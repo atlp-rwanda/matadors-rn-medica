@@ -2,11 +2,11 @@
   "expo": {
     "name": "matadors-rn-medica",
     "slug": "matadors-rn-medica",
+    "scheme": "matadors-rn-medica",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
-    "userInterfaceStyle": "automatic",
+    "userInterfaceStyle": "dark",
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
