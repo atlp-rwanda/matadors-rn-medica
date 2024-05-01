@@ -1,7 +1,5 @@
 # Medica App
 
-Url;
-
 Online Doctor Appointment & Consultation App
 
 ## Table Of Content
@@ -12,7 +10,6 @@ Online Doctor Appointment & Consultation App
  - [Setup](#setup)
  - [Testing](#testing)
  - [Contribute](#contribute)
- - [Deployment](#deployment)
  - [Contact](#contact)
  - [License](#license)
   
@@ -58,27 +55,26 @@ git clone https://github.com/atlp-rwanda/matadors-rn-medica.git
 2. Navigate to the project directory:
 
 3. Install dependencies:
-npm install
-
-4. Set up environment variables:
+```bash
+npm install 
+```
+5. Set up environment variables:
 - Create a `.env` file based on `.env.example` and fill in necessary values.
 
 ### Run The Service
 
 1. Start the Expo development server:
+```bash
 npm start
-
+```
 2. Use the Expo client on your mobile device or simulator to run the app.
-
-### Microservices
-
-None at the moment.
 
 ## Testing
 
 To run tests, use the following command:
+```bash
 npm test
-
+```
 ## Contribute
 
 Contributions are welcome! To contribute to this repository, please follow these steps:
@@ -88,18 +84,12 @@ Contributions are welcome! To contribute to this repository, please follow these
 4. Push to the branch (`git push origin feature/my-feature`).
 5. Create a new Pull Request.
 
-## Deployment
-
-The Medica app is deployed using [deployment platform]. To deploy updates:
-1. [Step 1 for deployment]
-2. [Step 2 for deployment]
-3. [Step 3 for deployment]
-
 
   ## Contact
 
   Feel free to reach out to me on my email:
-  example@gmail.com  
+  [GitHub](https://github.com/Nkbtemmy)
+  [GitHub](https://github.com/mukunzidd)
 
   ## License
 
