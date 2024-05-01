@@ -1,23 +1,23 @@
 const Typography = {
   heading: {
     // headings
-    heading_1: {
+    _1: {
       fontFamily: "Bold",
       fontSize: 48,
     },
-    heading_2: {
+    _2: {
       fontFamily: "Bold",
       fontSize: 40,
     },
-    heading_3: {
+    _3: {
       fontFamily: "Bold",
       fontSize: 32,
     },
-    heading_4: {
+    _4: {
       fontFamily: "Bold",
       fontSize: 24,
     },
-    heading_5: {
+    _5: {
       fontFamily: "Bold",
       fontSize: 20,
     },
@@ -25,23 +25,23 @@ const Typography = {
 
   bold: {
     // body
-    bold_xLarge: {
+    xLarge: {
       fontFamily: "Bold",
       fontSize: 18,
     },
-    bold_large: {
+    large: {
       fontFamily: "Bold",
       fontSize: 16,
     },
-    bold_medium: {
+    medium: {
       fontFamily: "Bold",
       fontSize: 14,
     },
-    bold_small: {
+    small: {
       fontFamily: "Bold",
       fontSize: 12,
     },
-    bold_xSmall: {
+    xSmall: {
       fontFamily: "Bold",
       fontSize: 10,
     },
@@ -49,23 +49,23 @@ const Typography = {
 
   semiBold: {
     // semibold
-    semiBold_xLarge: {
+    xLarge: {
       fontFamily: "SemiBold",
       fontSize: 18,
     },
-    semiBold_large: {
+    large: {
       fontFamily: "SemiBold",
       fontSize: 16,
     },
-    semiBold_medium: {
+    medium: {
       fontFamily: "SemiBold",
       fontSize: 14,
     },
-    semiBold_small: {
+    small: {
       fontFamily: "SemiBold",
       fontSize: 12,
     },
-    semiBold_xSmall: {
+    xSmall: {
       fontFamily: "SemiBold",
       fontSize: 10,
     },
@@ -73,23 +73,23 @@ const Typography = {
 
   medium: {
     // medium
-    medium_xLarge: {
+    xLarge: {
       fontFamily: "SemiBold",
       fontSize: 18,
     },
-    medium_large: {
+    large: {
       fontFamily: "SemiBold",
       fontSize: 16,
     },
-    medium_medium: {
+    medium: {
       fontFamily: "SemiBold",
       fontSize: 14,
     },
-    medium_small: {
+    small: {
       fontFamily: "SemiBold",
       fontSize: 12,
     },
-    medium_xSmall: {
+    xSmall: {
       fontFamily: "SemiBold",
       fontSize: 10,
     },
@@ -97,23 +97,23 @@ const Typography = {
 
   regular: {
     // Regular
-    regular_xLarge: {
+    xLarge: {
       fontFamily: "Regular",
       fontSize: 18,
     },
-    regular_large: {
+    large: {
       fontFamily: "Regular",
       fontSize: 16,
     },
-    regular_medium: {
+    medium: {
       fontFamily: "Regular",
       fontSize: 14,
     },
-    regular_small: {
+    small: {
       fontFamily: "Regular",
       fontSize: 12,
     },
-    regular_xSmall: {
+    xSmall: {
       fontFamily: "Regular",
       fontSize: 10,
     },

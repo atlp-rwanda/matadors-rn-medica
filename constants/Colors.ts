@@ -21,31 +21,43 @@ export default {
 export const Colors = {
   main: {
     // Main
-    main_primary: "#246BFD",
-    main_secondary: "#FFD300",
+    primary: {
+      "_100": "#E9F0FF",
+      "_200": "#A7C4FE",
+      "_300": "#7CA6FE",
+      "_400": "#5089FD",
+      "_500": "#246BFD",
+    },
+    secondary: {
+      "_100": "#FFFBE6",
+      "_200": "#FFED99",
+      "_300": "#FFE566",
+      "_400": "#FFDC33",
+      "_500": "#FFD300",
+    },
   },
   status: {
     // status
-    status_success: "#07BD74",
-    status_info: "#246BFD",
-    status_warning: "#FACC15",
-    status_error: "#F75555",
-    status_disabled: "#D8D8D8",
-    status_disabled_button: "#3062C8",
+    success: "#07BD74",
+    info: "#246BFD",
+    warning: "#FACC15",
+    error: "#F75555",
+    disabled: "#D8D8D8",
+    disabled_button: "#3062C8",
   },
 
   grayScale: {
     // gray scale
-    gray_900: "#212121",
-    gray_800: "#424242",
-    gray_700: "#616161",
-    gray_600: "#757575",
-    gray_500: "#9E9E9E",
-    gray_400: "#BDBDBD",
-    gray_300: "#E0E0E0",
-    gray_200: "#EEEEEE",
-    gray_100: "#F5F5F5",
-    gray_50: "#FAFAFA",
+    "_900": "#212121",
+    "_800": "#424242",
+    "_700": "#616161",
+    "_600": "#757575",
+    "_500": "#9E9E9E",
+    "_400": "#BDBDBD",
+    "_300": "#E0E0E0",
+    "_200": "#EEEEEE",
+    "_100": "#F5F5F5",
+    "_50": "#FAFAFA",
   },
 
   // will require to set this up here as soon as one needs gradients
@@ -58,9 +70,9 @@ export const Colors = {
   // },
 
   dark: {
-    dark_1: "#181A20",
-    dark_2: "#1F222A",
-    dark_3: "#35383F",
+    "_1": "#181A20",
+    "_2": "#1F222A",
+    "_3": "#35383F",
   },
 
   others: {
