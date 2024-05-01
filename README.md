@@ -87,9 +87,9 @@ Contributions are welcome! To contribute to this repository, please follow these
 
   ## Contact
 
-  Feel free to reach out to me on my email:
-  [GitHub](https://github.com/Nkbtemmy)
-  [GitHub](https://github.com/mukunzidd)
+  Feel free to reach out to us:
+  [Nkbtemmy](https://github.com/Nkbtemmy)
+  [mukunzidd](https://github.com/mukunzidd)
 
   ## License
 
