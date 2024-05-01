@@ -6,7 +6,6 @@ export default function SetYourFingerPrint() {
   return (
     <>
       <Text>Set Your Finger Print</Text>
-      <LeftArrow fillColor="#212121" />
     </>
   );
 }
