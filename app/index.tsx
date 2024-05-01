@@ -4,7 +4,9 @@ import { useEffect } from "react";
 
 export default function Index() {
   useEffect(() => {
-    router.push("/(auth)/SignIn&SignOut/SetYourFingerPrint");
+    setTimeout(() => {
+      router.push("/(auth)/SignIn&SignOut/SetYourFingerPrint");
+    }, 2000);
   });
 
   return (
