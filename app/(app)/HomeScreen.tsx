@@ -7,19 +7,19 @@ export default function HomeScreen(){
     return (
         <>
         <View style={styles.container}>
-            <View style={styles.splash}>
+            
               <View style={styles.image}>
               <Image source={require('../../assets/images/Group.png')} style={styles.imagex}/>
               </View>
 
-<ScrollView>
+<View>
 <Text style={styles.text}>Welcome to Medica! 👋</Text>
 <Text style={styles.description}>The best online doctor appointment & consultation app of the century for your health and medical needs!</Text>
-</ScrollView>
+</View>
     
 
             </View>
-        </View>
+   
         </>
     )
 }
@@ -30,20 +30,10 @@ flex:1,
 justifyContent:'center',
 alignItems:'center',
 backgroundColor:'#ffff',
-paddingTop:80
+paddingTop:50,
+paddingBottom:70
     },
-    splash:{
-        flex:1,
-      
-        justifyContent:'center',
-        alignItems:'center',
-backgroundColor:'white',
-gap:20,
-width:'100%',
-resizeMode:'cover',
 
-
-    },
     text:{
         fontSize:40,
         textAlign:'center',
