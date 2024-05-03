@@ -8,20 +8,17 @@ import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
-import { useColorScheme } from "@/components/useColorScheme";
 import { useColorScheme } from "@/components/useColorScheme";
 
 export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary,
 } from "expo-router";
-} from "expo-router";
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: "(auth)",
   initialRouteName: "(auth)",
 };
 
@@ -30,10 +27,6 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
-    Medium: require("../assets/fonts/Urbanist-Medium.ttf"),
-    SemiBold: require("../assets/fonts/Urbanist-SemiBold.ttf"),
-    Bold: require("../assets/fonts/Urbanist-Bold.ttf"),
-    Regular: require("../assets/fonts/Urbanist-Regular.ttf"),
     Medium: require("../assets/fonts/Urbanist-Medium.ttf"),
     SemiBold: require("../assets/fonts/Urbanist-SemiBold.ttf"),
     Bold: require("../assets/fonts/Urbanist-Bold.ttf"),
