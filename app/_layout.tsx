@@ -1,16 +1,15 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
-} from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
+import * as SecureStore from "expo-secure-store";
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
-import { useColorScheme } from "@/components/useColorScheme";
+import ThemeProvider, { ThemeContext } from "@/ctx/ThemeContext";
+import { Pressable, View, useColorScheme } from "react-native";
+import { ThemeType } from "@/constants/Types";
+import { Text } from "@/components/Themed";
 
 export {
 
@@ -33,33 +32,60 @@ export default function RootLayout() {
     ...FontAwesome.font,
   });
 
+  const systemTheme = useColorScheme() as ThemeType;
+
+  const [favoredTheme, setFavoredTheme] = useState<ThemeType>(null);
+
+  useEffect(() => {
+    async function getCustomTheme() {
+      try {
+        let favoredTheme = (await SecureStore.getItemAsync(
+          "theme"
+        )) as ThemeType;
+
+        if (!favoredTheme) {
+          favoredTheme = systemTheme;
+        }
+
+        setFavoredTheme(favoredTheme);
+      } catch (e) {
+        console.log(e);
+      }
+    }
+
+    getCustomTheme();
+  }, []);
+
+  // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {
     if (error) throw error;
   }, [error]);
 
   useEffect(() => {
-    if (loaded) {
+    if (loaded && favoredTheme) {
       SplashScreen.hideAsync();
     }
-  }, [loaded]);
+  }, [loaded, favoredTheme]);
 
   if (!loaded) {
     return null;
   }
 
-  return <RootLayoutNav />;
+  return (
+    <ThemeProvider theme={favoredTheme}>
+      <RootLayoutNav />
+    </ThemeProvider>
+  );
 }
 
 function RootLayoutNav() {
-  const colorScheme = useColorScheme();
-
   return (
-    <ThemeProvider value={colorScheme === "light" ? DarkTheme : DefaultTheme}>
+    <>
       <Stack initialRouteName="(auth)">
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="modal" options={{ presentation: "modal" }} />
       </Stack>
-    </ThemeProvider>
+    </>
   );
 }
