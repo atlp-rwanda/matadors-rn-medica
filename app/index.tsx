@@ -4,6 +4,7 @@ import HomeScreen from './(app)/HomeScreen';
 import SplashScreen from '@/SpashScreen/Splash';
 import { useEffect, useState } from 'react';
 import OnboardingScreen from './Onboading/OnboardingScreen';
+import CreateNewPassword from './(auth)/CreateNewPassword';
 
 export default function App() {
   const [showSplash, setShowSplash] = useState(true);
@@ -38,7 +39,7 @@ export default function App() {
     <>
       {showSplash && <SplashScreen />}
       {showHome && <HomeScreen />}
-      {showOnboarding && <OnboardingScreen />} 
+      {showOnboarding && <CreateNewPassword />} 
     </>
   );
 }
