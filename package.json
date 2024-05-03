@@ -7,7 +7,10 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "test": "jest --watchAll"
+    "test": "jest",
+    "test:watch": "jest --watchAll",
+    "test:update": "jest --updateSnapshot",
+     "ci-start": "expo build:web"
   },
   "jest": {
     "preset": "jest-expo"
