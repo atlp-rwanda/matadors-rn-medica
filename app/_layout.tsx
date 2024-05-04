@@ -10,18 +10,24 @@ import ThemeProvider, { ThemeContext } from "@/ctx/ThemeContext";
 import { Pressable, View, useColorScheme } from "react-native";
 import { ThemeType } from "@/constants/Types";
 import { Text } from "@/components/Themed";
+import {
+  DarkTheme,
+  DefaultTheme,
+} from "@react-navigation/native";
+
+
 
 export {
-  // Catch any errors thrown by the Layout component.
+
+
   ErrorBoundary,
 } from "expo-router";
 
 export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
+
   initialRouteName: "(auth)",
 };
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
@@ -84,7 +90,10 @@ function RootLayoutNav() {
     <>
       <Stack initialRouteName="(auth)">
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+        <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="modal" options={{ presentation: "modal" }} />
+        <Stack.Screen name="index" options={{ headerShown: false }} />
+        <Stack.Screen name="onBoarding" options={{ headerShown: false }} />
       </Stack>
     </>
   );

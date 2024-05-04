@@ -3,24 +3,12 @@ import Typography from "@/constants/Typography";
 import Colors from "@/constants/Colors";
 
 
-
-export default function HomeScreen(){
+export default function OnboardingScreen(){
     return (
         <>
         <View style={styles.container}>
-            
-              <View style={styles.image}>
-              <Image source={require('../../assets/images/Group.png')} style={styles.imagex}/>
-              </View>
-
-<View>
-<Text style={styles.text}>Welcome to Medica! 👋</Text>
-<Text style={styles.description}>The best online doctor appointment & consultation app of the century for your health and medical needs!</Text>
-</View>
-    
-
-            </View>
-   
+            <Text>OnboardingScreen</Text>
+        </View>
         </>
     )
 }
@@ -31,10 +19,20 @@ flex:1,
 justifyContent:'center',
 alignItems:'center',
 backgroundColor:'#ffff',
-paddingTop:50,
-paddingBottom:70
+// paddingTop:80
     },
+    splash:{
+        flex:1,
+      
+        justifyContent:'center',
+        alignItems:'center',
+backgroundColor:'white',
+gap:20,
+width:'100%',
+resizeMode:'cover',
 
+
+    },
     text:{
         fontSize:40,
         textAlign:'center',
@@ -43,7 +41,7 @@ paddingRight:30,
 color:'#236bfd',
 fontFamily:'Bold',
     },
-    description:{
+    textx:{
 textAlign:'center',
 lineHeight:25,
 paddingBottom:30,
