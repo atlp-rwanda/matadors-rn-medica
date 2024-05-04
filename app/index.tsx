@@ -34,7 +34,7 @@ export default function App() {
 
   useEffect(() => {
     setTimeout(() => {
-      router.push("/(auth)/SignIn&SignOut/SetYourFingerPrint");
+      router.push("/(auth)/SignIn&SignOut/LetsYouIn");
     }, 2000);
   }, []);
 
