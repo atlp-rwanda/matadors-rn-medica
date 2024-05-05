@@ -10,6 +10,49 @@ import { ThemeContext } from "@/ctx/ThemeContext";
 
 interface Props {
   title: string;
+<<<<<<< HEAD
+}
+
+export default function Header({ title }: Props) {
+  const { theme } = useContext(ThemeContext);
+
+  return (
+    <>
+      <StatusBar style={theme === "light" ? "dark" : "light"} />
+      <View
+        style={{
+          paddingVertical: 40,
+          paddingHorizontal: 20,
+          gap: 10,
+          flexDirection: "row",
+          alignItems: "center",
+          backgroundColor:
+            theme === "light" ? Colors.others.white : Colors.others.black,
+        }}
+      >
+        <Pressable>
+          <LeftArrow
+            fillColor={
+              theme === "light" ? Colors.grayScale._900 : Colors.others.white
+            }
+          />
+        </Pressable>
+        <Text
+          style={[
+            Typography.heading._4,
+            {
+              color:
+                theme === "light" ? Colors.grayScale._900 : Colors.others.white,
+            },
+          ]}
+        >
+          {title}
+        </Text>
+      </View>
+    </>
+  );
+=======
+>>>>>>> a304d8c (ft(auth): adding-forgetPassword-OTPverification)
 }
 
 export default function Header({ title }: Props) {

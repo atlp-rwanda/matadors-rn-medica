@@ -88,6 +88,16 @@ npm test
 ```
 npm start
 ```
+1. Use the Expo client on your mobile device or simulator to run the app.
+
+## Testing
+
+To run tests, use the following command:
+```bash
+npm test
+```
+npm start
+```
 2. Use the Expo client on your mobile device or simulator to run the app.
 
 ## Testing
@@ -121,11 +131,29 @@ Feel free to reach out to us:
 [Nkbtemmy](https://github.com/Nkbtemmy)
 [mukunzidd](https://github.com/mukunzidd)
 
+## Contact
+
+Feel free to reach out to me on my email:
+example@gmail.com  
+[GitHub](https://github.com/Nkbtemmy)
+[GitHub](https://github.com/mukunzidd)
+Feel free to reach out to us:
+[Nkbtemmy](https://github.com/Nkbtemmy)
+[mukunzidd](https://github.com/mukunzidd)
+
+<<<<<<< HEAD
+  None At the moment !!
+#  Test coverage
+=======
 ## License
 
-  None At the moment !!
+None At the moment !!
+>>>>>>> bc9ea19 (ft(setup fingerprint) fingerprint screen and its modal component)
+
+[![codecov](https://codecov.io/gh/atlp-rwanda/matadors-rn-medica/graph/badge.svg?token=5OP0X0107C)](https://codecov.io/gh/atlp-rwanda/matadors-rn-medica)
 #  Test coverage
 
 [![codecov](https://codecov.io/gh/atlp-rwanda/matadors-rn-medica/graph/badge.svg?token=5OP0X0107C)](https://codecov.io/gh/atlp-rwanda/matadors-rn-medica)
 
+For coverage on other branches, please visit the [Codecov project page](https://codecov.io/gh/atlp-rwanda/matadors-rn-medica) and select the appropriate branch.
 For coverage on other branches, please visit the [Codecov project page](https://codecov.io/gh/atlp-rwanda/matadors-rn-medica) and select the appropriate branch.

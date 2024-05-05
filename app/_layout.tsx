@@ -100,7 +100,6 @@ function RootLayoutNav() {
     <>
       <Stack initialRouteName="(auth)">
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-        <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="modal" options={{ presentation: "modal" }} />
         <Stack.Screen name="index" options={{ headerShown: false }} />
       </Stack>

@@ -61,9 +61,8 @@ export const Colors = {
     "_50": "#FAFAFA",
   },
 
-  // will require to set this up here as soon as one needs gradients
   // gradients: {
-  //   gradient_blue: { from: { x: 0, y: 0 }, to: { x: 1, y: 1 }, color: [""] },
+  //   gradient_blue: '{ from: { x: 0, y: 0 }, to: { x: 1, y: 1 }, color: [""] }',
   //   gradient_yellow: { from: { x: 0, y: 0 }, to: { x: 1, y: 1 }, color: [""] },
   //   gradient_green: { from: { x: 0, y: 0 }, to: { x: 1, y: 1 }, color: [""] },
   //   gradient_orange: { from: { x: 0, y: 0 }, to: { x: 1, y: 1 }, color: [""] },
@@ -108,12 +107,12 @@ export const Colors = {
   },
 
   transparent: {
-    blue: "#246BFD",
-    orange: "#FF9800",
-    yellow: "#FACC15",
-    red: "#F75555",
-    green: "#4CAF50",
-    purple: "#9C27B0",
-    cyan: "#00BCD4",
+    blue: "rgba(36, 108, 253, 0.1)",
+    orange: "#fff7eb",
+    yellow: "#fffbed",
+    red: "#fff2f2",
+    green: "#f1f9f1",
+    purple: "#f7eef9",
+    cyan: "#ebfafc",
   },
 };

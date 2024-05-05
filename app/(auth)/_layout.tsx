@@ -5,7 +5,7 @@ import { Stack } from "expo-router";
 export default function AuthLayout() {
   return (
     <>
-      <Stack initialRouteName="SignIn&SignOut/SetYourFingerPrint">
+      <Stack>
         <Stack.Screen
           name="SignIn&SignOut/SetYourFingerPrint"
           options={{
@@ -14,7 +14,11 @@ export default function AuthLayout() {
             },
           }}
         />
+        <Stack.Screen name="ForgotPassword&Reset/ForgotPassword" options={{headerShown:false}}/>
+        <Stack.Screen name="ForgotPassword&Reset/OTPform" options={{headerShown:false}}/>
+        
       </Stack>
+
     </>
   );
 }
