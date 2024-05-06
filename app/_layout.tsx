@@ -6,25 +6,18 @@ import * as SecureStore from "expo-secure-store";
 
 import { useContext, useEffect, useState } from "react";
 
+import * as NavigationBar from "expo-navigation-bar";
+import { ZoomOutUp } from "react-native-reanimated";
 import ThemeProvider, { ThemeContext } from "@/ctx/ThemeContext";
 import { Pressable, View, useColorScheme } from "react-native";
 import { ThemeType } from "@/constants/Types";
 import { Text } from "@/components/Themed";
-import {
-  DarkTheme,
-  DefaultTheme,
-} from "@react-navigation/native";
+import ModalProvider from "@/ctx/ModalContext";
+import ModalContainer from "@/components/UI/Modal";
 
-
-
-export {
-
-
-  ErrorBoundary,
-} from "expo-router";
+export { ErrorBoundary } from "expo-router";
 
 export const unstable_settings = {
-
   initialRouteName: "(auth)",
 };
 
@@ -69,7 +62,22 @@ export default function RootLayout() {
   }, [error]);
 
   useEffect(() => {
-    if (loaded && favoredTheme) {
+    async function handleNavigationButtons() {
+      await NavigationBar.setPositionAsync("absolute");
+      await NavigationBar.setBackgroundColorAsync("#ffffff00");
+      await NavigationBar.setBehaviorAsync("inset-swipe");
+      await NavigationBar.setVisibilityAsync("hidden");
+
+      NavigationBar.addVisibilityListener(({ visibility }) => {
+        if (visibility === "visible") {
+          setTimeout(async () => {
+            await NavigationBar.setVisibilityAsync("hidden");
+          }, 2000);
+        }
+      });
+    }
+    if (loaded) {
+      handleNavigationButtons();
       SplashScreen.hideAsync();
     }
   }, [loaded, favoredTheme]);
@@ -80,7 +88,9 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider theme={favoredTheme}>
-      <RootLayoutNav />
+      <ModalProvider>
+        <RootLayoutNav />
+      </ModalProvider>
     </ThemeProvider>
   );
 }
@@ -93,8 +103,8 @@ function RootLayoutNav() {
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="modal" options={{ presentation: "modal" }} />
         <Stack.Screen name="index" options={{ headerShown: false }} />
-        <Stack.Screen name="onBoarding" options={{ headerShown: false }} />
       </Stack>
+      <ModalContainer />
     </>
   );
 }

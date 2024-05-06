@@ -3,7 +3,6 @@ import Typography from "@/constants/Typography";
 import Colors from "@/constants/Colors";
 
 
-
 export default function HomeScreen(){
     return (
         <>
