@@ -12,6 +12,7 @@
       "backgroundColor": "#ffffff"
     },
     "assetBundlePatterns": ["**/*"],
+    "userInterfaceStyle": "dark",
     "ios": {
       "supportsTablet": true,
       "config": {

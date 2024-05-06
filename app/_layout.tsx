@@ -10,6 +10,12 @@ import ThemeProvider, { ThemeContext } from "@/ctx/ThemeContext";
 import { Pressable, View, useColorScheme } from "react-native";
 import { ThemeType } from "@/constants/Types";
 import { Text } from "@/components/Themed";
+import {
+  DarkTheme,
+  DefaultTheme,
+} from "@react-navigation/native";
+
+
 
 export {
 
@@ -17,7 +23,6 @@ export {
 } from "expo-router";
 
 export const unstable_settings = {
-
   initialRouteName: "(auth)",
 };
 
@@ -83,8 +88,9 @@ function RootLayoutNav() {
     <>
       <Stack initialRouteName="(auth)">
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-        <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="modal" options={{ presentation: "modal" }} />
+        <Stack.Screen name="index" options={{ headerShown: false }} />
+        <Stack.Screen name="onBoarding" options={{ headerShown: false }} />
       </Stack>
     </>
   );
