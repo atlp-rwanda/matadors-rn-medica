@@ -5,7 +5,8 @@ import SplashScreen from '@/SpashScreen/Splash';
 import { useEffect, useState } from 'react';
 import OnboardingScreen from './Onboading/OnboardingScreen';
 import CreateNewPassword from './(auth)/CreateNewPassword';
-
+import NotificationScreen from './(app)/ActionMenu/NotificationScreen';
+import { router } from 'expo-router';
 export default function App() {
   const [showSplash, setShowSplash] = useState(true);
   const [showHome, setShowHome] = useState(false);
@@ -16,6 +17,7 @@ export default function App() {
     const splashTimeout = setTimeout(() => {
       setShowSplash(false);
       setShowHome(true);
+      router.push("/(app)/ActionMenu/NotificationScreen")
     }, 3000);
 
 
@@ -39,7 +41,7 @@ export default function App() {
     <>
       {showSplash && <SplashScreen />}
       {showHome && <HomeScreen />}
-      {showOnboarding && <CreateNewPassword />} 
+      {showOnboarding && <NotificationScreen />} 
     </>
   );
 }
