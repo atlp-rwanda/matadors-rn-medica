@@ -4,19 +4,30 @@ Online Doctor Appointment & Consultation App
 
 ## Table Of Content
 
- - [Description](#description)
-  
- - [Documentation](#documentation)
- - [Setup](#setup)
- - [Testing](#testing)
- - [Contribute](#contribute)
- - [Contact](#contact)
- - [License](#license)
+- [Medica App](#medica-app)
+  - [Table Of Content](#table-of-content)
+  - [Description](#description)
+  - [Overview;](#overview)
+  - [Overview;](#overview-1)
+  - [Documentation](#documentation)
+    - [Endpoints](#endpoints)
+  - [Setup](#setup)
+    - [Dependencies](#dependencies)
+    - [Getting Started](#getting-started)
+    - [Run The Service](#run-the-service)
+  - [Testing](#testing)
+  - [Contribute](#contribute)
+  - [Contact](#contact)
+  - [Contact](#contact-1)
+  - [License](#license)
   
 
 ## Description
 
 Medica is a mobile application designed to facilitate online doctor appointments and consultations. Users can create an account, log in, browse through various doctor specialties, schedule appointments, and communicate with healthcare professionals through voice calls, video calls, or messaging. The app also supports different payment methods for appointment fees, provides access to healthcare articles, allows profile management, and offers a help center for user support.
+
+## Overview;
+None at the moment!!
 
 ## Overview;
 None at the moment!!
@@ -58,13 +69,23 @@ git clone https://github.com/atlp-rwanda/matadors-rn-medica.git
 ```bash
 npm install 
 ```
-5. Set up environment variables:
+1. Set up environment variables:
 - Create a `.env` file based on `.env.example` and fill in necessary values.
 
 ### Run The Service
 
 1. Start the Expo development server:
 ```bash
+npm start
+```
+1. Use the Expo client on your mobile device or simulator to run the app.
+
+## Testing
+
+To run tests, use the following command:
+```bash
+npm test
+```
 npm start
 ```
 2. Use the Expo client on your mobile device or simulator to run the app.
@@ -84,14 +105,23 @@ Contributions are welcome! To contribute to this repository, please follow these
 4. Push to the branch (`git push origin feature/my-feature`).
 5. Create a new Pull Request.
 
+## Contact
 
-  ## Contact
+Feel free to reach out to us:
+[Nkbtemmy](https://github.com/Nkbtemmy)
+[mukunzidd](https://github.com/mukunzidd)
 
-  Feel free to reach out to us:
-  [Nkbtemmy](https://github.com/Nkbtemmy)
-  [mukunzidd](https://github.com/mukunzidd)
+## Contact
 
-  ## License
+Feel free to reach out to me on my email:
+example@gmail.com  
+[GitHub](https://github.com/Nkbtemmy)
+[GitHub](https://github.com/mukunzidd)
+Feel free to reach out to us:
+[Nkbtemmy](https://github.com/Nkbtemmy)
+[mukunzidd](https://github.com/mukunzidd)
 
-  None At the moment !!
+## License
+
+None At the moment !!
 
