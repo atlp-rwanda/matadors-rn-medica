@@ -7,7 +7,7 @@ export default function SplashScreen() {
 
   useEffect(() => {
     setTimeout(() => {
-      router.push("/(app)/HomeScreen");
+      router.push("(app)/Booking/Booking_Appointment");
     }, 2000);
   }, []);
   return (

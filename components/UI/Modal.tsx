@@ -15,7 +15,7 @@ import Animated, {
 import { AnimatedView } from "react-native-reanimated/lib/typescript/reanimated2/component/View";
 import { ThemeContext } from "@/ctx/ThemeContext";
 import { useModal } from "@/ctx/ModalContext";
-import { LoadingIcon } from "./Icons";
+import { LoadingIcon } from "./icons";
 
 export default function ModalContainer() {
   const { visible, content } = useModal();

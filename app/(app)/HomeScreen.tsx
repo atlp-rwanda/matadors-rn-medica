@@ -59,7 +59,6 @@ const styles = StyleSheet.create({
     fontSize: 17,
   },
   image: {
-    // width: '100%',
     objectFit: "cover",
     height: "70%",
   },

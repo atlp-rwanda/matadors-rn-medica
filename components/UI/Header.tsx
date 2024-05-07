@@ -2,7 +2,7 @@ import { StatusBar } from "expo-status-bar";
 // import { Text, View } from "react-native";
 import { Text, View } from "../Themed";
 import { Colors } from "@/constants/Colors";
-import { LeftArrow } from "./Icons";
+import { LeftArrow } from "./icons";
 import { Pressable, useColorScheme } from "react-native";
 import Typography from "@/constants/Typography";
 import { useContext } from "react";
@@ -30,11 +30,11 @@ export default function Header({ title }: Props) {
         }}
       >
         <Pressable>
-          <LeftArrow
+          {/* <LeftArrow
             fillColor={
               theme === "light" ? Colors.grayScale._900 : Colors.others.white
             }
-          />
+          /> */}
         </Pressable>
         <Text
           style={[
