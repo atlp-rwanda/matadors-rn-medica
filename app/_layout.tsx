@@ -107,6 +107,7 @@ function RootLayoutNav() {
         <Stack.Screen name="onBoarding" options={{ headerShown: false }} />
         <Stack.Screen name="Booking_Appointment"options={{headerShown:false}} />
         <Stack.Screen name="Booking_Appointment" options={{headerShown:false}} />
+        <Stack.Screen name="Booking_Appointment"options={{headerShown:false}} />
       </Stack>
       <ModalContainer/>
     </>
