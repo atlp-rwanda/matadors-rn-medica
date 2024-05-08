@@ -3,7 +3,7 @@ import { Text, View } from "@/components/Themed";
 import Button from "@/components/UI/Button";
 import { Colors } from "@/constants/Colors";
 import Typography from "@/constants/Typography";
-import { Image, ScrollView } from "react-native";
+import { Image, SafeAreaView, ScrollView } from "react-native";
 import { ThemeContext } from "@/ctx/ThemeContext";
 import React, { useContext, useEffect } from "react";
 import * as LocalAuthentication from "expo-local-authentication";
@@ -36,7 +36,7 @@ export default function SetYourFingerPrint() {
   }));
 
   return (
-    <View >
+    <SafeAreaView >
        <Pressable
             onPress={()=> router.back()}
              style={{ marginTop: 30,
@@ -240,6 +240,6 @@ export default function SetYourFingerPrint() {
           </View>
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 }
