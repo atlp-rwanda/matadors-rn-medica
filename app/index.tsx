@@ -1,49 +1,59 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
-import HomeScreen from "./(app)/HomeScreen";
-import SplashScreen from "@/SpashScreen/Splash";
-import { useEffect, useState } from "react";
-import OnboardingScreen from "./Onboading/OnboardingScreen";
-import CreateNewPassword from "./(auth)/CreateNewPassword";
+import Loading from "@/app/spinner/Loading";
 import { router } from "expo-router";
+import { useEffect } from "react";
+import { Image, StyleSheet, Text, View } from "react-native";
 
-export default function App() {
-  const [showSplash, setShowSplash] = useState(true);
-  const [showHome, setShowHome] = useState(false);
-  const [showOnboarding, setShowOnboarding] = useState(false);
-
-  useEffect(() => {
-    const splashTimeout = setTimeout(() => {
-      setShowSplash(false);
-      setShowHome(true);
-    }, 3000);
-
-    return () => clearTimeout(splashTimeout);
-  }, []);
-
-  useEffect(() => {
-    if (showHome) {
-      const homeTimeout = setTimeout(() => {
-        setShowHome(false);
-        setShowOnboarding(true);
-      }, 5000);
-
-      return () => clearTimeout(homeTimeout);
-    }
-  }, [showHome]);
+export default function SplashScreen() {
 
   useEffect(() => {
     setTimeout(() => {
-      router.push("/(auth)/SignIn&SignOut/LetsYouIn");
+      router.push("(app)/HomeScreen");
     }, 2000);
   }, []);
-
   return (
     <>
-      {showSplash && <SplashScreen />}
-      {showHome && <HomeScreen />}
-      {showOnboarding && <CreateNewPassword />}
+      <View style={styles.container}>
+        <View style={styles.splash}>
+          <View>
+            <View>
+              <Image source={require("../assets/images/icon.png")} />
+            </View>
+          </View>
+
+          <View>
+            <Text style={styles.text}>Medica</Text>
+          </View>
+          <View style={styles.spin}>
+            <Loading />
+          </View>
+        </View>
+      </View>
     </>
   );
-
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#ffff",
+  },
+  splash: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "white",
+    gap: 20,
+    width: "100%",
+  },
+  text: {
+    fontSize: 30,
+  },
+  spin: {
+    position: "absolute",
+    bottom: 50,
+  },
+});
+

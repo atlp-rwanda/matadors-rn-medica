@@ -10,13 +10,15 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   Platform,
+  Pressable,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import CheckBox from "expo-checkbox";
-import { LeftArrow } from "@/components/UI/icons";
+import { LeftArrow } from "@/components/UI/Icons";
 import { router } from "expo-router";
 import Typography from "../../../constants/Typography";
 import { Colors } from "../../../constants/Colors";
+import { StatusBar } from "expo-status-bar";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
@@ -53,6 +55,7 @@ const Signup = () => {
 
   return (
     <View style={styles.container}>
+      <StatusBar style="light"/>
       <TouchableOpacity
         style={styles.arrow}
         onPress={() => router.replace("/(auth)/SignIn&SignOut/LetsYouIn")}
@@ -131,11 +134,13 @@ const Signup = () => {
         </Text>
       </View>
 
-      <TouchableOpacity style={styles.signinBtn}>
+      <Pressable 
+      onPress={()=> router.push("/(auth)/SignIn&SignOut/SignInBlankForm")}
+      style={styles.signinBtn}>
         <Text style={[Typography.bold.large, { color: Colors.others.white }]}>
           Sign up
         </Text>
-      </TouchableOpacity>
+      </Pressable>
 
       <Image source={require("../../../assets/icons/continue.png")} />
 
@@ -155,7 +160,7 @@ const Signup = () => {
         <Text style={[Typography.regular.medium]}>
           Already have an account? 
           <Text
-           style={[Typography.semiBold.medium, {color:Colors.main.primary._500}]}
+           style={[Typography.semiBold.medium, {color:Colors.main.primary._500, marginLeft: 10}]}
             onPress={() =>
               router.replace("/(auth)/SignIn&SignOut/SignInBlankForm")
             }

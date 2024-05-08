@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
-import { Image, StyleSheet, Text, TextInput, View, TouchableOpacity, ScrollView, Alert } from 'react-native';
-import { FontAwesome } from '@expo/vector-icons'; // Import FontAwesome icons
-import Colors from '@/constants/Colors';
+import React, { useContext, useState } from 'react';
+import { Image, StyleSheet, Text, TextInput, View, TouchableOpacity, ScrollView, Alert, Pressable } from 'react-native';
+import { FontAwesome, MaterialIcons } from '@expo/vector-icons'; // Import FontAwesome icons
+import {Colors} from '@/constants/Colors';
+import { router } from 'expo-router';
+import { LeftArrow } from '@/components/UI/Icons';
+import { ThemeContext } from '@/ctx/ThemeContext';
 
 export default function CreateNewPassword() {
   const [password, setPassword] = useState('');
@@ -10,6 +13,7 @@ export default function CreateNewPassword() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
 
+  const {theme, changeTheme} = useContext(ThemeContext)
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
@@ -19,10 +23,11 @@ export default function CreateNewPassword() {
   };
 
   const handleCreatePassword = () => {
-    if (password !== confirmPassword) {
-      Alert.alert('Error', 'Passwords do not match.');
-      return;
-    }
+    // if (password !== confirmPassword) {
+    //   Alert.alert('Error', 'Passwords do not match.');
+    //   return;
+    // }
+    router.push("/(auth)/SignIn&SignOut/SignInBlankForm")
 
     // Your password creation logic here
 
@@ -33,6 +38,23 @@ export default function CreateNewPassword() {
 
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContent}>
+       {/* <View > */}
+       <Pressable onPress={() => router.back()} style={{
+          paddingTop: 100,
+          flexDirection: "row",
+          alignItems: "center",
+          gap: 30,
+          padding:30,
+          backgroundColor:"white",
+            }}>
+          <MaterialIcons name="arrow-back" size={25} style={{alignSelf: "center",
+        }} />
+          <Text style={{ 
+            fontSize: 24,
+            fontWeight: "600",}}
+            >Set Your Fingerprint</Text>
+        </Pressable>
+        {/* </View> */}
       <View style={styles.container}>
         <View style={styles.image}>
           <Image source={require('../../assets/images/create.png')} />
@@ -101,7 +123,6 @@ const styles = StyleSheet.create({
     paddingLeft: 25,
     paddingTop: 20,
     fontFamily: 'Regular',
-    color: Colors.light.text,
     fontSize: 17,
   },
   image: {

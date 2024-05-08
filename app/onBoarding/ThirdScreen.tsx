@@ -5,7 +5,7 @@ import OnboardingComponent from '@/components/OnBoarding/OnboardingComponent'
 import { ThemeContext } from '@/ctx/ThemeContext'
 
 const image = require("../../assets/images/OnBoardingImages/thirdLightImg.png")
-const darkImg = require("../../assets/images/OnBoardingImages/thirdDarkImg.png")
+const  darkImg = require("../../assets/images/OnBoardingImages/thirdDarkImg.png")
 
 
 const ThirdScreen = () => {
@@ -14,10 +14,10 @@ const ThirdScreen = () => {
    return (
     <View style={styles.container}>
             <OnboardingComponent 
-        image={ theme=== "dark" ? darkImg : image}
+        image={ theme=== "light" ?  image : darkImg}
         text="Let's start living healthy and well with us right now!"
             action="Get Started"
-            direction="/"
+            direction="(auth)/SignIn&SignOut/LetsYouIn"
         >
             <Text style={styles.dots}></Text>
             <Text style={styles.dots}></Text>
@@ -32,7 +32,6 @@ const styles = StyleSheet.create({
 
     container: {
         flex: 1,
-        alignItems: "center",
     },
     dots: {
         width: 10,
