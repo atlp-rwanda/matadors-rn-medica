@@ -108,12 +108,12 @@ export const Colors = {
   },
 
   transparent: {
-    blue: "#246BFD",
-    orange: "#FF9800",
-    yellow: "#FACC15",
-    red: "#F75555",
-    green: "#4CAF50",
-    purple: "#9C27B0",
-    cyan: "#00BCD4",
+    blue: "rgba(36, 108, 253, 0.1)",
+    orange: "#fff7eb",
+    yellow: "#fffbed",
+    red: "#fff2f2",
+    green: "#f1f9f1",
+    purple: "#f7eef9",
+    cyan: "#ebfafc",
   },
 };

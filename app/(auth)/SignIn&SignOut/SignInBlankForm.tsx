@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import CheckBox from "expo-checkbox";
-import { LeftArrow } from "@/components/UI/icons";
+import { LeftArrow } from "@/components/UI/Icons";
 import { router } from "expo-router";
 import Typography from '../../../constants/Typography';
 import {Colors} from '../../../constants/Colors';

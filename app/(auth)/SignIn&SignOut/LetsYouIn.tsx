@@ -1,7 +1,7 @@
 import * as React from "react";
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import { useState } from "react";
-import { LeftArrow } from "@/components/UI/icons";
+import { LeftArrow } from "@/components/UI/Icons";
 import { router } from "expo-router";
 import Typography from "../../../constants/Typography";
 import { Colors } from "../../../constants/Colors";

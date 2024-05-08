@@ -34,7 +34,7 @@ export default function App() {
 
   useEffect(() => {
     setTimeout(() => {
-      router.push("/(auth)/SignIn&SignOut/LetsYouIn");
+      router.push("/(auth)/ForgotPassword&Reset/OTPform");
     }, 2000);
   }, []);
 
