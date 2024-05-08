@@ -14,7 +14,7 @@ import { ThemeType } from "@/constants/Types";
 import { Text } from "@/components/Themed";
 import ModalProvider from "@/ctx/ModalContext";
 import ModalContainer from "@/components/UI/Modal";
- 
+
 export { ErrorBoundary } from "expo-router";
  
 export const unstable_settings = {
@@ -106,6 +106,7 @@ function RootLayoutNav() {
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="onBoarding" options={{ headerShown: false }} />
         <Stack.Screen name="Booking_Appointment"options={{headerShown:false}} />
+        <Stack.Screen name="Booking_Appointment" options={{headerShown:false}} />
       </Stack>
       <ModalContainer/>
     </>
