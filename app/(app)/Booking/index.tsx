@@ -1,10 +1,16 @@
-import React from 'react'
-import { View } from 'react-native'
+import { router } from "expo-router";
+import React, { useEffect } from "react";
+import { Text, View } from "react-native";
 
 const index = () => {
+  useEffect(() => {
+    router.push("/(app)/Booking/SelectPayment");
+  }, []);
   return (
-    <View>index</View>
-  )
-}
+    <View>
+      <Text>Booking Index </Text>
+    </View>
+  );
+};
 
-export default index
+export default index;
