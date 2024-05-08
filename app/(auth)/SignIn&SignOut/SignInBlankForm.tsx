@@ -153,7 +153,7 @@ const Login = () => {
         <Text style={[Typography.regular.medium]}>Don’t have an account? </Text>
         <Text
           style={[Typography.semiBold.medium, {color:Colors.main.primary._500}]}
-          onPress={() => router.replace("/(auth)/SignIn&SignOut/SignUpBlankForm")}
+          onPress={() => router.push("/(auth)/SignIn&SignOut/SignInBlankForm")}
         >
           Sign up
         </Text>
@@ -179,8 +179,6 @@ const styles = StyleSheet.create({
   },
   passwordInputContainerFocused: {
     borderColor: "#246BFD",
-    // borderWidth: 2,
-    // borderRadius: 5,
   },
   icon: {
     tintColor: "#868a94",
@@ -230,7 +228,6 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   passwordInputContainer: {
-    // flex: 1,
     flexDirection: "row",
     alignItems: "center",
   },

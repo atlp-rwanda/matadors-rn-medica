@@ -28,7 +28,7 @@ const OnboardingComponent = ({
   const { theme, changeTheme } = useContext(ThemeContext);
 
   return (
-    <View style={styles.container}>
+    <View style={theme === "light" ? styles.DarkContainer : styles.lightContainer}>
       <View style={styles.img}>
         <Image source={image} />
       </View>
@@ -48,9 +48,16 @@ const OnboardingComponent = ({
 };
 
 const styles = StyleSheet.create({
-  container: {
+  lightContainer: {
     paddingHorizontal: "5%",
     paddingVertical: "20%",
+    backgroundColor: Colors.others.white
+  },
+
+  DarkContainer: {
+    paddingHorizontal: "5%",
+    paddingVertical: "20%",
+    backgroundColor: Colors.others.black
   },
 
   img: {

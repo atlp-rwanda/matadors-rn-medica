@@ -17,7 +17,7 @@ const ThirdScreen = () => {
         image={ theme=== "dark" ? darkImg : image}
         text="Let's start living healthy and well with us right now!"
             action="Get Started"
-            direction="/"
+            direction="(auth)/SignIn&SignOut/LetsYouIn"
         >
             <Text style={styles.dots}></Text>
             <Text style={styles.dots}></Text>
