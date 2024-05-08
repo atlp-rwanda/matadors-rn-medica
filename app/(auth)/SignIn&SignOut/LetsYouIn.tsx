@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, Image, TouchableOpacity, Pressable } from "react-native";
 import { useState } from "react";
 import { LeftArrow } from "@/components/UI/Icons";
 import { router } from "expo-router";
@@ -12,9 +12,11 @@ const LetsYouIn = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.arrow}>
+      <Pressable 
+      onPress={()=> router.back()}
+      style={styles.arrow}>
         <LeftArrow fillColor={"#23272f"} />
-      </View>
+      </Pressable>
 
       <Image source={require("../../../assets/icons/FrameOne.png")} />
 
@@ -51,7 +53,9 @@ const LetsYouIn = () => {
 
       <Image source={require("../../../assets/icons/OR.png")} />
 
-      <TouchableOpacity style={styles.signinBtn}>
+      <TouchableOpacity 
+      onPress={()=> router.push("/(auth)/SignIn&SignOut/YourProfile")}
+      style={styles.signinBtn}>
         <Text style={[Typography.bold.large, { color: Colors.others.white }]}>
           Sign in with password
         </Text>

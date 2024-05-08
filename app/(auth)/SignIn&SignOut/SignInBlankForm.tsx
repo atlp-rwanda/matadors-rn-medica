@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   TextInput,
   TouchableWithoutFeedback,
+  Pressable,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import CheckBox from "expo-checkbox";
@@ -129,9 +130,11 @@ const Login = () => {
         </TouchableOpacity>
       </View>
 
-      <View>
+      <Pressable
+      onPress={()=> router.push("/(auth)/ForgotPassword&Reset/ForgotPassword")}
+      >
         <Text style={[Typography.semiBold.large, {color:Colors.main.primary._500}]}>Forgot the password?</Text>
-      </View>
+      </Pressable>
 
       <View>
         <Image source={require("../../../assets/icons/continue.png")} />
@@ -153,7 +156,7 @@ const Login = () => {
         <Text style={[Typography.regular.medium]}>Don’t have an account? </Text>
         <Text
           style={[Typography.semiBold.medium, {color:Colors.main.primary._500}]}
-          onPress={() => router.replace("/(auth)/SignIn&SignOut/SignUpBlankForm")}
+          onPress={() => router.push("/(auth)/SignIn&SignOut/SignInBlankForm")}
         >
           Sign up
         </Text>
@@ -179,8 +182,6 @@ const styles = StyleSheet.create({
   },
   passwordInputContainerFocused: {
     borderColor: "#246BFD",
-    // borderWidth: 2,
-    // borderRadius: 5,
   },
   icon: {
     tintColor: "#868a94",
@@ -230,7 +231,6 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   passwordInputContainer: {
-    // flex: 1,
     flexDirection: "row",
     alignItems: "center",
   },

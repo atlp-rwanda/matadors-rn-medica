@@ -6,6 +6,7 @@ import { useState } from "react";
 import { View, StyleSheet, TouchableOpacity, TextInput } from "react-native";
 import  CountdownTimer from "@/components/OTPcomponents/countdownTimer";
 import { OtpInput } from "react-native-otp-entry";
+import { router } from "expo-router";
 
 
 export default function OTPform() {
@@ -77,6 +78,7 @@ export default function OTPform() {
         <Text style={[Typography.medium.xLarge,{color:isDark? Colors.others.white:Colors.grayScale._900}]}> Resend code in <CountdownTimer/> s</Text>
         </View>
         <TouchableOpacity
+        onPress={()=> router.push("/(auth)/CreateNewPassword")}
           style={{
             width: 380,
             height: 58,

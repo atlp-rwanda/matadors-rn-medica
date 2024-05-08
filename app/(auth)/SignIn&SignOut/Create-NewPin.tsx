@@ -3,21 +3,18 @@ import { StyleSheet,View, Text, Image, TextInput, Pressable, TouchableOpacity } 
 import { MaterialIcons } from '@expo/vector-icons';
 import React from 'react';
 import {Colors} from '@/constants/Colors';
+import { router } from 'expo-router';
 
 
 const CreateNewPin: React.FC<any> = ({navigation})=>{
     const [otp, setOtp] = useState(['','','','',]);
     const otpInputRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
     const [fullNameFocused, setFullNameFocused] = useState(false);
-
-   
     const handleOTPChange = (index: number, value: string) =>{
         const newOTP = [...otp]
         newOTP[index] = value;
-
         setOtp(newOTP);
     };
-    
     const handleFullNameFocus = () => {
       setFullNameFocused(false);
     };
@@ -26,10 +23,12 @@ const CreateNewPin: React.FC<any> = ({navigation})=>{
     return(
         <>
         <View style={styles.Maincont}>
-            <View style={styles.main}>
+            <Pressable
+            onPress={()=> router.back()}
+             style={styles.main}>
                 <MaterialIcons name="arrow-back" size={25} style={styles.icon}/>
                 <Text style={styles.fill}>Create New PIN</Text>
-            </View>
+            </Pressable>
         <View style={styles.middle}>
             <Text style={styles.text}>
                 Add a PIN number to make your account {'\n'}
@@ -53,6 +52,7 @@ const CreateNewPin: React.FC<any> = ({navigation})=>{
         </View>
           <View style={styles.btn}>
             <TouchableOpacity
+            onPress={()=> router.push("/(auth)/SignIn&SignOut/SetYourFingerPrint")}
               style={styles.button}
             >
               <Text style={styles.buttonText}>Continue</Text>
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
         height: 50
     },
     inputsFocused: {
-      // backgroundColor: "#246BFD",
+      backgroundColor: "#246BFD",
       borderWidth: 2,
       borderColor: "#246BFD"
     },
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
         height: 50,
         borderWidth: 2,
         borderRadius: 16,
-        borderColor: Colors.grayScale._200,
+        borderColor: Colors.grayScale._300,
         margin: 5,
         textAlign: 'center',
         fontSize: 25,
