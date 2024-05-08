@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Image, StyleSheet, Text, TextInput, View, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons'; // Import FontAwesome icons
 import Colors from '@/constants/Colors';
+import { router } from 'expo-router';
 
 export default function CreateNewPassword() {
   const [password, setPassword] = useState('');
@@ -19,10 +20,11 @@ export default function CreateNewPassword() {
   };
 
   const handleCreatePassword = () => {
-    if (password !== confirmPassword) {
-      Alert.alert('Error', 'Passwords do not match.');
-      return;
-    }
+    // if (password !== confirmPassword) {
+    //   Alert.alert('Error', 'Passwords do not match.');
+    //   return;
+    // }
+    router.push("/(auth)/SignIn&SignOut/SignInBlankForm")
 
     // Your password creation logic here
 

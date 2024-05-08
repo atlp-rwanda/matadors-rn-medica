@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   TextInput,
   TouchableWithoutFeedback,
+  Pressable,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import CheckBox from "expo-checkbox";
@@ -129,9 +130,11 @@ const Login = () => {
         </TouchableOpacity>
       </View>
 
-      <View>
+      <Pressable
+      onPress={()=> router.push("/(auth)/ForgotPassword&Reset/ForgotPassword")}
+      >
         <Text style={[Typography.semiBold.large, {color:Colors.main.primary._500}]}>Forgot the password?</Text>
-      </View>
+      </Pressable>
 
       <View>
         <Image source={require("../../../assets/icons/continue.png")} />

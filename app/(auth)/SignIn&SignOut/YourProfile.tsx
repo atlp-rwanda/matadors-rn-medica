@@ -1,4 +1,5 @@
 import { MaterialIcons } from "@expo/vector-icons";
+import { router } from "expo-router";
 import React, { useState } from "react";
 import { View, Text, StyleSheet,ScrollView, TextInput, Image, TouchableOpacity } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -96,6 +97,7 @@ const YourProfile = () =>{
               </View>
           <View style={styles.btn}>
             <TouchableOpacity
+            onPress={()=> router.push("/(auth)/SignIn&SignOut/Create-NewPin")}
               style={styles.button}
             >
               <Text style={styles.buttonText}>Continue</Text>

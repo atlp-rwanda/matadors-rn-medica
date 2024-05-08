@@ -53,7 +53,9 @@ const LetsYouIn = () => {
 
       <Image source={require("../../../assets/icons/OR.png")} />
 
-      <TouchableOpacity style={styles.signinBtn}>
+      <TouchableOpacity 
+      onPress={()=> router.push("/(auth)/SignIn&SignOut/YourProfile")}
+      style={styles.signinBtn}>
         <Text style={[Typography.bold.large, { color: Colors.others.white }]}>
           Sign in with password
         </Text>

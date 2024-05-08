@@ -8,7 +8,7 @@ export default function HomeScreen() {
     useEffect(() => {
         setTimeout(() => {
           router.push("/onBoarding/FirstScreen");
-        }, 4000);
+        }, 100);
       }, []);
   return (
     <>

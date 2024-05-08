@@ -11,6 +11,7 @@ import {
 import { Colors } from "@/constants/Colors";
 import { router } from "expo-router";
 import { ThemeContext } from "@/ctx/ThemeContext";
+import { StatusBar } from "expo-status-bar";
 
 const OnboardingComponent = ({
   image,
@@ -26,37 +27,42 @@ const OnboardingComponent = ({
   children: React.ReactNode;
 }) => {
   const { theme, changeTheme } = useContext(ThemeContext);
-
   return (
-    <View style={theme === "light" ? styles.DarkContainer : styles.lightContainer}>
-      <View style={styles.img}>
-        <Image source={image} />
-      </View>
-      <View style={styles.LowerSection}>
-        <Text style={theme === "light" ? styles.titleDark : styles.titleLight}>
-          {text}
-        </Text>
-        <View style={{ flexDirection: "row", alignSelf: "center" }}>
-          {children}
+    <>
+      <StatusBar style={theme === "light" ? "dark" : "dark"}/>
+      <View style={theme === "dark" ? styles.lightContainer : styles.DarkContainer}>
+        <View style={styles.img}>
+          <Image source={image} />
         </View>
-        <Pressable onPress={() => router.push(direction)} style={styles.btn}>
-          <Text style={styles.btnText}>{action}</Text>
-        </Pressable>
-      </View>
+        <View style={styles.LowerSection}>
+          <Text style={theme === "light" ? styles.titleDark : styles.titleLight}>
+            {text}
+          </Text>
+          <View style={{ flexDirection: "row", alignSelf: "center" }}>
+            {children}
+          </View>
+          <Pressable onPress={() => router.push(direction)} style={styles.btn}>
+            <Text style={styles.btnText}>{action}</Text>
+          </Pressable>
+        </View>
     </View>
+    </>
+   
   );
 };
 
 const styles = StyleSheet.create({
   lightContainer: {
-    paddingHorizontal: "5%",
-    paddingVertical: "20%",
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
     backgroundColor: Colors.others.white
   },
 
   DarkContainer: {
-    paddingHorizontal: "5%",
-    paddingVertical: "20%",
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
     backgroundColor: Colors.others.black
   },
 

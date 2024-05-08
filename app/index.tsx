@@ -8,7 +8,7 @@ export default function SplashScreen() {
   useEffect(() => {
     setTimeout(() => {
       router.push("/(app)/HomeScreen");
-    }, 2000);
+    }, 100);
   }, []);
   return (
     <>
@@ -19,7 +19,6 @@ export default function SplashScreen() {
               <Image source={require("../assets/images/icon.png")} />
             </View>
           </View>
-
           <View>
             <Text style={styles.text}>Medica</Text>
           </View>
