@@ -15,10 +15,11 @@ import Animated, {
   withRepeat,
   withTiming,
 } from "react-native-reanimated";
-import { LoadingIcon } from "@/components/UI/Icons";
 import { Pressable } from "react-native";
 import { router } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
+import { LoadingIcon } from "@/components/UI/Icons";
+import Booking_Appointment from "@/app/(app)/Booking/Booking_Appointment";
 
 export default function SetYourFingerPrint() {
   const { theme, changeTheme } = useContext(ThemeContext);
@@ -204,6 +205,25 @@ export default function SetYourFingerPrint() {
                 theme === "light" ? Colors.others.white : Colors.others.black,
             }}
           >
+            <Text
+              style={[
+                Typography.regular.xLarge,
+                { textAlign: "center" },
+                {
+                  shadowColor: "red",
+                  shadowOffset: { width: -2, height: 20 },
+                  shadowOpacity: 1,
+                  shadowRadius: 20,
+                  color:
+                    theme === "light"
+                      ? Colors.grayScale._900
+                      : Colors.others.white,
+                },
+              ]}
+            >
+          
+              Please put your finger on the fingerprint scanner to get started.
+            </Text>
             <View
               style={{
                 flexGrow: 1,
