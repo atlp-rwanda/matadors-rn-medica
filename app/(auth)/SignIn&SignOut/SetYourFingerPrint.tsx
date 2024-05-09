@@ -1,11 +1,9 @@
 import ModalScreen from "@/app/modal";
 import { Text, View } from "@/components/Themed";
-import { SvgUri, SvgXml } from "react-native-svg";
-
 import Button from "@/components/UI/Button";
 import { Colors } from "@/constants/Colors";
 import Typography from "@/constants/Typography";
-import { Image, ScrollView } from "react-native";
+import { Image, SafeAreaView, ScrollView } from "react-native";
 import { ThemeContext } from "@/ctx/ThemeContext";
 import React, { useContext, useEffect } from "react";
 import * as LocalAuthentication from "expo-local-authentication";
@@ -18,10 +16,14 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { LoadingIcon } from "@/components/UI/Icons";
+import { Pressable } from "react-native";
+import { router } from "expo-router";
+import { MaterialIcons } from "@expo/vector-icons";
 
 export default function SetYourFingerPrint() {
   const { theme, changeTheme } = useContext(ThemeContext);
   const modal = useModal();
+  changeTheme("light")
 
   const rotationValue = useSharedValue(0);
 
@@ -34,7 +36,19 @@ export default function SetYourFingerPrint() {
   }));
 
   return (
-    <>
+    <SafeAreaView >
+       <Pressable
+            onPress={()=> router.back()}
+             style={{ marginTop: 30,
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+              width: 250,
+              }}>
+                <MaterialIcons name="arrow-back" size={25} style={{alignSelf: "center",}}/>
+                <Text style={{fontSize: 24,
+        fontWeight: "600"}}>   Set Your Fingerprint</Text>
+            </Pressable>
       <ScrollView
         contentContainerStyle={{
           paddingHorizontal: 20,
@@ -47,7 +61,7 @@ export default function SetYourFingerPrint() {
           style={{
             height: "100%",
             justifyContent: "space-between",
-            paddingVertical: 20,
+            paddingVertical: 100,
             backgroundColor:
               theme === "light" ? Colors.others.white : Colors.others.black,
           }}
@@ -66,12 +80,15 @@ export default function SetYourFingerPrint() {
           >
             Add a fingerprint to make your account more secure.
           </Text>
-
-          <Image source={require("@/assets/images/fingerprint.png")} />
+            <View style={{width: 300, height: 300, alignSelf: "center"}}>
+            <Image 
+            style={{width: "100%", height: "100%"}}
+            source={require("@/assets/images/fingerprint.png")} />
+            </View>
 
           <View
             style={{
-              gap: 60,
+              gap: 10,
               backgroundColor:
                 theme === "light" ? Colors.others.white : Colors.others.black,
             }}
@@ -210,7 +227,7 @@ export default function SetYourFingerPrint() {
 
                         setTimeout(() => {
                           modal.hide();
-                        }, 4000);
+                        }, 3000);
                       }
                     } catch (err) {
                       console.log(err);
@@ -223,6 +240,6 @@ export default function SetYourFingerPrint() {
           </View>
         </View>
       </ScrollView>
-    </>
+    </SafeAreaView>
   );
 }

@@ -1,9 +1,10 @@
 import { Text } from "@/components/Themed";
 import { LeftArrow, Chat, Message } from "@/components/UI/Icons";
-import { StyleSheet, Image, View, TouchableOpacity } from "react-native";
+import { StyleSheet, Image, View, TouchableOpacity, Pressable } from "react-native";
 import Typography from "@/constants/Typography";
 import { Colors } from "@/constants/Colors";
 import { useState } from "react";
+import { router } from "expo-router";
 
 export default function ForgotPassword() {
   const image = require("@/assets/images/ForgotPasswordImages/forgotpassword.png");
@@ -27,9 +28,11 @@ export default function ForgotPassword() {
     <>
       <View style={isDark ? styles.containerdark : styles.container}>
         <View style={isDark ? styles.headerdark : styles.header}>
-          <LeftArrow
-            fillColor={isDark ? Colors.others.white : Colors.grayScale._900}
-          />
+          <Pressable onPress={()=> router.back()}>
+            <LeftArrow
+              fillColor={isDark ? Colors.others.white : Colors.grayScale._900}
+            />
+          </Pressable>
           <Text
             style={[
               Typography.heading._4,
@@ -160,6 +163,7 @@ export default function ForgotPassword() {
           </View>
         </TouchableOpacity>
         <TouchableOpacity
+          onPress={()=> router.push("/(auth)/ForgotPassword&Reset/OTPform")}
           style={{
             width: 380,
             height: 58,

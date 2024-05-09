@@ -12,14 +12,13 @@ function TabBarIcon(props: {
   return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
 }
 
-export default function TabLayout() {
+export default function Layout() {
 
   return (
     <Stack>
       <Stack.Screen
         name="FirstScreen"
         options={{
-          title: "onBoarding page",
           headerShown: false,
         }}
       />
@@ -27,7 +26,6 @@ export default function TabLayout() {
       <Stack.Screen
         name="SecondScreen"
         options={{
-          title: "onBoarding page",
           headerShown: false,
         }}
       />
@@ -35,7 +33,6 @@ export default function TabLayout() {
       <Stack.Screen
         name="ThirdScreen"
         options={{
-          title: "onBoarding page",
           headerShown: false,
         }}
       />
