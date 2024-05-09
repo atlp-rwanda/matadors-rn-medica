@@ -10,7 +10,6 @@ export default function SplashScreen() {
       router.push("/(app)/HomeScreen");
     }, 2000);
   }, []);
-
   return (
     <>
       <View style={styles.container}>
