@@ -1,0 +1,36 @@
+ft (HomeScreen): Add Home Screen component
+ 
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch ft-home-screen
+# Changes to be committed:
+#	new file:   app/(app)/ActionMenu/HomeScreen.tsx
+#	modified:   app/(app)/_layout.tsx
+#	modified:   app/index.tsx
+#	new file:   assets/icons/AppointmentSvg.ts
+#	new file:   assets/icons/ArticleSvg.ts
+#	new file:   assets/icons/HistorySvg.ts
+#	new file:   assets/icons/HomeSvg.ts
+#	new file:   assets/icons/ProfileSvg.ts
+#	new file:   assets/images/BlueHeart.png
+#	new file:   assets/images/Dentist.png
+#	new file:   assets/images/Ellipse.png
+#	new file:   assets/images/Frame.png
+#	new file:   assets/images/GeneralDoctor.png
+#	new file:   assets/images/HalfStar.png
+#	new file:   assets/images/Heart.png
+#	new file:   assets/images/More.png
+#	new file:   assets/images/Neurologist.png
+#	new file:   assets/images/Notification.png
+#	new file:   assets/images/Nutritionist.png
+#	new file:   assets/images/Optician.png
+#	new file:   assets/images/Pediatric.png
+#	new file:   assets/images/Radiologist.png
+#	new file:   assets/images/Randy.png
+#	new file:   assets/images/filter.png
+#	new file:   assets/images/search.png
+#	new file:   components/Line.tsx
+#	modified:   package-lock.json
+#	modified:   package.json
+#
