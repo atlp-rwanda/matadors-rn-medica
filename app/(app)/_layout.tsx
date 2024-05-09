@@ -7,9 +7,9 @@ export default function Layout() {
     <>
       <Stack>
       <Stack.Screen name="HomeScreen" options={{ headerShown: false }} />
+      <Stack.Screen name="Booking/Doctor_details" options={{ headerShown: false }} />
+      <Stack.Screen name="Booking/DoctorRatingAndReview" options={{ headerShown: false }}/>
       <Stack.Screen name="ActionMenu/NotificationScreen" options={{ headerShown: false }} />
-      
-
       <Stack.Screen name="ActionMenu/HomeScreen" options={{ headerShown: false }} />
       </Stack>
     </>
