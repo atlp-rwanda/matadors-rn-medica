@@ -4,16 +4,18 @@ import { Colors } from '@/constants/Colors'
 import OnboardingComponent from '@/components/OnBoarding/OnboardingComponent';
 import { ThemeContext } from '@/ctx/ThemeContext';
 
-const darkImg = require("../../assets/images/OnBoardingImages/secondLightImg.png")
-const image = require("../../assets/images/OnBoardingImages/secondDarkImg.png")
+const image= require("../../assets/images/OnBoardingImages/secondLightImg.png")
+const darkImg  = require("../../assets/images/OnBoardingImages/secondDarkImg.png")
 
 const FirstScreen = () => {
     const {theme, changeTheme} = useContext(ThemeContext)
+    console.log(theme)
+
 
    return (
     <View style={styles.container}>
           <OnboardingComponent 
-        image={theme === "dark" ? darkImg : image}
+        image={theme === "light" ? image : darkImg}
         text="Health checks & consultations easily anywhere anytime"
         action="Next"
         direction="/onBoarding/ThirdScreen"

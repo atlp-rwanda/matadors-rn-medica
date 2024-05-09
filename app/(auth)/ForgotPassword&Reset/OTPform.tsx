@@ -3,7 +3,7 @@ import { LeftArrow } from "@/components/UI/Icons";
 import { Colors } from "@/constants/Colors";
 import Typography from "@/constants/Typography";
 import { useState } from "react";
-import { View, StyleSheet, TouchableOpacity, TextInput } from "react-native";
+import { View, StyleSheet, TouchableOpacity, TextInput, Pressable } from "react-native";
 import  CountdownTimer from "@/components/OTPcomponents/countdownTimer";
 import { OtpInput } from "react-native-otp-entry";
 import { router } from "expo-router";
@@ -23,9 +23,12 @@ export default function OTPform() {
     <>
       <View style={isDark ? styles.containerdark : styles.container}>
         <View style={isDark ? styles.headerdark : styles.header}>
+          <Pressable onPress={()=> router.back()}>
+
           <LeftArrow
             fillColor={isDark ? Colors.others.white : Colors.grayScale._900}
           />
+          </Pressable>
           <Text
             style={[
               Typography.heading._4,

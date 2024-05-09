@@ -27,6 +27,7 @@ export default function ForgotPassword() {
   return (
     <>
       <View style={isDark ? styles.containerdark : styles.container}>
+        
         <View style={isDark ? styles.headerdark : styles.header}>
           <Pressable onPress={()=> router.back()}>
             <LeftArrow

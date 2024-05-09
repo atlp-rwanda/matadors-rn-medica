@@ -1,6 +1,6 @@
 import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import Typography from "@/constants/Typography";
-import Colors from "@/constants/Colors";
+import {Colors} from "@/constants/Colors";
 import { useEffect } from "react";
 import { router } from "expo-router";
 
@@ -56,7 +56,6 @@ const styles = StyleSheet.create({
     paddingBottom: 30,
     paddingTop: 20,
     fontFamily: "Regular",
-    color: Colors.light.text,
     fontSize: 17,
   },
   image: {
