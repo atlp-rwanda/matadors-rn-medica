@@ -10,6 +10,7 @@ export default function Layout() {
       <Stack.Screen name="ActionMenu/NotificationScreen" options={{ headerShown: false }} />
       
 
+      <Stack.Screen name="ActionMenu/HomeScreen" options={{ headerShown: false }} />
       </Stack>
     </>
   );
