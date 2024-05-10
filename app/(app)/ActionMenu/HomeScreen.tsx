@@ -10,6 +10,7 @@ import {AppointmentIcon} from "../../../assets/icons/AppointmentSvg";
 import {ArticleIcon} from "../../../assets/icons/ArticleSvg";
 import {ProfileIcon} from "../../../assets/icons/ProfileSvg";
 import Line from "@/components/Line";
+import { router } from "expo-router";
 //import { HomeIcon, HistoryIcon, AppointmentIcon, ArticleIcon, ProfileIcon } from '../../../assets/icons';
 
 
@@ -44,7 +45,7 @@ export default function HomeScreen() {
          <Text style={styles.userName}>Andrew Ainsley</Text>
         </View>
         <View style={styles.Icons}>
-          <TouchableOpacity><Image source={require('../../../assets/images/Notification.png')}></Image></TouchableOpacity>
+          <TouchableOpacity onPress={()=>router.push("/(app)/ActionMenu/NotificationScreen")}><Image source={require('../../../assets/images/Notification.png')}></Image></TouchableOpacity>
           <TouchableOpacity><Image style={styles.heart} source={require('../../../assets/images/Heart.png')}></Image></TouchableOpacity> 
         </View>
       </View>
