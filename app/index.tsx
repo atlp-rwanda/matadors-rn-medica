@@ -2,7 +2,6 @@ import Loading from "@/app/spinner/Loading";
 import { router } from "expo-router";
 import { useEffect } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
-
 export default function SplashScreen() {
 
   useEffect(() => {
