@@ -106,6 +106,7 @@ function RootLayoutNav() {
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="onBoarding" options={{ headerShown: false }} />
       </Stack>
+      <ModalContainer/>
     </>
   );
 }

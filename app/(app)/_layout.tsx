@@ -7,9 +7,7 @@ export default function Layout() {
     <>
       <Stack>
       <Stack.Screen name="HomeScreen" options={{ headerShown: false }} />
-      {/* <Stack.Screen name="SignIn&SignOut/SignUpBlankForm" options={{ headerShown: false }} />
-      <Stack.Screen name="SignIn&SignOut/LetsYouIn" options={{ headerShown: false }} /> */}
-
+      <Stack.Screen name="ActionMenu/HomeScreen" options={{ headerShown: false }} />
       </Stack>
     </>
   );

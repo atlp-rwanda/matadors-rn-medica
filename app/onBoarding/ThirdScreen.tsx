@@ -4,8 +4,8 @@ import { Colors } from '@/constants/Colors'
 import OnboardingComponent from '@/components/OnBoarding/OnboardingComponent'
 import { ThemeContext } from '@/ctx/ThemeContext'
 
-const darkImg = require("../../assets/images/OnBoardingImages/thirdLightImg.png")
-const image  = require("../../assets/images/OnBoardingImages/thirdDarkImg.png")
+const image = require("../../assets/images/OnBoardingImages/thirdLightImg.png")
+const  darkImg = require("../../assets/images/OnBoardingImages/thirdDarkImg.png")
 
 
 const ThirdScreen = () => {
@@ -14,7 +14,7 @@ const ThirdScreen = () => {
    return (
     <View style={styles.container}>
             <OnboardingComponent 
-        image={ theme=== "dark" ? darkImg : image}
+        image={ theme=== "light" ?  image : darkImg}
         text="Let's start living healthy and well with us right now!"
             action="Get Started"
             direction="(auth)/SignIn&SignOut/LetsYouIn"

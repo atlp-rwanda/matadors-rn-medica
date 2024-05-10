@@ -4,8 +4,8 @@ import { Colors } from '@/constants/Colors'
 import OnboardingComponent from '@/components/OnBoarding/OnboardingComponent';
 import { ThemeContext } from '@/ctx/ThemeContext';
 
-const darkImg = require("../../assets/images/OnBoardingImages/firstLightImg.png")
-const image = require("../../assets/images/OnBoardingImages/firstDarkImg.png")
+const  image = require("../../assets/images/OnBoardingImages/firstLightImg.png")
+const darkImg = require("../../assets/images/OnBoardingImages/firstDarkImg.png")
 
 const FirstScreen = () => {
     const {theme, changeTheme} = useContext(ThemeContext)
@@ -13,7 +13,7 @@ const FirstScreen = () => {
    return (
     <View style={styles.container}>
           <OnboardingComponent 
-        image={theme === "dark" ? darkImg : image}
+        image={theme === "light" ?  image: darkImg}
         text='Thousands of
         doctors & experts to help your health!'
         action="Next"

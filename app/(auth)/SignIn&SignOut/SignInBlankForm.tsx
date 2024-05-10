@@ -125,7 +125,9 @@ const Login = () => {
       </View>
 
       <View>
-        <TouchableOpacity style={styles.signinBtn}>
+        <TouchableOpacity 
+        onPress={()=> router.push("/(app)/ActionMenu/HomeScreen")}
+        style={styles.signinBtn}>
           <Text style={styles.signText}>Sign in</Text>
         </TouchableOpacity>
       </View>
@@ -156,7 +158,7 @@ const Login = () => {
         <Text style={[Typography.regular.medium]}>Don’t have an account? </Text>
         <Text
           style={[Typography.semiBold.medium, {color:Colors.main.primary._500}]}
-          onPress={() => router.push("/(auth)/SignIn&SignOut/SignInBlankForm")}
+          onPress={() => router.push("/(auth)/SignIn&SignOut/SignUpBlankForm")}
         >
           Sign up
         </Text>
@@ -312,6 +314,7 @@ const styles = StyleSheet.create({
   },
   account: {
     flexDirection: "row",
+    gap: 5
   },
   middlePart: {
     gap: 30,
