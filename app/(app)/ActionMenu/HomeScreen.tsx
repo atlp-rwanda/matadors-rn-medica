@@ -17,8 +17,13 @@ import { router } from "expo-router";
 export default function HomeScreen() {
     //const {user, isLoading}=useUser();
     const [activeIcon, setActiveIcon] = useState('Home'); 
-    const handleIconPress = (iconName: string) => {
+    const handleNavigation = (direction: string)=> {
+      router.push(direction)
+    }
+
+    const handleIconPress = (iconName: string, direction: string) => {
       setActiveIcon(iconName); // Update active icon state when an icon is pressed
+      handleNavigation(direction)
     };
     const isIconActive = (iconName: string) => {
       return activeIcon === iconName;
@@ -157,7 +162,7 @@ export default function HomeScreen() {
           <Text style={[styles.iconText, isIconActive('Home') && styles.activeText]}>Home</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => handleIconPress('Appointment')}>
+        <TouchableOpacity onPress={() => handleIconPress('Appointment', "(app)/Booking/Doctor_details")}>
           <SvgXml xml={AppointmentIcon} style={[styles.icon, isIconActive('Appointment') && styles.activeIcon]} />
           <Text style={[styles.iconText, isIconActive('Appointment') && styles.activeText]}>Appointments</Text>
         </TouchableOpacity>
