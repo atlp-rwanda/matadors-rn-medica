@@ -234,6 +234,7 @@ const DoctorDetails = () => {
       </View>
       <View>
         <Pressable
+        onPress={()=> router.push("(app)/Booking/BookingAppointment")}
           style={{
             backgroundColor: Colors.main.primary._500,
             paddingVertical: 20,
