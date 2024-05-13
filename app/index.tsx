@@ -4,12 +4,12 @@ import { useEffect } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 
 export default function SplashScreen() {
-
   useEffect(() => {
     setTimeout(() => {
       router.push("(app)/HomeScreen");
     }, 2000);
   }, []);
+
   return (
     <>
       <View style={styles.container}>
@@ -56,4 +56,3 @@ const styles = StyleSheet.create({
     bottom: 50,
   },
 });
-
