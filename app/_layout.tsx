@@ -18,7 +18,7 @@ import ModalContainer from "@/components/UI/Modal";
 export { ErrorBoundary } from "expo-router";
  
 export const unstable_settings = {
-  initialRouteName: "(onBoarding)",
+  initialRouteName: "(app)",
 };
  
 SplashScreen.preventAutoHideAsync();
@@ -99,9 +99,10 @@ function RootLayoutNav() {
   return (
     <>
       <Stack
-        initialRouteName="(auth)"
+        initialRouteName="(app)"
         screenOptions={{ statusBarTranslucent: true, headerShown: false }}>
-        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+          
+        <Stack.Screen name="(app)" options={{ headerShown: false }} />
         <Stack.Screen name="modal" options={{ presentation: "modal" }} />
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="onBoarding" options={{ headerShown: false }} />
