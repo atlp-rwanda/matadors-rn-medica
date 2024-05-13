@@ -1,15 +1,17 @@
 import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import Typography from "@/constants/Typography";
-import {Colors} from "@/constants/Colors";
+import { Colors } from "@/constants/Colors";
 import { useEffect } from "react";
 import { router } from "expo-router";
 
-export default function HomeScreen() {
-    useEffect(() => {
-        setTimeout(() => {
-          router.push("/onBoarding/FirstScreen");
-        }, 3000);
-      }, []);
+export default function Index() {
+  useEffect(() => {
+    setTimeout(() => {
+      // router.push("/onBoarding/FirstScreen");
+      router.push("/ActionMenu/");
+    }, 3000);
+  }, []);
+
   return (
     <>
       <View style={styles.container}>

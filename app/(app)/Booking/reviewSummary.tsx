@@ -3,38 +3,49 @@ import { LeftArrow } from "@/components/UI/Icons";
 import { Colors } from "@/constants/Colors";
 import Typography from "@/constants/Typography";
 import { useContext, useState } from "react";
-import { StyleSheet, Image, TouchableOpacity,View } from "react-native";
+import { StyleSheet, Image, TouchableOpacity, View } from "react-native";
 import { colors } from "react-native-elements";
-import { Mastercard ,Mastercarddark} from "@/components/UI/Icons";
-import { ThemeContext } from '@/ctx/ThemeContext';
-
+import { Mastercard, Mastercarddark } from "@/components/UI/Icons";
+import { ThemeContext } from "@/ctx/ThemeContext";
 
 export default function Reviewsummary() {
-  const  {theme, changeTheme}  = useContext(ThemeContext);
+  const { theme, changeTheme } = useContext(ThemeContext);
   changeTheme("light");
 
   return (
     <>
-      <View style={theme=== "dark" ? styles.containerdark : styles.container}>
-        <View style={theme=== "dark" ? styles.headerdark : styles.header}>
+      <View style={theme === "dark" ? styles.containerdark : styles.container}>
+        <View style={theme === "dark" ? styles.headerdark : styles.header}>
           <LeftArrow
-            fillColor={theme=== "dark" ? Colors.others.white : Colors.grayScale._900}
+            fillColor={
+              theme === "dark" ? Colors.others.white : Colors.grayScale._900
+            }
           />
           <Text
             style={[
               Typography.heading._4,
-              { color: theme=== "dark" ? Colors.others.white : Colors.grayScale._900 },
+              {
+                color:
+                  theme === "dark"
+                    ? Colors.others.white
+                    : Colors.grayScale._900,
+              },
             ]}
           >
             Review Summary
           </Text>
         </View>
-        <View style={{flexDirection: "row",
-    padding: 16,
-    width: 380,
-    borderRadius: 24,
-    backgroundColor: theme=== "dark"?Colors.dark._2:Colors.others.white,
-    gap: 16,}}>
+        <View
+          style={{
+            flexDirection: "row",
+            padding: 16,
+            width: 380,
+            borderRadius: 24,
+            backgroundColor:
+              theme === "dark" ? Colors.dark._2 : Colors.others.white,
+            gap: 16,
+          }}
+        >
           <Image
             source={require("@/assets/images/BookingImages/doctor.png")}
             style={{ width: 110, height: 110 }}
@@ -48,7 +59,12 @@ export default function Reviewsummary() {
             <Text
               style={[
                 Typography.heading._5,
-                { color: theme=== "dark" ? Colors.others.white : Colors.grayScale._900 },
+                {
+                  color:
+                    theme === "dark"
+                      ? Colors.others.white
+                      : Colors.grayScale._900,
+                },
               ]}
             >
               Dr Jenny Watson
@@ -57,15 +73,19 @@ export default function Reviewsummary() {
               style={{
                 width: 222,
                 height: 1,
-                backgroundColor: theme=== "dark"
-                  ? Colors.dark._3
-                  : Colors.grayScale._200,
+                backgroundColor:
+                  theme === "dark" ? Colors.dark._3 : Colors.grayScale._200,
               }}
             ></View>
             <Text
               style={[
                 Typography.medium.small,
-                { color: theme=== "dark" ? Colors.others.white : Colors.grayScale._800 },
+                {
+                  color:
+                    theme === "dark"
+                      ? Colors.others.white
+                      : Colors.grayScale._800,
+                },
               ]}
             >
               Immunologist
@@ -73,7 +93,12 @@ export default function Reviewsummary() {
             <Text
               style={[
                 Typography.medium.small,
-                { color: theme=== "dark" ? Colors.others.white : Colors.grayScale._800 },
+                {
+                  color:
+                    theme === "dark"
+                      ? Colors.others.white
+                      : Colors.grayScale._800,
+                },
               ]}
             >
               Christ hospital London,uk
@@ -81,8 +106,16 @@ export default function Reviewsummary() {
           </View>
         </View>
 
-
-        <View style={{ width: 380, padding: 24, gap: 20, borderRadius: 20, backgroundColor: theme=== "dark"?Colors.dark._2:Colors.others.white, }}>
+        <View
+          style={{
+            width: 380,
+            padding: 24,
+            gap: 20,
+            borderRadius: 20,
+            backgroundColor:
+              theme === "dark" ? Colors.dark._2 : Colors.others.white,
+          }}
+        >
           <View
             style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
@@ -90,7 +123,10 @@ export default function Reviewsummary() {
               style={[
                 Typography.medium.medium,
                 {
-                  color: theme=== "dark" ? Colors.grayScale._300 : Colors.grayScale._700,
+                  color:
+                    theme === "dark"
+                      ? Colors.grayScale._300
+                      : Colors.grayScale._700,
                 },
               ]}
             >
@@ -99,7 +135,12 @@ export default function Reviewsummary() {
             <Text
               style={[
                 Typography.semiBold.large,
-                { color: theme=== "dark" ? Colors.others.white : Colors.grayScale._800 },
+                {
+                  color:
+                    theme === "dark"
+                      ? Colors.others.white
+                      : Colors.grayScale._800,
+                },
               ]}
             >
               Dec 23, 2024 | 10:00 AM
@@ -112,7 +153,10 @@ export default function Reviewsummary() {
               style={[
                 Typography.medium.medium,
                 {
-                  color: theme=== "dark" ? Colors.grayScale._300 : Colors.grayScale._700,
+                  color:
+                    theme === "dark"
+                      ? Colors.grayScale._300
+                      : Colors.grayScale._700,
                 },
               ]}
             >
@@ -121,7 +165,12 @@ export default function Reviewsummary() {
             <Text
               style={[
                 Typography.semiBold.large,
-                { color: theme=== "dark" ? Colors.others.white : Colors.grayScale._800 },
+                {
+                  color:
+                    theme === "dark"
+                      ? Colors.others.white
+                      : Colors.grayScale._800,
+                },
               ]}
             >
               Messaging
@@ -134,7 +183,10 @@ export default function Reviewsummary() {
               style={[
                 Typography.medium.medium,
                 {
-                  color: theme=== "dark" ? Colors.grayScale._300 : Colors.grayScale._700,
+                  color:
+                    theme === "dark"
+                      ? Colors.grayScale._300
+                      : Colors.grayScale._700,
                 },
               ]}
             >
@@ -143,7 +195,12 @@ export default function Reviewsummary() {
             <Text
               style={[
                 Typography.semiBold.large,
-                { color: theme=== "dark" ? Colors.others.white : Colors.grayScale._800 },
+                {
+                  color:
+                    theme === "dark"
+                      ? Colors.others.white
+                      : Colors.grayScale._800,
+                },
               ]}
             >
               30 minutes
@@ -151,7 +208,16 @@ export default function Reviewsummary() {
           </View>
         </View>
 
-        <View style={{ width: 380, padding: 24, gap: 20, borderRadius:20 , backgroundColor: theme=== "dark"?Colors.dark._2:Colors.others.white,}}>
+        <View
+          style={{
+            width: 380,
+            padding: 24,
+            gap: 20,
+            borderRadius: 20,
+            backgroundColor:
+              theme === "dark" ? Colors.dark._2 : Colors.others.white,
+          }}
+        >
           <View
             style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
@@ -159,7 +225,10 @@ export default function Reviewsummary() {
               style={[
                 Typography.medium.medium,
                 {
-                  color: theme=== "dark" ? Colors.grayScale._300 : Colors.grayScale._700,
+                  color:
+                    theme === "dark"
+                      ? Colors.grayScale._300
+                      : Colors.grayScale._700,
                 },
               ]}
             >
@@ -168,13 +237,17 @@ export default function Reviewsummary() {
             <Text
               style={[
                 Typography.semiBold.large,
-                { color: theme=== "dark" ? Colors.others.white : Colors.grayScale._800 },
+                {
+                  color:
+                    theme === "dark"
+                      ? Colors.others.white
+                      : Colors.grayScale._800,
+                },
               ]}
             >
               $20
             </Text>
           </View>
-
 
           <View
             style={{ flexDirection: "row", justifyContent: "space-between" }}
@@ -183,7 +256,10 @@ export default function Reviewsummary() {
               style={[
                 Typography.medium.medium,
                 {
-                  color: theme=== "dark" ? Colors.grayScale._300 : Colors.grayScale._700,
+                  color:
+                    theme === "dark"
+                      ? Colors.grayScale._300
+                      : Colors.grayScale._700,
                 },
               ]}
             >
@@ -192,22 +268,26 @@ export default function Reviewsummary() {
             <Text
               style={[
                 Typography.semiBold.large,
-                { color: theme=== "dark" ? Colors.others.white : Colors.grayScale._800 },
+                {
+                  color:
+                    theme === "dark"
+                      ? Colors.others.white
+                      : Colors.grayScale._800,
+                },
               ]}
             >
               1 * $20
             </Text>
           </View>
 
-
           <View
             style={{
               width: 332,
               height: 1,
-              backgroundColor: theme=== "dark" ? Colors.dark._3 : Colors.grayScale._200,
+              backgroundColor:
+                theme === "dark" ? Colors.dark._3 : Colors.grayScale._200,
             }}
           ></View>
-
 
           <View
             style={{ flexDirection: "row", justifyContent: "space-between" }}
@@ -216,7 +296,10 @@ export default function Reviewsummary() {
               style={[
                 Typography.medium.medium,
                 {
-                  color: theme=== "dark" ? Colors.grayScale._300 : Colors.grayScale._700,
+                  color:
+                    theme === "dark"
+                      ? Colors.grayScale._300
+                      : Colors.grayScale._700,
                 },
               ]}
             >
@@ -225,27 +308,42 @@ export default function Reviewsummary() {
             <Text
               style={[
                 Typography.semiBold.large,
-                { color: theme=== "dark" ? Colors.others.white : Colors.grayScale._800 },
+                {
+                  color:
+                    theme === "dark"
+                      ? Colors.others.white
+                      : Colors.grayScale._800,
+                },
               ]}
             >
               $20
             </Text>
           </View>
-
         </View>
-        <View style={{ width: 380, padding: 24, gap: 20, borderRadius: 20 ,backgroundColor: theme=== "dark"?Colors.dark._2:Colors.others.white,}}>
-
+        <View
+          style={{
+            width: 380,
+            padding: 24,
+            gap: 20,
+            borderRadius: 20,
+            backgroundColor:
+              theme === "dark" ? Colors.dark._2 : Colors.others.white,
+          }}
+        >
           <View
             style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
-            <View> 
-              {theme=== "dark" ? <Mastercarddark/>:<Mastercard/>}
-              </View>
+            <View>
+              {theme === "dark" ? <Mastercarddark /> : <Mastercard />}
+            </View>
             <Text
               style={[
                 Typography.heading._5,
                 {
-                  color: theme=== "dark" ? Colors.grayScale._300 : Colors.grayScale._900,
+                  color:
+                    theme === "dark"
+                      ? Colors.grayScale._300
+                      : Colors.grayScale._900,
                 },
               ]}
             >
@@ -267,22 +365,20 @@ export default function Reviewsummary() {
             height: 58,
             borderRadius: 100,
             backgroundColor: Colors.main.primary._500,
-            alignItems:'center',
-            justifyContent:'center',            
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
-           
-          <Text style={[Typography.bold.large,{color:Colors.others.white}]}>Next</Text>
+          <Text style={[Typography.bold.large, { color: Colors.others.white }]}>
+            Next
+          </Text>
         </TouchableOpacity>
-        </View>
-      
+      </View>
     </>
   );
 }
 const styles = StyleSheet.create({
-  itemcontainer: {
-    
-  },
+  itemcontainer: {},
 
   header: {
     width: "100%",
