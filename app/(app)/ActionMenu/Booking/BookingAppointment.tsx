@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Pressable,
   Platform,
+  ScrollView,
 } from "react-native";
 import DatePicker, { getFormatedDate } from "react-native-modern-datepicker";
 import { Colors } from "@/constants/Colors";
@@ -21,11 +22,12 @@ function BookingAppointment() {
   const [selectedTime, setSelectedTime] = useState(null);
   const [selectedDate, setSelectedDate] = useState("");
 
-  const handleTimeSlotPress = ({ time }: {time: any}) => {
+  const handleTimeSlotPress = ({ time }: { time: any }) => {
     setSelectedTime(time === selectedTime ? null : time);
     console.log(time);
   };
   console.log(selectedTime);
+  changeTheme("light");
   //  documentation : https://hosseinshabani.github.io/react-native-modern-datepicker/?ref=retool-blog
   // Function to generate time slots from 9:00 AM to 15:00 PM
   const generateTimeSlots = () => {
@@ -43,7 +45,6 @@ function BookingAppointment() {
             style={[
               styles.button,
               selectedTime === time && styles.buttonSelected,
-              
             ]}
             onPress={(time: any) => handleTimeSlotPress(time)}
           >
@@ -51,7 +52,7 @@ function BookingAppointment() {
               style={[
                 styles.buttonText,
                 selectedTime === time && styles.buttonTextSelected,
-                Typography.bold.xLarge
+                Typography.bold.xLarge,
               ]}
             >
               {time}
@@ -69,9 +70,9 @@ function BookingAppointment() {
   }
   const ios = Platform.OS === "ios";
   return (
-    <View style={{ flex: 1, backgroundColor: "white"}}>
-      <SafeAreaView style={{ marginBottom: ios ? 10 : 40 }}>
-        <StatusBar style="dark"/>
+    <View style={{ flex: 1, backgroundColor: "white" }}>
+      <SafeAreaView style={{ marginBottom: ios ? 10 : 50 }}>
+        <StatusBar style="dark" />
       </SafeAreaView>
       <View style={{ flex: 1, justifyContent: "space-around" }}>
         <View
@@ -105,37 +106,48 @@ function BookingAppointment() {
               Book Appointment
             </Text>
           </Pressable>
-          <View style={{ padding: 20, justifyContent: "space-between" }}>
-            <View style={{ gap: 10 }}>
-              <Text style={Typography.bold.xLarge}>Select Date</Text>
-              <View style={{ borderRadius: 20 }}>
-                <DatePicker
-                  onSelectedChange={(date) => handleDate(date)}
-                  mode="calendar"
-                  options={{
-                    backgroundColor: Colors.transparent.blue,
-                    textHeaderColor: "#000",
-                    textDefaultColor: "#000",
-                    selectedTextColor: "#fff",
-                    mainColor: "#246BFD",
-                    textSecondaryColor: "#000",
-                    borderColor: "rgba(122, 146, 165, 0.1)",
-                  }}
-                  current="2020-07-13"
-                  style={{
-                    borderRadius: 20
-                  }}
-                />
-              </View>
+          <ScrollView 
+          showsVerticalScrollIndicator={false}
+          style={{marginBottom: 30}}>
+
+          <View
+            style={{
+              padding: 20,
+              justifyContent: "space-between",
+            }}
+          >
               <View style={{ gap: 10 }}>
-              <Text style={Typography.bold.xLarge}>Select Date</Text>
-                <View style={styles.change}>{generateTimeSlots()}</View>
+                <Text style={Typography.bold.xLarge}>Select Date</Text>
+                <View style={{ borderRadius: 20 }}>
+                  <DatePicker
+                    onSelectedChange={(date) => handleDate(date)}
+                    mode="calendar"
+                    options={{
+                      backgroundColor: Colors.transparent.blue,
+                      textHeaderColor: "#000",
+                      textDefaultColor: "#000",
+                      selectedTextColor: "#fff",
+                      mainColor: "#246BFD",
+                      textSecondaryColor: "#000",
+                      borderColor: "rgba(122, 146, 165, 0.1)",
+                    }}
+                    current="2020-07-13"
+                    style={{
+                      borderRadius: 20,
+                    }}
+                  />
+                </View>
+                <View style={{ gap: 10 }}>
+                  <Text style={Typography.bold.xLarge}>Select Date</Text>
+                  <View style={styles.change}>{generateTimeSlots()}</View>
+                </View>
               </View>
-            </View>
-            <TouchableOpacity style={styles.btn}>
+
+              <TouchableOpacity style={styles.btn}>
                 <Text style={styles.btnText}>Next</Text>
-            </TouchableOpacity>
+              </TouchableOpacity>
           </View>
+          </ScrollView>
         </View>
       </View>
     </View>
@@ -175,7 +187,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: Colors.main.primary._500,
     fontSize: 16,
-    padding:5,
+    padding: 5,
     alignSelf: "center",
   },
 
@@ -183,11 +195,11 @@ const styles = StyleSheet.create({
     color: "white",
   },
   btn: {
-   backgroundColor: Colors.main.primary._500,
+    backgroundColor: Colors.main.primary._500,
     textAlign: "center",
     padding: 18,
     borderRadius: 100,
-    marginTop: 10
+    marginTop: 10,
   },
   btnText: {
     textAlign: "center",

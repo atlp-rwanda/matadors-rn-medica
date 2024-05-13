@@ -104,7 +104,7 @@ export default function SetYourFingerPrint() {
 
         setTimeout(() => {
           modal.hide();
-          router.push("/(app)/ActionMenu/HomeScreen");
+          router.push("/(app)/ActionMenu");
         }, 3000);
       }
     } catch (err) {

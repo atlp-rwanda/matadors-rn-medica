@@ -1,7 +1,7 @@
 import { title } from "process";
 import React, { useContext } from "react";
 import { SvgXml } from "react-native-svg";
-import { Pressable, StatusBar, StyleSheet, Text, Touchable, TouchableOpacity } from "react-native";
+import { Pressable, ScrollView, StatusBar, StyleSheet, Text, Touchable, TouchableOpacity } from "react-native";
 import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Typography from "@/constants/Typography";
@@ -24,7 +24,7 @@ export const ReviewerCardComponent = () => {
   const {theme, changeTheme} = useContext(ThemeContext)
 
   return (
-    <View style={{ gap: 10, marginVertical: 10 }}>
+    <View style={{ gap: 10, marginVertical: 10}}>
       <View
         style={{
           flexDirection: "row",
@@ -102,7 +102,7 @@ const DoctorDetails = () => {
           </View>
         </View>
       </SafeAreaView>
-      <View style={styles.individualCard}>
+        <View style={styles.individualCard}>
         <View style={{width: 100, height: 100}}>
           <Image 
           style={{width: "100%", height: "100%"}}
@@ -197,6 +197,7 @@ const DoctorDetails = () => {
           <Text style={{color: theme === "dark" ? Colors.others.white : Colors.others.black}}>reviewers</Text>
         </View>
       </View>
+    
       <View style={{ gap: 5 }}>
       <Text style={[Typography.heading._5, {color: theme === "dark" ? Colors.others.white : Colors.others.black}]}>About me</Text>
         <Text style={{lineHeight: 25, color: theme === "dark" ? Colors.others.white : Colors.others.black}}>
@@ -219,7 +220,7 @@ const DoctorDetails = () => {
           <Text style={[Typography.heading._5, {
             color: theme === "dark" ? Colors.others.white : Colors.others.black
           }]}>Reviews</Text>
-          <Pressable onPress={()=> router.push("/Booking/DoctorRatingAndReview")}>
+          <Pressable onPress={()=> router.push("/ActionMenu/Booking/DoctorRatingAndReview")}>
             <Text
                 style={[Typography.heading._5, { color: Colors.main.primary._500 }]}
             >
@@ -234,7 +235,7 @@ const DoctorDetails = () => {
       </View>
       <View>
         <Pressable
-        onPress={()=> router.push("(app)/Booking/BookingAppointment")}
+        onPress={()=> router.push("/ActionMenu/Booking/BookingAppointment")}
           style={{
             backgroundColor: Colors.main.primary._500,
             paddingVertical: 20,
@@ -263,7 +264,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 24,
-    gap: 20,
+    gap: 15,
   },
   navBar: {
     flexDirection: "row",
