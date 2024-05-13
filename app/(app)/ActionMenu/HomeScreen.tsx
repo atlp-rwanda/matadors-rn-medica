@@ -35,8 +35,9 @@ export default function HomeScreen() {
     }
 
   return (
+    
     <View style={styles.container} >
-      <ScrollView>
+      <ScrollView >
       <View  style={styles.header} >
         <Image source={require('../../../assets/images/Ellipse.png')}></Image>
         <View style={styles.heading}>
@@ -107,25 +108,27 @@ export default function HomeScreen() {
         <Text style={styles.specialityTxt}>Top Doctors</Text>
         <TouchableOpacity><Text style={styles.seeTxt}>See All</Text></TouchableOpacity>
       </View>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} >
-        <View style={{ flexDirection: "row", gap: 20, marginTop:5, marginLeft: 10, backgroundColor:'#ffffff' }}>
+      
+        <View style={{ flexDirection: "row", gap: 20, marginTop:5,padding:5 ,marginLeft: 10, marginBottom:20 ,backgroundColor:'#ffffff' }}>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} >
           <View style={{ backgroundColor: "#246BFD", padding: 5, paddingHorizontal: 10, borderRadius: 20, justifyContent: "center",width:65,height:34,alignItems:'center' }}>
             <Text style={{ fontFamily: "Urbanist-regular", color: "white" }}>All</Text>
           </View>
-          <View style={{ backgroundColor: "#ffffff", padding: 5, paddingHorizontal: 10, borderColor:'#246BFD',borderWidth:2 ,borderRadius: 20,height:34,alignItems:'center' }}>
+          <View style={{ backgroundColor: "#ffffff", marginLeft:10 ,padding: 5, paddingHorizontal: 10, borderColor:'#246BFD',borderWidth:2 ,borderRadius: 20,height:34,alignItems:'center' }}>
             <Text style={{ fontFamily: "Urbanist-regular", color: '#246BFD' }}>General</Text>
           </View>
-          <View style={{ backgroundColor: "#ffffff", padding: 5, paddingHorizontal: 10,borderColor:'#246BFD',borderWidth:2 , borderRadius: 20 ,height:34,alignItems:'center'}}>
+          <View style={{ backgroundColor: "#ffffff",marginLeft:10, padding: 5, paddingHorizontal: 10,borderColor:'#246BFD',borderWidth:2 , borderRadius: 20 ,height:34,alignItems:'center'}}>
             <Text style={{ fontFamily: "Urbanist-regular", color: '#246BFD' }}>Dentist</Text>
           </View>
-          <View style={{ backgroundColor: "#ffffff", padding: 5, paddingHorizontal: 10,borderColor:'#246BFD',borderWidth:2 , borderRadius: 20,height:34,alignItems:'center' }}>
+          <View style={{ backgroundColor: "#ffffff",marginLeft:10, padding: 5, paddingHorizontal: 10,borderColor:'#246BFD',borderWidth:2 , borderRadius: 20,height:34,alignItems:'center' }}>
             <Text style={{ fontFamily: "Urbanist-regular", color: '#246BFD' }}>Nutritionist</Text>
           </View>
-          <View style={{ backgroundColor: "#ffffff", padding: 5, paddingHorizontal: 10,borderColor:'#246BFD',borderWidth:2 , borderRadius: 20,height:34,alignItems:'center' }}>
+          <View style={{ backgroundColor: "#ffffff", marginLeft:10,padding: 5, paddingHorizontal: 10,borderColor:'#246BFD',borderWidth:2 , borderRadius: 20,height:34,alignItems:'center' }}>
             <Text style={{ fontFamily: "Urbanist-regular", color: '#246BFD' }}>Neurologist</Text>
           </View>
+          </ScrollView>
         </View>
-      </ScrollView>
+      
       <ImageBackground style={styles.cardContainer}>
          <ImageBackground style={styles.card}>
            <Image style={styles.cardImage} source={require('../../../assets/images/Randy.png')}></Image>
@@ -141,38 +144,36 @@ export default function HomeScreen() {
               <Image source={require('../../../assets/images/HalfStar.png')}></Image>
               <Text style={styles.Ratings}>4.8  (3,379 reviews)</Text>
              </View>
-             
             
            </ImageBackground>
            
-           
-           
          </ImageBackground>
+         
       </ImageBackground>
      </ScrollView>
      <View style={styles.Footer}>
         <TouchableOpacity onPress={() => handleIconPress('Home')}>
-          <SvgXml xml={HomeIcon} style={[styles.icon, isIconActive('Home') && styles.activeIcon]} />
+          <SvgXml xml={HomeIcon} style={[styles.icon]} />
           <Text style={[styles.iconText, isIconActive('Home') && styles.activeText]}>Home</Text>
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => handleIconPress('Appointment')}>
-          <SvgXml xml={AppointmentIcon} style={[styles.icon, isIconActive('Appointment') && styles.activeIcon]} />
+          <SvgXml xml={AppointmentIcon} style={[styles.icon]} />
           <Text style={[styles.iconText, isIconActive('Appointment') && styles.activeText]}>Appointments</Text>
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => handleIconPress('History')}>
-          <SvgXml xml={HistoryIcon} style={[styles.icon, isIconActive('History') && styles.activeIcon]} />
+          <SvgXml xml={HistoryIcon} style={[styles.icon]} />
           <Text style={[styles.iconText, isIconActive('History') && styles.activeText]}>History</Text>
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => handleIconPress('Article')}>
-          <SvgXml xml={ArticleIcon} style={[styles.icon, isIconActive('Article') && styles.activeIcon]} />
+          <SvgXml xml={ArticleIcon} style={[styles.icon]} />
           <Text style={[styles.iconText, isIconActive('Article') && styles.activeText]}>Articles</Text>
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => handleIconPress('Profile')}>
-          <SvgXml xml={ProfileIcon} style={[styles.icon, isIconActive('Profile') && styles.activeIcon]} />
+          <SvgXml xml={ProfileIcon} style={[styles.icon]} />
           <Text style={[styles.iconText, isIconActive('Profile') && styles.activeText]}>Profile</Text>
         </TouchableOpacity>
      </View>
@@ -197,7 +198,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     backgroundColor: '#FFFFFF',
-    marginLeft: '3%'
+    marginLeft: '3%',
+    marginTop:'5%'
   },
    userImage:{
     width: 45,
@@ -262,13 +264,14 @@ search:{
    width:'100%',
    height: 200,
    marginLeft: '0%',
-   alignItems: 'center'
+   alignItems: 'center',
+
  },
  FrameImage:{
   width: '101%',
   padding: 0,
   height: '100%',
-  marginTop: '2%',
+  marginTop: '5%',
   marginLeft: '3%',
   shadowColor: '#A7C4FE',
   shadowOpacity:5,
@@ -276,7 +279,8 @@ search:{
   
  },
  FrameText:{
-  backgroundColor:'transparent'
+  backgroundColor:'transparent',
+  
  },
  button2:{
   backgroundColor:'#ffffff',
@@ -298,6 +302,7 @@ search:{
   marginTop: '10%',
   marginLeft: '13%',
   backgroundColor: 'transparent',
+  color:'#FFFFFF',
   fontFamily:'Urbanist-bold',
   fontSize: 25,
   width: 185,
@@ -306,6 +311,7 @@ search:{
   fontFamily:'Urbanist-regular' ,
   fontSize: 12,
   backgroundColor: 'transparent',
+  color:'#FFFFFF',
   width: 194,
   marginTop: '5%',
   marginLeft: '13%'
@@ -354,22 +360,32 @@ search:{
   flexDirection: 'row',
   gap:220,
   backgroundColor: 'transparent',
-  marginTop: '3%',
-  marginBottom: '4%'
+  marginTop: '8%',
+  marginBottom: '4%',
+  
  },
  Footer:{
   backgroundColor:'#FFFFFF',
-  height:50,
-  marginTop:'1%',
-  marginLeft:'6%',
+  height:90,
+  width:'101%',
+  marginTop:'0%',
+  marginLeft:'0%',
   alignItems: 'flex-start',
-  justifyContent: 'flex-start',
-  marginBottom:'5%',
+  justifyContent: 'space-around',
+  marginBottom:'0%',
   flexDirection:'row',
-  gap:28
+  gap:28,
+  //position:'absolute'
+  position: 'absolute',
+  bottom: 0,
+  left: 0,
+  right: 0,
+  padding:20,
+  borderTopLeftRadius:20,
+  borderTopRightRadius:20,
  },
  icon:{
-  marginLeft:'6%'
+  marginLeft:'0%'
  },
  iconText:{
   color:'#000000',
@@ -385,9 +401,11 @@ activeText: {
   fontWeight: 'bold', // Example: apply font weight for active text
 },
 cardContainer:{
-  backgroundColor:'#E5E5E5',
+  backgroundColor:'#EEEEEE',
   width:'100%',
-  height:'50%'
+  height:'40%',
+  padding:5,
+  
 },
 card:{
   width:'95%',
@@ -396,7 +414,7 @@ card:{
   marginLeft:'2%',
   borderRadius:20,
   backgroundColor:'#FFFFFF',
-  padding:15,
+  padding:10,
   flexDirection:'row'
 
 },
