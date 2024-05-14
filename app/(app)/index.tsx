@@ -7,8 +7,7 @@ import { router } from "expo-router";
 export default function Index() {
   useEffect(() => {
     setTimeout(() => {
-      router.push("/(auth)/SignIn&SignOut/LetsYouIn");
-      // router.push("/ActionMenu/");
+      router.push("onBoarding/FirstScreen");
     }, 3000);
   }, []);
 

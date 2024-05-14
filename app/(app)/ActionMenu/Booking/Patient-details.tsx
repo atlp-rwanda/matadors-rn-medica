@@ -1,7 +1,8 @@
 import { Colors } from "@/constants/Colors";
 import { MaterialIcons } from "@expo/vector-icons";
+import { router } from "expo-router";
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Pressable } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 
@@ -11,12 +12,16 @@ const PatientDetails = () => {
     return (
         <>
             <View style={styles.Main}>
-                <View style={styles.container}>
-                    <TouchableOpacity>
+                <Pressable
+                onPress={()=> router.back()}
+                 style={styles.container}>
+                    <TouchableOpacity
+                    onPress={() => router.back()}
+                    >
                         <MaterialIcons name="arrow-back" size={23} />
                     </TouchableOpacity>
                     <Text style={styles.fill}>Patient details</Text>
-                </View>
+                </Pressable>
                 <View style={styles.middle}>
                     <Text style={styles.select}>Full Name</Text>
                     <View style={styles.inputs11}>
@@ -78,6 +83,7 @@ const PatientDetails = () => {
                 </View>
           <View style={styles.btn}>
             <TouchableOpacity
+            onPress={()=> router.push("(app)/ActionMenu/Booking/SelectPayment")}
               style={styles.button}
             >
               <Text style={styles.buttonText}>Next</Text>

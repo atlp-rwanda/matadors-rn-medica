@@ -19,6 +19,7 @@ import {
 import PaymentChooseInputCard from "@/components/UI/PaymentChooseContainer/PaymentChooseInputCard";
 import { PaymentMethods } from "@/constants/PaymentMethods";
 import PaymentChooseContainer from "@/components/UI/PaymentChooseContainer/Index";
+import { router } from "expo-router";
 
 export default function SelectPayment() {
   const { theme, changeTheme } = useContext(ThemeContext);
@@ -92,7 +93,7 @@ export default function SelectPayment() {
           backgroundColor={Colors.main.primary._500}
           title="Next"
           textColor={{ color: Colors.others.white, opacity: 8 }}
-          onPress={() => {}}
+          onPress={() => {router.push("(app)/ActionMenu/Booking/reviewSummary")}}
           shadowColor={Colors.main.primary._500}
           style={{ marginTop: "auto" }}
         />

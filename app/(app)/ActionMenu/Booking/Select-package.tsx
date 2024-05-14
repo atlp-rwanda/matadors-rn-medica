@@ -1,5 +1,6 @@
 import { Colors } from "@/constants/Colors";
 import { MaterialIcons } from "@expo/vector-icons";
+import { router } from "expo-router";
 import React, { useState } from "react";
 import { View, StyleSheet, Text, Pressable, TextInput, Image, TouchableOpacity } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -34,19 +35,21 @@ const SelectPackage = () => {
         <>
             <View style={styles.Main}>
 
-                <View style={styles.container}>
+                <Pressable 
+                onPress={()=> router.back()}
+                style={styles.container}>
                     <TouchableOpacity>
                         <MaterialIcons name="arrow-back" size={23} />
                     </TouchableOpacity>
                     <Text style={styles.fill}>Select Package</Text>
-                </View>
+                </Pressable>
                 <View style={styles.middle}>
                     <Text style={styles.select}>Select Duration</Text>
                     {/* <Text>Gender</Text> */}
                     
                 <View style={styles.inputs1}>
               <View style={styles.input11}>
-            <Image source={require('../../../../assets/images/TimeCircle.png')} style={styles.icon}></Image>
+            <Image source={require('@/assets/images/TimeCircle.png')} style={styles.icon}></Image>
             <TextInput
                 style={styles.email}
                 placeholder="30 Minutes"
@@ -64,7 +67,7 @@ const SelectPackage = () => {
                         <View style={styles.container2}>
                             <View style={styles.text}>
                             <Image
-                                source={require('../../../../assets/images/AutoLayout.png')}
+                                source={require('@/assets/images/AutoLayout.png')}
                                 style={styles.visa}
                             />
                             <View>
@@ -88,7 +91,7 @@ const SelectPackage = () => {
                         <View style={styles.container2}>
                             <View style={styles.text}>
                             <Image
-                                source={require('../../../../assets/images/VoiceCall.png')}
+                                source={require('@/assets/images/VoiceCall.png')}
                                 style={styles.visa}
                             />
                             <View>
@@ -112,7 +115,7 @@ const SelectPackage = () => {
                         <View style={styles.container2}>
                             <View style={styles.text}>
                             <Image
-                                source={require('../../../../assets/images/VideoCall.png')}
+                                source={require('@/assets/images/VideoCall.png')}
                                 style={styles.visa}
                             />
                             <View>
@@ -137,6 +140,7 @@ const SelectPackage = () => {
           <View style={styles.btn}>
             <TouchableOpacity
               style={styles.button}
+              onPress={() => router.push("ActionMenu/Booking/Patient-details")}
             >
               <Text style={styles.buttonText}>Next</Text>
             </TouchableOpacity>

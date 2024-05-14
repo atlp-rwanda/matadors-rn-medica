@@ -3,10 +3,11 @@ import { LeftArrow } from "@/components/UI/Icons";
 import { Colors } from "@/constants/Colors";
 import Typography from "@/constants/Typography";
 import { useContext, useState } from "react";
-import { StyleSheet, Image, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Image, TouchableOpacity, View, Pressable } from "react-native";
 import { colors } from "react-native-elements";
 import { Mastercard, Mastercarddark } from "@/components/UI/Icons";
 import { ThemeContext } from "@/ctx/ThemeContext";
+import { router } from "expo-router";
 
 export default function Reviewsummary() {
   const { theme, changeTheme } = useContext(ThemeContext);
@@ -15,7 +16,8 @@ export default function Reviewsummary() {
   return (
     <>
       <View style={theme === "dark" ? styles.containerdark : styles.container}>
-        <View style={theme === "dark" ? styles.headerdark : styles.header}>
+        <Pressable onPress={()=> router.back()}
+        style={theme === "dark" ? styles.headerdark : styles.header}>
           <LeftArrow
             fillColor={
               theme === "dark" ? Colors.others.white : Colors.grayScale._900
@@ -34,7 +36,7 @@ export default function Reviewsummary() {
           >
             Review Summary
           </Text>
-        </View>
+        </Pressable>
         <View
           style={{
             flexDirection: "row",
@@ -360,6 +362,7 @@ export default function Reviewsummary() {
           </View>
         </View>
         <TouchableOpacity
+        onPress={()=> router.push("(app)/ActionMenu/Booking/EnterYourPin")}
           style={{
             width: 380,
             height: 58,
