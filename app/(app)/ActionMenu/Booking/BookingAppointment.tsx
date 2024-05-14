@@ -143,7 +143,9 @@ function BookingAppointment() {
                 </View>
               </View>
 
-              <TouchableOpacity style={styles.btn}>
+              <TouchableOpacity 
+              onPress={()=> router.push("(app)/ActionMenu/Booking/Select-package")}
+              style={styles.btn}>
                 <Text style={styles.btnText}>Next</Text>
               </TouchableOpacity>
           </View>
