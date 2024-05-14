@@ -5,8 +5,8 @@ import { Image, StyleSheet, Text, View } from "react-native";
 export default function SplashScreen() {
   useEffect(() => {
     setTimeout(() => {
-      router.push("/(app)");
-    }, 2000);
+      router.push("(app)/");
+    }, 10);
   }, []);
 
   return (

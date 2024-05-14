@@ -25,6 +25,10 @@ const Typography = {
 
   bold: {
     // body
+    xxLarge: {
+      fontFamily: "Bold",
+      fontSize: 24,
+    },
     xLarge: {
       fontFamily: "Bold",
       fontSize: 18,
