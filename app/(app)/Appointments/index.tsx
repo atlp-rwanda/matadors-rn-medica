@@ -149,10 +149,12 @@ export default function UpcomingAppointment() {
                       Upcoming
                     </Text>
                   </View>
+                  <TouchableOpacity onPress={()=>router.push("/Appointments/MessagingAppointment")}>
                   <Image
                     style={{ marginBottom: 10, marginLeft: "6%" }}
                     source={require("@/assets/images/Messaging.png")}
-                  ></Image>
+                    />
+                    </TouchableOpacity>
                 </View>
                 <Text style={styles.Date}>Today | 16:00 PM</Text>
               </ImageBackground>

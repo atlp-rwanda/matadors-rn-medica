@@ -38,9 +38,7 @@ const SelectPackage = () => {
                 <Pressable 
                 onPress={()=> router.back()}
                 style={styles.container}>
-                    <TouchableOpacity>
                         <MaterialIcons name="arrow-back" size={23} />
-                    </TouchableOpacity>
                     <Text style={styles.fill}>Select Package</Text>
                 </Pressable>
                 <View style={styles.middle}>
