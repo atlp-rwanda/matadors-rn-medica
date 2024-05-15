@@ -27,15 +27,18 @@ const OnboardingComponent = ({
   children: React.ReactNode;
 }) => {
   const { theme, changeTheme } = useContext(ThemeContext);
+  changeTheme("light")
+
+
   return (
     <>
       <StatusBar style={theme === "light" ? "dark" : "dark"}/>
-      <View style={theme === "dark" ? styles.lightContainer : styles.DarkContainer}>
+      <View style={theme === "light" ? styles.lightContainer: styles.DarkContainer }>
         <View style={styles.img}>
           <Image source={image} />
         </View>
         <View style={styles.LowerSection}>
-          <Text style={theme === "light" ? styles.titleDark : styles.titleLight}>
+          <Text style={theme === "light" ? styles.titleLight : styles.titleDark }>
             {text}
           </Text>
           <View style={{ flexDirection: "row", alignSelf: "center" }}>

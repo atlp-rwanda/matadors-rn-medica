@@ -1,0 +1,52 @@
+{
+    "notification":[
+        {
+    "IconComponent":"close",
+    "viewBackground": "#FEF1F1",
+    "timeFrame": "Today",
+    "time": "15:36 PM",
+    "notificationStatus": "Appointment Canceled",
+    "sentenceOne": "You have successfully canceled your appointment with Dr.",
+    "sentenceTwo": "Alan Watson on December 24, 2024, 13:00 p.m. 80% of the",
+    "sentenceThree": "funds will be returned to your account."
+  },
+    {
+    "IconComponent": "calendar",
+    "viewBackground":"#F1F9F1",
+    "timeFrame":"Yesterday ",
+    "time":" 15:36 PM",
+    "notificationStatus":"Schedule Changed",
+    "sentenceOne":"You have successfully changed schedule an appointment",
+    "sentenceTwo":"with Dr. Alan Watson on December 24, 2024, 13:00 pm.",
+    "sentenceThree":"Dont forget to activate your reminder."
+  },  {
+    "IconComponent": "calendar2",
+    "viewBackground": "#EDF3FF",
+    "timeFrame": "19 Dec .2022",
+    "time": "15:36 PM",
+    "notificationStatus": "Appointment Success",
+    "sentenceOne": "You have successfully canceled your appointment with Dr.",
+    "sentenceTwo": "Alan Watson on December 24, 2024, 13:00 p.m. 80% of the",
+    "sentenceThree": "funds will be returned to your account.",
+    "btnVisibility":"none"
+  },  {
+    "IconComponent": "service",
+    "viewBackground": "#FFF7EB",
+    "timeFrame": "19 Dec .2022",
+    "time": "10:52 PM",
+    "notificationStatus": "New Services Available!",
+    "sentenceOne": "You can now make multiple doctoral appointments at once.",
+    "sentenceTwo": "You can also cancel your appointment.",
+    "btnVisibility":"none"
+  },  {
+    "IconComponent": "wallet",
+    "viewBackground": "#EDF3FF",
+    "timeFrame": "Today",
+    "time": "15:36 PM",
+    "notificationStatus": "Credit Card Connected",
+    "sentenceOne": "Your credit card has been successfully linked with Medica.",
+    "sentenceTwo": "Enjoy our service.",
+    "btnVisibility":"none"
+  }
+    ]
+}

@@ -1,20 +1,20 @@
-import React, { useContext, useState } from 'react'
-import {  StyleSheet,SafeAreaView,Text, View } from 'react-native'
-import { Colors } from '@/constants/Colors'
-import OnboardingComponent from '@/components/OnBoarding/OnboardingComponent'
-import { ThemeContext } from '@/ctx/ThemeContext'
+import React, { useContext, useState } from "react";
+import { StyleSheet, SafeAreaView, Text, View } from "react-native";
+import { Colors } from "@/constants/Colors";
+import OnboardingComponent from "@/components/OnBoarding/OnboardingComponent";
+import { ThemeContext } from "@/ctx/ThemeContext";
 
-const darkImg = require("../../assets/images/OnBoardingImages/thirdLightImg.png")
-const image  = require("../../assets/images/OnBoardingImages/thirdDarkImg.png")
+const image = require("../../assets/images/OnBoardingImages/thirdLightImg.png")
+const  darkImg = require("../../assets/images/OnBoardingImages/thirdDarkImg.png")
 
 
 const ThirdScreen = () => {
-    const {theme, changeTheme} = useContext(ThemeContext)
+  const { theme, changeTheme } = useContext(ThemeContext);
 
-   return (
+  return (
     <View style={styles.container}>
             <OnboardingComponent 
-        image={ theme=== "dark" ? darkImg : image}
+        image={ theme=== "light" ?  image : darkImg}
         text="Let's start living healthy and well with us right now!"
             action="Get Started"
             direction="(auth)/SignIn&SignOut/LetsYouIn"
@@ -24,9 +24,8 @@ const ThirdScreen = () => {
             <Text style={[styles.dots, {width: 30, backgroundColor:Colors.main.primary._500}]}></Text>
         </OnboardingComponent>
     </View>
-
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
 
@@ -42,4 +41,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default ThirdScreen
+export default ThirdScreen;

@@ -3,9 +3,9 @@ import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import * as SecureStore from "expo-secure-store";
- 
+
 import { useContext, useEffect, useState } from "react";
- 
+
 import * as NavigationBar from "expo-navigation-bar";
 import { ZoomOutUp } from "react-native-reanimated";
 import ThemeProvider, { ThemeContext } from "@/ctx/ThemeContext";
@@ -14,15 +14,15 @@ import { ThemeType } from "@/constants/Types";
 import { Text } from "@/components/Themed";
 import ModalProvider from "@/ctx/ModalContext";
 import ModalContainer from "@/components/UI/Modal";
- 
+
 export { ErrorBoundary } from "expo-router";
- 
+
 export const unstable_settings = {
-  initialRouteName: "(onBoarding)",
+  initialRouteName: "(app)",
 };
- 
+
 SplashScreen.preventAutoHideAsync();
- 
+
 export default function RootLayout() {
   const [loaded, error] = useFonts({
     Medium: require("../assets/fonts/Urbanist-Medium.ttf"),
@@ -31,43 +31,43 @@ export default function RootLayout() {
     Regular: require("../assets/fonts/Urbanist-Regular.ttf"),
     ...FontAwesome.font,
   });
- 
+
   const systemTheme = useColorScheme() as ThemeType;
- 
+
   const [favoredTheme, setFavoredTheme] = useState<ThemeType>(null);
- 
+
   useEffect(() => {
     async function getCustomTheme() {
       try {
         let favoredTheme = (await SecureStore.getItemAsync(
           "theme"
         )) as ThemeType;
- 
+
         if (!favoredTheme) {
           favoredTheme = systemTheme;
         }
- 
+
         setFavoredTheme(favoredTheme);
       } catch (e) {
         console.log(e);
       }
     }
- 
+
     getCustomTheme();
   }, []);
- 
+
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {
     if (error) throw error;
   }, [error]);
- 
+
   useEffect(() => {
     async function handleNavigationButtons() {
       await NavigationBar.setPositionAsync("absolute");
       await NavigationBar.setBackgroundColorAsync("#ffffff00");
       await NavigationBar.setBehaviorAsync("inset-swipe");
       await NavigationBar.setVisibilityAsync("hidden");
- 
+
       NavigationBar.addVisibilityListener(({ visibility }) => {
         if (visibility === "visible") {
           setTimeout(async () => {
@@ -81,11 +81,11 @@ export default function RootLayout() {
       SplashScreen.hideAsync();
     }
   }, [loaded, favoredTheme]);
- 
+
   if (!loaded) {
     return null;
   }
- 
+
   return (
     <ThemeProvider theme={favoredTheme}>
       <ModalProvider>
@@ -94,18 +94,20 @@ export default function RootLayout() {
     </ThemeProvider>
   );
 }
- 
+
 function RootLayoutNav() {
   return (
     <>
       <Stack
-        initialRouteName="(auth)"
-        screenOptions={{ statusBarTranslucent: true, headerShown: false }}>
-        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+        initialRouteName="(app)"
+        screenOptions={{ statusBarTranslucent: true, headerShown: false }}
+      >
+        <Stack.Screen name="(app)" options={{ headerShown: false }} />
         <Stack.Screen name="modal" options={{ presentation: "modal" }} />
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="onBoarding" options={{ headerShown: false }} />
       </Stack>
+      <ModalContainer />
     </>
   );
 }

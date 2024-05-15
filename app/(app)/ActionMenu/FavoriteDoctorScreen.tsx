@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         width:"100%",
-         marginBottom: "5%",
+         marginBottom: "7%",
         marginTop: "8%",
         backgroundColor:"white"
     },

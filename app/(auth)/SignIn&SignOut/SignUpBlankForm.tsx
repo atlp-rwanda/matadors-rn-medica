@@ -160,7 +160,7 @@ const Signup = () => {
         <Text style={[Typography.regular.medium]}>
           Already have an account? 
           <Text
-           style={[Typography.semiBold.medium, {color:Colors.main.primary._500}]}
+           style={[Typography.semiBold.medium, {color:Colors.main.primary._500, marginLeft: 10}]}
             onPress={() =>
               router.replace("/(auth)/SignIn&SignOut/SignInBlankForm")
             }
