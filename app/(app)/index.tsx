@@ -20,7 +20,6 @@ export default function Index() {
             style={styles.imagex}
           />
         </View>
-
         <View>
           <Text style={styles.text}>Welcome to Medica! 👋</Text>
           <Text style={styles.description}>

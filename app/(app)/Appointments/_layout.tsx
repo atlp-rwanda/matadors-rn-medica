@@ -3,11 +3,11 @@ import { Stack } from "expo-router";
 export default function Layout() {
   return (
     <Stack>
-      <Stack.Screen name="CancelAppointment/index" />
-      <Stack.Screen name="VideoCallAppointment/index" />
-      <Stack.Screen name="VoiceCallAppointment/index" />
-      <Stack.Screen name="MessagingAppointment/index" />
-      <Stack.Screen name="ReschedualAppointment/index" />
+      <Stack.Screen name="CancelAppointment/index" options={{headerShown:false}}/>
+      <Stack.Screen name="VideoCallAppointment/index" options={{headerShown:false}}/>
+      <Stack.Screen name="VoiceCallAppointment/index" options={{headerShown:false}}/>
+      <Stack.Screen name="MessagingAppointment" options={{headerShown:false}}/>
+      <Stack.Screen name="ReschedualAppointment/index" options={{headerShown:false}}/>
     </Stack>
   );
 }
