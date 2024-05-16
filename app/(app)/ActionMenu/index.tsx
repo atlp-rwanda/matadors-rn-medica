@@ -51,7 +51,7 @@ export default function Index() {
                 source={require("../../../assets/images/Notification.png")}
               ></Image>
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => router.push("/ActionMenu/FavoriteDoctorScreen")}>
               <Image
                 style={styles.heart}
                 source={require("../../../assets/images/Heart.png")}
