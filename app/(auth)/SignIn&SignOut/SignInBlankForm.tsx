@@ -126,7 +126,7 @@ const Login = () => {
 
       <View>
         <TouchableOpacity 
-        onPress={()=> router.push("/(app)/ActionMenu/HomeScreen")}
+        onPress={()=> router.push("/(app)/ActionMenu")}
         style={styles.signinBtn}>
           <Text style={styles.signText}>Sign in</Text>
         </TouchableOpacity>

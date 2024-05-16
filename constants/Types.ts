@@ -8,3 +8,10 @@ export interface ModalType {
   hide: () => void;
   content: { children: React.JSX.Element | React.JSX.Element[] | null };
 }
+
+export interface PaymentOption {
+  id: number;
+  title: string;
+  iconSvgStringLight: string;
+  iconSvgStringDark?: string;
+}
