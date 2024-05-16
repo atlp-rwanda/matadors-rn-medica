@@ -108,9 +108,14 @@ function DoctorScreen() {
                     }}>
                     
                     {data.categories.map((category, index) =>
-                    <Pressable key={index} onPress={()=>handleCategoryChange(category)} style={[styles.categoryBtn,index==0?styles.firstCategoryBtn:{}]}>
+                        <Pressable key={index} onPress={() => handleCategoryChange(category)} style={[styles.categoryBtn,
+                            selectedCategory === category ? styles.firstCategoryBtn : {},
+                            ]}>
                             
-                           <Text style={[styles.categoryBtnText,index===0?styles.firstCategoryBtnText:{}]}>{category.name}</Text>  
+                            <Text style={[
+                                styles.categoryBtnText,
+                                selectedCategory === category ? styles.firstCategoryBtnText : {},
+                                ]}>{category.name}</Text>  
                             
                     </Pressable>
                         )}
@@ -256,7 +261,7 @@ const styles = StyleSheet.create({
     },
     body: {
         width: "98%",
-        backgroundColor: "#F7F7F7",
+        backgroundColor:"#F7F7F7",
     },
     scroll: {
         width: "100%",

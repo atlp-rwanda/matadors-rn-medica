@@ -2,6 +2,13 @@
 
 Online Doctor Appointment & Consultation App
 
+#  Test coverage
+
+[![codecov](https://codecov.io/gh/atlp-rwanda/matadors-rn-medica/graph/badge.svg?token=5OP0X0107C)](https://codecov.io/gh/atlp-rwanda/matadors-rn-medica)
+
+For coverage on other branches, please visit the [Codecov project page](https://codecov.io/gh/atlp-rwanda/matadors-rn-medica) and select the appropriate branch.
+
+
 ## Table Of Content
 
 - [Medica App](#medica-app)
@@ -124,8 +131,3 @@ Feel free to reach out to us:
 ## License
 
   None At the moment !!
-#  Test coverage
-
-[![codecov](https://codecov.io/gh/atlp-rwanda/matadors-rn-medica/graph/badge.svg?token=5OP0X0107C)](https://codecov.io/gh/atlp-rwanda/matadors-rn-medica)
-
-For coverage on other branches, please visit the [Codecov project page](https://codecov.io/gh/atlp-rwanda/matadors-rn-medica) and select the appropriate branch.
