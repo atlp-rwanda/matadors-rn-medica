@@ -6,7 +6,7 @@ import { Image, StyleSheet, Text, View } from "react-native";
 export default function SplashScreen() {
   useEffect(() => {
     setTimeout(() => {
-      router.push("/(app)");
+      router.push("/(app)/Appointments/ScheduledAppointments/AppointmentCompletedScreen");
     }, 2000);
   }, []);
 

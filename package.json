@@ -19,7 +19,8 @@
   "dependencies": {
     "@expo/vector-icons": "^14.0.0",
     "@oclif/screen": "^3.0.8",
-    "@react-navigation/native": "^6.0.2",
+    "@react-navigation/native": "^6.1.17",
+    "@react-navigation/stack": "^6.3.29",
     "eas-cli": "^8.0.0",
     "expo": "^51.0.2",
     "expo-checkbox": "^3.0.0",
@@ -41,6 +42,7 @@
     "react-native": "0.74.1",
     "react-native-calendars": "^1.1304.1",
     "react-native-elements": "^3.4.3",
+    "react-native-gesture-handler": "^2.16.2",
     "react-native-indicators": "^0.17.0",
     "react-native-modern-datepicker": "^1.0.0-beta.91",
     "react-native-otp-entry": "^1.6.1",

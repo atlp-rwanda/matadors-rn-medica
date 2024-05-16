@@ -11,7 +11,14 @@ import Typography from "@/constants/Typography";
 import { Stack, Tabs } from "expo-router";
 import { Pressable, Text, TouchableOpacity, View } from "react-native";
 import { SvgXml } from "react-native-svg";
+import { createStackNavigator } from '@react-navigation/stack';
+import { UpcomingAppointmentScreen } from "./Appointments/ScheduledAppointments/Navigator";
+import { CancelledAppointmentScreen } from "./Appointments/ScheduledAppointments/Navigator";
+import { CompletedAppointmentScreen } from "./Appointments/ScheduledAppointments/Navigator";
+import { EmptyAppointmentScreen } from "./Appointments/ScheduledAppointments/Navigator";
 
+
+const Stack = createStackNavigator();
 export default function Layout() {
   return (
     <>
@@ -178,6 +185,16 @@ export default function Layout() {
           }}
         />
       </Tabs>
+     
+      <Stack.Screen name="HomeScreen" options={{ headerShown: false }} />
+      <Stack.Screen name="ActionMenu/HomeScreen" options={{ headerShown: false }} />
+      <Stack.Navigator initialRouteName="AppointmentUpcoming">
+        <Stack.Screen name="EmptyAppointment" component={EmptyAppointmentScreen } />
+        <Stack.Screen name="AppointmentUpcoming" component={UpcomingAppointmentScreen} />
+        <Stack.Screen name="AppointmentCompleted" component={CompletedAppointmentScreen} />
+        <Stack.Screen name="AppointmentCancelled" component={CancelledAppointmentScreen} />
+      </Stack.Navigator>
+      
     </>
   );
 }
