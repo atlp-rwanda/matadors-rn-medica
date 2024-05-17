@@ -104,6 +104,7 @@ const SessionEnded = () => {
 
       <View style={styles.Button}>
         <TouchableOpacity
+          onPress={()=>router.push("Appointments")}
           style={[
             styles.backButton,
             { backgroundColor: theme === "dark" ? "#35383F" : "#E9F0FF" },

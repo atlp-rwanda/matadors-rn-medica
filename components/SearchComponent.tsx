@@ -80,6 +80,7 @@ const styles = StyleSheet.create({
         flexDirection:"row",
         justifyContent: "flex-start",
         alignItems: "center",
+        backgroundColor:"white"
     },
     searchView: {
         height: "100%",

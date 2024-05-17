@@ -14,6 +14,9 @@ import { leftArrow } from '@/assets/icons/left';
 import data from "../../doctors.json"
 import HeaderComponent from '@/components/HeaderComponent';
 import SearchComponent from '@/components/SearchComponent';
+import FoundDoctorCount from '@/components/FoundDoctorCount';
+import NofoundComponent from '@/components/NofoundComponent';
+import NotFoundScreen from '@/app/+not-found';
 
 
 interface imageMapProp{
@@ -82,21 +85,18 @@ function DoctorScreen() {
                         !showSearch ? (
                             <HeaderComponent
                                 onSearchPressed={handleSearchPressed}
-                                headerText="Notification"
+                                headerText="Top Doctor"
                             
                             />
                         ) : (
                                
-                                <SearchComponent
-                                    onSearchSubmit={handleSearchSubmit}
+                            <SearchComponent
+                                onSearchSubmit={handleSearchSubmit}
                                 
                                 
-                                />
+                            />
                         )
                     }
-                    
-                    
-            
                 </View>
                 <View style={styles.categoryBtnView}>
                 <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.categoryScroll}
@@ -108,15 +108,24 @@ function DoctorScreen() {
                     }}>
                     
                     {data.categories.map((category, index) =>
-                    <Pressable key={index} onPress={()=>handleCategoryChange(category)} style={[styles.categoryBtn,index==0?styles.firstCategoryBtn:{}]}>
+                        <Pressable key={index} onPress={() => handleCategoryChange(category)} style={[styles.categoryBtn,
+                            selectedCategory === category ? styles.firstCategoryBtn : {},
+                            ]}>
                             
-                           <Text style={[styles.categoryBtnText,index===0?styles.firstCategoryBtnText:{}]}>{category.name}</Text>  
+                            <Text style={[
+                                styles.categoryBtnText,
+                                selectedCategory === category ? styles.firstCategoryBtnText : {},
+                                ]}>{category.name}</Text>  
                             
                     </Pressable>
                         )}
-                   
-
                     </ScrollView>
+                    
+                </View>
+                <View style={styles.foundDoctorView}>
+                    {showSearch && (
+                        <FoundDoctorCount count={filteredDoctors.length } />
+                    )}
                 </View>
                 <View>
                 <ScrollView
@@ -128,25 +137,31 @@ function DoctorScreen() {
             paddingBottom: 150,
             paddingTop:20
           }}
-                >
-                    {filteredDoctors.map((doctor:any,index:any) =>
+                    >
+                        {filteredDoctors.length > 0 ? (
+                            
+                                filteredDoctors.map((doctor: any, index: any) =>
                         
-                        <View key={index } style={styles.componentView}>
-                     <DoctorComponent
+                                    <View key={index} style={styles.componentView}>
+                                        <DoctorComponent
 
-                        imageSource={imageMap[doctor.imageSource]}
-                        name={doctor.name}
-                        iconComponent={iconMapping[doctor.iconComponent]}
-                        professionalTitle={doctor.professionalTitle}
-                        hospital={doctor.hospital}
-                        star={iconMapping[doctor.star]}
-                        review={doctor.review}
-                        rate={doctor.rate}
+                                            imageSource={imageMap[doctor.imageSource]}
+                                            name={doctor.name}
+                                            iconComponent={iconMapping[doctor.iconComponent]}
+                                            professionalTitle={doctor.professionalTitle}
+                                            hospital={doctor.hospital}
+                                            star={iconMapping[doctor.star]}
+                                            review={doctor.review}
+                                            rate={doctor.rate}
 
-                        />
-                    </View>
+                                        />
+                                    </View>
                         
-                        )}
+                                )
+                            
+                        ) : (
+                             <NofoundComponent/>   
+                    )}
                         
                       
 
@@ -186,6 +201,13 @@ const styles = StyleSheet.create({
         marginTop: "8%",
         backgroundColor:"white"
     },
+    foundDoctorView: {
+        width: "100%",
+        display: "flex",
+        flexDirection: 'row',
+        justifyContent: "center",
+        alignItems: "center"
+    },
     searchComponent: {
         
     },
@@ -211,7 +233,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: 'center',
         marginBottom: "5%",
-        backgroundColor:"white"
+        backgroundColor: "white",
     },
     categoryBtn: {
         borderWidth: 2,
@@ -239,7 +261,7 @@ const styles = StyleSheet.create({
     },
     body: {
         width: "98%",
-        backgroundColor: "#F7F7F7",
+        backgroundColor:"#F7F7F7",
     },
     scroll: {
         width: "100%",
