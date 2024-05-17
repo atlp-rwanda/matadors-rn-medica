@@ -40,7 +40,7 @@ export default function Layout() {
         />
         <Stack.Screen
           name="SignIn&SignOut/SetYourFingerPrint"
-          options={{ headerShown: false }}
+          options={{ header: () => (<Header title="Set Your Fingerprint" />) }}
         />
       </Stack>
     </>

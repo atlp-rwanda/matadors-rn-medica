@@ -1,3 +1,4 @@
+import { TCountries } from "countries-list";
 import React from "react";
 
 export type ThemeType = "light" | "dark" | null;
@@ -14,4 +15,8 @@ export interface PaymentOption {
   title: string;
   iconSvgStringLight: string;
   iconSvgStringDark?: string;
+}
+
+export interface Countries extends TCountries {
+  [key: string]: any;
 }

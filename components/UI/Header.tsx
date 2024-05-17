@@ -7,20 +7,30 @@ import { Pressable, useColorScheme } from "react-native";
 import Typography from "@/constants/Typography";
 import { useContext } from "react";
 import { ThemeContext } from "@/ctx/ThemeContext";
+import { NavigationState } from "@react-navigation/native";
+import { router } from "expo-router";
 
 interface Props {
   title: string;
+  options?: {
+    leftComponent?: () => React.JSX.Element;
+    rightComponent?: () => React.JSX.Element;
+  };
+  // navigation: NavigationState;
 }
 
-export default function Header({ title }: Props) {
-  const { theme } = useContext(ThemeContext);
+export default function Header({ title, options }: Props) {
+  const { theme, changeTheme } = useContext(ThemeContext);
+
+  changeTheme("light");
 
   return (
     <>
       <StatusBar style={theme === "light" ? "dark" : "light"} />
       <View
         style={{
-          paddingVertical: 40,
+          paddingTop: 50,
+          paddingBottom: 10,
           paddingHorizontal: 20,
           backgroundColor:
             theme === "light" ? Colors.others.white : Colors.dark._1,
@@ -29,41 +39,47 @@ export default function Header({ title }: Props) {
           justifyContent: "space-between",
         }}
       >
-        <View
-          style={{
-            alignItems: "center",
-            flexDirection: "row",
-            gap: 10,
-            backgroundColor:
-              theme === "light" ? Colors.others.white : Colors.dark._1,
-          }}
-        >
-          <Pressable>
-            <LeftArrow
-              fillColor={
-                theme === "light" ? Colors.grayScale._900 : Colors.others.white
-              }
-            />
-          </Pressable>
-          <Text
-            style={[
-              Typography.heading._4,
-              {
-                color:
+        {!options?.leftComponent ? (
+          <View
+            style={{
+              alignItems: "center",
+              flexDirection: "row",
+              gap: 10,
+              backgroundColor:
+                theme === "light" ? Colors.others.white : Colors.dark._1,
+            }}
+          >
+            <Pressable
+              onPress={() => {
+                router.back();
+              }}
+            >
+              <LeftArrow
+                fillColor={
                   theme === "light"
                     ? Colors.grayScale._900
-                    : Colors.others.white,
-              },
-            ]}
-          >
-            {title}
-          </Text>
-        </View>
-        <Input
-          stroke={
-            theme === "light" ? Colors.grayScale._900 : Colors.others.white
-          }
-        />
+                    : Colors.others.white
+                }
+              />
+            </Pressable>
+            <Text
+              style={[
+                Typography.heading._4,
+                {
+                  color:
+                    theme === "light"
+                      ? Colors.grayScale._900
+                      : Colors.others.white,
+                },
+              ]}
+            >
+              {title}
+            </Text>
+          </View>
+        ) : (
+          options?.leftComponent && options?.leftComponent()
+        )}
+        {options?.rightComponent && options?.rightComponent()}
       </View>
     </>
   );
