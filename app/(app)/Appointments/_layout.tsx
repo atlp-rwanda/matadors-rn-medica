@@ -11,6 +11,8 @@ export default function Layout() {
       <Stack.Screen name="VoiceCallAppointment/SessionEnded" options={{headerShown:false}}/>
       <Stack.Screen name="MessagingAppointment" options={{headerShown:false}}/>
       <Stack.Screen name="ReschedualAppointment/index" options={{headerShown:false}}/>
+      <Stack.Screen name="ReschedualAppointment/rescheduleDate" options={{ headerShown: false }}  />
+      <Stack.Screen name="ReschedualAppointment/selectreason" options={{ headerShown: false }}  />
     </Stack>
   );
 }

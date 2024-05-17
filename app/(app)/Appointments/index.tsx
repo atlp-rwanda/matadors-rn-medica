@@ -193,6 +193,7 @@ export default function UpcomingAppointment() {
                   height: 34,
                   alignItems: "center",
                 }}
+                onPress={()=> router.push('/(app)/Appointments/ReschedualAppointment/selectreason')}
               >
                 <Text
                   style={{  color: "white" }}
