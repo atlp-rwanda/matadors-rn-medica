@@ -83,7 +83,11 @@ const DoctorDetails = () => {
   const {theme, changeTheme} = useContext(ThemeContext)
 
   return (
-    <View style={[styles.container, {backgroundColor: theme === "dark" ? Colors.others.black : Colors.others.white}]}>
+    <ScrollView style={[styles.container, { backgroundColor: theme === "dark" ? Colors.others.black : Colors.others.white }]}
+      contentContainerStyle={{
+      height:"100%"
+    }}
+    >
       <SafeAreaView>
         <View style={styles.navBar}>
           <View style={styles.leftSide}>
@@ -256,7 +260,7 @@ const DoctorDetails = () => {
         </Pressable>
       </View>
       <StatusBar backgroundColor={"black"} />
-    </View>
+    </ScrollView>
   );
 };
 

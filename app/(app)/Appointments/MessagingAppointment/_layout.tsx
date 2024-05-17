@@ -6,5 +6,6 @@ export default function Layout() {
     <Stack.Screen  name="index" options={{headerShown:false}}/>
     <Stack.Screen  name="AppointmentMessaging" options={{headerShown:false}}/>
     <Stack.Screen  name="ChatMessaging" options={{headerShown:false}}/>
+    <Stack.Screen  name="Camera" options={{headerShown:false}}/>
 </Stack>
 )}
