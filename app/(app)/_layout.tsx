@@ -25,6 +25,7 @@ export default function Layout() {
                 backgroundColor: "white",
                 paddingHorizontal: 30,
                 paddingVertical: 25,
+                // display: 'none'
               }}
             >
               {state.routes.map((route) => {

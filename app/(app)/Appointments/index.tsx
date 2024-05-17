@@ -9,6 +9,7 @@ import {
   Dimensions,
   ImageBackground,
   ScrollView,
+  Pressable,
 } from "react-native";
 import { SvgXml } from "react-native-svg";
 import { SearchIcon } from "@/assets/icons/SearchSvg";
@@ -16,6 +17,8 @@ import { MoreIcon } from "@/assets/icons/MoreCircleSvg";
 import Line from "@/components/Line";
 import Typography from "@/constants/Typography";
 import { StatusBar } from "expo-status-bar";
+import { router } from "expo-router";
+
 
 export default function UpcomingAppointment() {
   const [activeTab, setActiveTab] = useState("Upcoming");
@@ -234,10 +237,13 @@ export default function UpcomingAppointment() {
                       Upcoming
                     </Text>
                   </View>
+                  <TouchableOpacity onPress={()=> router.push('/(app)/Appointments/VoiceCallAppointment/MyAppointmentVoiceCall')}>
                   <Image
                     style={{ marginBottom: 10, marginLeft: "6%" }}
                     source={require("@/assets/images/VoiceCall.png")}
-                  ></Image>
+                  />
+                  </TouchableOpacity>
+
                 </View>
                 <Text style={styles.Date}>Today | 14:00 PM</Text>
               </ImageBackground>
