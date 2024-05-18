@@ -17,7 +17,7 @@
       "infoPlist": {
         "NSFaceIDUsageDescription": "This app uses Face ID and Touch ID for some features"
       },
-      "bundleIdentifier": "medical.app"
+      "bundleIdentifier": "medical.app",
     },
     "android": {
       "adaptiveIcon": {
