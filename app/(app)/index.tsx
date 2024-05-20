@@ -9,9 +9,6 @@ export default function Index() {
   useEffect(() => {
     setTimeout(() => {
       router.push("onBoarding/FirstScreen");
-      // router.push("/(auth)/SignIn&SignOut/LetsYouIn");
-      // router.push("/(app)/Profile");
-      // router.push("(app)/ActionMenu");
     }, 3000);
   }, []);
 
