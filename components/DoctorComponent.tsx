@@ -13,16 +13,18 @@ interface DoctorComponentProps{
     star: ReactElement,
     rate: string,
     review: string,
-    remove:()=>void
+    remove: () => void,
+    backgroundStyle?:any
 }
-function DoctorComponent({ imageSource, name, iconComponent, professionalTitle, hospital, star, rate, review, remove }: DoctorComponentProps) {
+function DoctorComponent({ imageSource, name, iconComponent, professionalTitle, hospital, star, rate, review, remove,backgroundStyle }: DoctorComponentProps) {
     const { theme, changeTheme } = useContext(ThemeContext)
     const containerStyle = theme === "dark" ? styles.outerDark : styles.outerLight
     const nameColor = theme === "dark" ? styles.textDark : styles.textLight
     const descriptionColor = theme === "dark" ? styles.descriptionDark : styles.descriptionLight
+    const horizontalColor=theme==="dark"?styles.horizontalDark:styles.horizontalLight
 
     return (
-        <View style={[styles.outer,containerStyle]}>
+        <View style={[styles.outer,containerStyle,backgroundStyle]}>
             <View style={styles.inner}>
                 <View style={styles.profileView}>
                     <Image source={imageSource } />
@@ -40,7 +42,7 @@ function DoctorComponent({ imageSource, name, iconComponent, professionalTitle, 
 
                         </Pressable>
                     </View>
-                    <View style={styles.horizontal}></View>
+                    <View style={[styles.horizontal,horizontalColor]}></View>
                     <View style={styles.lowerView}>
                         <View style={styles.professionalView}>
                             <View style={styles.proNameView}>
@@ -201,9 +203,15 @@ const styles = StyleSheet.create({
     horizontal: {
         width: "100%",
         borderWidth: 1,
-        borderColor:"#EEEEEE",
         marginBottom: "5%",
-         backgroundColor:"#EEEEEE"
+    },
+    horizontalLight: {
+        borderColor:"#EEEEEE"
+        
+    },
+    horizontalDark: {
+        borderColor:"#35383F"
+        
     },
     reviewView: {
        display: "flex",

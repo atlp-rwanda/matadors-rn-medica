@@ -10,6 +10,8 @@ import { overlay } from 'react-native-paper';
 import DoctorComponent from './DoctorComponent';
 import Ratebtn from './Ratebtn';
 import { Rating } from 'react-native-elements';
+import { ThemeContext } from '@/ctx/ThemeContext';
+import { useContext } from 'react';
 
 
 interface iconMappingProp{
@@ -30,6 +32,12 @@ export const iconMapping:iconMappingProp = {
 
 
 function FilterPopup({ visible, onClose, cancel, }: RemovefavoritepopProps) {
+    const { theme, changeTheme } = useContext(ThemeContext)
+    const outerBackgroundColor = theme === "dark" ? styles.viewDark : styles.viewLight
+    const titleColor = theme === "dark" ? styles.whiteTitle : styles.introColor
+    const horizontalColor = theme === 'dark' ? styles.darkHorizontal : styles.greyHorizontal
+    const resetButtonColor = theme === "dark" ? "#35383F" : "#E9F0FF"
+    const resetbtnTextColor = theme === "dark" ? "white" : "#246BFD"
      const [selectedCategory, setSelectedCategory] = useState(data.categories[0])
     const [showpopUp, setShowPopup] = useState(false)
     const [selectedDoctor, setSelectedDoctor] = useState()
@@ -60,14 +68,14 @@ function FilterPopup({ visible, onClose, cancel, }: RemovefavoritepopProps) {
     if(!visible) return null
     return (
         <SafeAreaView style={styles.overlay}>
-        <Animated.View style={[styles.outer,{ transform: [{ translateY: translateY.interpolate({ inputRange: [-1, 1], outputRange: [0, 300] }) }] }]}>
-            <View style={styles.inner}>
-                    <View style={styles.intro}><Text style={styles.introText}>Filter</Text></View>
-                    <View style={styles.horizontal}></View>
+        <Animated.View style={[styles.outer,outerBackgroundColor,{ transform: [{ translateY: translateY.interpolate({ inputRange: [-1, 1], outputRange: [0, 300] }) }] }]}>
+            <View style={[styles.inner,outerBackgroundColor]}>
+                    <View style={styles.intro}><Text style={[styles.introText,titleColor]}>Filter</Text></View>
+                    <View style={[styles.horizontal,horizontalColor]}></View>
                     <View style={styles.displayComponent}>
                         <View style={styles.specialityView}>
-                            <View style={styles.titleView}><Text style={styles.title}>Speciality</Text></View>
-                            <View style={styles.categoryBtnView}>
+                            <View style={styles.titleView}><Text style={[styles.title,titleColor]}>Speciality</Text></View>
+                            <View style={[styles.categoryBtnView,outerBackgroundColor]}>
                 <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.categoryScroll}
                     contentContainerStyle={{
                         flexDirection: "row",
@@ -92,8 +100,8 @@ function FilterPopup({ visible, onClose, cancel, }: RemovefavoritepopProps) {
                     
                             </View>
                             <View style={styles.rateView}>
-                                <View style={styles.titleView}><Text style={styles.title}>Rating</Text></View>
-                                <View style={styles.categoryBtnView}>
+                                <View style={styles.titleView}><Text style={[styles.title,titleColor]}>Rating</Text></View>
+                                <View style={[styles.categoryBtnView,outerBackgroundColor]}>
                                     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.categoryScroll}
                                         contentContainerStyle={{
                                             flexDirection: "row",
@@ -124,13 +132,13 @@ function FilterPopup({ visible, onClose, cancel, }: RemovefavoritepopProps) {
                         
                         
                     </View>
-                    <View style={styles.horizontal}></View>
+                    <View style={[styles.horizontal,horizontalColor]}></View>
                 <View style={styles.btnView}>
                     <Removebtn
                         action={cancel} 
-                        backColor="#E9F0FF"
+                        backColor={ resetButtonColor}
                         text="Reset"
-                        textColor="#246BFD"
+                        textColor={resetbtnTextColor}
 
                     />
                     <Removebtn
@@ -169,7 +177,6 @@ const styles = StyleSheet.create({
         width: "100%",
         height: "45%",
         zIndex:1000,
-        backgroundColor: 'white',
         borderTopLeftRadius: 30,
          borderTopRightRadius: 30,
        shadowColor: '#000',
@@ -180,6 +187,13 @@ const styles = StyleSheet.create({
         display: "flex",
         flexDirection: "row",
         justifyContent: "center",    
+    },
+    viewDark: {
+         backgroundColor: '#1F222A',
+        
+    },
+    viewLight: {
+         backgroundColor: 'white',
     },
     intro: {
         width: "100%",
@@ -192,13 +206,17 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     introText: {
-        color: "#212121",
         fontWeight: "bold",
         fontSize:20
     },
+    whiteTitle: {
+        color:"white"
+    },
+    introColor: {
+        color: "#212121",
+    },
     inner: {  
         width: "90%",
-        backgroundColor:"white"
     },
     btn: {
         height: 50,
@@ -239,7 +257,6 @@ const styles = StyleSheet.create({
         
     },
     title: {
-        color: "#212121",
         fontWeight: "500",
         fontSize:18
         
@@ -271,12 +288,17 @@ const styles = StyleSheet.create({
         alignItems: "center",
         zIndex:10000
     },
+    darkHorizontal: {
+        borderColor:"#35383E",    
+    },
+    greyHorizontal: {
+        borderColor:"#EEEEEE",
+        
+    },
     horizontal: {
         width: "100%",
         borderWidth: 1,
-        borderColor:"#EEEEEE",
         marginBottom: "6%",
-         backgroundColor:"#EEEEEE"
     },
     categoryScroll: {
     

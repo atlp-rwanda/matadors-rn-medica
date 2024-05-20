@@ -2,8 +2,13 @@ import React,{ReactElement, useState} from 'react';
 import { StyleSheet, Text, Image, View, TouchableHighlight, SafeAreaView, Button, Alert, Platform, StatusBar, Dimensions,TextInput, Pressable,ImageURISource} from 'react-native'
 import Typography from '@/constants/Typography';
 import { SvgXml } from "react-native-svg"
+import { ThemeContext } from '@/ctx/ThemeContext';
+import { useContext } from 'react';
 
 function NofoundComponent() {
+    const { theme, changeTheme } = useContext(ThemeContext)
+    const NotFoundColor = theme === "dark" ? styles.NotFoundWhite : styles.NotFoundText
+    const sentenceTextColor=theme==="dark"?styles.sentenceTextWhite:styles.sentenceText
     return (
         <View style={styles.parent}>
         <View style={styles.outer}>
@@ -12,13 +17,13 @@ function NofoundComponent() {
 
             </View>
             <View style={styles.NotFound}>
-                <Text style={styles.NotFoundText}>Not Found</Text>
+                <Text style={[styles.NotFoundText,NotFoundColor]}>Not Found</Text>
 
             </View>
             <View style={styles.paragraph}>
-                <View style={styles.sentenceView}><Text style={styles.sentenceText}>Sorry, the keyword you entered can not be</Text></View>
-                <View style={styles.sentenceView}><Text style={styles.sentenceText}>found, please try again or search with </Text></View>
-                <View style={styles.sentenceView}><Text style={styles.sentenceText}>another keyword</Text></View>
+                <View style={styles.sentenceView}><Text style={[styles.sentenceText,sentenceTextColor]}>Sorry, the keyword you entered can not be</Text></View>
+                <View style={styles.sentenceView}><Text style={[styles.sentenceText,sentenceTextColor]}>found, please try again or search with </Text></View>
+                <View style={styles.sentenceView}><Text style={[styles.sentenceText,sentenceTextColor]}>another keyword</Text></View>
 
             </View>
 
@@ -37,9 +42,7 @@ const styles = StyleSheet.create({
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        borderColor:"black"
-        
-        
+        borderColor:"black"    
     },
 
     outer: {
@@ -50,10 +53,7 @@ const styles = StyleSheet.create({
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        borderColor:"red"
-        
-
-        
+        borderColor:"red"   
     },
     imageView: {
         width:"100%",
@@ -67,15 +67,15 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "center",
         alignItems: "center",
-        width:"100%"
-
-        
+        width:"100%"   
+    },
+    NotFoundWhite: {
+       color:"white" 
     },
     NotFoundText: {
         color: "#212121",
         fontWeight: "bold",
-        fontSize:18
-        
+        fontSize:18  
     },
     paragraph: {
         display: "flex",
@@ -92,10 +92,12 @@ const styles = StyleSheet.create({
         width:"100%"
         
     },
+    sentenceTextWhite: {
+       color:"white" 
+    },
     sentenceText: {
         color: "#212121",
         fontSize: 16,
-        fontWeight:"300"
-        
+        fontWeight:"300"  
     }
 })

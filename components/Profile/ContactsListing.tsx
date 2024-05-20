@@ -3,6 +3,7 @@ import Typography from "@/constants/Typography";
 import { ThemeContext } from "@/ctx/ThemeContext";
 import { useContext } from "react";
 import { Pressable, Text, View } from "react-native";
+import React from "react";
 
 interface Props {
   icon: () => React.JSX.Element;
