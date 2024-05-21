@@ -4,6 +4,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { ThemeContext } from '@/ctx/ThemeContext';
 import { SvgXml } from 'react-native-svg';
 import { Success } from '@/assets/icons/Success';
+import { router } from 'expo-router';
 
 interface PopupProps {
   message: string;
@@ -21,7 +22,7 @@ const Popup: React.FC<PopupProps> = ({ message, show, onClose,bigMessage }) => {
       <SvgXml xml={Success} />
         <Text style={[Typography.heading._4, {color: theme === 'dark' ? '#246BFD' : '#246BFD'}]}>{message}</Text>
         <Text style={[Typography.regular.large, {color: theme === 'dark' ? '#FFFFFF' : '#212121'}]}>{bigMessage}</Text>
-        <TouchableOpacity onPress={onClose} style={styles.okButton}>
+        <TouchableOpacity onPress={() => router.push('Appointments')} style={styles.okButton}>
           <Text style={[Typography.bold.large, { color: theme === 'dark' ? '#FFFFFF' : '#FFFFFF'}]}>Ok</Text>
         </TouchableOpacity>
       </View>

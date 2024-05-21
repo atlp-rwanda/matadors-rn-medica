@@ -1,6 +1,6 @@
 {
     "Upcoming": [
-      { "name": "Dr. Raul Zirkind", "date": "Dec 12, 2022", "time": "16:00 PM", "image": "doctor1.png", "status": "Upcoming", "statusColor": "#246BFD", "type": "Voice Call", "icon": "VoiceCall.png" },
+      { "name": "Dr. Raul Zirkind", "date": "Dec 12, 2022", "time": "16:00 PM", "image": "doctor1.png", "status": "Upcoming", "statusColor": "#246BFD", "type": "Video Call", "icon": "VoiceCall.png" },
       { "name": "Dr. Keegan Dach", "date": "Nov 20, 2022", "time": "10:00 AM", "image": "doctor2.png","status": "Upcoming", "statusColor": "#246BFD", "type": "Messaging", "icon": "Messaging.png"},
       {"name": "Dr. Drake Boeson", "date": "Nov 08, 2022", "time": "13:00 PM", "image": "doctor3.png","status": "Upcoming", "statusColor": "#246BFD","type": "Video Call", "icon": "VideoCall.png"},
       {"name": "Dr. Quinn Slatter", "date": "Oct 16, 2022", "time": "09:00 AM", "image": "doctor4.png","status": "Upcoming", "statusColor": "#246BFD","type": "Voice Call", "icon": "VoiceCall.png"}

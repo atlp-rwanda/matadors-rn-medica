@@ -17,7 +17,7 @@ export default function Index() {
       <View style={styles.container}>
         <View style={styles.image}>
           <Image
-            source={require("../../assets/images/Group.png")}
+            source={require("@/assets/images/Group.png")}
             style={styles.imagex}
           />
         </View>

@@ -52,7 +52,9 @@ import {
         <View style={{ flexDirection: "row", alignSelf: "flex-start", gap: 12 }}>
   
           <TouchableOpacity onPress={()=> router.back()}>
-           <SvgXml xml={theme === 'dark' ? backArrowWhite : backArrowBlack} /> 
+            <View>
+               <SvgXml xml={theme === 'dark' ? backArrowWhite : backArrowBlack} /> 
+            </View>
           </TouchableOpacity>
           
           <Text style={[Typography.heading._4, {color: theme === 'dark' ? '#FFFFFF' : '#212121'}]}>
@@ -167,6 +169,7 @@ import {
               alignItems: "center",
               backgroundColor: theme === "dark" ? "#35383F" : "#E9F0FF",
             }}
+            onPress={() => router.push('Appointments')}
           >
             <Text
               style={[

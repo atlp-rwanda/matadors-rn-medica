@@ -20,7 +20,7 @@ const DoctorCard = () => {
       }}
     >
       <Image
-        source={require("@/assets/images/BookingImages/doctor.png")}
+        source={require("@/assets/images/Maria.png")}
         style={{ width: 110, height: 110 }}
       />
       <View
@@ -38,7 +38,7 @@ const DoctorCard = () => {
             },
           ]}
         >
-          Dr Jenny Watson
+          Dr Maria Foose
         </Text>
         <View
           style={{
@@ -57,7 +57,7 @@ const DoctorCard = () => {
             },
           ]}
         >
-          Immunologist
+          Dermatologists
         </Text>
         <Text
           style={[
@@ -68,8 +68,7 @@ const DoctorCard = () => {
             },
           ]}
         >
-          Christ hospital London,uk
-        </Text>
+The Venus Hospital in Paris, France        </Text>
       </View>
     </View>
   );
