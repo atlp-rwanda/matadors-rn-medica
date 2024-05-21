@@ -17,6 +17,7 @@ import SearchComponent from '@/components/SearchComponent';
 import FoundDoctorCount from '@/components/FoundDoctorCount';
 import NofoundComponent from '@/components/NofoundComponent';
 import RemovefavoritePopup from '@/components/RemovefavoritePopup';
+import FilterPopup from '@/components/FilterSearchComponent';
 import NotFoundScreen from '@/app/+not-found';
 
 
@@ -64,7 +65,8 @@ function DoctorScreen() {
     const [searchTerm, setSearchTerm] = useState<string>('')
     const [selectedCategory, setSelectedCategory] = useState(data.categories[0])
     const [showpopUp, setShowPopup] = useState(false)
-    const [selectedDoctor,setSelectedDoctor]=useState()
+    const [selectedDoctor, setSelectedDoctor] = useState()
+    const [showFilter,setShowfilter]=useState(false)
 
     const handleSearchPressed = () => {
         setShowSearch(true)
@@ -76,6 +78,9 @@ function DoctorScreen() {
     const handleCategoryChange = (category:any) => {
         setSelectedCategory(category),
             setSearchTerm('')
+    }
+    const handleFilter = () => {
+        setShowfilter(true)
     }
     const handleRemove = (doctor:any) => {
         setSelectedDoctor(doctor)
@@ -99,7 +104,8 @@ function DoctorScreen() {
                         ) : (
                                
                             <SearchComponent
-                                onSearchSubmit={handleSearchSubmit}
+                                    onSearchSubmit={handleSearchSubmit}
+                                    filterAction={handleFilter}
                                 
                                 
                             />
@@ -188,6 +194,15 @@ function DoctorScreen() {
             
             
             />
+            <FilterPopup
+                cancel={()=>setShowfilter(false)}
+                visible={showFilter}
+                onClose={() => setShowfilter(false)}
+            
+            
+            
+            />
+            
 
              
         </SafeAreaView>
