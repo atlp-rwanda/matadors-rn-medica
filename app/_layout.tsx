@@ -14,6 +14,7 @@ import { ThemeType } from "@/constants/Types";
 import { Text } from "@/components/Themed";
 import ModalProvider from "@/ctx/ModalContext";
 import ModalContainer from "@/components/UI/Modal";
+import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
 
 export { ErrorBoundary } from "expo-router";
 
@@ -89,7 +90,9 @@ export default function RootLayout() {
   return (
     <ThemeProvider theme={favoredTheme}>
       <ModalProvider>
-        <RootLayoutNav />
+        <AutocompleteDropdownContextProvider>
+          <RootLayoutNav />
+        </AutocompleteDropdownContextProvider>
       </ModalProvider>
     </ThemeProvider>
   );
