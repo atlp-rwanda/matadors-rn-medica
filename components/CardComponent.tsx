@@ -10,7 +10,9 @@ interface DoctorComponentProps {
   iconComponent?: ReactElement;
   method: string;
   day: string;
-  time: string;
+  time: string;  
+  onPress: ()=> void
+
 }
 function DoctorComponentVoice({
   imageSource,
@@ -19,10 +21,11 @@ function DoctorComponentVoice({
   method,
   day,
   time,
+  onPress
 }: DoctorComponentProps) {
   return (
       <TouchableOpacity
-          onPress={()=>router.push("History/VoiceCallHistory")}
+          onPress={onPress}
       style={{
         borderRadius: 10,
         borderColor: "white",
@@ -82,9 +85,12 @@ function DoctorComponentVideo({
   method,
   day,
   time,
+  onPress
+
 }: DoctorComponentProps) {
   return (
     <TouchableOpacity
+    onPress={onPress}
       style={{
         borderRadius: 10,
         borderColor: "white",
