@@ -2,7 +2,7 @@ import { BlueAttachIcon } from "@/components/UI/icons/attachIcon";
 import { WhiteMessageIcon } from "@/components/UI/icons/blueMessage";
 import { BlueCameraIcon } from "@/components/UI/icons/cameraIcon";
 import { circleWithDots } from "@/components/UI/icons/circleWithDots";
-import { WhiteDoubleTick } from "@/components/UI/icons/doubleTickIcon";
+import { WhiteDoubleTick, BlueDoubleTick } from "@/components/UI/icons/doubleTickIcon";
 import { BlackFilterIcon } from "@/components/UI/icons/filterIcon";
 import { blueImojiIcon } from "@/components/UI/icons/imojiIcon";
 import { WhiteVoiceIcon } from "@/components/UI/icons/voiceIcon";
@@ -27,6 +27,7 @@ import MenuComponent from "./Menu";
 import { TouchableOpacity } from "react-native";
 import AttachComponent from "./AttachComponent";
 import { Image } from "react-native";
+import PlaySound from "./Playsound";
 
 function ChatMessaging() {
   const date = new Date();
@@ -127,7 +128,7 @@ function ChatMessaging() {
                 position: "absolute",
                 right: 20,
                 top: 50,
-                // zIndex:10
+                zIndex:10
               },
               styles.shadowProp,
             ]}
@@ -349,33 +350,39 @@ function ChatMessaging() {
               alignSelf: "flex-end",
               flexDirection: "row",
               alignItems: "center",
-              gap: 20
+              gap: 20,
             }}
           >
-            <View style={{ width: 130, height: 130, backgroundColor: "green", borderRadius: 20}}>
-              <Image 
-              style={{width: "100%", height: "100%"}}
-              source={require("@/assets/images/leftFoot.png")} />
+            <View
+              style={{
+                width: 130,
+                height: 130,
+                backgroundColor: "green",
+                borderRadius: 20,
+              }}
+            >
+              <Image
+                style={{ width: "100%", height: "100%" }}
+                source={require("@/assets/images/leftFoot.png")}
+              />
             </View>
-            <View style={{ width: 130, height: 130, backgroundColor: "green", borderRadius: 20}}>
-              <Image 
-              style={{width: "100%", height: "100%"}}
-              source={require("@/assets/images/rigthFoot.png")} />
+            <View
+              style={{
+                width: 130,
+                height: 130,
+                backgroundColor: "green",
+                borderRadius: 20,
+              }}
+            >
+              <Image
+                style={{ width: "100%", height: "100%" }}
+                source={require("@/assets/images/rigthFoot.png")}
+              />
             </View>
           </View>
-
-          <View
-            style={{
-              alignSelf: "flex-end",
-              flexDirection: "row",
-              alignItems: "center",
-              gap: 20
-            }}
-          >
-          <Text>sound player</Text>
-          </View>
-
-          <Text
+          <PlaySound />
+       <Pressable onPress={()=> router.push("Appointments/Review/ReviewBlankform")}>
+       <Text
             style={{
               alignSelf: "center",
               paddingVertical: 5,
@@ -387,6 +394,7 @@ function ChatMessaging() {
           >
             Session End
           </Text>
+       </Pressable>
         </ScrollView>
         <View style={{}}>
           {attachContainer && (
@@ -478,6 +486,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 3,
     elevation: 10,
+    backgroundColor:Colors.others.white
+
   },
 });
 export default ChatMessaging;

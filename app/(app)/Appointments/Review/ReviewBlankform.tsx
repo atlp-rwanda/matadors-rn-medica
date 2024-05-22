@@ -24,7 +24,7 @@ import {
   
   const ReviewBlankform: React.FC = () => {
     const { theme, changeTheme } = useContext(ThemeContext);
-    changeTheme("light");
+    changeTheme("dark");
     const [rating, setRating] = useState(0);
     const [value, setValue] = useState("first");
     const [showPopup, setShowPopup] = useState(false);
