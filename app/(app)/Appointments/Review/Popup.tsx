@@ -14,7 +14,7 @@ interface PopupProps {
 
 const Popup: React.FC<PopupProps> = ({ message, show, onClose,bigMessage }) => {
     const {theme, changeTheme} = useContext(ThemeContext);
-    changeTheme('dark');
+    changeTheme('light');
   return (
     <View style={[styles.overlay, { display: show ? 'flex' : 'none' }]}>
       <View style={[styles.popup, {backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF", borderRadius: 48,gap:32,padding: 32}]}>

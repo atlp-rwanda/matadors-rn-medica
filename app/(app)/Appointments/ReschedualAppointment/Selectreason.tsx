@@ -1,3 +1,4 @@
+import React from "react";
 import { useContext, useState } from "react";
 import { ThemeContext } from "@/ctx/ThemeContext";
 import { Pressable, View, StyleSheet,TextInput, TouchableOpacity } from "react-native";
