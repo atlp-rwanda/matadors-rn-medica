@@ -11,7 +11,6 @@ import { router } from "expo-router";
 
 export default function Reviewsummary() {
   const { theme, changeTheme } = useContext(ThemeContext);
-  changeTheme("light");
 
   return (
     <>

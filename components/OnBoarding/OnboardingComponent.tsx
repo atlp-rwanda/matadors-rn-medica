@@ -27,7 +27,6 @@ const OnboardingComponent = ({
   children: React.ReactNode;
 }) => {
   const { theme, changeTheme } = useContext(ThemeContext);
-  changeTheme("light")
 
 
   return (

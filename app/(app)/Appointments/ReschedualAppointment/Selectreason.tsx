@@ -12,7 +12,6 @@ import { RadioButton } from 'react-native-paper';
 export default function Selectreason(){
     const { theme, changeTheme } = useContext(ThemeContext);
     const [selectedValue, setSelectedValue] = useState('option1');
-  changeTheme("light");
     return(
         <>
       <View style={theme === "dark" ? styles.containerdark : styles.container}>

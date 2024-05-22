@@ -6,19 +6,24 @@ import { Colors } from "@/constants/Colors";
 import { SvgXml } from "react-native-svg";
 import {
   CalenderIcon,
+  CalenderIconDark,
   DropDownIcon,
+  DropDownIconDark,
   MessageIcon,
+  MessageIconDark,
 } from "@/assets/icons/Profile/Icons";
 import { Dropdown } from "react-native-element-dropdown";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Typography from "@/constants/Typography";
 import { typedCountries } from "@/constants/Languages";
+import { ThemeContext } from "@/ctx/ThemeContext";
 
 interface Props {}
 
 export default function EditProfile() {
   const [value, setValue] = useState<string>("United States");
   const [isFocus, setIsFocus] = useState(false);
+  const { theme } = useContext(ThemeContext);
 
   const countryNames: { label: string; value: string }[] = Object.keys(
     typedCountries
@@ -26,13 +31,12 @@ export default function EditProfile() {
     return { label: typedCountries[key].name, value: typedCountries[key].name };
   });
 
-  console.log(countryNames.length);
-
   return (
     <>
       <ScrollView
         style={{
-          backgroundColor: "white",
+          backgroundColor:
+            theme === "light" ? Colors.others.white : Colors.dark._1,
           height: "100%",
         }}
         contentContainerStyle={{
@@ -55,7 +59,9 @@ export default function EditProfile() {
             rightElement={() => {
               return (
                 <Pressable>
-                  <SvgXml xml={CalenderIcon} />
+                  <SvgXml
+                    xml={theme === "light" ? CalenderIcon : CalenderIconDark}
+                  />
                 </Pressable>
               );
             }}
@@ -66,7 +72,9 @@ export default function EditProfile() {
             rightElement={() => {
               return (
                 <Pressable>
-                  <SvgXml xml={MessageIcon} />
+                  <SvgXml
+                    xml={theme === "light" ? MessageIcon : MessageIconDark}
+                  />
                 </Pressable>
               );
             }}
@@ -74,14 +82,34 @@ export default function EditProfile() {
           {/* <Input placeholder="Country" value="United States" /> */}
           <Dropdown
             style={{
-              backgroundColor: Colors.grayScale._50,
+              backgroundColor:
+                theme === "light" ? Colors.grayScale._50 : Colors.dark._2,
               paddingHorizontal: 20,
               paddingVertical: 10,
               borderRadius: 20,
             }}
             placeholderStyle={[Typography.semiBold.medium]}
-            selectedTextStyle={[Typography.semiBold.medium, {}]}
-            inputSearchStyle={styles.inputSearchStyle}
+            selectedTextStyle={[
+              Typography.semiBold.medium,
+              {
+                color:
+                  theme === "light"
+                    ? Colors.grayScale._900
+                    : Colors.others.white,
+              },
+            ]}
+            containerStyle={{
+              borderRadius: 20,
+              backgroundColor:
+                theme === "light" ? Colors.others.white : Colors.dark._2,
+              borderWidth: 0,
+            }}
+            inputSearchStyle={{
+              height: 40,
+              fontSize: 16,
+              // borderColor: theme === "light" ? Colors.others.white : Colors.others.
+              borderRadius: 10,
+            }}
             data={countryNames}
             maxHeight={300}
             labelField="label"
@@ -96,7 +124,15 @@ export default function EditProfile() {
               setValue(item.value);
               setIsFocus(false);
             }}
-            renderRightIcon={() => <SvgXml xml={DropDownIcon} />}
+            renderRightIcon={() => (
+              <SvgXml
+                xml={theme === "light" ? DropDownIcon : DropDownIconDark}
+              />
+            )}
+            itemTextStyle={{
+              color:
+                theme === "light" ? Colors.grayScale._900 : Colors.others.white,
+            }}
           />
           <Input placeholder="+250" value="+1 111 467 378 399" />
           <Input placeholder="Gender" value="Male" />
@@ -119,13 +155,6 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     padding: 16,
   },
-  dropdown: {
-    height: 50,
-    borderColor: "gray",
-    borderWidth: 0.5,
-    borderRadius: 8,
-    paddingHorizontal: 8,
-  },
   icon: {
     marginRight: 5,
   },
@@ -147,9 +176,5 @@ const styles = StyleSheet.create({
   iconStyle: {
     width: 20,
     height: 20,
-  },
-  inputSearchStyle: {
-    height: 40,
-    fontSize: 16,
   },
 });

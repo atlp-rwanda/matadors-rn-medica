@@ -3,7 +3,9 @@ import { View } from "../Themed";
 import { Pressable, Text } from "react-native";
 import { ProfileIcon, ChevronRight } from "@/assets/icons/Profile/Icons";
 import Typography from "@/constants/Typography";
-import React from "react";
+import React, { useContext } from "react";
+import { ThemeContext } from "@/ctx/ThemeContext";
+import { Colors } from "@/constants/Colors";
 
 interface Props {
   icon: () => React.JSX.Element;
@@ -20,6 +22,7 @@ export default function OptionListing({
   textColor,
   onPress,
 }: Props) {
+  const { theme } = useContext(ThemeContext);
   return (
     <>
       <Pressable
@@ -31,6 +34,8 @@ export default function OptionListing({
           // backgroundColor: "red",
           gap: 15,
           alignItems: "center",
+          backgroundColor:
+            theme === "light" ? Colors.others.white : Colors.dark._1,
         }}
       >
         {/* <View style={{ flexDirection: "row", gap: 15, alignItems: "center" }}> */}
@@ -39,7 +44,13 @@ export default function OptionListing({
           {title}
         </Text>
         {/* </View> */}
-        <View style={{ marginLeft: "auto" }}>
+        <View
+          style={{
+            marginLeft: "auto",
+            backgroundColor:
+              theme === "light" ? Colors.others.white : Colors.dark._1,
+          }}
+        >
           {rightComponent && rightComponent()}
         </View>
       </Pressable>

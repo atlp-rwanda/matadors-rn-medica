@@ -7,15 +7,21 @@ import {
   WhatsappBlueIcon,
 } from "@/assets/icons/Profile/Icons";
 import ContactsListing from "@/components/Profile/ContactsListing";
+import { Colors } from "@/constants/Colors";
+import { ThemeContext } from "@/ctx/ThemeContext";
+import { useContext } from "react";
 import { ScrollView } from "react-native";
 import { View } from "react-native";
 import { SvgXml } from "react-native-svg";
 
 export default function ContactUs() {
+  const { theme } = useContext(ThemeContext);
+
   return (
     <ScrollView
       style={{
-        backgroundColor: "white",
+        backgroundColor:
+          theme === "light" ? Colors.others.white : Colors.dark._1,
         height: "100%",
       }}
       contentContainerStyle={{

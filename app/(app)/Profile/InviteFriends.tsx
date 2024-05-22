@@ -1,12 +1,18 @@
 import FriendsListing from "@/components/Profile/FriendsListing";
+import { Colors } from "@/constants/Colors";
+import { ThemeContext } from "@/ctx/ThemeContext";
+import { useContext } from "react";
 import { ScrollView, View } from "react-native";
 
 export default function InviteFriends() {
+  const { theme } = useContext(ThemeContext);
+
   return (
     <>
       <ScrollView
         style={{
-          backgroundColor: "white",
+          backgroundColor:
+            theme === "light" ? Colors.others.white : Colors.dark._1,
           height: "100%",
         }}
         contentContainerStyle={{}}

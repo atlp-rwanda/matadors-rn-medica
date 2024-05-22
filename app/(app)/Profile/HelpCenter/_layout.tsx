@@ -8,6 +8,8 @@ import { ParamListBase, TabNavigationState } from "@react-navigation/native";
 import Typography from "@/constants/Typography";
 import { Colors } from "@/constants/Colors";
 import { color } from "react-native-elements/dist/helpers";
+import { useContext } from "react";
+import { ThemeContext } from "@/ctx/ThemeContext";
 
 const { Navigator } = createMaterialTopTabNavigator();
 
@@ -19,6 +21,8 @@ export const MaterialTopTabs = withLayoutContext<
 >(Navigator);
 
 export default function Layout() {
+  const { theme } = useContext(ThemeContext);
+
   return (
     <MaterialTopTabs
       screenOptions={{
@@ -27,6 +31,8 @@ export default function Layout() {
         tabBarInactiveTintColor: Colors.grayScale._500,
         tabBarStyle: {
           elevation: 0,
+          backgroundColor:
+            theme === "light" ? Colors.others.white : Colors.dark._1,
         },
         tabBarIndicatorStyle: {
           backgroundColor: Colors.main.primary._500,

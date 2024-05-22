@@ -9,14 +9,16 @@ import Header from "@/components/UI/Header";
 import Modal from "@/components/UI/Modal";
 import { Colors } from "@/constants/Colors";
 import Typography from "@/constants/Typography";
+import { ThemeContext } from "@/ctx/ThemeContext";
 import { Stack, Tabs, useSegments } from "expo-router";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Pressable, Text, TouchableOpacity, View } from "react-native";
 import { SvgXml } from "react-native-svg";
 
 export default function Layout() {
   const [tabVisible, setTabVisible] = useState(false);
   const segments = useSegments();
+  const { theme } = useContext(ThemeContext);
 
   return (
     <>
@@ -35,7 +37,8 @@ export default function Layout() {
                   display: tabVisible ? "flex" : "none",
                   flexDirection: "row",
                   justifyContent: "space-between",
-                  backgroundColor: "white",
+                  backgroundColor:
+                    theme === "light" ? Colors.others.white : Colors.dark._1,
                   paddingHorizontal: 30,
                   paddingVertical: 25,
                 }}
@@ -197,7 +200,6 @@ export default function Layout() {
           }}
         />
       </Tabs>
-      
     </>
   );
 }

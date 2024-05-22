@@ -5,7 +5,8 @@ import TagsContainer from "@/components/UI/Tags";
 import Tag from "@/components/UI/Tags/Tag";
 import { Colors } from "@/constants/Colors";
 import Typography from "@/constants/Typography";
-import { useState } from "react";
+import { ThemeContext } from "@/ctx/ThemeContext";
+import { useContext, useState } from "react";
 import { ScrollView } from "react-native";
 import { View } from "react-native";
 import { Text } from "react-native-paper";
@@ -47,31 +48,33 @@ export default function FAQ() {
     },
   ]);
 
+  const { theme } = useContext(ThemeContext);
+
   return (
     <>
       <ScrollView
         style={{
-          backgroundColor: "white",
+          backgroundColor: theme === "light" ? Colors.others.white : Colors.dark._1,
           height: "100%",
         }}
         contentContainerStyle={{
           flexDirection: "column",
           justifyContent: "flex-start",
-          gap: 20,
+          gap: 24,
           paddingVertical: 20,
         }}
       >
         <ScrollView
           horizontal={true}
           showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{ gap: 15, paddingHorizontal: 20 }}
+          contentContainerStyle={{ gap: 20, paddingHorizontal: 20 }}
         >
           <TagsContainer data={tags} />
         </ScrollView>
 
         <View
           style={{
-            paddingHorizontal: 10,
+            paddingHorizontal: 20,
             alignItems: "center",
             justifyContent: "center",
           }}
@@ -79,7 +82,7 @@ export default function FAQ() {
           <Search onchange={() => {}} />
         </View>
 
-        <View style={{ paddingHorizontal: 20, gap: 20 }}>
+        <View style={{ paddingHorizontal: 20, gap: 24 }}>
           {faqs.map((faq) => {
             return (
               <Accordion title={faq.title} description={faq.description} />

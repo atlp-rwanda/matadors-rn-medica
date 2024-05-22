@@ -21,7 +21,6 @@ import { ThemeContext } from "@/ctx/ThemeContext";
 
 export default function AddNewCard() {
   const { theme, changeTheme } = useContext(ThemeContext);
-  changeTheme("light");
   const [date, setDate] = useState<Date>(new Date());
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
   const [textColor, setTextColor] = useState("black");

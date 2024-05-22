@@ -1,6 +1,7 @@
 import SelectPaymentCardListing from "@/components/Profile/SelectedPaymentCardListing";
 import Button from "@/components/UI/Button";
 import {
+  applePayDark,
   applePayLight,
   googlePay,
   masterCardDark,
@@ -10,17 +11,24 @@ import {
 import PaymentChooseContainer from "@/components/UI/PaymentChooseContainer/Index";
 import { Colors } from "@/constants/Colors";
 import { PaymentMethods } from "@/constants/PaymentMethods";
+import { ThemeContext } from "@/ctx/ThemeContext";
+import { useContext } from "react";
 import { ScrollView, View } from "react-native";
 import { SvgXml } from "react-native-svg";
 
 export default function Payment() {
+  const { theme } = useContext(ThemeContext);
   return (
     <ScrollView
-      style={{ backgroundColor: "white" }}
+      style={{
+        backgroundColor:
+          theme === "light" ? Colors.others.white : Colors.dark._1,
+      }}
       contentContainerStyle={{
         paddingHorizontal: 20,
         height: "100%",
-        backgroundColor: Colors.others.white,
+        backgroundColor:
+          theme === "light" ? Colors.others.white : Colors.dark._1,
         paddingVertical: 20,
       }}
     >
@@ -39,25 +47,39 @@ export default function Payment() {
         />
         <SelectPaymentCardListing
           icon={() => {
-            return <SvgXml xml={applePayLight} />;
+            return (
+              <SvgXml xml={theme === "light" ? applePayLight : applePayDark} />
+            );
           }}
           title="Apple Pay"
         />
         <SelectPaymentCardListing
           icon={() => {
-            return <SvgXml xml={masterCardLight} />;
+            return (
+              <SvgXml
+                xml={theme === "light" ? masterCardLight : masterCardDark}
+              />
+            );
           }}
           title="•••• •••• •••• •••• 4679"
         />
         <SelectPaymentCardListing
           icon={() => {
-            return <SvgXml xml={masterCardLight} />;
+            return (
+              <SvgXml
+                xml={theme === "light" ? masterCardLight : masterCardDark}
+              />
+            );
           }}
           title="•••• •••• •••• •••• 2766"
         />
         <SelectPaymentCardListing
           icon={() => {
-            return <SvgXml xml={masterCardLight} />;
+            return (
+              <SvgXml
+                xml={theme === "light" ? masterCardLight : masterCardDark}
+              />
+            );
           }}
           title="•••• •••• •••• •••• 3892"
         />

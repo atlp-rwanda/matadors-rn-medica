@@ -36,7 +36,6 @@ export default function RescheduleAppointment() {
     console.log(time);
   };
   console.log(selectedTime);
-  changeTheme("light");
   //  documentation : https://hosseinshabani.github.io/react-native-modern-datepicker/?ref=retool-blog
   // Function to generate time slots from 9:00 AM to 15:00 PM
   const generateTimeSlots = () => {
