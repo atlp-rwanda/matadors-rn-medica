@@ -55,25 +55,6 @@ export default function SelectPayment() {
 
         <PaymentChooseContainer data={PaymentMethods} />
 
-        {/* <View style={{ gap: 25 }}>
-          <PaymentChooseInputCard title="Paypal" icon={paypal} selected />
-          <PaymentChooseInputCard
-            title="Google Pay"
-            icon={googlePay}
-            selected={false}
-          />
-          <PaymentChooseInputCard
-            title="Apple Pay"
-            icon={theme === "light" ? applePayLight : applePayDark}
-            selected={false}
-          />
-          <PaymentChooseInputCard
-            title="•••• •••• •••• •••• 4679"
-            icon={theme === "light" ? masterCardLight : masterCardDark}
-            selected={false}
-          />
-        </View> */}
-
         <Button
           backgroundColor={
             theme === "light" ? Colors.main.primary._100 : Colors.dark._3
@@ -93,7 +74,9 @@ export default function SelectPayment() {
           backgroundColor={Colors.main.primary._500}
           title="Next"
           textColor={{ color: Colors.others.white, opacity: 8 }}
-          onPress={() => {router.push("(app)/ActionMenu/Booking/reviewSummary")}}
+          onPress={() => {
+            router.push("(app)/ActionMenu/Booking/reviewSummary");
+          }}
           shadowColor={Colors.main.primary._500}
           style={{ marginTop: "auto" }}
         />

@@ -1,7 +1,15 @@
 import { title } from "process";
 import React, { useContext } from "react";
 import { SvgXml } from "react-native-svg";
-import { Pressable, ScrollView, StatusBar, StyleSheet, Text, Touchable, TouchableOpacity } from "react-native";
+import {
+  Pressable,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  Touchable,
+  TouchableOpacity,
+} from "react-native";
 import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Typography from "@/constants/Typography";
@@ -18,13 +26,16 @@ import { statisticIcon } from "@/components/UI/icons/statistics";
 import { halfTransparentStar } from "@/components/UI/icons/halfTransparentStart";
 import { blueMessageIcon } from "@/components/UI/icons/blueMessage";
 import { ThemeContext } from "@/ctx/ThemeContext";
-import { backArrowBlack, backArrowWhite } from "@/components/UI/icons/backArrow";
+import {
+  backArrowBlack,
+  backArrowWhite,
+} from "@/components/UI/icons/backArrow";
 
 export const ReviewerCardComponent = () => {
-  const {theme, changeTheme} = useContext(ThemeContext)
+  const { theme, changeTheme } = useContext(ThemeContext);
 
   return (
-    <View style={{ gap: 10, marginVertical: 10}}>
+    <View style={{ gap: 10, marginVertical: 10 }}>
       <View
         style={{
           flexDirection: "row",
@@ -39,7 +50,17 @@ export const ReviewerCardComponent = () => {
               source={require("@/assets/images/jenny_watson.png")}
             />
           </View>
-          <Text style={[Typography.bold.large, {color: theme === "dark" ? Colors.others.white : Colors.others.black}]}>Charlotte Hanlin</Text>
+          <Text
+            style={[
+              Typography.bold.large,
+              {
+                color:
+                  theme === "dark" ? Colors.others.white : Colors.others.black,
+              },
+            ]}
+          >
+            Charlotte Hanlin
+          </Text>
         </View>
         <View
           style={{
@@ -50,8 +71,15 @@ export const ReviewerCardComponent = () => {
           }}
         >
           <View style={styles.ratings}>
-            <SvgXml xml={fullSmallBlueStar}/>
-            <Text style={[Typography.semiBold.medium,{color: Colors.main.primary._500}]}>5</Text>
+            <SvgXml xml={fullSmallBlueStar} />
+            <Text
+              style={[
+                Typography.semiBold.medium,
+                { color: Colors.main.primary._500 },
+              ]}
+            >
+              5
+            </Text>
           </View>
           <View>
             <SvgXml xml={circleWithDots} />
@@ -59,20 +87,40 @@ export const ReviewerCardComponent = () => {
         </View>
       </View>
       <View style={{ gap: 10 }}>
-        <Text style={{
-          color: theme === "dark" ? Colors.others.white : Colors.others.black
-        }}>
+        <Text
+          style={{
+            color: theme === "dark" ? Colors.others.white : Colors.others.black,
+          }}
+        >
           Dr. Jenny is very professional in her work and responsive. I have
           consulted and my problem is solved. 😍😍
         </Text>
         <View style={{ flexDirection: "row", alignItems: "center", gap: 40 }}>
           <View style={{ flexDirection: "row", gap: 10, alignItems: "center" }}>
-            <SvgXml xml={blueHeart}/>
-            <Text style={[Typography.medium.small, {
-              color: theme === "dark" ? Colors.others.white : Colors.others.black
-            }]}>5</Text>
+            <SvgXml xml={blueHeart} />
+            <Text
+              style={[
+                Typography.medium.small,
+                {
+                  color:
+                    theme === "dark"
+                      ? Colors.others.white
+                      : Colors.others.black,
+                },
+              ]}
+            >
+              5
+            </Text>
           </View>
-          <Text style={{color: theme === "dark" ? Colors.others.white : Colors.others.black}}> 6 days ago</Text>
+          <Text
+            style={{
+              color:
+                theme === "dark" ? Colors.others.white : Colors.others.black,
+            }}
+          >
+            {" "}
+            6 days ago
+          </Text>
         </View>
       </View>
     </View>
@@ -80,7 +128,7 @@ export const ReviewerCardComponent = () => {
 };
 
 const DoctorDetails = () => {
-  const {theme, changeTheme} = useContext(ThemeContext)
+  const { theme, changeTheme } = useContext(ThemeContext);
 
   return (
     <ScrollView style={[styles.container, { backgroundColor: theme === "dark" ? Colors.others.black : Colors.others.white }]}
@@ -91,34 +139,72 @@ const DoctorDetails = () => {
       <SafeAreaView>
         <View style={styles.navBar}>
           <View style={styles.leftSide}>
-          <Pressable onPress={()=> router.back()}>
-              {
-                theme === "dark" ? <SvgXml xml={backArrowWhite} />: <SvgXml xml={backArrowBlack} />
-              }
-          </Pressable>
+            <Pressable onPress={() => router.back()}>
+              {theme === "dark" ? (
+                <SvgXml xml={backArrowWhite} />
+              ) : (
+                <SvgXml xml={backArrowBlack} />
+              )}
+            </Pressable>
             <View>
-            <Text style={[Typography.heading._4, {color: theme === "dark" ? Colors.others.white : Colors.others.black}]}>Dr.Jenny Watson</Text>
+              <Text
+                style={[
+                  Typography.heading._4,
+                  {
+                    color:
+                      theme === "dark"
+                        ? Colors.others.white
+                        : Colors.others.black,
+                  },
+                ]}
+              >
+                Dr.Jenny Watson
+              </Text>
             </View>
           </View>
           <View style={styles.rightSide}>
             <SvgXml xml={blackHeart} />
-            <SvgXml xml={circleWithDots}/>
+            <SvgXml xml={circleWithDots} />
           </View>
         </View>
       </SafeAreaView>
-        <View style={styles.individualCard}>
-        <View style={{width: 100, height: 100}}>
-          <Image 
-          style={{width: "100%", height: "100%"}}
-          source={require("@/assets/images/jenny_watson.png")} />
+      <View style={styles.individualCard}>
+        <View style={{ width: 100, height: 100 }}>
+          <Image
+            style={{ width: "100%", height: "100%" }}
+            source={require("@/assets/images/jenny_watson.png")}
+          />
         </View>
         <View style={{ flex: 1 }}>
-        <Text style={[styles.drName, Typography.bold.xLarge, {color: theme === "dark" ? Colors.others.white : Colors.others.black}]}>
+          <Text
+            style={[
+              styles.drName,
+              Typography.bold.xLarge,
+              {
+                color:
+                  theme === "dark" ? Colors.others.white : Colors.others.black,
+              },
+            ]}
+          >
             Dr. Jenny Watson
           </Text>
           <View style={{ flex: 1, justifyContent: "space-around" }}>
-          <Text style={{color: theme === "dark" ? Colors.others.white : Colors.others.black}}>Immunologists</Text>
-            <Text style={{color: theme === "dark" ? Colors.others.white : Colors.others.black}}>Christ Hospital in London, UK</Text>
+            <Text
+              style={{
+                color:
+                  theme === "dark" ? Colors.others.white : Colors.others.black,
+              }}
+            >
+              Immunologists
+            </Text>
+            <Text
+              style={{
+                color:
+                  theme === "dark" ? Colors.others.white : Colors.others.black,
+              }}
+            >
+              Christ Hospital in London, UK
+            </Text>
           </View>
         </View>
       </View>
@@ -131,27 +217,7 @@ const DoctorDetails = () => {
               borderRadius: 100,
             }}
           >
-            <SvgXml xml={bluePeopleIcon}/>
-          </View>
-          <Text
-            style={[
-              Typography.bold.xLarge,
-              { color: Colors.main.primary._500,  },
-            ]}
-          >
-            5.000+
-          </Text>
-          <Text style={{color: theme === "dark" ? Colors.others.white : Colors.others.black}}>patients</Text>
-        </View>
-        <View style={{ alignItems: "center", gap: 5 }}>
-          <View
-            style={{
-              backgroundColor: "rgba(36, 107, 253, 0.1)",
-              padding: 20,
-              borderRadius: 100,
-            }}
-          >
-            <SvgXml xml={statisticIcon}/>
+            <SvgXml xml={bluePeopleIcon} />
           </View>
           <Text
             style={[
@@ -161,7 +227,14 @@ const DoctorDetails = () => {
           >
             5.000+
           </Text>
-          <Text style={{color: theme === "dark" ? Colors.others.white : Colors.others.black}}>years exp...</Text>
+          <Text
+            style={{
+              color:
+                theme === "dark" ? Colors.others.white : Colors.others.black,
+            }}
+          >
+            patients
+          </Text>
         </View>
         <View style={{ alignItems: "center", gap: 5 }}>
           <View
@@ -171,7 +244,7 @@ const DoctorDetails = () => {
               borderRadius: 100,
             }}
           >
-            <SvgXml xml={halfTransparentStar}/>
+            <SvgXml xml={statisticIcon} />
           </View>
           <Text
             style={[
@@ -181,7 +254,41 @@ const DoctorDetails = () => {
           >
             5.000+
           </Text>
-          <Text style={{color: theme === "dark" ? Colors.others.white : Colors.others.black}}>rating</Text>
+          <Text
+            style={{
+              color:
+                theme === "dark" ? Colors.others.white : Colors.others.black,
+            }}
+          >
+            years exp...
+          </Text>
+        </View>
+        <View style={{ alignItems: "center", gap: 5 }}>
+          <View
+            style={{
+              backgroundColor: "rgba(36, 107, 253, 0.1)",
+              padding: 20,
+              borderRadius: 100,
+            }}
+          >
+            <SvgXml xml={halfTransparentStar} />
+          </View>
+          <Text
+            style={[
+              Typography.bold.xLarge,
+              { color: Colors.main.primary._500 },
+            ]}
+          >
+            5.000+
+          </Text>
+          <Text
+            style={{
+              color:
+                theme === "dark" ? Colors.others.white : Colors.others.black,
+            }}
+          >
+            rating
+          </Text>
         </View>
         <View style={{ alignItems: "center", gap: 5 }}>
           <View
@@ -198,13 +305,35 @@ const DoctorDetails = () => {
           >
             5.000+
           </Text>
-          <Text style={{color: theme === "dark" ? Colors.others.white : Colors.others.black}}>reviewers</Text>
+          <Text
+            style={{
+              color:
+                theme === "dark" ? Colors.others.white : Colors.others.black,
+            }}
+          >
+            reviewers
+          </Text>
         </View>
       </View>
-    
+
       <View style={{ gap: 5 }}>
-      <Text style={[Typography.heading._5, {color: theme === "dark" ? Colors.others.white : Colors.others.black}]}>About me</Text>
-        <Text style={{lineHeight: 25, color: theme === "dark" ? Colors.others.white : Colors.others.black}}>
+        <Text
+          style={[
+            Typography.heading._5,
+            {
+              color:
+                theme === "dark" ? Colors.others.white : Colors.others.black,
+            },
+          ]}
+        >
+          About me
+        </Text>
+        <Text
+          style={{
+            lineHeight: 25,
+            color: theme === "dark" ? Colors.others.white : Colors.others.black,
+          }}
+        >
           Dr. Jenny Watson is the top most Immunologists specialist in Christ
           Hospital at London. She achived several awards for her wonderful
           contribution in medical field. She is available for private
@@ -213,25 +342,54 @@ const DoctorDetails = () => {
         </Text>
       </View>
       <View style={{ gap: 5 }}>
-        <Text style={[Typography.heading._5, {
-          color: theme === "dark" ? Colors.others.white : Colors.others.black
-        }]}>Working Time</Text>
-        <Text style={{color: theme === "dark" ? Colors.others.white : Colors.others.black}}> Monday - Friday, 08.00 AM - 20.00 PM </Text>
+        <Text
+          style={[
+            Typography.heading._5,
+            {
+              color:
+                theme === "dark" ? Colors.others.white : Colors.others.black,
+            },
+          ]}
+        >
+          Working Time
+        </Text>
+        <Text
+          style={{
+            color: theme === "dark" ? Colors.others.white : Colors.others.black,
+          }}
+        >
+          {" "}
+          Monday - Friday, 08.00 AM - 20.00 PM{" "}
+        </Text>
       </View>
 
       <View style={{ gap: 10 }}>
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <Text style={[Typography.heading._5, {
-            color: theme === "dark" ? Colors.others.white : Colors.others.black
-          }]}>Reviews</Text>
-          <Pressable onPress={()=> router.push("/ActionMenu/Booking/DoctorRatingAndReview")}>
+          <Text
+            style={[
+              Typography.heading._5,
+              {
+                color:
+                  theme === "dark" ? Colors.others.white : Colors.others.black,
+              },
+            ]}
+          >
+            Reviews
+          </Text>
+          <Pressable
+            onPress={() =>
+              router.push("/ActionMenu/Booking/DoctorRatingAndReview")
+            }
+          >
             <Text
-                style={[Typography.heading._5, { color: Colors.main.primary._500 }]}
+              style={[
+                Typography.heading._5,
+                { color: Colors.main.primary._500 },
+              ]}
             >
-                See All
+              See All
             </Text>
           </Pressable>
-         
         </View>
         <View>
           <ReviewerCardComponent />
@@ -239,7 +397,7 @@ const DoctorDetails = () => {
       </View>
       <View>
         <Pressable
-        onPress={()=> router.push("/ActionMenu/Booking/BookingAppointment")}
+          onPress={() => router.push("/ActionMenu/Booking/BookingAppointment")}
           style={{
             backgroundColor: Colors.main.primary._500,
             paddingVertical: 20,
@@ -302,7 +460,7 @@ const styles = StyleSheet.create({
   },
 
   drName: {
-    borderColor:"rgba(83, 83, 83, 0.4)",
+    borderColor: "rgba(83, 83, 83, 0.4)",
     borderBottomWidth: 0.5,
     paddingBottom: 20,
   },
