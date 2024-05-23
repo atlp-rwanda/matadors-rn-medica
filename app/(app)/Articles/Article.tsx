@@ -24,7 +24,8 @@ export default function Article() {
             <TouchableOpacity>
             <Image source={require("../../../assets/images/search1.png")} />
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => router.push("./ArticleDetails")}>
             <Image source={require("../../../assets/images/Notify.png")} />
             </TouchableOpacity>
           </View>

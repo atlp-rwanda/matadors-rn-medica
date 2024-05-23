@@ -22,8 +22,7 @@ export default function SeeAllArticles() {
                 style={{
                     paddingTop: 5
                 }}
-                >
-                        <MaterialIcons name="arrow-back" size={23} />
+                ><MaterialIcons name="arrow-back" size={23} />
                 </Pressable>
             <Text style={{ fontSize: 24, color: "#212121" }}>Articles</Text>
           </View>

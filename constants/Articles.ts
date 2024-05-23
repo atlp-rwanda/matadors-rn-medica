@@ -1,37 +1,37 @@
 export const articles = [
     {
       id: 1,
-      image: require("../assets/images/Image1.png"),
+      image: require("../assets/images/Image4.png"),
       title: "COVID-19 Was a Top Cause of Death in 2020 and 2021, Even For Younger People",
       date: "Dec 22, 2022",
      category: "Covid-19"
     },
     {
       id: 2,
-      image: require("../assets/images/Image2.png"),
+      image: require("../assets/images/Image1.png"),
       title: "Study Finds Being 'Hangry' is a Real Thing",
       date: "Dec 22, 2022",
      category: "Health"
     },
     {
       id: 3,
-      image: require("../assets/images/Image1.png"),
+      image: require("../assets/images/Image2.png"),
       title: "Why Childhood Obesity Rates Are Rising and What We Can Do",
       date: "Dec 22, 2022",
      category: "Covid-19"
     },
     {
         id: 4,
-        image: require("../assets/images/Image2.png"),
+        image: require("../assets/images/Image1.png"),
         date: "Dec 22, 2022",
-        title: "Study Finds Being 'Hangry' is a Real Thing",
+        title: "Enim aut facilis cupiditate exercitationem optio officia.",
        category: "Covid-19"
       },
       {
         id: 5,
-        image: require("../assets/images/Image1.png"),
-        date: "Dec 22, 2022",
-        title: "Study Finds Being 'Hangry' is a Real Thing",
+        image: require("../assets/images/Image2.png"),
+        date: "May 22, 2024",
+        title: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
        category: "Health"
       },
       
