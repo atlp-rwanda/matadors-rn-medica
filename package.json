@@ -112,6 +112,10 @@
           {
             "type": "rf",
             "section": "Refactors"
+          },
+          {
+            "type": "chore",
+            "section": "Chore"
           }
         ]
       }
