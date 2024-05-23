@@ -1,3 +1,5 @@
+
+import React from "react";
 import Header from "@/components/UI/Header";
 import Modal from "@/components/UI/Modal";
 import { Stack } from "expo-router";

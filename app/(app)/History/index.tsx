@@ -8,7 +8,7 @@ import React, { ReactElement, useState } from "react";
 import { Platform, TouchableOpacity } from "react-native";
 import { Image, ImageBackground, Text, View, FlatList,ScrollView } from "react-native";
 import { SvgXml } from "react-native-svg";
-import data from "../history.json"
+import data from "@/app/(app)/History/history.json"
 import NofoundComponent from "@/components/NofoundComponent";
 import SearchComponent from "@/components/SearchComponent";
 import Historyheader from "@/components/Historyheader";
@@ -27,11 +27,11 @@ interface iconMappingProp{
 }
 
 const imageMap:imageMapProp = {
-    'doctor1.png': require("../../../../assets/images/Doctors/doctor1.png"),
-    'doctor2.png': require("../../../../assets/images/Doctors/doctor2.png"),
-    'doctor3.png': require("../../../../assets/images/Doctors/doctor3.png"),
-    'doctor4.png': require("../../../../assets/images/Doctors/doctor4.png"),
-    'doctor5.png':require("../../../../assets/images/Doctors/doctor5.png")
+    'doctor1.png': require("@/assets/images/Doctors/doctor1.png"),
+    'doctor2.png': require("@/assets/images/Doctors/doctor2.png"),
+    'doctor3.png': require("@/assets/images/Doctors/doctor3.png"),
+    'doctor4.png': require("@/assets/images/Doctors/doctor4.png"),
+    'doctor5.png':require("@/assets/images/Doctors/doctor5.png")
 
 }
 export const iconMapping:iconMappingProp = {
@@ -152,6 +152,8 @@ const index = () => {
                     method="Voice Call"
                     day={doctor.timeFrame}
                     time={doctor.time}
+                    onPress={()=> router.push("History/VoiceCallHistory/[id]")}
+
 
                     
                   
@@ -161,22 +163,17 @@ const index = () => {
                     (
                       <DoctorComponentVideo
                         key={index}
-                    imageSource={imageMap[doctor.imageSource]}
-                    iconComponent={iconMapping[doctor.iconComponent]}
-                    name={doctor.name}
-                    method="Video call"
-                    day={doctor.timeFrame}
-                    time={doctor.time}
-                      
-                      
-                      
+                        imageSource={imageMap[doctor.imageSource]}
+                        iconComponent={iconMapping[doctor.iconComponent]}
+                        name={doctor.name}
+                        method="Video call"
+                        day={doctor.timeFrame}
+                        time={doctor.time}
+                        onPress={()=> router.push("History/VideoCallHistory/[id]")}
                       
                       />
 
                     ):null
-              
-            
-
           ))
             
           ):
@@ -194,3 +191,4 @@ const index = () => {
 };
 
 export default index;
+
