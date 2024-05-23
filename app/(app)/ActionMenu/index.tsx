@@ -184,7 +184,7 @@ export default function Index() {
                 justifyContent: "center",
                 width: 65,
                 height: 34,
-                alignItems: "center",
+                alignItems: "center"
               }}
             >
               <Text style={{ fontFamily: "Urbanist-regular", color: "white" }}>
