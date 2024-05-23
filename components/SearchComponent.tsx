@@ -10,7 +10,7 @@ import { router } from 'expo-router';
 
 interface searchComponentProps{
     onSearchSubmit: (searchTerm: string) => void,
-    filterAction:()=>void
+    filterAction?:()=>void
 }
 function SearchComponent({onSearchSubmit,filterAction}:searchComponentProps) {
     const [value, setValue] = useState("")
@@ -60,6 +60,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: "center",
         alignItems: "center",
+        
     },
     outer: {
         width: "80%",
