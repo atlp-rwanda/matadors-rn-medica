@@ -16,6 +16,8 @@ import HeaderComponent from '@/components/HeaderComponent';
 import SearchComponent from '@/components/SearchComponent';
 import FoundDoctorCount from '@/components/FoundDoctorCount';
 import NofoundComponent from '@/components/NofoundComponent';
+import RemovefavoritePopup from '@/components/RemovefavoritePopup';
+import FilterPopup from '@/components/FilterSearchComponent';
 import NotFoundScreen from '@/app/+not-found';
 
 
@@ -62,6 +64,9 @@ function DoctorScreen() {
     const [showSearch, setShowSearch] = useState<boolean>(false)
     const [searchTerm, setSearchTerm] = useState<string>('')
     const [selectedCategory, setSelectedCategory] = useState(data.categories[0])
+    const [showpopUp, setShowPopup] = useState(false)
+    const [selectedDoctor, setSelectedDoctor] = useState()
+    const [showFilter,setShowfilter]=useState(false)
 
     const handleSearchPressed = () => {
         setShowSearch(true)
@@ -73,6 +78,14 @@ function DoctorScreen() {
     const handleCategoryChange = (category:any) => {
         setSelectedCategory(category),
             setSearchTerm('')
+    }
+    const handleFilter = () => {
+        setShowfilter(true)
+    }
+    const handleRemove = (doctor:any) => {
+        setSelectedDoctor(doctor)
+        
+        setShowPopup(true)
     }
 
     const filteredDoctors=searchTerm.length>0 ? selectedCategory.Doctors.filter(doctor=>doctor.name.toLowerCase().includes(searchTerm)):selectedCategory.Doctors
@@ -91,7 +104,8 @@ function DoctorScreen() {
                         ) : (
                                
                             <SearchComponent
-                                onSearchSubmit={handleSearchSubmit}
+                                    onSearchSubmit={handleSearchSubmit}
+                                    filterAction={handleFilter}
                                 
                                 
                             />
@@ -153,6 +167,7 @@ function DoctorScreen() {
                                             star={iconMapping[doctor.star]}
                                             review={doctor.review}
                                             rate={doctor.rate}
+                                            remove={()=>handleRemove(doctor)}
 
                                         />
                                     </View>
@@ -162,17 +177,33 @@ function DoctorScreen() {
                         ) : (
                              <NofoundComponent/>   
                     )}
-                        
-                      
+                         
 
-                    
+                    </ScrollView>
                      
-
-                </ScrollView>
                 </View>
+               
                    
             
             </View>
+            <RemovefavoritePopup
+                cancel={()=>setShowPopup(false)}
+                visible={showpopUp}
+                onClose={() => setShowPopup(false)}
+                doctor={selectedDoctor}
+            
+            
+            />
+            <FilterPopup
+                cancel={()=>setShowfilter(false)}
+                visible={showFilter}
+                onClose={() => setShowfilter(false)}
+            
+            
+            
+            />
+            
+
              
         </SafeAreaView>
         
@@ -183,11 +214,7 @@ export default DoctorScreen;
 
 const styles = StyleSheet.create({
     container: {
-        width: "100%",
-        height:"100%",
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "center",
+        flex: 1,
         backgroundColor: "white",
         zIndex:1
     },
