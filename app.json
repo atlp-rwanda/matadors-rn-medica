@@ -9,7 +9,7 @@
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "white"
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
@@ -17,12 +17,12 @@
       "infoPlist": {
         "NSFaceIDUsageDescription": "This app uses Face ID and Touch ID for some features"
       },
-      "bundleIdentifier": "medical.app"
+      "bundleIdentifier": "medical.app",
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "white"
       },
       "package": "medical.app",
       "softwareKeyboardLayoutMode": "pan"

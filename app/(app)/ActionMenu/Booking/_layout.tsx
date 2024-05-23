@@ -1,3 +1,5 @@
+
+import React from "react";
 import Header from "@/components/UI/Header";
 import Modal from "@/components/UI/Modal";
 import { Stack } from "expo-router";
@@ -20,7 +22,10 @@ export default function BookingLayout() {
         <Stack.Screen name="Select-package" options={{ headerShown: false }} />
         <Stack.Screen name="Patient-details" options={{ headerShown: false }} />
         <Stack.Screen name="EnterYourPin" options={{ headerShown: false }} />
-
+        <Stack.Screen
+          name="SelectPayment"
+          options={{ header: () => <Header title="Payments" /> }}
+        />
       </Stack>
     </>
   );

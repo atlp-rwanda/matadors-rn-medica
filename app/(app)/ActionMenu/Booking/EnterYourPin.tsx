@@ -1,20 +1,116 @@
 import { Text } from "@/components/Themed";
-import { LeftArrow } from "@/components/UI/Icons";
+import { LeftArrow, } from "@/components/UI/Icons";
 import { Colors } from "@/constants/Colors";
 import Typography from "@/constants/Typography";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import {
   View,
   StyleSheet,
   TouchableOpacity,
   Pressable,
+  Image,
 } from "react-native";
 import { OtpInput } from "react-native-otp-entry";
 import { router } from "expo-router";
+import { useModal } from "@/ctx/ModalContext";
+import { ThemeContext } from "@/ctx/ThemeContext";
 
 export default function EnterYourPin() {
   const [isDark, setIsDark] = useState(false);
-  const [pin1, Setpin1] = useState(null);
+  const modal = useModal();
+
+  const { theme, changeTheme } = useContext(ThemeContext);
+
+  async function handlePIN() {
+    modal.show({
+      children: (
+        <View
+          style={{
+            padding: 40,
+            alignItems: "center",
+            gap: 20,
+            borderRadius: 48,
+            backgroundColor:
+              theme === "light" ? Colors.others.white : Colors.dark._2,
+          }}
+        >
+          <Image source={require("@/assets/images/calendarmodal.png")} />
+          <View
+            style={{
+              gap: 20,
+              backgroundColor:
+                theme === "light" ? Colors.others.white : Colors.dark._2,
+            }}
+          >
+            <Text
+              style={[
+                Typography.heading._4,
+                {
+                  color: Colors.main.primary._500,
+                  textAlign: "center",
+                },
+              ]}
+            >
+              Congratulations!
+            </Text>
+            <Text
+              style={[
+                Typography.regular.large,
+                {
+                  textAlign: "center",
+                  color:
+                    theme === "light"
+                      ? Colors.grayScale._900
+                      : Colors.others.white,
+                },
+              ]}
+            >
+              Appointment successfully booked. You will receive a notification
+              and the doctor you selected will contact you.
+            </Text>
+            <TouchableOpacity style={{
+                 backgroundColor: Colors.main.primary._500,
+                 alignItems: "center",
+                 padding: 18,
+                 borderRadius: 100,
+                 marginTop: 10,
+            }} onPress={()=> {
+              modal.hide()
+              router.push("Appointments")
+            }}>
+              <Text
+                style={[Typography.bold.large, { color: Colors.others.white,textAlign: "center"}]}
+              >
+                View Appointment
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={()=> {
+                modal.hide()
+                router.push("ActionMenu")
+              }}
+              style={{
+                backgroundColor: theme === "light"
+                ? Colors.main.primary._100:Colors.dark._3,
+                borderRadius: 100,
+                padding: 18,
+                alignItems: "center",
+              }}
+            >
+              <Text
+                style={[
+                  Typography.bold.large,
+                  {  color:theme === "light" ? Colors.main.primary._500:Colors.others.white },
+                ]}
+              >
+                cancel
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      ),
+    });
+  }
 
   return (
     <>
@@ -78,7 +174,7 @@ export default function EnterYourPin() {
           </View>
         </View>
         <TouchableOpacity
-          onPress={() => {}}
+          onPress={handlePIN}
           style={{
             width: 380,
             height: 58,
