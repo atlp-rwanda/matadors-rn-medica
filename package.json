@@ -11,9 +11,8 @@
     "test": "jest --coverage",
     "test:watch": "jest --watchAll",
     "test:update": "jest --updateSnapshot",
-    "ci-start": "expo build:web", 
+    "ci-start": "expo build:web",
     "release": "release-it"
-
   },
   "jest": {
     "preset": "jest-expo"
