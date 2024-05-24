@@ -3,14 +3,12 @@ import Typography from "@/constants/Typography";
 import { Colors } from "@/constants/Colors";
 import { useEffect } from "react";
 import { router } from "expo-router";
+import React from "react";
 
 export default function Index() {
   useEffect(() => {
     setTimeout(() => {
       router.push("onBoarding/FirstScreen");
-      // router.push("/(auth)/SignIn&SignOut/LetsYouIn");
-      // router.push("/(app)/Profile");
-      // router.push("(app)/ActionMenu");
     }, 3000);
   }, []);
 

@@ -9,9 +9,10 @@ import { router } from 'expo-router';
 
 
 interface searchComponentProps{
-    onSearchSubmit:(searchTerm:string)=>void
+    onSearchSubmit: (searchTerm: string) => void,
+    filterAction?:()=>void
 }
-function SearchComponent({onSearchSubmit}:searchComponentProps) {
+function SearchComponent({onSearchSubmit,filterAction}:searchComponentProps) {
     const [value, setValue] = useState("")
     const handleSearchClick = () => {
         onSearchSubmit(value)
@@ -39,7 +40,7 @@ function SearchComponent({onSearchSubmit}:searchComponentProps) {
                 />
                 
             </View>
-            <Pressable style={styles.filterView}>
+            <Pressable style={styles.filterView} onPress={filterAction}>
                 <SvgXml xml={filter} />
 
             </Pressable>
@@ -59,6 +60,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: "center",
         alignItems: "center",
+        
     },
     outer: {
         width: "80%",
@@ -80,6 +82,7 @@ const styles = StyleSheet.create({
         flexDirection:"row",
         justifyContent: "flex-start",
         alignItems: "center",
+        backgroundColor:"white"
     },
     searchView: {
         height: "100%",

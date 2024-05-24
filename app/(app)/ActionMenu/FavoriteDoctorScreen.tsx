@@ -14,6 +14,11 @@ import { leftArrow } from '@/assets/icons/left';
 import data from "../../doctors.json"
 import HeaderComponent from '@/components/HeaderComponent';
 import SearchComponent from '@/components/SearchComponent';
+import FoundDoctorCount from '@/components/FoundDoctorCount';
+import NofoundComponent from '@/components/NofoundComponent';
+import RemovefavoritePopup from '@/components/RemovefavoritePopup';
+import FilterPopup from '@/components/FilterSearchComponent';
+import NotFoundScreen from '@/app/+not-found';
 
 
 interface imageMapProp{
@@ -59,6 +64,9 @@ function DoctorScreen() {
     const [showSearch, setShowSearch] = useState<boolean>(false)
     const [searchTerm, setSearchTerm] = useState<string>('')
     const [selectedCategory, setSelectedCategory] = useState(data.categories[0])
+    const [showpopUp, setShowPopup] = useState(false)
+    const [selectedDoctor, setSelectedDoctor] = useState()
+    const [showFilter,setShowfilter]=useState(false)
 
     const handleSearchPressed = () => {
         setShowSearch(true)
@@ -71,6 +79,14 @@ function DoctorScreen() {
         setSelectedCategory(category),
             setSearchTerm('')
     }
+    const handleFilter = () => {
+        setShowfilter(true)
+    }
+    const handleRemove = (doctor:any) => {
+        setSelectedDoctor(doctor)
+        
+        setShowPopup(true)
+    }
 
     const filteredDoctors=searchTerm.length>0 ? selectedCategory.Doctors.filter(doctor=>doctor.name.toLowerCase().includes(searchTerm)):selectedCategory.Doctors
     return (
@@ -82,21 +98,19 @@ function DoctorScreen() {
                         !showSearch ? (
                             <HeaderComponent
                                 onSearchPressed={handleSearchPressed}
-                                headerText="Notification"
+                                headerText="Top Doctor"
                             
                             />
                         ) : (
                                
-                                <SearchComponent
+                            <SearchComponent
                                     onSearchSubmit={handleSearchSubmit}
+                                    filterAction={handleFilter}
                                 
                                 
-                                />
+                            />
                         )
                     }
-                    
-                    
-            
                 </View>
                 <View style={styles.categoryBtnView}>
                 <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.categoryScroll}
@@ -108,15 +122,24 @@ function DoctorScreen() {
                     }}>
                     
                     {data.categories.map((category, index) =>
-                    <Pressable key={index} onPress={()=>handleCategoryChange(category)} style={[styles.categoryBtn,index==0?styles.firstCategoryBtn:{}]}>
+                        <Pressable key={index} onPress={() => handleCategoryChange(category)} style={[styles.categoryBtn,
+                            selectedCategory === category ? styles.firstCategoryBtn : {},
+                            ]}>
                             
-                           <Text style={[styles.categoryBtnText,index===0?styles.firstCategoryBtnText:{}]}>{category.name}</Text>  
+                            <Text style={[
+                                styles.categoryBtnText,
+                                selectedCategory === category ? styles.firstCategoryBtnText : {},
+                                ]}>{category.name}</Text>  
                             
                     </Pressable>
                         )}
-                   
-
                     </ScrollView>
+                    
+                </View>
+                <View style={styles.foundDoctorView}>
+                    {showSearch && (
+                        <FoundDoctorCount count={filteredDoctors.length } />
+                    )}
                 </View>
                 <View>
                 <ScrollView
@@ -128,36 +151,59 @@ function DoctorScreen() {
             paddingBottom: 150,
             paddingTop:20
           }}
-                >
-                    {filteredDoctors.map((doctor:any,index:any) =>
+                    >
+                        {filteredDoctors.length > 0 ? (
+                            
+                                filteredDoctors.map((doctor: any, index: any) =>
                         
-                        <View key={index } style={styles.componentView}>
-                     <DoctorComponent
+                                    <View key={index} style={styles.componentView}>
+                                        <DoctorComponent
 
-                        imageSource={imageMap[doctor.imageSource]}
-                        name={doctor.name}
-                        iconComponent={iconMapping[doctor.iconComponent]}
-                        professionalTitle={doctor.professionalTitle}
-                        hospital={doctor.hospital}
-                        star={iconMapping[doctor.star]}
-                        review={doctor.review}
-                        rate={doctor.rate}
+                                            imageSource={imageMap[doctor.imageSource]}
+                                            name={doctor.name}
+                                            iconComponent={iconMapping[doctor.iconComponent]}
+                                            professionalTitle={doctor.professionalTitle}
+                                            hospital={doctor.hospital}
+                                            star={iconMapping[doctor.star]}
+                                            review={doctor.review}
+                                            rate={doctor.rate}
+                                            remove={()=>handleRemove(doctor)}
 
-                        />
-                    </View>
+                                        />
+                                    </View>
                         
-                        )}
-                        
-                      
+                                )
+                            
+                        ) : (
+                             <NofoundComponent/>   
+                    )}
+                         
 
-                    
+                    </ScrollView>
                      
-
-                </ScrollView>
                 </View>
+               
                    
             
             </View>
+            <RemovefavoritePopup
+                cancel={()=>setShowPopup(false)}
+                visible={showpopUp}
+                onClose={() => setShowPopup(false)}
+                doctor={selectedDoctor}
+            
+            
+            />
+            <FilterPopup
+                cancel={()=>setShowfilter(false)}
+                visible={showFilter}
+                onClose={() => setShowfilter(false)}
+            
+            
+            
+            />
+            
+
              
         </SafeAreaView>
         
@@ -168,11 +214,7 @@ export default DoctorScreen;
 
 const styles = StyleSheet.create({
     container: {
-        width: "100%",
-        height:"100%",
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "center",
+        flex: 1,
         backgroundColor: "white",
         zIndex:1
     },
@@ -185,6 +227,13 @@ const styles = StyleSheet.create({
          marginBottom: "7%",
         marginTop: "8%",
         backgroundColor:"white"
+    },
+    foundDoctorView: {
+        width: "100%",
+        display: "flex",
+        flexDirection: 'row',
+        justifyContent: "center",
+        alignItems: "center"
     },
     searchComponent: {
         
@@ -211,7 +260,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: 'center',
         marginBottom: "5%",
-        backgroundColor:"white"
+        backgroundColor: "white",
     },
     categoryBtn: {
         borderWidth: 2,
@@ -239,7 +288,7 @@ const styles = StyleSheet.create({
     },
     body: {
         width: "98%",
-        backgroundColor: "#F7F7F7",
+        backgroundColor:"#F7F7F7",
     },
     scroll: {
         width: "100%",

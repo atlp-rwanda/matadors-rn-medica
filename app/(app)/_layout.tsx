@@ -1,3 +1,4 @@
+import React from "react";
 import { AppointmentIcon } from "@/assets/icons/AppointmentSvg";
 import { ArticleIcon } from "@/assets/icons/ArticleSvg";
 import { HistoryIcon } from "@/assets/icons/HistorySvg";
@@ -196,6 +197,7 @@ export default function Layout() {
           }}
         />
       </Tabs>
+      
     </>
   );
 }
