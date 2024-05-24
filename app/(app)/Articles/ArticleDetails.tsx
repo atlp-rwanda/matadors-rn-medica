@@ -1,7 +1,7 @@
 
  
 import Colors from '@/constants/Colors';
-import { useNavigation } from 'expo-router';
+import { router, useNavigation } from 'expo-router';
 import React from 'react';
 import { View, Text, Image, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native';
 
@@ -33,7 +33,9 @@ export default function ArticlesDetails() {
     <SafeAreaView style={{paddingTop:50, backgroundColor: Colors.light.background}}>
       <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
         <View style={{ display: "flex", flexDirection: "row", gap: 15, padding: 15 }}>
-          <TouchableOpacity><Image style={{ marginTop: 10 }} source={require("../../../assets/images/Arrow.png")} /></TouchableOpacity>
+          <TouchableOpacity
+          onPress={()=> router.back()}
+          ><Image style={{ marginTop: 10 }} source={require("../../../assets/images/Arrow.png")} /></TouchableOpacity>
         </View>
         <View style={{ display: "flex", flexDirection: "row", gap: 10, padding: 15 }}>
           <TouchableOpacity><Image style={{ height: 22.57, width: 18.13, padding: 10 }} source={require("../../../assets/images/Notify.png")} /></TouchableOpacity>
