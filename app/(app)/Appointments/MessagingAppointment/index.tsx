@@ -38,6 +38,7 @@ interface PatientType{
 
 function AppointmentMessaging() {
   const { theme, changeTheme } = useContext(ThemeContext);
+  changeTheme("light")
   const ios = Platform.OS === "ios";
 
 

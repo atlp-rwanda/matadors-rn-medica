@@ -1,6 +1,8 @@
 // DoctorCard.tsx
+import {Colors} from '@/constants/Colors';
 import React from 'react';
 import { View, Text, Image, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
+import { SvgXml } from 'react-native-svg';
 
 interface DoctorCardProps {
   name: string;
@@ -11,10 +13,11 @@ interface DoctorCardProps {
   statusColor: string;
   type: string;
   icon: any;
+  iconOnPress: ()=> void
   buttons?: { label: string, action: () => void, styleType: 'cancel' | 'primary' }[];
 }
 
-const DoctorCard: React.FC<DoctorCardProps> = ({ name, date, time, image, status, statusColor, type, icon, buttons }) => {
+const DoctorCard: React.FC<DoctorCardProps> = ({ name, date, time, image, status, statusColor, type, icon, buttons, iconOnPress }) => {
   return (
     <ImageBackground style={styles.card}>
       <View style={styles.upperSection}>
@@ -28,8 +31,11 @@ const DoctorCard: React.FC<DoctorCardProps> = ({ name, date, time, image, status
             <View style={[styles.statusContainer, { borderColor: statusColor }]}>
               <Text style={{ fontFamily: "Urbanist-regular", color: statusColor, fontSize: 12 }}>{status}</Text>
             </View>
-            <TouchableOpacity>
-            <Image style={{ marginBottom: 10, marginLeft: '6%' }} source={icon}></Image>
+            <TouchableOpacity 
+            onPress={iconOnPress}
+            style={{padding: 20, backgroundColor: Colors.transparent.blue, borderRadius: 100, marginLeft: 10}}
+            >
+            {icon}
             </TouchableOpacity>
           </View>
           <Text style={styles.date}>{date} | {time}</Text>
