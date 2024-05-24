@@ -7,6 +7,9 @@ export default function Layout() {
       <Stack.Screen name="index" options={{headerShown:false}}/>
       <Stack.Screen name="CancelAppointment/index" options={{headerShown:false}}/>
       <Stack.Screen name="VideoCallAppointment/index" options={{headerShown:false}}/>
+      <Stack.Screen name="VideoCallAppointment/VideoCallRinging" options={{headerShown:false}}/>
+      <Stack.Screen name="VideoCallAppointment/VideoCall" options={{headerShown:false}}/>
+      <Stack.Screen name="VideoCallAppointment/VideoCallSessionEnded" options={{headerShown:false}}/>
       <Stack.Screen name="VoiceCallAppointment/index" options={{headerShown:false}}/>
       <Stack.Screen name="VoiceCallAppointment/VoiceCallRinging" options={{headerShown:false}}/>
       <Stack.Screen name="VoiceCallAppointment/SessionEnded" options={{headerShown:false}}/>
