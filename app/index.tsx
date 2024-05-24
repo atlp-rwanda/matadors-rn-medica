@@ -1,15 +1,15 @@
+import React from "react";
 import Loading from "@/app/spinner/Loading";
 import { router } from "expo-router";
 import { useEffect } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
-
 export default function SplashScreen() {
-
   useEffect(() => {
     setTimeout(() => {
-      router.push("(app)/HomeScreen");
+      router.push("(app)");
     }, 2000);
   }, []);
+
   return (
     <>
       <View style={styles.container}>
@@ -56,4 +56,3 @@ const styles = StyleSheet.create({
     bottom: 50,
   },
 });
-

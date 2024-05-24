@@ -1,7 +1,39 @@
-import React from 'react'
-import { View } from 'react-native'
+import { View, Text } from "@/components/Themed";
+import {
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  TextInput,
+  ImageBackground,
+  ScrollView,
+} from "react-native";
+import React, { useState } from "react";
+import { useFonts as useFontsExpo } from "expo-font";
+import { useNavigation } from "@react-navigation/native";
+import Line from "@/components/Line";
+import { router } from "expo-router";
 
-const index = () => {
+export default function Index() {
+  //const {user, isLoading}=useUser();
+  const [activeIcon, setActiveIcon] = useState("Home");
+  const handleIconPress = (iconName: string) => {
+    setActiveIcon(iconName); // Update active icon state when an icon is pressed
+  };
+  const isIconActive = (iconName: string) => {
+    return activeIcon === iconName;
+  };
+  const navigation = useNavigation();
+  const [text, setText] = useState("");
+  const [fontsLoaded] = useFontsExpo({
+    "Urbanist-regular": require("../../../assets/fonts/Urbanist-Regular.ttf"),
+    "Urbanist-bold": require("../../../assets/fonts/Urbanist-Bold.ttf"),
+    "Urbanist-Semibold": require("../../../assets/fonts/Urbanist-SemiBold.ttf"),
+    "Urbanist-Medium": require("../../../assets/fonts/Urbanist-Medium.ttf"),
+  });
+  if (!fontsLoaded) {
+    return null;
+  }
+
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -275,7 +307,242 @@ const index = () => {
         </TouchableOpacity>
       </ScrollView>
     </View>
-  )
+  );
 }
 
-export default index
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: "#FFFFFF",
+    padding: 2,
+    paddingTop: 40,
+  },
+  containerDark: {
+    backgroundColor: "#181A20",
+    padding: 2,
+    paddingTop: 40,
+  },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    backgroundColor: "#FFFFFF",
+    marginLeft: "3%",
+    marginTop: "5%",
+  },
+  userImage: {
+    width: 45,
+    height: 45,
+  },
+  heading: {
+    backgroundColor: "#FFFFFF",
+    marginLeft: "2%",
+  },
+  greetings: {
+    color: "#757575",
+    fontFamily: "Urbanist-regular",
+  },
+  Icons: {
+    backgroundColor: "#FFFFFF",
+    flexDirection: "row",
+    paddingLeft: "27%",
+  },
+
+  filter: {
+    marginLeft: "3%",
+  },
+  heart: {
+    marginLeft: "36%",
+  },
+  userName: {
+    color: "#000000",
+    fontSize: 20,
+    fontWeight: "bold",
+    fontFamily: "Urbanist-bold",
+  },
+
+  searchinput: {
+    color: "#757575",
+    fontFamily: "Urbanist-regular",
+    fontSize: 18,
+    flex: 1,
+  },
+  search: {
+    backgroundColor: "#F5F5F5",
+    width: "90%",
+    flexDirection: "row",
+    gap: 18,
+    color: "#757575",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    marginTop: "7%",
+    marginLeft: "5%",
+    marginRight: 30,
+    padding: 15,
+    borderRadius: 12,
+    position: "relative",
+  },
+  frame: {
+    backgroundColor: "transparent",
+    marginRight: "0%",
+    padding: 0,
+    width: "100%",
+    height: 200,
+    marginLeft: "0%",
+    alignItems: "center",
+  },
+  FrameImage: {
+    width: "101%",
+    padding: 0,
+    height: "100%",
+    marginTop: "5%",
+    marginLeft: "3%",
+    shadowColor: "#A7C4FE",
+    shadowOpacity: 5,
+    flexDirection: "row",
+  },
+  FrameText: {
+    backgroundColor: "transparent",
+  },
+  button2: {
+    backgroundColor: "#ffffff",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 20,
+    width: 100,
+    height: 30,
+    marginTop: "5%",
+    marginLeft: "13%",
+  },
+  buttontext2: {
+    color: "#246BFD",
+    fontFamily: "Urbanist-Semibold",
+    fontSize: 13,
+  },
+
+  h1: {
+    marginTop: "10%",
+    marginLeft: "13%",
+    backgroundColor: "transparent",
+    color: "#FFFFFF",
+    fontFamily: "Urbanist-bold",
+    fontSize: 25,
+    width: 185,
+  },
+  body: {
+    fontFamily: "Urbanist-regular",
+    fontSize: 12,
+    backgroundColor: "transparent",
+    color: "#FFFFFF",
+    width: 194,
+    marginTop: "5%",
+    marginLeft: "13%",
+  },
+  TxtContainer: {
+    flexDirection: "row",
+    gap: 180,
+    backgroundColor: "transparent",
+    marginTop: "6%",
+  },
+  specialityTxt: {
+    color: "#000000",
+    fontFamily: "Urbanist-bold",
+    fontSize: 19,
+    marginLeft: "4%",
+  },
+  seeTxt: {
+    color: "#246BFD",
+    fontFamily: "Urbanist-bold",
+    fontSize: 15,
+  },
+  specialityContainer1: {
+    backgroundColor: "transparent",
+    marginTop: "5%",
+    marginLeft: "5%",
+    marginRight: "5%",
+    flexDirection: "row",
+    gap: 40,
+  },
+  NameTxt: {
+    backgroundColor: "transparent",
+    marginLeft: "5%",
+    marginTop: "2%",
+    flexDirection: "row",
+    gap: 40,
+  },
+  DocSpeciality: {
+    color: "#000000",
+    fontSize: 14,
+    marginLeft: "2%",
+    fontFamily: "Urbanist-bold",
+  },
+  TopDocs: {
+    flexDirection: "row",
+    gap: 220,
+    backgroundColor: "transparent",
+    marginTop: "8%",
+    marginBottom: "4%",
+  },
+  cardContainer: {
+    backgroundColor: "#EEEEEE",
+    width: "100%",
+    height: "40%",
+    padding: 5,
+  },
+  card: {
+    width: "95%",
+    height: "40%",
+    marginTop: "2%",
+    marginLeft: "2%",
+    borderRadius: 20,
+    backgroundColor: "#FFFFFF",
+    padding: 10,
+    flexDirection: "row",
+  },
+  cardImage: {
+    height: "93%",
+    width: "30%",
+    borderRadius: 20,
+    //backgroundColor:'black'
+  },
+  DocName: {
+    fontFamily: "Urbanist-bold",
+    //backgroundColor:'',
+    color: "#000000",
+    marginLeft: "3%",
+    marginRight: "18%",
+    marginTop: "1%",
+    fontSize: 20,
+    padding: 0,
+  },
+  DocDescription: {
+    flexDirection: "column",
+    backgroundColor: "transparent",
+  },
+  DocHeart: {
+    marginTop: "3%",
+  },
+  CardHeader: {
+    flexDirection: "row",
+    backgroundColor: "transparent",
+  },
+  DocProfession: {
+    backgroundColor: "transparent",
+    color: "#424242",
+    fontFamily: "Urbanist-regular",
+    fontSize: 15,
+    marginLeft: "5%",
+    marginTop: "5%",
+  },
+  DocRating: {
+    backgroundColor: "transparent",
+    flexDirection: "row",
+    marginLeft: "5%",
+    marginTop: "6%",
+  },
+  Ratings: {
+    color: "#000000",
+    backgroundColor: "transparent",
+    fontSize: 15,
+    marginLeft: "5%",
+  },
+});
