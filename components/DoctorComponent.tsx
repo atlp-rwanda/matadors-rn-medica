@@ -10,9 +10,10 @@ interface DoctorComponentProps{
     hospital: string,
     star: ReactElement,
     rate: string,
-    review:string
+    review: string,
+    remove:()=>void
 }
-function DoctorComponent({imageSource,name,iconComponent,professionalTitle,hospital,star,rate,review}:DoctorComponentProps) {
+function DoctorComponent({imageSource,name,iconComponent,professionalTitle,hospital,star,rate,review,remove}:DoctorComponentProps) {
     return (
         <View style={styles.outer}>
             <View style={styles.inner}>
@@ -26,11 +27,11 @@ function DoctorComponent({imageSource,name,iconComponent,professionalTitle,hospi
                             <Text  style={Typography.bold.xLarge}   >{ name}</Text>
 
                         </View>
-                        <View style={styles.heartIconView}>
+                        <Pressable style={styles.heartIconView} onPress={remove}>
                             { iconComponent}
 
 
-                        </View>
+                        </Pressable>
                     </View>
                     <View style={styles.horizontal}></View>
                     <View style={styles.lowerView}>

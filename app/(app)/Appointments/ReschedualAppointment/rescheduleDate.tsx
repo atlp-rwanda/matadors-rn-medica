@@ -75,7 +75,6 @@ export default function RescheduleAppointment() {
   function handlebackhome(){
     modal.hide();
     router.push('/(app)/Appointments');
-
   }
 
   function handleDate(select: string) {

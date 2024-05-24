@@ -2,7 +2,7 @@ import { BlueAttachIcon } from "@/components/UI/icons/attachIcon";
 import { WhiteMessageIcon } from "@/components/UI/icons/blueMessage";
 import { BlueCameraIcon } from "@/components/UI/icons/cameraIcon";
 import { circleWithDots } from "@/components/UI/icons/circleWithDots";
-import { WhiteDoubleTick } from "@/components/UI/icons/doubleTickIcon";
+import { WhiteDoubleTick, BlueDoubleTick } from "@/components/UI/icons/doubleTickIcon";
 import { BlackFilterIcon } from "@/components/UI/icons/filterIcon";
 import { blueImojiIcon } from "@/components/UI/icons/imojiIcon";
 import { WhiteVoiceIcon } from "@/components/UI/icons/voiceIcon";
@@ -17,16 +17,26 @@ import {
   KeyboardAvoidingView,
   Pressable,
   ScrollView,
+  StyleSheet,
   Text,
   TextInput,
 } from "react-native";
 import { Platform, SafeAreaView, View } from "react-native";
 import { SvgXml } from "react-native-svg";
+import MenuComponent from "./Menu";
+import { TouchableOpacity } from "react-native";
+import AttachComponent from "./AttachComponent";
+import { Image } from "react-native";
+import PlaySound from "./Playsound";
 
 function ChatMessaging() {
   const date = new Date();
 
   const { theme, changeTheme } = useContext(ThemeContext);
+  const [inputFocused, setInputFocused] = useState<boolean>(false);
+  const [menu, setMenu] = useState(false);
+  const [attachContainer, setAttachContainer] = useState<boolean>(false);
+
   const [messages, setMessages] = useState<any[]>([
     {
       user: "user1",
@@ -38,13 +48,18 @@ function ChatMessaging() {
       chat: " I'm Andrew, I have a problem with my immune system 😢",
       time: `${date.getHours()}:${date.getMinutes()}`,
     },
-    {
-
-    }
+    {},
   ]);
-  const [inputFocused, setInputFocused] = useState<boolean>(false);
+  function handleChatMenu() {
+    setMenu(!menu);
+  }
 
-  const handleChat = (text: string, user: string) => {
+  function handleAttachMenu() {
+    setAttachContainer(!attachContainer);
+  }
+  const [chats, setChats] = useState("");
+
+  const handleChat = (text: string, user = "user") => {
     setInputFocused(true);
     const newMessage = {
       user,
@@ -54,11 +69,18 @@ function ChatMessaging() {
     setMessages((prevMessages) => [...prevMessages, newMessage]);
   };
 
+  const handleTextChange = (text: string) => {
+    setChats(text);
+    handleChat(text);
+  };
+
   const ios = Platform.OS === "ios";
   changeTheme("light");
 
   return (
-    <SafeAreaView style={{ flex: 1,paddingTop: ios ? 10 : 30, backgroundColor: "white"  }}>
+    <SafeAreaView
+      style={{ flex: 1, paddingTop: ios ? 10 : 30, backgroundColor: "white" }}
+    >
       <StatusBar style="dark" />
       <View
         style={{
@@ -96,14 +118,38 @@ function ChatMessaging() {
             Dr. Drake Boeson
           </Text>
         </Pressable>
+        {menu && (
+          <View
+            style={[
+              {
+                backgroundColor: Colors.others.white,
+                borderRadius: 10,
+                padding: 20,
+                position: "absolute",
+                right: 20,
+                top: 50,
+                zIndex:10
+              },
+              styles.shadowProp,
+            ]}
+          >
+            <MenuComponent closeMenu={handleChatMenu} />
+          </View>
+        )}
         <View style={{ flexDirection: "row", gap: 10 }}>
           <SvgXml xml={BlackFilterIcon} />
-          <SvgXml xml={circleWithDots} />
+          <TouchableOpacity onPress={handleChatMenu}>
+            <SvgXml xml={circleWithDots} />
+          </TouchableOpacity>
         </View>
       </View>
 
       <KeyboardAvoidingView
-        style={{ flex: 1, justifyContent: "space-around", paddingHorizontal: 20 }}
+        style={{
+          flex: 1,
+          justifyContent: "space-around",
+          paddingHorizontal: 20,
+        }}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0}
       >
@@ -143,7 +189,8 @@ function ChatMessaging() {
                 alignItems: "baseline",
                 justifyContent:
                   message.user === "user" ? "flex-start" : "flex-end",
-                borderBottomStartRadius: 10,
+                borderBottomEndRadius: message.user === "user" ? 10 : 20,
+                borderBottomStartRadius: message.user === "user1" ? 10 : 20,
                 borderRadius: 20,
                 alignSelf: message.user === "user" ? "flex-end" : "flex-start",
                 marginBottom: 20,
@@ -153,19 +200,24 @@ function ChatMessaging() {
               <Text
                 style={[
                   Typography.medium.xLarge,
-                  { color:   
-                    message.user === "user"
-                      ? Colors.others.white
-                      : "black", maxWidth: 250 },
+                  {
+                    color:
+                      message.user === "user" ? Colors.others.white : "black",
+                    maxWidth: 250,
+                  },
                 ]}
               >
                 {message.chat}
               </Text>
               <View>
-                <Text style={{  color:   
-                    message.user === "user"
-                      ? Colors.others.white
-                      :"rgba(117, 117, 117, 0.5)" }}>
+                <Text
+                  style={{
+                    color:
+                      message.user === "user"
+                        ? Colors.others.white
+                        : "rgba(117, 117, 117, 0.5)",
+                  }}
+                >
                   {message.time}
                 </Text>
               </View>
@@ -293,21 +345,75 @@ function ChatMessaging() {
               <SvgXml xml={WhiteDoubleTick} />
             </View>
           </View>
-
-          <Text
+          <View
+            style={{
+              alignSelf: "flex-end",
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 20,
+            }}
+          >
+            <View
+              style={{
+                width: 130,
+                height: 130,
+                backgroundColor: "green",
+                borderRadius: 20,
+              }}
+            >
+              <Image
+                style={{ width: "100%", height: "100%" }}
+                source={require("@/assets/images/leftFoot.png")}
+              />
+            </View>
+            <View
+              style={{
+                width: 130,
+                height: 130,
+                backgroundColor: "green",
+                borderRadius: 20,
+              }}
+            >
+              <Image
+                style={{ width: "100%", height: "100%" }}
+                source={require("@/assets/images/rigthFoot.png")}
+              />
+            </View>
+          </View>
+          <PlaySound />
+       <Pressable onPress={()=> router.push("Appointments/Review/ReviewBlankform")}>
+       <Text
             style={{
               alignSelf: "center",
               paddingVertical: 5,
               paddingHorizontal: 20,
               backgroundColor: "rgba(117, 117, 117, 0.2)",
               borderRadius: 10,
-              marginBottom: 10,
+              marginVertical: 10,
             }}
           >
             Session End
           </Text>
+       </Pressable>
         </ScrollView>
         <View style={{}}>
+          {attachContainer && (
+            <View
+              style={[
+                {
+                  backgroundColor: Colors.others.white,
+                  padding: 40,
+                  position: "absolute",
+                  top: -190,
+                  borderRadius: 20,
+                  left: 40,
+                },
+                styles.shadowProp,
+              ]}
+            >
+              <AttachComponent />
+            </View>
+          )}
           <View style={{ flexDirection: "row", alignItems: "center", gap: 20 }}>
             <View
               style={{
@@ -327,12 +433,12 @@ function ChatMessaging() {
               </Pressable>
               <TextInput
                 style={[Typography.semiBold.medium, { flex: 2 }]}
-                value={messages}
-                onChangeText={handleChat}
-                keyboardType="text"
+                value={chats}
+                onChangeText={handleTextChange}
+                keyboardType="default"
                 returnKeyType="done"
               />
-              <Pressable>
+              <Pressable onPress={handleAttachMenu}>
                 <SvgXml xml={BlueAttachIcon} />
               </Pressable>
               <Pressable
@@ -372,4 +478,16 @@ function ChatMessaging() {
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  shadowProp: {
+    shadowColor: "#171717",
+    shadowOffset: { width: -2, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 10,
+    backgroundColor:Colors.others.white
+
+  },
+});
 export default ChatMessaging;

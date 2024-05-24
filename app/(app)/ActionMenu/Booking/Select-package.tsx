@@ -2,7 +2,7 @@ import { Colors } from "@/constants/Colors";
 import { MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React, { useState } from "react";
-import { View, StyleSheet, Text, Pressable, TextInput, Image, TouchableOpacity } from "react-native";
+import { View, StyleSheet, Text, Pressable, TextInput, Image, TouchableOpacity, ScrollView } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const SelectPackage = () => {
@@ -33,14 +33,12 @@ const SelectPackage = () => {
 
     return (
         <>
-            <View style={styles.Main}>
+            <ScrollView style={styles.Main}>
 
                 <Pressable 
                 onPress={()=> router.back()}
                 style={styles.container}>
-                    <TouchableOpacity>
                         <MaterialIcons name="arrow-back" size={23} />
-                    </TouchableOpacity>
                     <Text style={styles.fill}>Select Package</Text>
                 </Pressable>
                 <View style={styles.middle}>
@@ -145,7 +143,7 @@ const SelectPackage = () => {
               <Text style={styles.buttonText}>Next</Text>
             </TouchableOpacity>
           </View>
-            </View>
+            </ScrollView>
         </>
     )
 }
