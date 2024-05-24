@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, Image, SafeAreaView, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
-import FieldComponent from '@/components/FieldComponent';
+import FieldComponent from "@/components/FieldComponent";
 import ArticleCard from '@/components/cards/ArticleCard';
-import { articles } from '@/constants/Articles';
+import { articles } from "@/constants/Articles";
 import { router } from "expo-router";
 import Colors from '@/constants/Colors';
 

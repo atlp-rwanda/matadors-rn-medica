@@ -2,9 +2,9 @@
 import React from 'react';
 import { View, Text, Image, SafeAreaView, ScrollView,TouchableOpacity, Pressable } from 'react-native';
 import {router, useNavigation } from 'expo-router';
-import FieldComponent from '@/components/FieldComponent';
+import FieldComponent from "@/components/FieldComponent";
 import ArticleCard from '@/components/cards/ArticleCard';
-import { articles } from '@/constants/Articles';
+import { articles } from "@/constants/Articles";
 import { MaterialIcons } from '@expo/vector-icons';
 import Colors from '@/constants/Colors';
 
