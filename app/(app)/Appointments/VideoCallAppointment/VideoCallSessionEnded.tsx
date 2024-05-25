@@ -16,13 +16,13 @@ interface doctor {
 
 const SessionEnded = () => {
   const { theme, changeTheme } = useContext(ThemeContext);
-  changeTheme("light");
+  changeTheme("dark");
   const doctorDetails: doctor[] = [
     {
       id: "22",
-      name: "Dr. Jenny Watson",
-      title: "Immunologists",
-      location: "Alka Hospital in Seoul, South Korea",
+      name: "Dr. Maria Foose",
+      title: "Dermatologists",
+      location: "The Venus Hospital in Paris, France",
     },
   ];
 
@@ -67,7 +67,7 @@ const SessionEnded = () => {
       </View>
 
       <View style={styles.detail}>
-        <Image source={require("@/assets/images/Jenny.png")} />
+        <Image source={require("@/assets/images/MariaSmallEllipse.png")} />
         {doctorDetails &&
           doctorDetails.map((data: doctor) => (
             <View style={styles.detail}>
@@ -104,7 +104,6 @@ const SessionEnded = () => {
 
       <View style={styles.Button}>
         <TouchableOpacity
-          onPress={()=>router.push("Appointments")}
           style={[
             styles.backButton,
             { backgroundColor: theme === "dark" ? "#35383F" : "#E9F0FF" },

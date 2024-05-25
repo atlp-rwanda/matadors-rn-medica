@@ -166,7 +166,9 @@ import {
               justifyContent: "center",
               alignItems: "center",
               backgroundColor: theme === "dark" ? "#35383F" : "#E9F0FF",
+              
             }}
+            onPress={()=> router.push('Appointments')}
           >
             <Text
               style={[
