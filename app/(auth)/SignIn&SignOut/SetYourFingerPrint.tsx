@@ -34,6 +34,13 @@ export default function SetYourFingerPrint() {
     transform: [{ rotate: `${rotationValue.value * 360}deg` }],
   }));
 
+  useEffect(() => {
+    setTimeout(() => {
+      changeTheme("dark");
+      console.log(theme);
+    }, 2000);
+  }, []);
+
   return (
     <>
       <ScrollView
@@ -41,7 +48,7 @@ export default function SetYourFingerPrint() {
           paddingHorizontal: 20,
           height: "100%",
           backgroundColor:
-            theme === "light" ? Colors.others.white : Colors.others.black,
+            theme === "light" ? Colors.others.white : Colors.grayScale._900,
         }}
       >
         <View
@@ -50,7 +57,7 @@ export default function SetYourFingerPrint() {
             justifyContent: "space-between",
             paddingVertical: 20,
             backgroundColor:
-              theme === "light" ? Colors.others.white : Colors.others.black,
+              theme === "light" ? Colors.others.white : Colors.grayScale._900,
           }}
         >
           <Text
@@ -74,7 +81,7 @@ export default function SetYourFingerPrint() {
             style={{
               gap: 60,
               backgroundColor:
-                theme === "light" ? Colors.others.white : Colors.others.black,
+                theme === "light" ? Colors.others.white : Colors.grayScale._900,
             }}
           >
             <Text
@@ -103,7 +110,9 @@ export default function SetYourFingerPrint() {
                 width: "100%",
                 gap: 20,
                 backgroundColor:
-                  theme === "light" ? Colors.others.white : Colors.others.black,
+                  theme === "light"
+                    ? Colors.others.white
+                    : Colors.grayScale._900,
               }}
             >
               <View
@@ -112,7 +121,7 @@ export default function SetYourFingerPrint() {
                   backgroundColor:
                     theme === "light"
                       ? Colors.others.white
-                      : Colors.others.black,
+                      : Colors.grayScale._900,
                 }}
               >
                 <Button
@@ -133,7 +142,7 @@ export default function SetYourFingerPrint() {
                     backgroundColor:
                       theme === "light"
                         ? Colors.others.white
-                        : Colors.others.black,
+                        : Colors.grayScale._900,
                   },
                 ]}
               >
@@ -211,7 +220,7 @@ export default function SetYourFingerPrint() {
 
                         setTimeout(() => {
                           modal.hide();
-                          router.push("/(app)/ActionMenu")
+                          router.push("/(app)/ActionMenu");
                         }, 4000);
                       }
                     } catch (err) {

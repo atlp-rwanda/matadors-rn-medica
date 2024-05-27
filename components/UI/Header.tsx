@@ -22,8 +22,6 @@ interface Props {
 export default function Header({ title, options }: Props) {
   const { theme, changeTheme } = useContext(ThemeContext);
 
-  changeTheme("light");
-
   return (
     <>
       <StatusBar style={theme === "light" ? "dark" : "light"} />
@@ -33,7 +31,7 @@ export default function Header({ title, options }: Props) {
           paddingBottom: 10,
           paddingHorizontal: 20,
           backgroundColor:
-            theme === "light" ? Colors.others.white : Colors.dark._1,
+            theme === "light" ? Colors.others.white : Colors.grayScale._900,
           flexDirection: "row",
           alignItems: "center",
           justifyContent: "space-between",
@@ -46,7 +44,7 @@ export default function Header({ title, options }: Props) {
               flexDirection: "row",
               gap: 10,
               backgroundColor:
-                theme === "light" ? Colors.others.white : Colors.dark._1,
+                theme === "light" ? Colors.others.white : Colors.grayScale._900,
             }}
           >
             <Pressable
