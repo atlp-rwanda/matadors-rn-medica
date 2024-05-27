@@ -101,7 +101,7 @@ export default function SetYourFingerPrint() {
                 justifyContent: "center",
                 alignItems: "center",
                 width: "100%",
-                gap: 4,
+                gap: 20,
                 backgroundColor:
                   theme === "light" ? Colors.others.white : Colors.others.black,
               }}
