@@ -4,7 +4,7 @@ import { Colors } from "@/constants/Colors";
 import Typography from "@/constants/Typography";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import React, { ReactElement, useState } from "react";
+import React, { ReactElement, useContext, useState } from "react";
 import { Platform, TouchableOpacity } from "react-native";
 import { Image, ImageBackground, Text, View, FlatList,ScrollView } from "react-native";
 import { SvgXml } from "react-native-svg";
@@ -15,6 +15,8 @@ import Historyheader from "@/components/Historyheader";
 import { DoctorComponentVoice,DoctorComponentVideo } from "@/components/CardComponent";
 import MessageComponent from "@/components/MessageComponent";
 import { rightArrow } from "@/assets/icons/Right_arrow";
+import { ThemeContext } from "@/ctx/ThemeContext";
+import { red } from "react-native-reanimated/lib/typescript/reanimated2/Colors";
 
 
 
@@ -40,6 +42,7 @@ export const iconMapping:iconMappingProp = {
 }
 
 const index = () => {
+  const {theme, changeTheme} = useContext(ThemeContext)
   const [showSearch, setShowSearch] = useState<boolean>(false)
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [selectedCategory, setSelectedCategory] = useState(data.categories[0])
@@ -59,12 +62,13 @@ const index = () => {
     <View
       style={{
         flex: 1,
-        backgroundColor: Colors.others.white,
         flexDirection: "column",
         padding: 20,
+        backgroundColor: theme === "dark" ? Colors.dark._1 :  Colors.others.white,
+
       }}
     >
-      <StatusBar style="dark" />
+      <StatusBar style={theme === "dark"? "light": "dark"} />
       
       <View style={{ paddingTop: 20, gap: 30 }}>
         <View
@@ -118,7 +122,7 @@ const index = () => {
           )}
         </View>
       </View>
-      <View style={{ backgroundColor: "white", width: "100%" }}>
+      <View style={{ backgroundColor: theme=== "dark" ? Colors.dark._1 : Colors.others.white, width: "100%" }}>
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
@@ -154,9 +158,6 @@ const index = () => {
                     time={doctor.time}
                     onPress={()=> router.push("History/VoiceCallHistory/[id]")}
 
-
-                    
-                  
                   />
                   ) : selectedCategory.name === "Video Call" ?
                     

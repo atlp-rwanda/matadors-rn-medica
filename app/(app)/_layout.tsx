@@ -16,9 +16,10 @@ import { Pressable, Text, TouchableOpacity, View } from "react-native";
 import { SvgXml } from "react-native-svg";
 
 export default function Layout() {
+  const { theme, changeTheme } = useContext(ThemeContext);
+
   const [tabVisible, setTabVisible] = useState(false);
   const segments = useSegments();
-  const { theme } = useContext(ThemeContext);
 
   return (
     <>
@@ -37,14 +38,13 @@ export default function Layout() {
                   display: tabVisible ? "flex" : "none",
                   flexDirection: "row",
                   justifyContent: "space-between",
-                  backgroundColor:
-                    theme === "light" ? Colors.others.white : Colors.dark._1,
+                  backgroundColor: theme === "dark"? Colors.dark._1 : Colors.others.white,
                   paddingHorizontal: 30,
                   paddingVertical: 25,
+                
                 }}
               >
                 {state.routes.map((route) => {
-                  // console.log(route);
                   const { options } = descriptors[route.key];
                   const label =
                     options.tabBarLabel !== undefined

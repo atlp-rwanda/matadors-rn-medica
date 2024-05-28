@@ -1,19 +1,25 @@
 import { MoreIcon } from "@/assets/icons/MoreCircleSvg";
 import {
   backArrowBlack,
+  backArrowWhite,
 } from "@/components/UI/icons/backArrow";
 import { Colors } from "@/constants/Colors";
 import Typography from "@/constants/Typography";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
-import { Pressable, Text, TouchableWithoutFeedback } from "react-native";
+import React, { useContext, useState } from "react";
+import { ImageBackground, Pressable, Text, TouchableWithoutFeedback } from "react-native";
 import { TouchableOpacity } from "react-native";
 import { View } from "react-native";
 import { SvgXml } from "react-native-svg";
 import DoctorComponent from "../CardComponent";
 import { BlueRightIconWithBg } from "@/components/UI/icons/rigthIcon";
 import HistoryMenu from "../HistoryMenu";
+import { VideoCallWhiteIcon } from "@/components/Icons/Icons";
+import { bluePlayBtn, playBtnWhiteIcon } from "@/components/UI/icons/playBtn";
+import { BlueVideoCall } from "@/components/UI/icons/videoCallIcon";
+import { ThemeContext } from "@/ctx/ThemeContext";
+import { moreWhiteIcon } from "@/components/UI/icons/circleWithDots";
 
 
 const Ddata = {
@@ -27,23 +33,18 @@ const Ddata = {
   };
 
 const IndividualCall = () => {
+  const {theme, changeTheme} = useContext(ThemeContext)
 const [menu, setMenu] = useState(false)
-const [playBtn, setPlayBtn] = useState(false)
-
-const handlePlayAudio = ()=> {
-  setPlayBtn(!playBtn)
-}
 
 const handleMenu =()=> {
   setMenu(!menu)
 }
 
-
 return (
     <View
       style={{
         flex: 1,
-        backgroundColor: Colors.others.white,
+        backgroundColor: theme === "dark"? Colors.dark._1:  Colors.others.white,
         flexDirection: "column",
         padding: 20,
         position: "relative"
@@ -59,19 +60,16 @@ return (
           }}
         >
           <Pressable onPress={() => router.back()}>
-            <SvgXml xml={backArrowBlack} />
+            <SvgXml xml={theme === "dark"? backArrowWhite : backArrowBlack} />
           </Pressable>
           <TouchableOpacity onPress={handleMenu}>
-            <SvgXml xml={MoreIcon} />
+            <SvgXml xml={ theme ==="dark" ? moreWhiteIcon : MoreIcon} />
           </TouchableOpacity>
         </View>
         {menu && (
           <View
             style={[
               {
-                backgroundColor: Colors.others.white,
-                borderRadius: 10,
-                padding: 20,
                 position: "absolute",
                 right: 20,
                 top: 50,
@@ -86,33 +84,22 @@ return (
           <DoctorComponent
             imageSource={Ddata.image}
             name={Ddata.name}
-            iconComponent={<SvgXml xml={BlueRightIconWithBg} />}
+            iconComponent={<SvgXml xml={BlueVideoCall} />}
             method={Ddata.method}
             day={Ddata.day}
             time={Ddata.time}
           />
         </View>
-        <Text>30 minutes of video calls have been recorded.</Text>
-        {
-          !playBtn ? (
-          <TouchableOpacity
-            onPress={handlePlayAudio}
+        <Text style={{color: theme=== "dark"? "white" :"black"}}
+        >30 minutes of video calls have been recorded.</Text>
+          <Pressable
+            onPress={() =>router.push("History/VideoCallHistory/VideoPlayer")}
             style={{flexDirection: "row",gap: 20,alignItems: "center", justifyContent: "center", backgroundColor: Colors.main.primary._500, borderRadius: 100. }}>
-            <SvgXml xml={BlueRightIconWithBg}/>
+            <View style={{padding: 20}}>
+              <SvgXml xml={playBtnWhiteIcon}/>
+            </View>
             <Text style={[Typography.bold.large,{color: Colors.others.white}]}>Play audio recording</Text>
-        </TouchableOpacity>) : (
-        <View style={{alignItems: "center", justifyContent: "space-between", gap: 20}}>
-              <View style={{backgroundColor: Colors.main.primary._300, height: 100, width: 100}}></View>
-              <View style={{flexDirection: "row", alignItems: "center", gap: 20}}>
-                <TouchableWithoutFeedback>
-                  <Text style={{paddingVertical: 20,paddingHorizontal: 70,backgroundColor: Colors.transparent.blue, color: Colors.main.primary._500, borderRadius: 100}}>Stop</Text>
-                </TouchableWithoutFeedback>
-                <TouchableWithoutFeedback>
-                  <Text style={{paddingVertical: 20,paddingHorizontal: 70,backgroundColor: Colors.main.primary._500, color: Colors.others.white,borderRadius: 100}}>Pause</Text>
-                </TouchableWithoutFeedback>
-              </View>
-        </View>)
-        }
+        </Pressable>
       </View>
     </View>
   );

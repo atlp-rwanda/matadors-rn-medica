@@ -1,9 +1,10 @@
 import { Colors } from "@/constants/Colors";
 import Typography from "@/constants/Typography";
-import React, { ReactElement } from "react";
+import React, { ReactElement, useContext } from "react";
 import { Image, Text, TouchableOpacity } from "react-native";
 import { ImageURISource, View } from "react-native";
 import { router } from "expo-router";
+import { ThemeContext } from "@/ctx/ThemeContext";
 interface DoctorComponentProps {
   imageSource: ImageURISource | number;
   name: string;
@@ -23,6 +24,7 @@ function DoctorComponentVoice({
   time,
   onPress
 }: DoctorComponentProps) {
+  const {theme, changeTheme} = useContext(ThemeContext)
   return (
       <TouchableOpacity
           onPress={onPress}
@@ -32,14 +34,14 @@ function DoctorComponentVoice({
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between",    
-        backgroundColor: Colors.others.white,    
+        backgroundColor: theme === "dark"? Colors.dark._2: Colors.others.white,  
         padding: 20,
         shadowColor: "#cfcfcf",
         shadowOffset: { width: -2, height: 4 },
         shadowOpacity: 3,
         shadowRadius: 2,
         elevation: 10,
-         marginBottom: 5,
+        marginBottom: 5,
         marginTop:5
       }}
     >
@@ -54,29 +56,19 @@ function DoctorComponentVoice({
           <Image style={{width: "100%", height: "100%",borderRadius: 10}} source={imageSource} />
         </View>
         <View style={{ gap: 10, alignItems: "flex-start" }}>
-          <Text style={[Typography.bold.large]}>{name}</Text>
-          <Text>{method}</Text>
-          <Text>
-                      {day} | <Text></Text>
-            {time}
-          </Text>
+          <Text style={[Typography.bold.large, {color: theme === "dark" ? Colors.others.white: "black"}]}>{name}</Text>
+          <Text style={{color: theme === "dark" ? Colors.others.white: "black"}}>{method}</Text>
+          <Text style={{color: theme === "dark" ? Colors.others.white: "black"}}>{day} | {time}</Text>
         </View>
       </View>
           <View style={{
-          width: 40,
-              height: 40,
-              borderRadius: 100,
-              backgroundColor: "#EDF3FF",
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "center",
-              alignItems:"center"
+            padding: 20,
+            backgroundColor: Colors.transparent.blue,
+            borderRadius: 100
       }}>{iconComponent}</View>
     </TouchableOpacity>
   );
 }
-
-
 
 function DoctorComponentVideo({
   imageSource,
@@ -88,6 +80,7 @@ function DoctorComponentVideo({
   onPress
 
 }: DoctorComponentProps) {
+  const {theme, changeTheme} = useContext(ThemeContext)
   return (
     <TouchableOpacity
     onPress={onPress}
@@ -97,7 +90,7 @@ function DoctorComponentVideo({
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between",    
-        backgroundColor: Colors.others.white,    
+        backgroundColor: theme==="dark"? Colors.dark._1:  Colors.others.white,    
         padding: 20,
         shadowColor: "#cfcfcf",
         shadowOffset: { width: -2, height: 4 },
@@ -119,23 +112,18 @@ function DoctorComponentVideo({
           <Image style={{width: "100%", height: "100%",borderRadius: 10}} source={imageSource} />
         </View>
         <View style={{ gap: 10, alignItems: "flex-start" }}>
-          <Text style={[Typography.bold.large]}>{name}</Text>
-          <Text>{method}</Text>
-          <Text>
-            {day} | <Text></Text>
+          <Text style={[Typography.bold.large, {color: theme==="dark"? Colors.others.white: Colors.others.black}]}>{name}</Text>
+          <Text style={{color: theme === "dark" ? Colors.grayScale._700: Colors.others.black}}>{method}</Text>
+          <Text style={{color: theme === "dark" ? Colors.grayScale._700: Colors.others.black}}>
+            {day} |  
             {time}
           </Text>
         </View>
       </View>
           <View style={{
-              width: 40,
-              height: 40,
-              borderRadius: 100,
-              backgroundColor: "#EDF3FF",
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "center",
-              alignItems:"center"
+       padding: 20,
+       backgroundColor: Colors.transparent.blue,
+       borderRadius: 100
           }}>{iconComponent}</View>
     </TouchableOpacity>
   );

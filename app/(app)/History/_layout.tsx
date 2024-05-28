@@ -8,6 +8,7 @@ export default function Layout() {
       <Stack.Screen name="MessageHistory/Chats" options={{ headerShown: false }} />
       <Stack.Screen name="VoiceCallHistory/[id]" options={{ headerShown: false }} />
       <Stack.Screen name="VideoCallHistory/[id]" options={{ headerShown: false }} />
+      <Stack.Screen name="VideoCallHistory/VideoPlayer" options={{ headerShown: false }} />
     </Stack>
   );
 }

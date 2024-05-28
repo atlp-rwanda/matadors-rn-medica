@@ -55,7 +55,7 @@ export default function SetYourFingerPrint() {
         >
           <Text
             style={[
-              Typography.regular.xLarge,
+              Typography.heading._2,
               {
                 textAlign: "center",
                 color:
