@@ -13,7 +13,13 @@ export default function BookingLayout() {
           name="BookingAppointment"
           options={{ headerShown: false }}
         />
-        <Stack.Screen name="Doctor_details" options={{ headerShown: false }} />
+        <Stack.Screen name="Doctor_details" options={{ header: () => (
+            <Header
+              title="Dr. Jenny Watson"
+              options={{
+              }}
+            />
+          ), }} />
         <Stack.Screen
           name="DoctorRatingAndReview"
           options={{ headerShown: false }}
@@ -22,6 +28,7 @@ export default function BookingLayout() {
         <Stack.Screen name="Select-package" options={{ headerShown: false }} />
         <Stack.Screen name="Patient-details" options={{ headerShown: false }} />
         <Stack.Screen name="EnterYourPin" options={{ headerShown: false }} />
+        <Stack.Screen name="AddNewCard" options={{ headerShown: false }} />
         <Stack.Screen
           name="SelectPayment"
           options={{ header: () => <Header title="Payments" /> }}

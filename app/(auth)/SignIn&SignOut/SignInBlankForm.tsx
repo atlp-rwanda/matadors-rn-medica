@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -13,8 +13,19 @@ import { Ionicons } from "@expo/vector-icons";
 import CheckBox from "expo-checkbox";
 import { LeftArrow } from "@/components/UI/Icons";
 import { router } from "expo-router";
-import Typography from '../../../constants/Typography';
-import {Colors} from '../../../constants/Colors';
+import Typography from "../../../constants/Typography";
+import { Colors } from "../../../constants/Colors";
+import { ThemeContext } from "@/ctx/ThemeContext";
+import { SvgXml } from "react-native-svg";
+import {
+  BackArrow,
+  BlackApple,
+  DarkContinueLine,
+  LightContinueLine,
+  WhiteApple,
+  blackArrow,
+} from "@/components/Icons/Icons";
+import { StatusBar } from "expo-status-bar";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -23,7 +34,8 @@ const Login = () => {
   const [isChecked, setIsChecked] = useState(false);
   const [emailFocused, setEmailFocused] = useState(false);
   const [passwordFocused, setPasswordFocused] = useState(false);
-
+  const { theme, changeTheme } = useContext(ThemeContext);
+  changeTheme("dark");
 
   const handleEmailChange = (text: string) => {
     setEmail(text);
@@ -45,7 +57,7 @@ const Login = () => {
   const handlePasswordFocus = () => {
     setPasswordFocused(true);
     setEmailFocused(false);
-  }
+  };
 
   const handleEmailBlur = () => {
     setEmailFocused(false);
@@ -53,33 +65,61 @@ const Login = () => {
 
   const handlePasswordBlur = () => {
     setPasswordFocused(false);
-  }
+  };
 
   return (
-    <View style={styles.container}>
-    
-        <TouchableOpacity style={styles.arrow} onPress={() => router.replace("/(auth)/SignIn&SignOut/SignUpBlankForm")}>
-          <LeftArrow fillColor={"#23272f"} />
-        </TouchableOpacity>
-      
+    <View
+      style={[
+        styles.container,
+        { backgroundColor: theme === "dark" ? "#181A20" : "#FFFFFF" },
+      ]}
+    >
+      <StatusBar style={theme === "dark" ? "light" : "dark"} />
+
+      <TouchableOpacity
+        style={styles.arrow}
+        onPress={() => router.replace("/(auth)/SignIn&SignOut/SignUpBlankForm")}
+      >
+        <SvgXml xml={theme === "dark" ? BackArrow : blackArrow} />
+      </TouchableOpacity>
+
       <View>
         <Image source={require("../../../assets/icons/HeartPlus.png")} />
       </View>
 
-      <View style={styles.middlePart}>
-        <View style={styles.midPartOne}>
-          <Text style={[Typography.heading._3,{color:Colors.grayScale._900}]}>Login to Your Account</Text>
-        </View>
+      {/* <View style={styles.middlePart}> */}
+      <View style={styles.midPartOne}>
+        <Text
+          style={[
+            Typography.heading._3,
+            { color: theme === "dark" ? "#FFFFFF" : Colors.grayScale._900 },
+          ]}
+        >
+          Login to Your Account
+        </Text>
+        {/* </View> */}
       </View>
 
       <View style={styles.Buttons}>
-        <View style={[styles.inputOne, emailFocused && styles.inputOneFocused]}>
-          <Image source={require("../../../assets/icons/Message.png")} style={[styles.icon, emailFocused && styles.iconFocused]} />
+        <View
+          style={[
+            styles.inputOne,
+            emailFocused && styles.inputOneFocused,
+            {
+              backgroundColor:
+                theme === "dark" ? "#1F222A" : Colors.grayScale._50,
+            },
+          ]}
+        >
+          <Image
+            source={require("../../../assets/icons/Message.png")}
+            style={[styles.icon, emailFocused && styles.iconFocused]}
+          />
           <TextInput
             style={[styles.email, emailFocused && styles.emailFocused]}
             placeholder="Email"
             keyboardType="email-address"
-            placeholderTextColor="rgba(45, 45, 45, 0.5)"
+            placeholderTextColor="#9E9E9E"
             value={email}
             onChangeText={handleEmailChange}
             onFocus={handleEmailFocus}
@@ -87,32 +127,48 @@ const Login = () => {
           />
         </View>
 
-        <View style={[styles.inputOne, passwordFocused && styles.inputOneFocused]}>
-          <Image source={require("../../../assets/icons/Lock.png")} style={[styles.icon, passwordFocused && styles.iconFocused]} />
-          
-            <TextInput
-              style={[styles.email, passwordFocused && styles.emailFocused]}
-              placeholder="Password"
-              placeholderTextColor="rgba(45, 45, 45, 0.5)"
-              secureTextEntry={secureTextEntry}
-              value={password}
-              onChangeText={handlePasswordChange}
-              onFocus={handlePasswordFocus}
-              onBlur={handlePasswordBlur}
-            />
-            <View style={[styles.passwordInputContainer, passwordFocused && styles.passwordInputContainerFocused]}>
-              <TouchableWithoutFeedback onPress={togglePasswordVisibility}>
-                <Ionicons
-                  name={secureTextEntry ? "eye-outline" : "eye-off-outline"}
-                  size={24}
-                  color={passwordFocused ? "#246BFD" : "gray"}
-                  style={styles.eye}
-                />
-              </TouchableWithoutFeedback>
-            </View>
+        <View
+          style={[
+            styles.inputOne,
+            passwordFocused && styles.inputOneFocused,
+            {
+              backgroundColor:
+                theme === "dark" ? "#1F222A" : Colors.grayScale._50,
+            },
+          ]}
+        >
+          <Image
+            source={require("../../../assets/icons/Lock.png")}
+            style={[styles.icon, passwordFocused && styles.iconFocused]}
+          />
+
+          <TextInput
+            style={[styles.email, passwordFocused && styles.emailFocused]}
+            placeholder="Password"
+            placeholderTextColor="#9E9E9E"
+            secureTextEntry={secureTextEntry}
+            value={password}
+            onChangeText={handlePasswordChange}
+            onFocus={handlePasswordFocus}
+            onBlur={handlePasswordBlur}
+          />
+          <View
+            style={[
+              styles.passwordInputContainer,
+              passwordFocused && styles.passwordInputContainerFocused,
+            ]}
+          >
+            <TouchableWithoutFeedback onPress={togglePasswordVisibility}>
+              <Ionicons
+                name={secureTextEntry ? "eye-outline" : "eye-off-outline"}
+                size={24}
+                color={passwordFocused ? "#246BFD" : "gray"}
+                style={styles.eye}
+              />
+            </TouchableWithoutFeedback>
+          </View>
         </View>
       </View>
-
 
       <View style={styles.Check}>
         <CheckBox
@@ -121,43 +177,94 @@ const Login = () => {
           style={styles.checkbox}
           color="#007bff"
         />
-        <Text style={[Typography.semiBold.medium, {color:Colors.grayScale._900}]}>Remember me</Text>
+        <Text
+          style={[
+            Typography.semiBold.medium,
+            { color: theme === "dark" ? "#FFFFFF" : Colors.grayScale._900 },
+          ]}
+        >
+          Remember me
+        </Text>
       </View>
 
       <View>
-        <TouchableOpacity 
-        onPress={()=> router.push("/(app)/ActionMenu")}
-        style={styles.signinBtn}>
+        <TouchableOpacity
+          onPress={() => router.push("/(app)/ActionMenu")}
+          style={styles.signinBtn}
+        >
           <Text style={styles.signText}>Sign in</Text>
         </TouchableOpacity>
       </View>
 
-      <Pressable
-      onPress={()=> router.push("/(auth)/ForgotPassword&Reset/ForgotPassword")}
+      <TouchableOpacity
+        onPress={() =>
+          router.push("/(auth)/ForgotPassword&Reset/ForgotPassword")
+        }
       >
-        <Text style={[Typography.semiBold.large, {color:Colors.main.primary._500}]}>Forgot the password?</Text>
-      </Pressable>
+        <Text
+          style={[
+            Typography.semiBold.large,
+            { color: Colors.main.primary._500 },
+          ]}
+        >
+          Forgot the password?
+        </Text>
+      </TouchableOpacity>
 
       <View>
-        <Image source={require("../../../assets/icons/continue.png")} />
+        <SvgXml xml={theme === "dark" ? DarkContinueLine : LightContinueLine} />
       </View>
 
       <View style={styles.overCont}>
-        <View style={styles.smallCont}>
-          <Image source={require("../../../assets/icons/facebook.png")} />
-        </View>
-        <View style={styles.smallCont}>
-          <Image source={require("../../../assets/icons/Google.png")} />
-        </View>
-        <View style={styles.smallCont}>
-          <Image source={require("../../../assets/icons/AppleIcon.png")} />
-        </View>
+      <TouchableOpacity>
+          <View
+            style={[
+              styles.smallCont,
+              { backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF", borderColor: theme === 'dark' ? '#35383F' : '#EEEEEE' },
+            ]}
+          >
+            <Image source={require("../../../assets/icons/facebook.png")} />
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity>
+          <View
+            style={[
+              styles.smallCont,
+              { backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF", borderColor: theme === 'dark' ? '#35383F' : '#EEEEEE'  },
+            ]}
+          >
+            <Image source={require("../../../assets/icons/Google.png")} />
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity>
+          <View
+            style={[
+              styles.smallCont,
+              { backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF", borderColor: theme === 'dark' ? '#35383F' : '#EEEEEE'  },
+            ]}
+          >
+            <SvgXml xml={theme === 'dark' ? WhiteApple : BlackApple} />
+
+          </View>
+        </TouchableOpacity>
       </View>
 
       <View style={styles.account}>
-        <Text style={[Typography.regular.medium]}>Don’t have an account? </Text>
         <Text
-          style={[Typography.semiBold.medium, {color:Colors.main.primary._500}]}
+          style={[
+            Typography.regular.medium,
+            { color: theme === "dark" ? "#FFFFFF" : Colors.grayScale._500 },
+          ]}
+        >
+          Don’t have an account?{" "}
+        </Text>
+        <Text
+          style={[
+            Typography.semiBold.medium,
+            { color: Colors.main.primary._500 },
+          ]}
           onPress={() => router.push("/(auth)/SignIn&SignOut/SignUpBlankForm")}
         >
           Sign up
@@ -170,14 +277,13 @@ const Login = () => {
 export default Login;
 
 const styles = StyleSheet.create({
-
   inputOneFocused: {
     borderColor: "#246BFD",
     borderWidth: 2,
   },
   emailFocused: {
     color: "#212121",
-    fontSize: 16
+    fontSize: 16,
   },
   iconFocused: {
     tintColor: "#246BFD",
@@ -188,10 +294,10 @@ const styles = StyleSheet.create({
   icon: {
     tintColor: "#868a94",
   },
-  eye:{
-    marginRight: 10
+  eye: {
+    marginRight: 10,
   },
-  passwordIconContainer:{
+  passwordIconContainer: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-end",
@@ -248,7 +354,7 @@ const styles = StyleSheet.create({
   inputOne: {
     borderRadius: 16,
     backgroundColor: "#FAFAFA",
-    width: 380,
+    width: 360,
     height: 60,
     padding: 8,
     paddingHorizontal: 10,
@@ -268,13 +374,13 @@ const styles = StyleSheet.create({
   },
   signinBtn: {
     backgroundColor: "#246BFD",
-    width: 380,
+    width: 360,
     height: 58,
     borderRadius: 100,
     justifyContent: "center",
     alignItems: "center",
-    shadowColor: '#246BFD',
-    elevation: 15,
+    shadowColor: "#246BFD",
+    elevation: 10,
   },
   textBtn: {
     fontSize: 16,
@@ -289,9 +395,9 @@ const styles = StyleSheet.create({
     padding: 10,
     width: 380,
     borderRadius: 16,
-  },  
+  },
   Buttons: {
-    gap: 10,
+    gap: 20,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -314,21 +420,17 @@ const styles = StyleSheet.create({
   },
   account: {
     flexDirection: "row",
-    gap: 5
-  },
-  middlePart: {
-    gap: 30,
+    gap: 5,
   },
   arrow: {
-    alignSelf: "flex-start"
+    alignSelf: "flex-start",
   },
   container: {
     flex: 1,
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#FFFFFF",
-    gap: 15,
+    gap: 17,
     paddingTop: 24,
     paddingLeft: 24,
     paddingBottom: 48,
@@ -338,5 +440,4 @@ const styles = StyleSheet.create({
     color: "#246BFD",
     fontWeight: "600",
   },
-
 });

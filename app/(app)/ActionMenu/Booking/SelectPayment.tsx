@@ -66,7 +66,7 @@ export default function SelectPayment() {
                 : Colors.others.white,
             opacity: 8,
           }}
-          onPress={() => {}}
+          onPress={() => router.push('(app)/ActionMenu/Booking/AddNewCard')}
           // shadowColor={Colors.main.primary._100}
         />
         <Button
