@@ -70,12 +70,12 @@ const Login = () => {
     >
       <StatusBar style={theme === "dark" ? "light" : "dark"} />
 
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={styles.arrow}
         onPress={() => router.replace("/(auth)/SignIn&SignOut/SignUpBlankForm")}
       >
-        <SvgXml xml={theme === "dark" ? backArrowWhite : backArrowBlack} />
-      </TouchableOpacity>
+        <SvgXml xml={theme === "dark" ? BackArrow : blackArrow} />
+      </TouchableOpacity> */}
 
       <View>
         <Image source={require("../../../assets/icons/HeartPlus.png")} />
