@@ -1,6 +1,7 @@
 import Header from "@/components/UI/Header";
 import Modal from "@/components/UI/Modal";
 import { Stack } from "expo-router";
+import React from "react";
 
 export default function Layout() {
   return (
@@ -8,15 +9,17 @@ export default function Layout() {
       <Stack>
         <Stack.Screen
           name="SignIn&SignOut/SignUpBlankForm"
-          options={{ headerShown: false }}
+          options={{ header: () => (<Header title="" />) }}
+
         />
         <Stack.Screen
           name="SignIn&SignOut/LetsYouIn"
-          options={{ headerShown: false }}
+          options={{ header: () => (<Header title="" />) }}
+
         />
         <Stack.Screen
           name="SignIn&SignOut/SignInBlankForm"
-          options={{ headerShown: false }}
+          options={{ header: () => (<Header title="" />) }}
         />
         <Stack.Screen
           name="ForgotPassword&Reset/OTPform"

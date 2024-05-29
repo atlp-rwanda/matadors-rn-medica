@@ -8,10 +8,10 @@ import { colors } from "react-native-elements";
 import { Mastercard, Mastercarddark } from "@/components/UI/Icons";
 import { ThemeContext } from "@/ctx/ThemeContext";
 import { router } from "expo-router";
+import React from "react";
 
 export default function Reviewsummary() {
   const { theme, changeTheme } = useContext(ThemeContext);
-
   return (
     <>
       <View style={theme === "dark" ? styles.containerdark : styles.container}>

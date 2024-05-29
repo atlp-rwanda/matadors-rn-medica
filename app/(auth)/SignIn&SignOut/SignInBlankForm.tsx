@@ -35,7 +35,6 @@ const Login = () => {
   const [emailFocused, setEmailFocused] = useState(false);
   const [passwordFocused, setPasswordFocused] = useState(false);
   const { theme, changeTheme } = useContext(ThemeContext);
-  changeTheme("dark");
 
   const handleEmailChange = (text: string) => {
     setEmail(text);
@@ -76,12 +75,12 @@ const Login = () => {
     >
       <StatusBar style={theme === "dark" ? "light" : "dark"} />
 
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={styles.arrow}
         onPress={() => router.replace("/(auth)/SignIn&SignOut/SignUpBlankForm")}
       >
         <SvgXml xml={theme === "dark" ? BackArrow : blackArrow} />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
       <View>
         <Image source={require("../../../assets/icons/HeartPlus.png")} />

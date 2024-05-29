@@ -28,7 +28,6 @@ const LetsYouIn = () => {
   const [visible, setVisible] = React.useState(false);
   const hideDialog = () => setVisible(false);
   const { theme, changeTheme } = useContext(ThemeContext);
-  changeTheme("dark");
 
   return (
     <View
@@ -38,9 +37,6 @@ const LetsYouIn = () => {
       ]}
     >
       <StatusBar style={theme === "dark" ? "light" : "dark"} />
-      <Pressable onPress={() => router.back()} style={styles.arrow}>
-        <SvgXml xml={theme === "dark" ? BackArrow : blackArrow} />
-      </Pressable>
 
       <Image source={require("../../../assets/icons/FrameOne.png")} />
 
@@ -146,10 +142,6 @@ const LetsYouIn = () => {
 export default LetsYouIn;
 
 const styles = StyleSheet.create({
-  //   signupText: {
-  //     color: "#246BFD",
-  //     fontWeight: "600",
-  //   },
   signText: {
     fontSize: 16,
     color: "#FFFFFF",
@@ -211,7 +203,5 @@ const styles = StyleSheet.create({
     paddingLeft: 24,
     paddingBottom: 24,
     paddingRight: 24,
-    // borderWidth: 4,
-    // borderColor: 'red',
   },
 });

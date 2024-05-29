@@ -20,6 +20,7 @@ import PaymentChooseInputCard from "@/components/UI/PaymentChooseContainer/Payme
 import { PaymentMethods } from "@/constants/PaymentMethods";
 import PaymentChooseContainer from "@/components/UI/PaymentChooseContainer/Index";
 import { router } from "expo-router";
+import React from "react";
 
 export default function SelectPayment() {
   const { theme, changeTheme } = useContext(ThemeContext);

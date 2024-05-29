@@ -31,8 +31,6 @@ export const ReviewerCardComponent = () => {
     setLikes(likes + 1);
   };
 
-
-
   return (
     <View style={{ gap: 10, marginVertical: 10 }}>
       <View
@@ -134,7 +132,6 @@ export const ReviewerCardComponent = () => {
 
 const DoctorDetails = () => {
   const { theme, changeTheme } = useContext(ThemeContext);
-  changeTheme("light");
   return (
     <View
       style={{
