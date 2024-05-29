@@ -1,7 +1,9 @@
 import React,{ReactElement, useState} from 'react';
 import { StyleSheet, Text, Image, View, TouchableHighlight, SafeAreaView, Button, Alert, Platform, StatusBar, Dimensions,TextInput, Pressable,ImageURISource} from 'react-native'
 import Typography from '@/constants/Typography';
- import { SvgXml } from "react-native-svg"
+import { SvgXml } from "react-native-svg"
+import { ThemeContext } from '@/ctx/ThemeContext';
+import { useContext } from 'react';
 interface DoctorComponentProps{
     imageSource: ImageURISource|number
     name: string,
@@ -13,9 +15,15 @@ interface DoctorComponentProps{
     review: string,
     remove:()=>void
 }
-function DoctorComponent({imageSource,name,iconComponent,professionalTitle,hospital,star,rate,review,remove}:DoctorComponentProps) {
+function DoctorComponent({ imageSource, name, iconComponent, professionalTitle, hospital, star, rate, review, remove }: DoctorComponentProps) {
+    const { theme, changeTheme } = useContext(ThemeContext)
+    changeTheme("dark")
+    const containerStyle = theme === "dark" ? styles.outerDark : styles.outerLight
+    const nameColor = theme === "dark" ? styles.textDark : styles.textLight
+    const descriptionColor = theme === "dark" ? styles.descriptionDark : styles.descriptionLight
+
     return (
-        <View style={styles.outer}>
+        <View style={[styles.outer,containerStyle]}>
             <View style={styles.inner}>
                 <View style={styles.profileView}>
                     <Image source={imageSource } />
@@ -24,7 +32,7 @@ function DoctorComponent({imageSource,name,iconComponent,professionalTitle,hospi
                     <View style={styles.rightViewInner}>
                     <View style={styles.upperRightView}>
                         <View style={styles.nameView}>
-                            <Text  style={Typography.bold.xLarge}   >{ name}</Text>
+                            <Text  style={[Typography.bold.xLarge,nameColor]}   >{ name}</Text>
 
                         </View>
                         <Pressable style={styles.heartIconView} onPress={remove}>
@@ -37,7 +45,7 @@ function DoctorComponent({imageSource,name,iconComponent,professionalTitle,hospi
                     <View style={styles.lowerView}>
                         <View style={styles.professionalView}>
                             <View style={styles.proNameView}>
-                                <Text style={styles.professionalTitle}>{ professionalTitle}</Text>
+                                <Text style={[styles.professionalTitle,descriptionColor]}>{ professionalTitle}</Text>
 
 
                             </View>
@@ -45,7 +53,7 @@ function DoctorComponent({imageSource,name,iconComponent,professionalTitle,hospi
 
                             </View>
                             <View style={styles.hospitalView}>
-                                <Text style={styles.hospitalText}>{ hospital}</Text>
+                                <Text style={[styles.hospitalText,descriptionColor]}>{ hospital}</Text>
 
                             </View>
                
@@ -56,12 +64,12 @@ function DoctorComponent({imageSource,name,iconComponent,professionalTitle,hospi
 
                             </View>
                             <View style={styles.rateView}>
-                                <Text style={styles.rateText} >{rate}</Text>
+                                <Text style={[styles.rateText,descriptionColor]} >{rate}</Text>
                                 
 
                             </View>
                             <View style={styles.allReviewView}>
-                                <Text style={styles.allReviewText} >{review}</Text>
+                                <Text style={[styles.allReviewText,descriptionColor]} >{review}</Text>
                                 
 
                             </View>
@@ -82,12 +90,33 @@ export default DoctorComponent;
 const styles = StyleSheet.create({
     outer: {
         width: "95%",
-        backgroundColor: "white",
         height: "100%",
         borderRadius: 10,
         borderWidth: 1,
-        borderColor:"white",
         zIndex:1000
+        
+    },
+    outerDark: {
+        backgroundColor: "#1F222A",
+        borderColor:"#1F222A"
+        
+    },
+    outerLight: {
+        backgroundColor: "white",
+        borderColor:"white",
+        
+    },
+    textDark: {
+        color:"white"
+        
+    },
+    textLight: {
+        
+    },
+    descriptionDark: {
+        color:"#E0E0E0"
+    },
+    descriptionLight: {
         
     },
     inner: {
