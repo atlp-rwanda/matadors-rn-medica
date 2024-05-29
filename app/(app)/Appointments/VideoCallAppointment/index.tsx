@@ -42,7 +42,6 @@ interface PatientType {
 
 function AppointmentMessaging() {
   const { theme, changeTheme } = useContext(ThemeContext);
-  changeTheme("light");
   const ios = Platform.OS === "ios";
 
   const PatientDetails: PatientType[] = [
@@ -341,8 +340,7 @@ function AppointmentMessaging() {
                         { color: Colors.others.white },
                       ]}
                     >
-                      {data?.appointmentMethod}(
-                      <Text>Start at 10:00 AM</Text>)
+                      {data?.appointmentMethod}(<Text>Start at 10:00 AM</Text>)
                     </Text>
                   </View>
                 </Pressable>

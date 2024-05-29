@@ -1,7 +1,22 @@
+import {
+  CalenderIcon,
+  CalenderIconGray,
+  DropDownIcon,
+  DropDownIconDark,
+  DropDownIconGray,
+  MessageIcon,
+  MessageIconGray,
+} from "@/assets/icons/Profile/Icons";
+import Button from "@/components/UI/Button";
+import Input from "@/components/UI/Input";
+import SelectProfile from "@/components/UI/SelectProfile";
+import { Colors } from "@/constants/Colors";
+import Typography from "@/constants/Typography";
+import { ThemeContext } from "@/ctx/ThemeContext";
 import { MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   View,
   Text,
@@ -12,195 +27,182 @@ import {
   TouchableOpacity,
   Pressable,
 } from "react-native";
+import { Dropdown } from "react-native-element-dropdown";
+import { SvgXml } from "react-native-svg";
 import Icon from "react-native-vector-icons/FontAwesome";
 
 const YourProfile = () => {
-  const [fullName, setFullName] = useState("");
-  const [nickname, setNickname] = useState("");
-  const [date, setDate] = useState("");
-  const [email, setEmail] = useState("");
-  const [gender, setGender] = useState("");
-
-  const handleFullNameChange = (text: string) => {
-    setFullName(text);
-  };
-  const handleNicknameChange = (text: string) => {
-    setNickname(text);
-  };
-  const handleDateChange = (text: string) => {
-    setDate(text);
-  };
-  const handleEmailChange = (text: string) => {
-    setEmail(text);
-  };
-  const handleGenderChange = (text: string) => {
-    setGender(text);
-  };
+  const [isFocus, setIsFocus] = useState(false);
+  const [image, setImage] = useState<null | string>(null);
+  const [value, setValue] = useState<string>("United States");
+  const { theme } = useContext(ThemeContext);
 
   return (
-      <View style={styles.container}>
-        <View style={styles.main}>
-          <Pressable onPress={() => router.back()}>
-            <MaterialIcons name="arrow-back" size={25} style={styles.icon} />
-          </Pressable>
-          <Text style={styles.fill}>Fill Your profile</Text>
-        </View>
-        <View style={styles.image}>
-          <Image
-            source={require("../../../assets/images/Edit-avatar.png")}
-            style={styles.img}
-          />
-        </View>
-        <ScrollView style={styles.scroll}>
-          <View style={styles.inputs1}>
-            <TextInput
-              style={styles.email}
-              placeholder="Full Name"
-              keyboardType="default"
-              placeholderTextColor="#9E9E9E"
-              value={fullName}
-              onChangeText={handleFullNameChange}
-            />
-          </View>
-          <View style={styles.inputs1}>
-            <TextInput
-              style={styles.email}
-              placeholder="Nickname"
-              keyboardType="default"
-              placeholderTextColor="#9E9E9E"
-              value={nickname}
-              onChangeText={handleNicknameChange}
-            />
-          </View>
-          <View style={styles.inputs1}>
-            <TextInput
-              style={styles.email}
-              value={date}
-              keyboardType="numeric"
-              placeholder="Date of Birth"
-              placeholderTextColor="#9E9E9E"
-              onChangeText={handleDateChange}
-            />
-            <Icon name="calendar" size={20} style={styles.icon} />
-          </View>
-          <View style={styles.inputs1}>
-            <TextInput
-              style={styles.email}
-              value={email}
-              placeholder="Email"
-              keyboardType="default"
-              placeholderTextColor="#9E9E9E"
-              onChangeText={handleEmailChange}
-            />
-            <Icon name="envelope" size={20} style={styles.icon} />
-          </View>
-          <View style={styles.inputs1}>
-            <TextInput
-              style={styles.email}
-              placeholder="Gender"
-              keyboardType="email-address"
-              placeholderTextColor="#9E9E9E"
-              value={gender}
-              onChangeText={handleGenderChange}
-            />
-            <Icon name="caret-down" size={25} style={styles.icon} />
-          </View>
-          <View style={styles.btn}>
-            <TouchableOpacity
-              onPress={() =>
-                router.push("/(auth)/SignIn&SignOut/Create-NewPin")
-              }
-              style={styles.button}
-            >
-              <Text style={styles.buttonText}>Continue</Text>
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
+    <ScrollView
+      style={{
+        height: "100%",
+        backgroundColor:
+          theme === "light" ? Colors.others.white : Colors.dark._1,
+      }}
+      contentContainerStyle={{
+        gap: 15,
+        alignItems: "center",
+        // paddingTop: 20,
+        paddingHorizontal: 15,
+        // paddingBottom: 30,
+        height: "100%",
+        paddingVertical: 20,
+      }}
+    >
+      <View>
+        <SelectProfile image={image} setImage={setImage} />
       </View>
+
+      <View
+        style={{
+          gap: 20,
+          paddingHorizontal: 20,
+          paddingVertical: 20,
+          width: "100%",
+          height: "100%",
+        }}
+      >
+        <Input placeholder="First Name" />
+        <Input placeholder="Last Name" />
+        <Input
+          placeholder="Birth Date"
+          rightElement={() => {
+            return (
+              <Pressable>
+                <SvgXml xml={CalenderIconGray} />
+              </Pressable>
+            );
+          }}
+        />
+        <Input
+          placeholder="Email"
+          rightElement={() => {
+            return (
+              <Pressable>
+                <SvgXml xml={MessageIconGray} />
+              </Pressable>
+            );
+          }}
+        />
+        <Dropdown
+          style={{
+            backgroundColor:
+              theme === "light" ? Colors.grayScale._50 : Colors.dark._2,
+            paddingHorizontal: 20,
+            paddingVertical: 10,
+            borderRadius: 20,
+          }}
+          placeholderStyle={[
+            Typography.semiBold.medium,
+            {
+              color:
+                theme === "light" ? Colors.grayScale._500 : Colors.others.white,
+            },
+          ]}
+          selectedTextStyle={[
+            Typography.semiBold.medium,
+            {
+              color:
+                theme === "light" ? Colors.grayScale._900 : Colors.others.white,
+            },
+          ]}
+          containerStyle={{
+            borderRadius: 20,
+            backgroundColor:
+              theme === "light" ? Colors.others.white : Colors.dark._2,
+            borderWidth: 0,
+          }}
+          inputSearchStyle={{
+            height: 40,
+            fontSize: 16,
+            // borderColor: theme === "light" ? Colors.others.white : Colors.others.
+            borderRadius: 10,
+          }}
+          search
+          onFocus={() => setIsFocus(true)}
+          onBlur={() => setIsFocus(false)}
+          onChange={(item) => {
+            setValue(item.value);
+            setIsFocus(false);
+          }}
+          renderRightIcon={() => (
+            <SvgXml xml={theme === "light" ? DropDownIconGrayz : DropDownIconDark} />
+          )}
+          itemTextStyle={{
+            color:
+              theme === "light" ? Colors.grayScale._900 : Colors.others.white,
+          }}
+          data={[
+            { label: "Male", value: "M" },
+            { label: "Female", value: "F" },
+          ]}
+          maxHeight={300}
+          labelField="label"
+          valueField="value"
+          placeholder={!isFocus ? "Gender" : "..."}
+          searchPlaceholder="Search..."
+          renderInputSearch={() => <></>}
+          value={value}
+        />
+      </View>
+
+      <View style={{ marginTop: "auto", width: "100%" }}>
+        <Button
+          title="Update"
+          onPress={() => {
+            router.push("/(auth)/SignIn&SignOut/Create-NewPin")
+          }}
+          shadowColor={Colors.main.primary._500}
+          backgroundColor={Colors.main.primary._500}
+        />
+      </View>
+    </ScrollView>
   );
 };
 
-export default YourProfile;
-
 const styles = StyleSheet.create({
-  body: {
-    padding: 0,
-    margin: 0,
-  },
   container: {
-    backgroundColor: "#fff",
-    width: "100%",
-    height: "100%",
-    padding: 20,
+    backgroundColor: "white",
+    padding: 16,
   },
-  main: {
-    marginTop: 30,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    width: "50%",
-    height: "7%",
-  },
-  inputsFocused: {
-    borderColor: "#246BFD",
-    borderWidth: 2,
-  },
-  emailFocused: {
-    color: "#ccc",
-    fontSize: 16,
-  },
-  scroll: {
-    height: "70%",
+  dropdown: {
+    height: 50,
+    borderColor: "gray",
+    borderWidth: 0.5,
+    borderRadius: 8,
+    paddingHorizontal: 8,
   },
   icon: {
-    alignSelf: "center",
-    color: "#212121",
+    marginRight: 5,
   },
-  fill: {
-    fontSize: 20,
-    fontWeight: "500",
+  label: {
+    position: "absolute",
+    backgroundColor: "white",
+    left: 22,
+    top: 8,
+    zIndex: 999,
+    paddingHorizontal: 8,
+    fontSize: 14,
   },
-  image: {
-    height: 200,
-    width: 200,
-    alignSelf: "center",
-  },
-  img: {
-    height: "100%",
-    width: "100%",
-  },
-  inputs1: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    backgroundColor: "#FAFAFA",
-    margin: 10,
-    marginTop: 30,
-    marginBottom: 0,
-    padding: 8,
-    borderRadius: 10,
-    paddingHorizontal: 10,
-  },
-  email: {
-    height: 40,
-    // paddingLeft: 5,
+  placeholderStyle: {
     fontSize: 16,
   },
-  btn: {
-    marginTop: 48,
+  selectedTextStyle: {
+    fontSize: 16,
   },
-  button: {
-    width: 350,
-    alignSelf: "center",
-    backgroundColor: "#246BFD",
-    paddingTop: 18,
-    paddingBottom: 18,
-    paddingLeft: 16,
-    paddingRight: 16,
-    borderRadius: 100,
+  iconStyle: {
+    width: 20,
+    height: 20,
   },
-  buttonText: {
-    alignSelf: "center",
-    color: "#fff",
-    fontWeight: "bold",
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 16,
   },
 });
+
+export default YourProfile;

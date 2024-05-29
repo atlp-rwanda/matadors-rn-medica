@@ -3,6 +3,7 @@
     {
       "IconComponent": "close",
       "viewBackground": "#FEF1F1",
+      "viewBackgroundDark": "#2A1F24",
       "timeFrame": "Today",
       "time": "15:36 PM",
       "notificationStatus": "Appointment Canceled",
@@ -13,6 +14,7 @@
     {
       "IconComponent": "calendar",
       "viewBackground": "#F1F9F1",
+      "viewBackgroundDark": "#1C2624",
       "timeFrame": "Yesterday ",
       "time": " 15:36 PM",
       "notificationStatus": "Schedule Changed",
@@ -23,6 +25,7 @@
     {
       "IconComponent": "calendar2",
       "viewBackground": "#EDF3FF",
+      "viewBackgroundDark": "#192032",
       "timeFrame": "19 Dec .2022",
       "time": "15:36 PM",
       "notificationStatus": "Appointment Success",
@@ -35,6 +38,7 @@
     {
       "IconComponent": "service",
       "viewBackground": "#FFF7EB",
+      "viewBackgroundDark": "#192032",
       "timeFrame": "19 Dec .2022",
       "time": "10:52 PM",
       "notificationStatus": "New Services Available!",
@@ -45,6 +49,7 @@
     {
       "IconComponent": "wallet",
       "viewBackground": "#EDF3FF",
+      "viewBackgroundDark": "#2A241D",
       "timeFrame": "Today",
       "time": "15:36 PM",
       "notificationStatus": "Credit Card Connected",

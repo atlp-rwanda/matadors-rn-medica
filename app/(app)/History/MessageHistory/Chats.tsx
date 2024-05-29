@@ -66,7 +66,6 @@ function ChatMessaging() {
   };
 
   const ios = Platform.OS === "ios";
-  changeTheme("light");
 
   return (
     <SafeAreaView

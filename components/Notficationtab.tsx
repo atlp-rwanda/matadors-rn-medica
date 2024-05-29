@@ -1,6 +1,8 @@
 import React,{ReactElement, useState} from 'react';
 import { StyleSheet, Text, Image, View, TouchableHighlight, SafeAreaView, Button, Alert, Platform, StatusBar, Dimensions,TextInput, Pressable} from 'react-native'
 import Typography from "@/constants/Typography";
+import { ThemeContext } from '@/ctx/ThemeContext';
+import { useContext } from 'react';
 
 
 interface notificatioTabProps{
@@ -18,7 +20,9 @@ interface notificatioTabProps{
     }
 
 function Notficationtab({IconComponet,viewBackground,notificationStatus,timeFrame,time, sentenceOne,sentenceTwo,sentenceThree,btnVisibility}:notificatioTabProps) {
-    
+    const { theme, changeTheme } = useContext(ThemeContext)
+    const textColor = theme === "dark" ? styles.textDark : styles.textLight
+    const sentenceColor=theme==="dark"?styles.sentenceDark:styles.sentenceLight
     return (
         <SafeAreaView>
             <View style={styles.outer}>
@@ -27,8 +31,8 @@ function Notficationtab({IconComponet,viewBackground,notificationStatus,timeFram
                 {IconComponet}    
               </View>
               <View>
-                    <Text style={styles.notificationStyle}>{notificationStatus }</Text>
-                    <View style={styles.TimeView}><Text style={styles.timeStyle}>{timeFrame}</Text><View style={styles.separateView}></View><Text style={styles.timeStyle}>{time}</Text></View>
+                    <Text style={[styles.notificationStyle,textColor]}>{notificationStatus }</Text>
+                    <View style={styles.TimeView}><Text style={[styles.timeStyle,sentenceColor]}>{timeFrame}</Text><View style={styles.separateView}></View><Text style={[styles.timeStyle,sentenceColor]}>{time}</Text></View>
               </View>   
             </View>
             
@@ -39,9 +43,9 @@ function Notficationtab({IconComponet,viewBackground,notificationStatus,timeFram
              </View>
             </View>
              <View>
-                        <Text style={styles.textStyle}>{sentenceOne}</Text>
-                        <Text style={styles.textStyle}  >{sentenceTwo}</Text>
-                        <Text  style={styles.textStyle} >{sentenceThree}</Text>
+                        <Text style={[styles.textStyle,sentenceColor]}>{sentenceOne}</Text>
+                        <Text style={[styles.textStyle,sentenceColor]}  >{sentenceTwo}</Text>
+                        <Text  style={[styles.textStyle,sentenceColor]} >{sentenceThree}</Text>
             </View>
        </SafeAreaView>
     );
@@ -52,8 +56,23 @@ const styles = StyleSheet.create({
     outer: {
         display: "flex",
         flexDirection: "row", 
-        marginBottom: "6%",
-        justifyContent:"space-between"
+        marginBottom: "2%",
+        justifyContent: "space-between",
+    },
+    textLight: {
+        color: "#212121"
+        
+    },
+    textDark: {
+        color:"white"
+        
+    },
+    sentenceDark: {
+        color:"#E0E0E0"
+    },
+    sentenceLight: {
+        color:"#424242",
+        
     },
     TimeView: {
         marginTop:9,
@@ -72,7 +91,6 @@ const styles = StyleSheet.create({
         
     },
     notificationStyle: {
-        color: "#212121",
         fontSize: 18,
         fontWeight:'bold'
     },
@@ -98,7 +116,6 @@ const styles = StyleSheet.create({
         
     },
     textStyle: {
-        color:"#424242",
         fontFamily: "Regular",
         fontSize:12.7
        

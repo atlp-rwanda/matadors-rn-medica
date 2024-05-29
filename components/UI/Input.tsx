@@ -7,7 +7,7 @@ import { TextInput } from "react-native";
 
 interface Props {
   placeholder: string;
-  value: string;
+  value?: string;
   textInputConfig?: object;
   rightElement?: () => React.JSX.Element;
 }
@@ -44,6 +44,7 @@ export default function Input({
             paddingVertical: 15,
           },
         ]}
+        placeholderTextColor={Colors.grayScale._500}
       />
 
       {rightElement && rightElement()}

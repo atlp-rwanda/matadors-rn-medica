@@ -33,7 +33,6 @@ function ChatMessaging() {
   const date = new Date();
 
   const { theme, changeTheme } = useContext(ThemeContext);
-  changeTheme("light")
 
   const [inputFocused, setInputFocused] = useState<boolean>(false);
   const [menu, setMenu] = useState(false);

@@ -15,8 +15,7 @@ export default function Selectreason(){
     const { theme, changeTheme } = useContext(ThemeContext);
     const [selectedValue, setSelectedValue] = useState('option1');
     const modal = useModal();
-  changeTheme("light");
-
+    
   function handlebackhome(){
     modal.hide();
     router.push('/(app)/Appointments');

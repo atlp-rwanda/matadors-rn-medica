@@ -16,7 +16,7 @@ import {
 
 const Loading = () => (
   <View style={[styles.container, styles.horizontal]}>
-    <BallIndicator animating={true} color={"#236bfd"} />
+    <BallIndicator animating={true} color={"#236bfd"} count={8} size={40} />
   </View>
 );
 

@@ -32,7 +32,7 @@ export default function Layout() {
         />
         <Stack.Screen
           name="SignIn&SignOut/YourProfile"
-          options={{ headerShown: false }}
+          options={{ header: () => <Header title="Fill Your Profile" /> }}
         />
         <Stack.Screen
           name="SignIn&SignOut/Create-NewPin"
@@ -40,7 +40,7 @@ export default function Layout() {
         />
         <Stack.Screen
           name="SignIn&SignOut/SetYourFingerPrint"
-          options={{ header: () => (<Header title="Set Your Fingerprint" />) }}
+          options={{ header: () => <Header title="Set Your Fingerprint" /> }}
         />
       </Stack>
     </>

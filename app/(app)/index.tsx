@@ -1,70 +1,72 @@
 import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import Typography from "@/constants/Typography";
 import { Colors } from "@/constants/Colors";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { router } from "expo-router";
 import React from "react";
+import { ThemeContext } from "@/ctx/ThemeContext";
+import { StatusBar } from "expo-status-bar";
 
 export default function Index() {
+  const { theme, changeTheme } = useContext(ThemeContext);
+
   useEffect(() => {
     setTimeout(() => {
-      router.push("onBoarding/FirstScreen");
-    }, 3000);
-  }, []);
+      router.push("/onBoarding/FirstScreen");
+    });
+  });
 
   return (
     <>
-      <View style={styles.container}>
-        <View style={styles.image}>
+      <StatusBar style={theme === "light" ? "dark" : "light"} />
+      <ScrollView
+        contentContainerStyle={{
+          justifyContent: "space-around",
+          alignItems: "center",
+          height: "100%",
+          backgroundColor:
+            theme === "light" ? Colors.others.white : Colors.dark._1,
+        }}
+      >
+        <View style={{ width: "110%" }}>
           <Image
             source={require("../../assets/images/Group.png")}
-            style={styles.imagex}
+            style={{ width: "100%" }}
           />
         </View>
-        <View>
-          <Text style={styles.text}>Welcome to Medica! 👋</Text>
-          <Text style={styles.description}>
+
+        <View style={{ gap: 20 }}>
+          <Text
+            style={[
+              Typography.heading._1,
+              {
+                color:
+                  theme === "light"
+                    ? Colors.main.primary._500
+                    : Colors.others.white,
+                textAlign: "center",
+              },
+            ]}
+          >
+            Welcome to Medica! 👋
+          </Text>
+          <Text
+            style={[
+              Typography.medium.xLarge,
+              {
+                color:
+                  theme === "light"
+                    ? Colors.grayScale._900
+                    : Colors.others.white,
+                textAlign: "center",
+              },
+            ]}
+          >
             The best online doctor appointment & consultation app of the century
             for your health and medical needs!
           </Text>
         </View>
-      </View>
+      </ScrollView>
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#ffff",
-    paddingTop: 50,
-    paddingBottom: 70,
-  },
-
-  text: {
-    fontSize: 40,
-    textAlign: "center",
-    paddingLeft: 30,
-    paddingRight: 30,
-    color: "#236bfd",
-    fontFamily: "Bold",
-  },
-  description: {
-    textAlign: "center",
-    lineHeight: 25,
-    paddingBottom: 30,
-    paddingTop: 20,
-    fontFamily: "Regular",
-    fontSize: 17,
-  },
-  image: {
-    // width: '100%',
-    objectFit: "cover",
-    height: "70%",
-  },
-  imagex: {
-    height: "100%",
-  },
-});

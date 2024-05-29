@@ -11,7 +11,7 @@ import { NavigationState } from "@react-navigation/native";
 import { router } from "expo-router";
 
 interface Props {
-  title: string;
+  title?: string;
   options?: {
     leftComponent?: () => React.JSX.Element;
     rightComponent?: () => React.JSX.Element;
