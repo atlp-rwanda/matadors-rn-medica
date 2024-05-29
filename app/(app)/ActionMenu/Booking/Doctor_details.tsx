@@ -30,8 +30,6 @@ export const ReviewerCardComponent = () => {
     setLikes(likes + 1);
   };
 
-
-
   return (
     <View style={{ gap: 10, marginVertical: 10 }}>
       <View

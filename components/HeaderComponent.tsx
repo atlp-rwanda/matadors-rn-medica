@@ -19,7 +19,6 @@ interface Headerprops{
 
 function HeaderComponent({ onSearchPressed, headerText }: Headerprops) {
     const { theme, changeTheme } = useContext(ThemeContext)
-    changeTheme("light")
     const leftArrowIcon = theme === "dark" ? LeftArrowWhite : leftArrow
     const searchIcon = theme === "dark" ? searchWhiteIcon : search
     const moreIcon = theme === "dark" ? moreWhiteIcon : more

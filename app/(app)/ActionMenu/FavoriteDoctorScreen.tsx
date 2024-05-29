@@ -70,7 +70,6 @@ function DoctorScreen() {
     const [selectedDoctor, setSelectedDoctor] = useState()
     const [showFilter, setShowfilter] = useState(false)
     const { theme, changeTheme } = useContext(ThemeContext)
-    changeTheme("light")
     const containerStyle = theme === "dark" ? styles.outerDark : styles.outerLight
     const scrollbackColor=theme === "dark" ? styles.scrollDark : styles.scrollLight
 
@@ -96,8 +95,7 @@ function DoctorScreen() {
 
     const filteredDoctors=searchTerm.length>0 ? selectedCategory.Doctors.filter(doctor=>doctor.name.toLowerCase().includes(searchTerm)):selectedCategory.Doctors
     return (
-        <SafeAreaView style={[styles.container, containerStyle]}>
-            
+        <SafeAreaView style={[styles.container,containerStyle]}>
             <View>
                 
                 <View style={[styles.upper,containerStyle]}>
@@ -239,7 +237,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         width:"100%",
          marginBottom: "7%",
-        marginTop: "18%",
+        marginTop: "8%",
     },
     foundDoctorView: {
         width: "100%",

@@ -17,7 +17,6 @@ interface DoctorComponentProps{
 }
 function DoctorComponent({ imageSource, name, iconComponent, professionalTitle, hospital, star, rate, review, remove }: DoctorComponentProps) {
     const { theme, changeTheme } = useContext(ThemeContext)
-    changeTheme("dark")
     const containerStyle = theme === "dark" ? styles.outerDark : styles.outerLight
     const nameColor = theme === "dark" ? styles.textDark : styles.textLight
     const descriptionColor = theme === "dark" ? styles.descriptionDark : styles.descriptionLight
