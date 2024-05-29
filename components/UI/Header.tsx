@@ -9,6 +9,7 @@ import { useContext } from "react";
 import { ThemeContext } from "@/ctx/ThemeContext";
 import { NavigationState } from "@react-navigation/native";
 import { router } from "expo-router";
+import React from "react";
 
 interface Props {
   title: string;
@@ -21,6 +22,8 @@ interface Props {
 
 export default function Header({ title, options }: Props) {
   const { theme, changeTheme } = useContext(ThemeContext);
+
+  // changeTheme("light");
 
   return (
     <>

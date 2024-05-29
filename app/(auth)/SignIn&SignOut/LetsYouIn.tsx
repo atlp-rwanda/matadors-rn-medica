@@ -1,77 +1,144 @@
 import * as React from "react";
-import { StyleSheet, Text, View, Image, TouchableOpacity, Pressable } from "react-native";
-import { useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  Pressable,
+} from "react-native";
+import { useState, useContext } from "react";
 import { LeftArrow } from "@/components/UI/Icons";
 import { router } from "expo-router";
 import Typography from "../../../constants/Typography";
 import { Colors } from "../../../constants/Colors";
+import { ThemeContext } from "@/ctx/ThemeContext";
+import { StatusBar } from "expo-status-bar";
+import {
+  BackArrow,
+  blackArrow,
+  OrLine,
+  greyOrLine,
+  BlackApple,
+  WhiteApple,
+} from "@/components/Icons/Icons";
+import { SvgXml } from "react-native-svg";
 
 const LetsYouIn = () => {
   const [visible, setVisible] = React.useState(false);
   const hideDialog = () => setVisible(false);
+  const { theme, changeTheme } = useContext(ThemeContext);
+  changeTheme("dark");
 
   return (
-    <View style={styles.container}>
-      <Pressable 
-      onPress={()=> router.back()}
-      style={styles.arrow}>
-        <LeftArrow fillColor={"#23272f"} />
+    <View
+      style={[
+        styles.container,
+        { backgroundColor: theme === "dark" ? "#181A20" : "#FFFFFF" },
+      ]}
+    >
+      <StatusBar style={theme === "dark" ? "light" : "dark"} />
+      <Pressable onPress={() => router.back()} style={styles.arrow}>
+        <SvgXml xml={theme === "dark" ? BackArrow : blackArrow} />
       </Pressable>
 
       <Image source={require("../../../assets/icons/FrameOne.png")} />
 
-      <View style={styles.middlePart}>
-        <View style={styles.midPartOne}>
-          <Text
-            style={[Typography.heading._1, { color: Colors.grayScale._900 }]}
-          >
-            Let's you in
-          </Text>
-        </View>
+      <View style={styles.midPartOne}>
+        <Text
+          style={[
+            Typography.heading._1,
+            { color: theme === "dark" ? "#FFFFFF" : Colors.grayScale._900 },
+          ]}
+        >
+          Let's you in
+        </Text>
+      </View>
 
+      <View style={styles.middlePart}>
         <View style={styles.Buttons}>
-          <TouchableOpacity style={styles.middleButton}>
+          <TouchableOpacity
+            style={[
+              styles.middleButton,
+              { backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF", borderColor: theme === 'dark' ? '#35383F' : '#EEEEEE' },
+            ]}
+          >
             <Image source={require("../../../assets/icons/facebook.png")} />
-            <Text style={[Typography.semiBold.large]}>
+            <Text
+              style={[
+                Typography.semiBold.large,
+                { color: theme === "dark" ? "#FFFFFF" : Colors.grayScale._900 },
+              ]}
+            >
               Continue with facebook
             </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.middleButton}>
+          <TouchableOpacity
+            style={[
+              styles.middleButton,
+              { backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF", borderColor: theme === 'dark' ? '#35383F' : '#EEEEEE' },
+            ]}
+          >
             <Image source={require("../../../assets/icons/Google.png")} />
-            <Text style={[Typography.semiBold.large]}>
+            <Text
+              style={[
+                Typography.semiBold.large,
+                { color: theme === "dark" ? "#FFFFFF" : Colors.grayScale._900 },
+              ]}
+            >
               Continue with Google
             </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.middleButton}>
-            <Image source={require("../../../assets/icons/AppleIcon.png")} />
-            <Text style={[Typography.semiBold.large]}>Continue with Apple</Text>
+          <TouchableOpacity
+            style={[
+              styles.middleButton,
+              { backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF", borderColor: theme === 'dark' ? '#35383F' : '#EEEEEE' },
+            ]}
+          >
+            <SvgXml xml={theme === 'dark' ? WhiteApple : BlackApple } />
+            <Text
+              style={[
+                Typography.semiBold.large,
+                { color: theme === "dark" ? "#FFFFFF" : Colors.grayScale._900 },
+              ]}
+            >
+              Continue with Apple
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
 
-      <Image source={require("../../../assets/icons/OR.png")} />
+      <SvgXml xml={theme === "dark" ? OrLine : greyOrLine} />
 
-      <TouchableOpacity 
-      onPress={()=> router.push("/(auth)/SignIn&SignOut/YourProfile")}
-      style={styles.signinBtn}>
+      <TouchableOpacity
+        onPress={() => router.push("/(auth)/SignIn&SignOut/YourProfile")}
+        style={styles.signinBtn}
+      >
         <Text style={[Typography.bold.large, { color: Colors.others.white }]}>
           Sign in with password
         </Text>
       </TouchableOpacity>
 
-      <Text style={[Typography.regular.medium]}>
-        Don't have an account?
+      <View style={{ flexDirection: "row", gap: 5 }}>
         <Text
-          style={styles.signupText}
+          style={[
+            Typography.regular.medium,
+            { color: theme === "dark" ? "#FFFFFF" : Colors.grayScale._500 },
+          ]}
+        >
+          Don't have an account?
+        </Text>
+        <Text
+          style={[Typography.semiBold.medium, { color: "#246DFB" }]}
           onPress={() =>
             router.replace("/(auth)/SignIn&SignOut/SignUpBlankForm")
           }
         >
           Sign up
         </Text>
-      </Text>
+      </View>
     </View>
   );
 };
@@ -79,10 +146,10 @@ const LetsYouIn = () => {
 export default LetsYouIn;
 
 const styles = StyleSheet.create({
-  signupText: {
-    color: "#246BFD",
-    fontWeight: "600",
-  },
+  //   signupText: {
+  //     color: "#246BFD",
+  //     fontWeight: "600",
+  //   },
   signText: {
     fontSize: 16,
     color: "#FFFFFF",
@@ -95,6 +162,8 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     justifyContent: "center",
     alignItems: "center",
+    shadowColor: "#246BFD",
+    elevation: 10,
   },
   textBtn: {
     fontSize: 16,
@@ -104,7 +173,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 15,
     borderWidth: 1,
-    borderColor: "#eeeeee",
     justifyContent: "center",
     alignItems: "center",
     padding: 15,
@@ -127,7 +195,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   middlePart: {
-    gap: 30,
+    gap: 24,
   },
   arrow: {
     alignSelf: "flex-start",
@@ -141,7 +209,7 @@ const styles = StyleSheet.create({
     gap: 20,
     paddingTop: 24,
     paddingLeft: 24,
-    paddingBottom: 48,
+    paddingBottom: 24,
     paddingRight: 24,
     // borderWidth: 4,
     // borderColor: 'red',
