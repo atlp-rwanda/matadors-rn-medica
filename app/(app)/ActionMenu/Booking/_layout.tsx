@@ -22,6 +22,7 @@ export default function BookingLayout() {
         <Stack.Screen name="Select-package" options={{ headerShown: false }} />
         <Stack.Screen name="Patient-details" options={{ headerShown: false }} />
         <Stack.Screen name="EnterYourPin" options={{ headerShown: false }} />
+        <Stack.Screen name="AddNewCard" options={{ headerShown: false }} />
         <Stack.Screen
           name="SelectPayment"
           options={{ header: () => <Header title="Payments" /> }}
