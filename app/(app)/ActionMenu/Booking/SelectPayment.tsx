@@ -26,6 +26,8 @@ export default function SelectPayment() {
   const { theme, changeTheme } = useContext(ThemeContext);
   const [selected, setSelected] = useState(false);
 
+  changeTheme("dark");
+
   return (
     <>
       <StatusBar style={theme === "light" ? "dark" : "light"} />

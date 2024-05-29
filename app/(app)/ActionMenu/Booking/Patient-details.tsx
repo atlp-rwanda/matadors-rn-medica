@@ -20,6 +20,8 @@ const PatientDetails = () => {
   const [text, setText] = useState("");
   const [height, setHeight] = useState(40);
   const { theme, changeTheme } = useContext(ThemeContext);
+  changeTheme("dark");
+
   return (
     <>
       <View

@@ -19,6 +19,7 @@ import Typography from "@/constants/Typography";
 
 function BookingAppointment() {
   const { theme, changeTheme } = useContext(ThemeContext);
+  changeTheme("dark");
   const [selectedTime, setSelectedTime] = useState(null);
   const [selectedDate, setSelectedDate] = useState("");
 
