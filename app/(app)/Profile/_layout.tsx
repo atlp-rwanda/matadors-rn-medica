@@ -1,12 +1,20 @@
 import { Logo } from "@/assets/icons/Logo";
-import { ThreeDotCircle } from "@/assets/icons/ThreeDotCircle";
+import {
+  ThreeDotCircle,
+  ThreeDotCircleDark,
+} from "@/assets/icons/ThreeDotCircle";
 import Header from "@/components/UI/Header";
+import { ScanDarkIcon, ScanLightIcon } from "@/components/UI/Icons";
+import { Colors } from "@/constants/Colors";
 import Typography from "@/constants/Typography";
+import { ThemeContext } from "@/ctx/ThemeContext";
 import { Stack } from "expo-router";
+import { useContext } from "react";
 import { Pressable, Text, View } from "react-native";
 import { SvgXml } from "react-native-svg";
 
 export default function Layout() {
+  const { theme } = useContext(ThemeContext);
   return (
     <Stack>
       <Stack.Screen
@@ -26,14 +34,32 @@ export default function Layout() {
                       }}
                     >
                       <SvgXml xml={Logo} />
-                      <Text style={Typography.heading._4}>Profile</Text>
+                      <Text
+                        style={[
+                          Typography.heading._4,
+                          {
+                            color:
+                              theme === "light"
+                                ? Colors.grayScale._900
+                                : Colors.others.white,
+                          },
+                        ]}
+                      >
+                        Profile
+                      </Text>
                     </View>
                   );
                 },
                 rightComponent: () => {
                   return (
                     <Pressable onPress={() => {}}>
-                      <SvgXml xml={ThreeDotCircle} />
+                      <SvgXml
+                        xml={
+                          theme === "light"
+                            ? ThreeDotCircle
+                            : ThreeDotCircleDark
+                        }
+                      />
                     </Pressable>
                   );
                 },
@@ -54,7 +80,22 @@ export default function Layout() {
       />
       <Stack.Screen
         name="Payment"
-        options={{ header: () => <Header title="Payment" /> }}
+        options={{
+          header: () => (
+            <Header
+              title="Payment"
+              options={{
+                rightComponent: () => (
+                  <Pressable onPress={() => {}} style={{}}>
+                    <SvgXml
+                      xml={theme === "light" ? ScanLightIcon : ScanDarkIcon}
+                    />
+                  </Pressable>
+                ),
+              }}
+            />
+          ),
+        }}
       />
       <Stack.Screen
         name="Security"

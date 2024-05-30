@@ -1,6 +1,7 @@
 import { Colors } from "@/constants/Colors";
 import Typography from "@/constants/Typography";
-import React from "react";
+import { ThemeContext } from "@/ctx/ThemeContext";
+import React, { useContext } from "react";
 import { ScrollView, Text, View } from "react-native";
 import { colors } from "react-native-elements";
 
@@ -10,6 +11,8 @@ interface Props {
 }
 
 export default function SelectPaymentCardListing({ icon, title }: Props) {
+  const { theme } = useContext(ThemeContext);
+
   return (
     <>
       <View
@@ -19,15 +22,26 @@ export default function SelectPaymentCardListing({ icon, title }: Props) {
           justifyContent: "flex-start",
           paddingHorizontal: 20,
           paddingVertical: 20,
-          backgroundColor: "white",
-          elevation: 20,
-          shadowColor: Colors.grayScale._400,
+          backgroundColor:
+            theme === "light" ? Colors.others.white : Colors.dark._2,
+          elevation: theme === "light" ? 20 : 0,
+          shadowColor: theme === "light" ? Colors.grayScale._400 : "none",
           gap: 10,
           borderRadius: 15,
         }}
       >
         {icon()}
-        <Text style={Typography.bold.xLarge}>{title}</Text>
+        <Text
+          style={
+            (Typography.bold.xLarge,
+            {
+              color:
+                theme === "light" ? Colors.grayScale._900 : Colors.others.white,
+            })
+          }
+        >
+          {title}
+        </Text>
         <Text
           style={[
             Typography.bold.large,

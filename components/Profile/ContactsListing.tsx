@@ -1,5 +1,7 @@
 import { Colors } from "@/constants/Colors";
 import Typography from "@/constants/Typography";
+import { ThemeContext } from "@/ctx/ThemeContext";
+import { useContext } from "react";
 import { Pressable, Text, View } from "react-native";
 
 interface Props {
@@ -9,6 +11,8 @@ interface Props {
 }
 
 export default function ContactsListing({ icon, title, onPress }: Props) {
+  const { theme } = useContext(ThemeContext);
+
   return (
     <Pressable
       onPress={() => {
@@ -20,14 +24,23 @@ export default function ContactsListing({ icon, title, onPress }: Props) {
         alignItems: "center",
         gap: 20,
         padding: 20,
-        backgroundColor: Colors.others.white,
-        elevation: 20,
+        backgroundColor:
+          theme === "light" ? Colors.others.white : Colors.dark._2,
+        elevation: theme === "light" ? 20 : 0,
         shadowColor: Colors.grayScale._400,
         borderRadius: 20,
       }}
     >
       {icon()}
-      <Text style={[Typography.bold.xLarge, { color: Colors.grayScale._900 }]}>
+      <Text
+        style={[
+          Typography.bold.xLarge,
+          {
+            color:
+              theme === "light" ? Colors.grayScale._900 : Colors.others.white,
+          },
+        ]}
+      >
         {title}
       </Text>
     </Pressable>

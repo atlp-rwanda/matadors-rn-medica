@@ -4,18 +4,18 @@ import { Colors } from "@/constants/Colors";
 import OnboardingComponent from "@/components/OnBoarding/OnboardingComponent";
 import { ThemeContext } from "@/ctx/ThemeContext";
 
-const  image = require("../../assets/images/OnBoardingImages/firstLightImg.png")
-const darkImg = require("../../assets/images/OnBoardingImages/firstDarkImg.png")
+const image = require("../../assets/images/OnBoardingImages/firstLightImg.png");
+const darkImg = require("../../assets/images/OnBoardingImages/firstDarkImg.png");
 
 const FirstScreen = () => {
   const { theme, changeTheme } = useContext(ThemeContext);
 
   return (
     <View style={styles.container}>
-          <OnboardingComponent 
-        image={theme === "light" ?  image: darkImg}
-        text='Thousands of
-        doctors & experts to help your health!'
+      <OnboardingComponent
+        image={theme === "light" ? image : darkImg}
+        text="Thousands of
+        doctors & experts to help your health!"
         action="Next"
         direction="/onBoarding/SecondScreen"
       >
@@ -33,10 +33,9 @@ const FirstScreen = () => {
 };
 
 const styles = StyleSheet.create({
-
-    container: {
-        flex: 1,
-    },
+  container: {
+    flex: 1,
+  },
 
   dots: {
     width: 10,

@@ -41,7 +41,7 @@ export default function SetYourFingerPrint() {
           paddingHorizontal: 20,
           height: "100%",
           backgroundColor:
-            theme === "light" ? Colors.others.white : Colors.others.black,
+            theme === "light" ? Colors.others.white : Colors.dark._1,
         }}
       >
         <View
@@ -50,7 +50,7 @@ export default function SetYourFingerPrint() {
             justifyContent: "space-between",
             paddingVertical: 20,
             backgroundColor:
-              theme === "light" ? Colors.others.white : Colors.others.black,
+              theme === "light" ? Colors.others.white : Colors.dark._1,
           }}
         >
           <Text
@@ -74,7 +74,7 @@ export default function SetYourFingerPrint() {
             style={{
               gap: 60,
               backgroundColor:
-                theme === "light" ? Colors.others.white : Colors.others.black,
+                theme === "light" ? Colors.others.white : Colors.dark._1,
             }}
           >
             <Text
@@ -101,9 +101,9 @@ export default function SetYourFingerPrint() {
                 justifyContent: "center",
                 alignItems: "center",
                 width: "100%",
-                gap: 4,
+                gap: 20,
                 backgroundColor:
-                  theme === "light" ? Colors.others.white : Colors.others.black,
+                  theme === "light" ? Colors.others.white : Colors.dark._1,
               }}
             >
               <View
@@ -112,7 +112,7 @@ export default function SetYourFingerPrint() {
                   backgroundColor:
                     theme === "light"
                       ? Colors.others.white
-                      : Colors.others.black,
+                      : Colors.dark._1,
                 }}
               >
                 <Button
@@ -133,7 +133,7 @@ export default function SetYourFingerPrint() {
                     backgroundColor:
                       theme === "light"
                         ? Colors.others.white
-                        : Colors.others.black,
+                        : Colors.dark._1,
                   },
                 ]}
               >
@@ -158,7 +158,7 @@ export default function SetYourFingerPrint() {
                                 backgroundColor:
                                   theme === "light"
                                     ? Colors.others.white
-                                    : Colors.grayScale._900,
+                                    : Colors.dark._1,
                               }}
                             >
                               <Image
@@ -170,7 +170,7 @@ export default function SetYourFingerPrint() {
                                   backgroundColor:
                                     theme === "light"
                                       ? Colors.others.white
-                                      : Colors.grayScale._900,
+                                      : Colors.dark._1,
                                 }}
                               >
                                 <Text

@@ -1,18 +1,25 @@
 import SwitchNotificationListing from "@/components/Profile/SwitchNotificationListing";
+import { Colors } from "@/constants/Colors";
+import { ThemeContext } from "@/ctx/ThemeContext";
+import { useContext } from "react";
 import { ScrollView, View } from "react-native";
 
 export default function Notification() {
+  const { theme } = useContext(ThemeContext);
   return (
     <>
       <ScrollView
-        style={{ backgroundColor: "white" }}
+        style={{
+          backgroundColor:
+            theme === "light" ? Colors.others.white : Colors.dark._1,
+        }}
         contentContainerStyle={{
           height: "100%",
         }}
       >
         <View
           style={{
-            gap: 10,
+            gap: 30,
             paddingHorizontal: 20,
             paddingVertical: 20,
             height: "100%",

@@ -1,6 +1,7 @@
 import { Colors } from "@/constants/Colors";
 import Typography from "@/constants/Typography";
-import React from "react";
+import { ThemeContext } from "@/ctx/ThemeContext";
+import React, { useContext } from "react";
 import { View } from "react-native";
 import { TextInput } from "react-native";
 
@@ -17,10 +18,12 @@ export default function Input({
   textInputConfig,
   rightElement,
 }: Props) {
+  const { theme } = useContext(ThemeContext);
   return (
     <View
       style={{
-        backgroundColor: Colors.grayScale._50,
+        backgroundColor:
+          theme === "light" ? Colors.grayScale._50 : Colors.dark._2,
         borderRadius: 15,
         flexDirection: "row",
         alignItems: "center",
@@ -34,7 +37,8 @@ export default function Input({
         style={[
           Typography.semiBold.medium,
           {
-            color: Colors.grayScale._900,
+            color:
+              theme === "light" ? Colors.grayScale._900 : Colors.others.white,
             // width: "100%",
             flexGrow: 1,
             paddingVertical: 15,

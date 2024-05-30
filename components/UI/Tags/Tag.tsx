@@ -1,5 +1,7 @@
 import { Colors } from "@/constants/Colors";
 import Typography from "@/constants/Typography";
+import { ThemeContext } from "@/ctx/ThemeContext";
+import { useContext } from "react";
 import { Pressable, Text } from "react-native";
 
 interface Props {
@@ -9,6 +11,8 @@ interface Props {
 }
 
 export default function Tag({ selected, title, onPress }: Props) {
+  const { theme } = useContext(ThemeContext);
+
   return (
     <Pressable
       onPress={() => {
@@ -22,7 +26,9 @@ export default function Tag({ selected, title, onPress }: Props) {
         borderRadius: 100,
         backgroundColor: selected
           ? Colors.main.primary._500
-          : Colors.others.white,
+          : theme === "light"
+          ? Colors.others.white
+          : Colors.dark._1,
       }}
     >
       <Text
