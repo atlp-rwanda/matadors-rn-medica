@@ -1,13 +1,3 @@
-
-export default {
-  light: {
-    text: "#000",
-    background: "#fff",
-    tabIconDefault: "#ccc",
-    input : "#EEEEEE"
-  },
-};
-
 export const Colors = {
   main: {
     // Main

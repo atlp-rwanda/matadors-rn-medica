@@ -27,7 +27,6 @@ const RadioText: RadioButtonProps[] = [
 const ReviewBlankform: React.FC<RadioButtonProps> = (props) => {
   const{ theme, changeTheme } = useContext(ThemeContext);
 const [rating, setRating ] = useState(0);
-  changeTheme('light');
 
   return (
     <View style={[styles.container, {backgroundColor: theme === 'dark' ? 'black' : 'white'}]}>

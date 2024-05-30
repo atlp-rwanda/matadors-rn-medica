@@ -8,7 +8,9 @@ import React from "react";
 export default function Index() {
   useEffect(() => {
     setTimeout(() => {
-      router.push("onBoarding/FirstScreen");
+      // router.push("onBoarding/FirstScreen");
+      router.push("Appointments");
+
     }, 3000);
   }, []);
 

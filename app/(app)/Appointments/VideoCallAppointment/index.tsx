@@ -17,15 +17,14 @@ import { ThemeContext } from "@/ctx/ThemeContext";
 import { StatusBar } from "expo-status-bar";
 import Typography from "@/constants/Typography";
 import { SvgXml } from "react-native-svg";
-import { circleWithDots } from "@/components/UI/icons/circleWithDots";
 import { WhiteMenuCircle } from "@/components/UI/icons/WhiteMenuCircle";
 import DoctorCard from "@/components/DoctorCard";
 import {
   VideoCall,
-  CallWhiteIcon,
   VideoCallWhiteIcon,
 } from "@/components/Icons/Icons";
 import { BackArrow, blackArrow } from "@/components/Icons/Icons";
+import { MoreIcon } from "@/assets/icons/MoreCircleSvg";
 
 interface PatientType {
   id: string;
@@ -42,7 +41,6 @@ interface PatientType {
 
 function AppointmentMessaging() {
   const { theme, changeTheme } = useContext(ThemeContext);
-  changeTheme("light");
   const ios = Platform.OS === "ios";
 
   const PatientDetails: PatientType[] = [
@@ -105,7 +103,7 @@ function AppointmentMessaging() {
             </Text>
           </Pressable>
           <View>
-            <SvgXml xml={theme === "dark" ? WhiteMenuCircle : circleWithDots} />
+            <SvgXml xml={theme === "dark" ? WhiteMenuCircle : MoreIcon} />
           </View>
         </View>
         <View style={{ flex: 1, paddingBottom: 30 }}>

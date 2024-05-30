@@ -16,7 +16,6 @@ interface doctor {
 
 const SessionEnded = () => {
   const { theme, changeTheme } = useContext(ThemeContext);
-  changeTheme("dark");
   const doctorDetails: doctor[] = [
     {
       id: "22",

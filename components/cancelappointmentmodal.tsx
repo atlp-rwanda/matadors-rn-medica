@@ -1,4 +1,4 @@
-import React,{ReactElement, useState,useRef,useEffect} from 'react';
+import React,{ReactElement, useState,useRef,useEffect, useContext} from 'react';
 import { StyleSheet, Text, Image, View,Animated, TouchableHighlight, SafeAreaView, Button, Alert, Platform, StatusBar, Dimensions,TextInput, Pressable,ImageURISource} from 'react-native'
 import Typography from '@/constants/Typography';
 import { SvgXml } from "react-native-svg"
@@ -9,6 +9,7 @@ import { overlay } from 'react-native-paper';
 import DoctorComponent from './DoctorComponent';
 import { Colors } from '@/constants/Colors';
 import { router } from "expo-router";
+import { ThemeContext } from '@/ctx/ThemeContext';
 interface CancelProps{
     visible: boolean,
 
@@ -17,6 +18,8 @@ interface CancelProps{
 }
 
 function Cancelappointment({ visible,  cancel }: CancelProps) {
+    const { theme, changeTheme } = useContext(ThemeContext);
+
     const [showpopUp, setShowPopup] = useState(false)
     const [selectedDoctor,setSelectedDoctor]=useState()
      const handleRemove = (doctor:any) => {
