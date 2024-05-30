@@ -7,11 +7,15 @@ import {
   ImageBackground,
   ScrollView,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useFonts as useFontsExpo } from "expo-font";
 import { useNavigation } from "@react-navigation/native";
 import Line from "@/components/Line";
 import { router } from "expo-router";
+import { SvgXml } from "react-native-svg";
+import {NotificationIcon,NotificationIconDark} from "@/assets/icons/Profile/Icons";
+import { ThemeContext } from "@/ctx/ThemeContext";
+import { blackHeart, whiteHeart } from "@/components/UI/icons/blackHeart";
 
 export default function Index() {
   //const {user, isLoading}=useUser();
@@ -22,6 +26,8 @@ export default function Index() {
   const isIconActive = (iconName: string) => {
     return activeIcon === iconName;
   };
+  const { theme, changeTheme } = useContext(ThemeContext);
+    //changeTheme("light");
   const navigation = useNavigation();
   const [text, setText] = useState("");
   const [fontsLoaded] = useFontsExpo({
@@ -35,42 +41,49 @@ export default function Index() {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={{
+      backgroundColor: theme === "dark" ? "#181A20" : "#FFFFFF",
+    padding: 2,
+    paddingTop: 40,
+    }}>
       <ScrollView>
-        <View style={styles.header}>
+        <View style={{
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "flex-start",
+          backgroundColor: theme === "dark" ? "#181A20" : "#FFFFFF",
+          marginLeft: "3%",
+         marginTop: "5%",}}>
           <Image source={require("../../../assets/images/Ellipse.png")}></Image>
-          <View style={styles.heading}>
-            <Text style={styles.greetings}> Good Morning👋</Text>
-            <Text style={styles.userName}>Andrew Ainsley</Text>
+          <View style={{backgroundColor: theme === "dark" ? "#181A20" : "#FFFFFF" ,marginLeft: "2%",}}>
+           <Text style={{color: theme==="dark" ? "#E0E0E0" : "#757575",fontFamily: "Urbanist-regular",}}> Good Morning👋</Text>
+           <Text style={{ color: theme==="dark" ? "#FFFFFF" : "#000000", fontSize: 20, fontWeight: "bold",fontFamily: "Urbanist-bold",}}>Andrew Ainsley</Text>
           </View>
-          <View style={styles.Icons}>
+          <View style={{backgroundColor: theme === "dark" ? "#181A20" : "#FFFFFF",flexDirection: "row",paddingLeft: "27%",}}>
             <TouchableOpacity
               onPress={() => router.push("/ActionMenu/NotificationScreen")}
             >
-              <Image
-                source={require("../../../assets/images/Notification.png")}
-              ></Image>
+              <SvgXml xml={theme === 'dark' ? NotificationIconDark : NotificationIcon} /> 
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => router.push("/ActionMenu/FavoriteDoctorScreen")}>
-              <Image
-                style={styles.heart}
-                source={require("../../../assets/images/Heart.png")}
-              ></Image>
+            <TouchableOpacity onPress={() => router.push("/ActionMenu/FavoriteDoctorScreen")} style={styles.heart}>
+            <SvgXml xml={theme === 'dark' ? whiteHeart :blackHeart } />
             </TouchableOpacity>
           </View>
         </View>
 
-        <View style={styles.search}>
+        <View style={{backgroundColor: theme === "dark" ? "#35383F" : "#F5F5F5",width: "90%",flexDirection: "row",gap: 18, alignItems: "center", justifyContent: "flex-start",
+          marginTop: "7%",marginLeft: "5%", marginRight: 30,padding: 15, borderRadius: 12, position: "relative",}}>
+
           <Image source={require("../../../assets/images/search.png")} />
           <TextInput
             placeholder="Search"
             onChangeText={(newText) => setText(newText)}
             style={styles.searchinput}
-            placeholderTextColor="rgba(45,45,45,0.4)"
+            placeholderTextColor={  theme === "dark" ? "#757575" : "rgba(45,45,45,0.4)"}
           />
-          <TouchableOpacity>
+          <TouchableOpacity style={styles.filter}>
             <Image
-              style={styles.filter}
+              
               source={require("../../../assets/images/filter.png")}
             />
           </TouchableOpacity>
@@ -97,7 +110,7 @@ export default function Index() {
           </ImageBackground>
         </View>
         <View style={styles.TxtContainer}>
-          <Text style={styles.specialityTxt}>Doctor Speciality</Text>
+          <Text style={{color: theme === "dark" ? "#FFFFFF" : "#000000",fontFamily: "Urbanist-bold", fontSize: 19,marginLeft: "4%",}}>Doctor Speciality</Text>
           <TouchableOpacity>
             <Text style={styles.seeTxt}>See All</Text>
           </TouchableOpacity>
@@ -125,10 +138,10 @@ export default function Index() {
           </TouchableOpacity>
         </View>
         <View style={styles.NameTxt}>
-          <Text style={styles.DocSpeciality}>General..</Text>
-          <Text style={styles.DocSpeciality}>Dentist</Text>
-          <Text style={styles.DocSpeciality}>Ophthal..</Text>
-          <Text style={styles.DocSpeciality}>Nutrition..</Text>
+          <Text style={{color: theme === "dark" ? "#FFFFFF" : "#000000",fontSize: 14, marginLeft: "2%",fontFamily: "Urbanist-bold",}}>General..</Text>
+          <Text style={{color: theme === "dark" ? "#FFFFFF" : "#000000",fontSize: 14, marginLeft: "2%",fontFamily: "Urbanist-bold",}}>Dentist</Text>
+          <Text style={{color: theme === "dark" ? "#FFFFFF" : "#000000",fontSize: 14, marginLeft: "2%",fontFamily: "Urbanist-bold",}}>Ophthal..</Text>
+          <Text style={{color: theme === "dark" ? "#FFFFFF" : "#000000",fontSize: 14, marginLeft: "2%",fontFamily: "Urbanist-bold",}}>Nutrition..</Text>
         </View>
         <View style={styles.specialityContainer1}>
           <TouchableOpacity>
@@ -151,14 +164,14 @@ export default function Index() {
           </TouchableOpacity>
         </View>
         <View style={styles.NameTxt}>
-          <Text style={styles.DocSpeciality}>Neurolo..</Text>
-          <Text style={styles.DocSpeciality}>Pediatric</Text>
-          <Text style={styles.DocSpeciality}>Radiolo..</Text>
-          <Text style={styles.DocSpeciality}>More</Text>
+          <Text style={{color: theme === "dark" ? "#FFFFFF" : "#000000",fontSize: 14, marginLeft: "2%",fontFamily: "Urbanist-bold",}}>Neurolo..</Text>
+          <Text style={{color: theme === "dark" ? "#FFFFFF" : "#000000",fontSize: 14, marginLeft: "2%",fontFamily: "Urbanist-bold",}}>Pediatric</Text>
+          <Text style={{color: theme === "dark" ? "#FFFFFF" : "#000000",fontSize: 14, marginLeft: "2%",fontFamily: "Urbanist-bold",}}>Radiolo..</Text>
+          <Text style={{color: theme === "dark" ? "#FFFFFF" : "#000000",fontSize: 14, marginLeft: "2%",fontFamily: "Urbanist-bold",}}>More</Text>
         </View>
         <View style={styles.TopDocs}>
-          <Text style={styles.specialityTxt}>Top Doctors</Text>
-          <TouchableOpacity>
+          <Text style={{color: theme === "dark" ? "#FFFFFF" : "#000000",fontFamily: "Urbanist-bold", fontSize: 19,marginLeft: "4%",}}>Top Doctors</Text>
+          <TouchableOpacity onPress={() => router.push("/ActionMenu/FavoriteDoctorScreen")}>
             <Text style={styles.seeTxt}>See All</Text>
           </TouchableOpacity>
         </View>
@@ -171,13 +184,13 @@ export default function Index() {
             padding: 5,
             marginLeft: 10,
             marginBottom: 20,
-            backgroundColor: "#ffffff",
+            backgroundColor: theme === "dark" ? "#181A20" : "#ffffff",
           }}
         >
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             <View
               style={{
-                backgroundColor: "#246BFD",
+                backgroundColor:  "#246BFD",
                 padding: 5,
                 paddingHorizontal: 10,
                 borderRadius: 20,
@@ -193,7 +206,7 @@ export default function Index() {
             </View>
             <View
               style={{
-                backgroundColor: "#ffffff",
+                backgroundColor: theme === "dark" ? "#181A20" : "#ffffff",
                 marginLeft: 10,
                 padding: 5,
                 paddingHorizontal: 10,
@@ -212,7 +225,7 @@ export default function Index() {
             </View>
             <View
               style={{
-                backgroundColor: "#ffffff",
+                backgroundColor: theme === "dark" ? "#181A20" : "#ffffff",
                 marginLeft: 10,
                 padding: 5,
                 paddingHorizontal: 10,
@@ -231,7 +244,7 @@ export default function Index() {
             </View>
             <View
               style={{
-                backgroundColor: "#ffffff",
+                backgroundColor: theme === "dark" ? "#181A20" : "#ffffff",
                 marginLeft: 10,
                 padding: 5,
                 paddingHorizontal: 10,
@@ -250,7 +263,7 @@ export default function Index() {
             </View>
             <View
               style={{
-                backgroundColor: "#ffffff",
+                backgroundColor: theme === "dark" ? "#181A20" : "#ffffff",
                 marginLeft: 10,
                 padding: 5,
                 paddingHorizontal: 10,
@@ -270,116 +283,73 @@ export default function Index() {
           </ScrollView>
         </View>
 
-        <TouchableOpacity
-          onPress={() => router.push("/ActionMenu/Booking/Doctor_details")}
-          style={styles.cardContainer}
-        >
-          <ImageBackground style={styles.card}>
+        <ImageBackground style={{backgroundColor: theme === "dark" ? "#181A20": "#EEEEEE", width: "100%",  padding: 5,}} >
+
+          <TouchableOpacity 
+          onPress={() => router.push("/ActionMenu/Booking/Doctor_details")} 
+          style={{width: "95%", height: 150, marginTop: "2%",marginLeft: "2%",borderRadius: 20, backgroundColor: theme === "dark" ? "#1F222A": "#FFFFFF",padding: 10, flexDirection: "row",}}>
+         
             <Image
               style={styles.cardImage}
               source={require("../../../assets/images/Randy.png")}
             ></Image>
             <ImageBackground style={styles.DocDescription}>
               <View style={styles.CardHeader}>
-                <Text style={styles.DocName}> Dr. Randy Wigham</Text>
+                <Text style={{fontFamily: "Urbanist-bold", color: theme === "dark" ? "#FFFFFF": "#000000", marginLeft: "3%", marginRight: "18%",marginTop: "1%", fontSize: 20, padding: 0,}}> Dr. Randy Wigham</Text>
                 <Image
                   style={styles.DocHeart}
                   source={require("../../../assets/images/BlueHeart.png")}
                 ></Image>
               </View>
               <Line
-                color="#EEEEEE"
+                color="#E1E1E1"
                 thickness={2}
                 style={{ marginLeft: 10, marginTop: 20, width: "90%" }}
               />
 
-              <Text style={styles.DocProfession}>
+              <Text style={{backgroundColor: "transparent",color:theme === "dark" ? "#E0E0E0": "#424242",fontFamily: "Urbanist-regular",fontSize: 15, marginLeft: "5%",marginTop: "5%",}}>
                 Cardiologist | The Valley Hospital
               </Text>
               <View style={styles.DocRating}>
                 <Image
                   source={require("../../../assets/images/HalfStar.png")}
                 ></Image>
-                <Text style={styles.Ratings}>4.8 (3,379 reviews)</Text>
+                <Text style={{color: theme === "dark" ? "#FFFFFF": "#000000", backgroundColor: "transparent", fontSize: 15, marginLeft: "5%",}}>4.8 (3,379 reviews)</Text>
+   
+   
+   
               </View>
             </ImageBackground>
-          </ImageBackground>
-        </TouchableOpacity>
+          </TouchableOpacity>
+        </ImageBackground>
       </ScrollView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "#FFFFFF",
-    padding: 2,
-    paddingTop: 40,
-  },
+ 
   containerDark: {
     backgroundColor: "#181A20",
     padding: 2,
     paddingTop: 40,
   },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    backgroundColor: "#FFFFFF",
-    marginLeft: "3%",
-    marginTop: "5%",
-  },
+  
   userImage: {
     width: 45,
     height: 45,
   },
-  heading: {
-    backgroundColor: "#FFFFFF",
-    marginLeft: "2%",
-  },
-  greetings: {
-    color: "#757575",
-    fontFamily: "Urbanist-regular",
-  },
-  Icons: {
-    backgroundColor: "#FFFFFF",
-    flexDirection: "row",
-    paddingLeft: "27%",
-  },
-
   filter: {
     marginLeft: "3%",
   },
   heart: {
-    marginLeft: "36%",
+    marginLeft: 25,
   },
-  userName: {
-    color: "#000000",
-    fontSize: 20,
-    fontWeight: "bold",
-    fontFamily: "Urbanist-bold",
-  },
-
   searchinput: {
     color: "#757575",
     fontFamily: "Urbanist-regular",
     fontSize: 18,
     flex: 1,
-  },
-  search: {
-    backgroundColor: "#F5F5F5",
-    width: "90%",
-    flexDirection: "row",
-    gap: 18,
-    color: "#757575",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    marginTop: "7%",
-    marginLeft: "5%",
-    marginRight: 30,
-    padding: 15,
-    borderRadius: 12,
-    position: "relative",
   },
   frame: {
     backgroundColor: "transparent",
@@ -443,12 +413,6 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
     marginTop: "6%",
   },
-  specialityTxt: {
-    color: "#000000",
-    fontFamily: "Urbanist-bold",
-    fontSize: 19,
-    marginLeft: "4%",
-  },
   seeTxt: {
     color: "#246BFD",
     fontFamily: "Urbanist-bold",
@@ -469,12 +433,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 40,
   },
-  DocSpeciality: {
-    color: "#000000",
-    fontSize: 14,
-    marginLeft: "2%",
-    fontFamily: "Urbanist-bold",
-  },
+  
   TopDocs: {
     flexDirection: "row",
     gap: 220,
@@ -482,38 +441,14 @@ const styles = StyleSheet.create({
     marginTop: "8%",
     marginBottom: "4%",
   },
-  cardContainer: {
-    backgroundColor: "#EEEEEE",
-    width: "100%",
-    height: "40%",
-    padding: 5,
-  },
-  card: {
-    width: "95%",
-    height: "40%",
-    marginTop: "2%",
-    marginLeft: "2%",
-    borderRadius: 20,
-    backgroundColor: "#FFFFFF",
-    padding: 10,
-    flexDirection: "row",
-  },
+  
   cardImage: {
     height: "93%",
     width: "30%",
     borderRadius: 20,
     //backgroundColor:'black'
   },
-  DocName: {
-    fontFamily: "Urbanist-bold",
-    //backgroundColor:'',
-    color: "#000000",
-    marginLeft: "3%",
-    marginRight: "18%",
-    marginTop: "1%",
-    fontSize: 20,
-    padding: 0,
-  },
+  
   DocDescription: {
     flexDirection: "column",
     backgroundColor: "transparent",
@@ -525,24 +460,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: "transparent",
   },
-  DocProfession: {
-    backgroundColor: "transparent",
-    color: "#424242",
-    fontFamily: "Urbanist-regular",
-    fontSize: 15,
-    marginLeft: "5%",
-    marginTop: "5%",
-  },
+  
   DocRating: {
     backgroundColor: "transparent",
     flexDirection: "row",
     marginLeft: "5%",
     marginTop: "6%",
-  },
-  Ratings: {
-    color: "#000000",
-    backgroundColor: "transparent",
-    fontSize: 15,
-    marginLeft: "5%",
   },
 });
