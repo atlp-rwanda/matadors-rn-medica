@@ -1,12 +1,13 @@
 import { MoreIcon } from "@/assets/icons/MoreCircleSvg";
 import {
   backArrowBlack,
+  backArrowWhite,
 } from "@/components/UI/icons/backArrow";
 import { Colors } from "@/constants/Colors";
 import Typography from "@/constants/Typography";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Pressable, Text, TouchableWithoutFeedback } from "react-native";
 import { TouchableOpacity } from "react-native";
 import { View } from "react-native";
@@ -14,6 +15,12 @@ import { SvgXml } from "react-native-svg";
 import DoctorComponent from "../CardComponent";
 import { BlueRightIconWithBg } from "@/components/UI/icons/rigthIcon";
 import HistoryMenu from "../HistoryMenu";
+import { audioWaveHistoryIcon } from "@/components/UI/icons/audioWave";
+import { playBtnWhiteIcon } from "@/components/UI/icons/playBtn";
+import { BlueVoiceCall } from "@/components/UI/icons/callIcon";
+import { ThemeContext } from "@/ctx/ThemeContext";
+import DoctorCard from "@/components/DoctorCard";
+import { moreWhiteIcon } from "@/components/UI/icons/circleWithDots";
 
 
 const Ddata = {
@@ -27,6 +34,8 @@ const Ddata = {
   };
 
 const IndividualCall = () => {
+  const {theme, changeTheme} = useContext(ThemeContext)
+
 const [menu, setMenu] = useState(false)
 const [playBtn, setPlayBtn] = useState(false)
 
@@ -43,14 +52,14 @@ const handleMenu =()=> {
     <View
       style={{
         flex: 1,
-        backgroundColor: Colors.others.white,
+        backgroundColor: theme==="dark" ? Colors.dark._1 : Colors.others.white,
         flexDirection: "column",
         padding: 20,
         position: "relative"
       }}
     >
-      <StatusBar style="dark" />
-      <View style={{ paddingTop: 20, gap: 30 }}>
+      <StatusBar style={theme === "dark"? "light": "dark"} />
+      <View style={{ paddingTop: 40, gap: 30 }}>
         <View
           style={{
             flexDirection: "row",
@@ -59,19 +68,16 @@ const handleMenu =()=> {
           }}
         >
           <Pressable onPress={() => router.back()}>
-            <SvgXml xml={backArrowBlack} />
+            <SvgXml xml={theme === "dark" ? backArrowWhite : backArrowBlack} />
           </Pressable>
           <TouchableOpacity onPress={handleMenu}>
-            <SvgXml xml={MoreIcon} />
+            <SvgXml xml={theme === "dark" ? moreWhiteIcon:MoreIcon} />
           </TouchableOpacity>
         </View>
         {menu && (
           <View
             style={[
               {
-                backgroundColor: Colors.others.white,
-                borderRadius: 10,
-                padding: 20,
                 position: "absolute",
                 right: 20,
                 top: 50,
@@ -86,23 +92,27 @@ const handleMenu =()=> {
           <DoctorComponent
             imageSource={Ddata.image}
             name={Ddata.name}
-            iconComponent={<SvgXml xml={BlueRightIconWithBg} />}
+            iconComponent={<SvgXml xml={BlueVoiceCall} />}
             method={Ddata.method}
             day={Ddata.day}
             time={Ddata.time}
           />
         </View>
-        <Text>30 minutes of voice calls have been recorded.</Text>
+        <Text style={{color: theme === "dark"? Colors.others.white : Colors.others.black}}>30 minutes of voice calls have been recorded.</Text>
         {
           !playBtn ? (
           <TouchableOpacity
             onPress={handlePlayAudio}
             style={{flexDirection: "row",gap: 20,alignItems: "center", justifyContent: "center", backgroundColor: Colors.main.primary._500, borderRadius: 100. }}>
-            <SvgXml xml={BlueRightIconWithBg}/>
+           <View style={{padding: 20}}>
+           <SvgXml xml={playBtnWhiteIcon}/>
+           </View>
             <Text style={[Typography.bold.large,{color: Colors.others.white}]}>Play audio recording</Text>
         </TouchableOpacity>) : (
         <View style={{alignItems: "center", justifyContent: "space-between", gap: 20}}>
-              <View style={{backgroundColor: Colors.main.primary._300, height: 100, width: 100}}></View>
+              <View>
+                <SvgXml xml={audioWaveHistoryIcon} />
+              </View>
               <View style={{flexDirection: "row", alignItems: "center", gap: 20}}>
                 <TouchableWithoutFeedback>
                   <Text style={{paddingVertical: 20,paddingHorizontal: 70,backgroundColor: Colors.transparent.blue, color: Colors.main.primary._500, borderRadius: 100}}>Stop</Text>

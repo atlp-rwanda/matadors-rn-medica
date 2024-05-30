@@ -43,7 +43,7 @@ const Ddata = [
 
 const index = () => {
   function handleAction(index: number){
-    router.push("History/VoiceCallHistory/[id]")
+    router.push("History/VoiceCallHistory/PlayVoiceRecorded")
     console.log(index)
   }
   return (

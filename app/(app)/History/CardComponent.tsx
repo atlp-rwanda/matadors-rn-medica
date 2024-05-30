@@ -1,6 +1,7 @@
 import { Colors } from "@/constants/Colors";
 import Typography from "@/constants/Typography";
-import React, { ReactElement } from "react";
+import { ThemeContext } from "@/ctx/ThemeContext";
+import React, { ReactElement, useContext } from "react";
 import { Image, Text, TouchableOpacity } from "react-native";
 import { ImageURISource, View } from "react-native";
 
@@ -22,6 +23,9 @@ function DoctorComponent({
   time,
   handle
 }: DoctorComponentProps) {
+  const {theme, changeTheme} = useContext(ThemeContext)
+
+
   return (
     <TouchableOpacity
     onPress={handle}
@@ -31,9 +35,8 @@ function DoctorComponent({
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between",    
-        backgroundColor: Colors.others.white,    
+        backgroundColor: theme ==="dark"? Colors.dark._1 : Colors.others.white,    
         padding: 20,
-          shadowColor: "#cfcfcf",
           shadowOffset: { width: -2, height: 4 },
           shadowOpacity: 3,
           shadowRadius: 2,
@@ -51,15 +54,14 @@ function DoctorComponent({
           <Image style={{width: "100%", height: "100%",borderRadius: 10}} source={imageSource} />
         </View>
         <View style={{ gap: 10, alignItems: "flex-start" }}>
-          <Text style={[Typography.bold.large]}>{name}</Text>
-          <Text>{method}</Text>
-          <Text>
-            {day} | <Text></Text>
-            {time}
+          <Text style={[Typography.bold.large, {color: theme ==="dark"? Colors.others.white: "black"}]}>{name}</Text>
+          <Text style={{color: Colors.grayScale._700}}>{method}</Text>
+          <Text style={{color: Colors.grayScale._700}}>
+            {day}  |  {time}
           </Text>
         </View>
       </View>
-      <View>{iconComponent}</View>
+      <View style={{backgroundColor: Colors.transparent.blue, padding: 20, borderRadius: 100}}>{iconComponent}</View>
     </TouchableOpacity>
   );
 }

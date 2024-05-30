@@ -1,7 +1,6 @@
 import React, { useContext, useState } from "react";
-import { circleWithDots } from "@/components/UI/icons/circleWithDots";
 import { WhiteDoubleTick } from "@/components/UI/icons/doubleTickIcon";
-import { BlackFilterIcon } from "@/components/UI/icons/filterIcon";
+import { BlackFilterIcon, filterWhiteIcon } from "@/components/UI/icons/filterIcon";
 
 import { Colors } from "@/constants/Colors";
 import Typography from "@/constants/Typography";
@@ -20,11 +19,15 @@ import { SvgXml } from "react-native-svg";
 import { TouchableOpacity } from "react-native";
 import { Image } from "react-native";
 import MenuComponent from "./Menu";
+import PlaySound from "../../Appointments/MessagingAppointment/Playsound";
+import { backArrowBlack, backArrowWhite } from "@/components/UI/icons/backArrow";
+import { moreGrayIcon, moreWhiteIcon } from "@/components/UI/icons/circleWithDots";
 
 function ChatMessaging() {
   const date = new Date();
 
   const { theme, changeTheme } = useContext(ThemeContext);
+
   const [menu, setMenu] = useState(false);
   const [attachContainer, setAttachContainer] = useState<boolean>(false);
 
@@ -51,7 +54,6 @@ function ChatMessaging() {
   const [chats, setChats] = useState("");
 
   const handleChat = (text: string, user = "user") => {
-    // setInputFocused(true);
     const newMessage = {
       user,
       chat: text,
@@ -66,11 +68,10 @@ function ChatMessaging() {
   };
 
   const ios = Platform.OS === "ios";
-  changeTheme("light");
 
   return (
     <SafeAreaView
-      style={{ flex: 1, paddingTop: ios ? 10 : 30, backgroundColor: "white" }}
+      style={{ flex: 1, paddingTop: ios ? 10 : 30, backgroundColor: theme==="dark" ? Colors.dark._1: Colors.others.white }}
     >
       <StatusBar style="dark" />
       <View
@@ -80,8 +81,6 @@ function ChatMessaging() {
           justifyContent: "space-between",
           gap: 30,
           padding: 20,
-          backgroundColor:
-            theme === "light" ? Colors.others.white : Colors.others.black,
         }}
       >
         <Pressable
@@ -91,19 +90,17 @@ function ChatMessaging() {
             alignItems: "center",
             justifyContent: "space-between",
             gap: 20,
-            backgroundColor:
-              theme === "light" ? Colors.others.white : Colors.others.black,
           }}
         >
-          <MaterialIcons
-            name="arrow-back"
-            size={25}
-            style={{ alignSelf: "center" }}
-          />
+          <View style={{ alignSelf: "center" }}>
+          <SvgXml xml={theme === "dark" ? backArrowWhite : backArrowBlack} />
+          </View>
+          
           <Text
             style={{
               fontSize: 24,
               fontWeight: "600",
+              color: theme === "dark"? Colors.others.white : Colors.others.black
             }}
           >
             Dr. Drake Boeson
@@ -113,24 +110,19 @@ function ChatMessaging() {
           <View
             style={[
               {
-                backgroundColor: Colors.others.white,
-                borderRadius: 10,
-                padding: 20,
                 position: "absolute",
                 right: 20,
                 top: 50,
-                // zIndex:10
               },
-              styles.shadowProp,
             ]}
           >
             <MenuComponent closeMenu={handleChatMenu} />
           </View>
         )}
         <View style={{ flexDirection: "row", gap: 10 }}>
-          <SvgXml xml={BlackFilterIcon} />
+          <SvgXml xml={theme=== "dark"? filterWhiteIcon: BlackFilterIcon} />
           <TouchableOpacity onPress={handleChatMenu}>
-            <SvgXml xml={circleWithDots} />
+            <SvgXml xml={ theme === "dark" ? moreWhiteIcon:  moreGrayIcon} />
           </TouchableOpacity>
         </View>
       </View>
@@ -158,6 +150,7 @@ function ChatMessaging() {
               backgroundColor: "rgba(117, 117, 117, 0.2)",
               borderRadius: 10,
               marginBottom: 10,
+              color: theme === "dark"? Colors.grayScale._700 : Colors.others.black
             }}
           >
             Session Start
@@ -177,7 +170,7 @@ function ChatMessaging() {
                 flexDirection: "row",
                 alignItems: "baseline",
                 justifyContent:
-                  message.user === "user" ? "flex-start" : "flex-end",
+                message.user === "user" ? "flex-start" : "flex-end",
                 borderBottomEndRadius: message.user === "user" ? 10 : 20,
                 borderBottomStartRadius: message.user === "user1" ? 10 : 20,
                 borderRadius: 20,
@@ -191,7 +184,7 @@ function ChatMessaging() {
                   Typography.medium.xLarge,
                   {
                     color:
-                      message.user === "user" ? Colors.others.white : "black",
+                      message.user === "user" || theme ==="dark" ? Colors.grayScale._700 : "black",
                     maxWidth: 250,
                   },
                 ]}
@@ -294,7 +287,7 @@ function ChatMessaging() {
             <Text
               style={[
                 Typography.medium.xLarge,
-                { color: Colors.others.black, maxWidth: 250 },
+                { color: theme === "dark" ? Colors.grayScale._700: Colors.others.black, maxWidth: 250 },
               ]}
             >
               Hi, good afternoon Dr. Drake... 😁😁
@@ -362,7 +355,7 @@ function ChatMessaging() {
               gap: 20
             }}
           >
-          <Text>sound player</Text>
+          <PlaySound />
           </View>
 
           <Text
@@ -373,6 +366,7 @@ function ChatMessaging() {
               backgroundColor: "rgba(117, 117, 117, 0.2)",
               borderRadius: 10,
               marginVertical: 10,
+              color: theme === "dark"? Colors.grayScale._700 : Colors.others.black
             }}
           >
             Session End
