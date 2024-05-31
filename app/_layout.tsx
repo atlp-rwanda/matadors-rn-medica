@@ -15,6 +15,7 @@ import { Text } from "@/components/Themed";
 import ModalProvider from "@/ctx/ModalContext";
 import ModalContainer from "@/components/UI/Modal";
 import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
+import { StatusBar } from "expo-status-bar";
 
 export { ErrorBoundary } from "expo-router";
 

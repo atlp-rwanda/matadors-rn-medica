@@ -14,7 +14,11 @@ import { calendar2 } from '@/assets/icons/calendar2';
 import { service } from '@/assets/icons/service';
 import { wallet } from '@/assets/icons/wallet';
 import data from "../../../data.json"
+import { more } from '@/assets/icons/more';
+import { MorewhiteIcon } from '@/assets/icons/MorewhiteIcon';
 import { router } from 'expo-router';
+import { ThemeContext } from '@/ctx/ThemeContext';
+import { useContext } from 'react';
 
 type iconName = 'close' | 'calendar' | 'calendar2' | 'service' | 'wallet'
 interface iconMapping{
@@ -32,26 +36,29 @@ export const iconMapping:iconMapping = {
 
 
 function NotificationScreen() {
+    const { theme, changeTheme } = useContext(ThemeContext)
+    const containerStyle = theme === "dark" ? styles.containerDark : styles.containerLight
+    const textColor = theme === "dark" ? styles.textDark : styles.textLight
+    const iconColor = theme === 'dark' ? '#FFFFFF' : 'black'
+    const moreIcon=theme==='dark'?MorewhiteIcon:more
     
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={[styles.container,containerStyle]}>
             <View>
              <View style={styles.upper}>
             <View style={styles.upperInner}>
                         <View style={styles.upperLeft}>
                 
                 <Pressable onPress={()=>router.back()}>
-                    <Ionicons name="arrow-back" size={24} color="black" />
+                    <Ionicons name="arrow-back" size={24} color={iconColor} />
                 </Pressable>
                 <View style={styles.NotificationView}>
-                    <Text style={styles.Headstyle}>Notification</Text>
+                    <Text style={[styles.Headstyle,textColor]}>Notification</Text>
                 </View>
                  </View>
                         
               <View style={styles.moreView}>
-                <View style={styles.more}>
-                    <Feather name="more-horizontal" size={24} color="black" />
-                </View>          
+                <SvgXml xml={moreIcon} />          
               </View>
               
                </View>     
@@ -68,23 +75,27 @@ function NotificationScreen() {
             >
             <View style={styles.body}>
                <View style={styles.bodyInner}>
-             {data.notification.map((Notification, index) =>
-                 <View key={ index} style={styles.componentView}>
-                    <Notficationtab
-                         IconComponet={iconMapping[Notification.IconComponent]}
-                        viewBackground={Notification.viewBackground}
-                        timeFrame={Notification.timeFrame}
-                        time={Notification.time}
-                        notificationStatus={Notification.notificationStatus}
-                        sentenceOne={Notification.sentenceOne}
-                        sentenceTwo={Notification.sentenceTwo}
-                         sentenceThree={Notification.sentenceThree}
-                        btnVisibility={Notification.btnVisibility} 
-                    />
-                </View>
+                            {data.notification.map((Notification, index) => {
+                                const background=theme==="dark"?Notification.viewBackgroundDark:Notification.viewBackground
+                                
+                        return(
+                 
+                 <View key={index} style={styles.componentView}>
+                                    <Notficationtab
+                                        IconComponet={iconMapping[Notification.IconComponent]}
+                                        viewBackground={background}
+                                        timeFrame={Notification.timeFrame}
+                                        time={Notification.time}
+                                        notificationStatus={Notification.notificationStatus}
+                                        sentenceOne={Notification.sentenceOne}
+                                        sentenceTwo={Notification.sentenceTwo}
+                                        sentenceThree={Notification.sentenceThree}
+                                        btnVisibility={Notification.btnVisibility}
+                                    />
+                                </View>)
                    
             
-            )}
+                             } )}
                 </View>
             </View>
             </ScrollView>
@@ -103,7 +114,23 @@ const styles = StyleSheet.create({
         display: "flex",
         flexDirection: "row",
         justifyContent: "center",
-        backgroundColor:"white"
+       
+    },
+    containerDark: {
+        backgroundColor:"#181A20"
+        
+    },
+    containerLight: {
+         backgroundColor:"white"
+    },
+    textDark: {
+        color:"white"
+        
+    },
+    textLight: {
+         color: "#212121",
+        
+        
     },
     upper: {
         display: "flex",
@@ -112,7 +139,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         width:"100%",
         marginBottom: "7%",
-        marginTop: "8%",
+        marginTop: "18%",
     },
     upperInner: {
         width: "93%",
@@ -158,7 +185,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     Headstyle: {
-        color: "#212121",
         fontWeight: "bold",
         fontSize:20
     },

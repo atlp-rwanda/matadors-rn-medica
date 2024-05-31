@@ -1,19 +1,36 @@
-import React from "react";
+import React, { useContext } from "react";
 import Loading from "@/app/spinner/Loading";
 import { router } from "expo-router";
 import { useEffect } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
+import { ThemeContext } from "@/ctx/ThemeContext";
+import { Colors } from "@/constants/Colors";
+import Typography from "@/constants/Typography";
+import { StatusBar } from "expo-status-bar";
+
 export default function SplashScreen() {
+  const { theme, changeTheme } = useContext(ThemeContext);
   useEffect(() => {
     setTimeout(() => {
       router.push("/(app)/");
     }, 1000);
   }, []);
 
+
   return (
     <>
-      <View style={styles.container}>
-        <View style={styles.splash}>
+      <StatusBar style={theme === "light" ? "dark" : "light"} />
+      <View
+        style={{
+          height: "100%",
+          width: "100%",
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor:
+            theme === "light" ? Colors.others.white : Colors.dark._1,
+        }}
+      >
+        <View style={{ flexDirection: "row", gap: 10, alignItems: "center" }}>
           <View>
             <View>
               <Image source={require("../assets/images/icon.png")} />
@@ -21,11 +38,24 @@ export default function SplashScreen() {
           </View>
 
           <View>
-            <Text style={styles.text}>Medica</Text>
+            <Text
+              style={[
+                Typography.heading._1,
+                {
+                  color:
+                    theme === "light"
+                      ? Colors.grayScale._900
+                      : Colors.others.white,
+                },
+              ]}
+            >
+              Medica
+            </Text>
           </View>
-          <View style={styles.spin}>
-            <Loading />
-          </View>
+        </View>
+
+        <View style={styles.spin}>
+          <Loading />
         </View>
       </View>
     </>
@@ -33,21 +63,6 @@ export default function SplashScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#ffff",
-  },
-  splash: {
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "white",
-    gap: 20,
-    width: "100%",
-  },
   text: {
     fontSize: 30,
   },

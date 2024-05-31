@@ -166,6 +166,19 @@ export const CalenderIconDark = `<svg width="20" height="20" viewBox="0 0 20 20"
 <path d="M6.6862 1.70898V4.42732" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
 `;
+export const CalenderIconGray = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M2.29102 10.6463C2.29102 4.84964 4.22352 2.91797 10.0193 2.91797C15.816 2.91797 17.7485 4.84964 17.7485 10.6463C17.7485 16.443 15.816 18.3746 10.0193 18.3746C4.22352 18.3746 2.29102 16.443 2.29102 10.6463Z" stroke="#9E9E9E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M2.52051 7.77018H17.5272" stroke="#9E9E9E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M13.6903 11.0514H13.6978" stroke="#9E9E9E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M10.0242 11.0514H10.0317" stroke="#9E9E9E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M6.35042 11.0514H6.35792" stroke="#9E9E9E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M13.6903 14.2624H13.6978" stroke="#9E9E9E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M10.0242 14.2624H10.0317" stroke="#9E9E9E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M6.35042 14.2624H6.35792" stroke="#9E9E9E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M13.36 1.70898V4.42732" stroke="#9E9E9E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M6.68717 1.70898V4.42732" stroke="#9E9E9E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+`;
 
 export const MessageIcon = `<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M13.6205 6.51562C13.6205 6.51562 10.9455 9.72615 8.98894 9.72615C7.03322 9.72615 4.32812 6.51562 4.32812 6.51562" stroke="#212121" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -179,8 +192,19 @@ export const MessageIconDark = `<svg width="18" height="18" viewBox="0 0 18 18" 
 </svg>
 `;
 
+export const MessageIconGray = `<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M13.6205 6.51562C13.6205 6.51562 10.9455 9.72615 8.98894 9.72615C7.03322 9.72615 4.32812 6.51562 4.32812 6.51562" stroke="#9E9E9E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M1.04297 8.97428C1.04297 3.27587 3.0271 1.37695 8.97948 1.37695C14.9319 1.37695 16.916 3.27587 16.916 8.97428C16.916 14.6719 14.9319 16.5716 8.97948 16.5716C3.0271 16.5716 1.04297 14.6719 1.04297 8.97428Z" stroke="#9E9E9E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+`;
+
 export const DropDownIcon = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M9.0575 13.8596C9.00917 13.8126 8.8025 13.6348 8.6325 13.4692C7.56333 12.4982 5.81333 9.96534 5.27917 8.63963C5.19333 8.4383 5.01167 7.92929 5 7.65733C5 7.39674 5.06 7.14832 5.18167 6.91127C5.35167 6.61577 5.61917 6.37872 5.935 6.24882C6.15417 6.16521 6.81 6.03532 6.82167 6.03532C7.53917 5.90542 8.705 5.83398 9.99333 5.83398C11.2208 5.83398 12.3392 5.90542 13.0675 6.01177C13.0792 6.02395 13.8942 6.15384 14.1733 6.29591C14.6833 6.5565 15 7.06552 15 7.61025V7.65733C14.9875 8.0121 14.6708 8.75816 14.6592 8.75816C14.1242 10.0124 12.46 12.4868 11.3542 13.4813C11.3542 13.4813 11.07 13.7614 10.8925 13.8832C10.6375 14.0731 10.3217 14.1673 10.0058 14.1673C9.65333 14.1673 9.325 14.061 9.0575 13.8596" fill="#212121"/>
+</svg>
+`;
+
+export const DropDownIconGray = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M9.0575 13.8596C9.00917 13.8126 8.8025 13.6348 8.6325 13.4692C7.56333 12.4982 5.81333 9.96534 5.27917 8.63963C5.19333 8.4383 5.01167 7.92929 5 7.65733C5 7.39674 5.06 7.14832 5.18167 6.91127C5.35167 6.61577 5.61917 6.37872 5.935 6.24882C6.15417 6.16521 6.81 6.03532 6.82167 6.03532C7.53917 5.90542 8.705 5.83398 9.99333 5.83398C11.2208 5.83398 12.3392 5.90542 13.0675 6.01177C13.0792 6.02395 13.8942 6.15384 14.1733 6.29591C14.6833 6.5565 15 7.06552 15 7.61025V7.65733C14.9875 8.0121 14.6708 8.75816 14.6592 8.75816C14.1242 10.0124 12.46 12.4868 11.3542 13.4813C11.3542 13.4813 11.07 13.7614 10.8925 13.8832C10.6375 14.0731 10.3217 14.1673 10.0058 14.1673C9.65333 14.1673 9.325 14.061 9.0575 13.8596" fill="#9E9E9E"/>
 </svg>
 `;
 

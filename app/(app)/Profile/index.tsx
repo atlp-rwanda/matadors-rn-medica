@@ -35,23 +35,11 @@ import {
 import { ThemeContext } from "@/ctx/ThemeContext";
 import { router } from "expo-router";
 import Switch from "@/components/UI/Switch";
+import SelectProfile from "@/components/UI/SelectProfile";
 
 const index = () => {
-  const [image, setImage] = useState<null | string>(null);
   const { theme, changeTheme } = useContext(ThemeContext);
-
-  async function pickImage() {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 4],
-      quality: 1,
-    });
-
-    if (!result.canceled) {
-      setImage(result.assets[0].uri);
-    }
-  }
+  const [image, setImage] = useState<null | string>(null);
 
   return (
     <ScrollView
@@ -69,32 +57,7 @@ const index = () => {
       }}
     >
       <View style={{ justifyContent: "start", alignItems: "center", gap: 4 }}>
-        <View style={{ position: "relative" }}>
-          {image ? (
-            <Image
-              source={{ uri: image }}
-              style={{ width: 140, height: 140, borderRadius: 100 }}
-            />
-          ) : (
-            <>
-              {theme === "light" ? (
-                <SvgXml xml={EmptyImageContainer} />
-              ) : (
-                <SvgXml xml={EmptyImageContainerDark} />
-              )}
-            </>
-          )}
-          <Pressable
-            onPress={pickImage}
-            style={{
-              position: "absolute",
-              bottom: 0,
-              right: 0,
-            }}
-          >
-            <SvgXml xml={EditBlueIcon} />
-          </Pressable>
-        </View>
+        <SelectProfile image={image} setImage={setImage} />
 
         <Text
           style={[
