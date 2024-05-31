@@ -131,7 +131,7 @@ const YourProfile = () => {
             setIsFocus(false);
           }}
           renderRightIcon={() => (
-            <SvgXml xml={theme === "light" ? DropDownIconGrayz : DropDownIconDark} />
+            <SvgXml xml={theme === "light" ? DropDownIconGray : DropDownIconDark} />
           )}
           itemTextStyle={{
             color:
