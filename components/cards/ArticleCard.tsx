@@ -1,8 +1,9 @@
 import { View, Text, StyleSheet } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
 import { Image } from "react-native";
 import { TouchableOpacity } from "react-native";
 import { router, useNavigation } from "expo-router";
+import { ThemeContext } from "@/ctx/ThemeContext";
 
 interface IArticleProps {
   title?: string;
@@ -13,7 +14,8 @@ interface IArticleProps {
 }
 
 export default function ArticleCard({ article }: { article: IArticleProps }) {
-  const navigation = useNavigation();
+  const { theme, changeTheme } = useContext(ThemeContext);
+
   return (
     <TouchableOpacity
     onPress={() => router.push("(app)/Articles/ArticleDetails")}
@@ -40,20 +42,20 @@ export default function ArticleCard({ article }: { article: IArticleProps }) {
         }}
       >
         <View>
-          <Text style={{ color: "#424242", fontSize: 10 }}>{article.date}</Text>
+          <Text style={{ color: theme === 'light' ? "#424242" : '#FFFFFF', fontSize: 10 }}>{article.date}</Text>
         </View>
         <View style={{ flexWrap: "wrap", maxWidth: "82%", width: "95%" }}>
           <View>
-            <Text style={{ fontSize: 16, color: "#212121" }} numberOfLines={3}>
+            <Text style={{ fontSize: 16, color: theme === 'light' ? "#212121" : '#FFFFFF'}} numberOfLines={3}>
               {article.title}
             </Text>
           </View>
         </View>
         <Text
           style={{
-            color: "#246BFD",
+            color: theme === 'light' ? "#246BFD" : '#246BFD',
             fontSize: 10,
-            backgroundColor: "#E0E7FF",
+            backgroundColor: theme === 'light' ? "rgba(36, 107, 253, 0.08)" : "rgba(36, 107, 253, 0.08)",
             borderRadius: 6,
             height: 24,
             width: 59,
@@ -69,35 +71,3 @@ export default function ArticleCard({ article }: { article: IArticleProps }) {
   );
 }
 
-const styles = StyleSheet.create({
-  date: {
-    color: "#246BFD",
-    fontSize: 10,
-    backgroundColor: "rgba(0,0,0,0.5)",
-    borderRadius: 6,
-    width: 59,
-    textAlign: "center",
-    padding: 4,
-    position: "relative",
-  },
-  container: {
-    display: "flex",
-    flexDirection: "row",
-    gap: 2,
-    marginBottom: 20,
-    justifyContent: "space-between",
-    padding: 5,
-    backgroundColor: "aqua",
-  },
-  constainer2: {
-    display: "flex",
-    justifyContent: "space-between",
-  },
-  description: {
-    fontSize: 14,
-    color: "#000",
-    display: "flex",
-    marginRight: 10,
-    flexWrap: "wrap",
-  },
-});

@@ -3,7 +3,7 @@ import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import * as SecureStore from "expo-secure-store";
-
+import React from "react";
 import { useContext, useEffect, useState } from "react";
 
 import * as NavigationBar from "expo-navigation-bar";

@@ -1,7 +1,7 @@
 import { Colors } from "@/constants/Colors";
 import { MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   View,
   Text,
@@ -12,70 +12,176 @@ import {
   ScrollView,
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
+import { ThemeContext } from "@/ctx/ThemeContext";
 
 const PatientDetails = () => {
   const [text, setText] = useState("");
   const [height, setHeight] = useState(40);
+  const { theme, changeTheme } = useContext(ThemeContext);
   return (
     <>
-      <ScrollView style={styles.Main}>
-        <Pressable onPress={() => router.back()} style={styles.container}>
+      <ScrollView style={{
+      backgroundColor: theme === "light" ? "#FFFFFF" : "#181A20",
+    width: "100%",
+    height: 900,
+    padding: 20,
+  }}>
+        <Pressable onPress={() => router.back()} style={{
+    marginTop: 40,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 15,
+    width: "60%",
+    height: 60,
+  }}>
           <TouchableOpacity onPress={() => router.back()}>
-            <MaterialIcons name="arrow-back" size={23} />
+            <MaterialIcons name="arrow-back" size={23} style ={{color:  theme === 'light' ? '#212121' : '#FFFFFF',}} />
           </TouchableOpacity>
-          <Text style={styles.fill}>Patient details</Text>
+          <Text style={{
+    fontSize: 24,
+    fontWeight: "600",
+    color:  theme === 'light' ? '#212121' : '#FFFFFF',
+  }}>Patient details</Text>
         </Pressable>
-        <View style={styles.middle}>
-          <Text style={styles.select}>Full Name</Text>
-          <View style={styles.inputs11}>
+        <View style={{
+    marginTop: 10,
+  }}>
+          <Text style={{
+    fontSize: 16,
+    fontWeight: "500",
+    color:  theme === 'light' ? '#212121' : '#FFFFFF',
+  }}>Full Name</Text>
+          <View style={{
+    width: "95%",
+    flexDirection: "row",
+    backgroundColor:  theme === 'light' ? '#FAFAFA' : '#1F222A',
+    margin: 10,
+    marginTop: 20,
+    marginBottom: 10,
+    padding: 10,
+    borderRadius: 10,
+    paddingHorizontal: 10,
+  }}>
             <TextInput
-              style={styles.email1}
+              style={{
+                fontSize: 15,
+                color: theme === "light" ? '#212121' : '#FAFAFA',
+                fontWeight: "400",
+              }}
               placeholder="Andrew Ainsley"
               keyboardType="default"
-              placeholderTextColor="#212121"
+              placeholderTextColor= {theme === 'light' ? '#212121' : '#FFFFFF'}
             />
           </View>
         </View>
-        <View style={styles.middle}>
-          <Text style={styles.select}>Gender</Text>
-          {/* <Text>Gender</Text> */}
-
-          <View style={styles.inputs1}>
+        <View style={{
+    marginTop: 10,
+  }}>
+          <Text style={{
+    fontSize: 16,
+    fontWeight: "500",
+    color:  theme === 'light' ? '#212121' : '#FFFFFF',
+  }}>Gender</Text>
+          <View style={{
+    width: "95%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    backgroundColor:  theme === 'light' ? '#FAFAFA' : '#1F222A',
+    margin: 10,
+    marginTop: 20,
+    marginBottom: 10,
+    padding: 10,
+    borderRadius: 10,
+    paddingHorizontal: 10,
+  }}>
             <TextInput
-              style={styles.email}
+              style={{
+                fontSize: 15,
+                color: theme === "light" ? '#212121' : '#FAFAFA',
+                fontWeight: "400",
+              }}
               placeholder="Male"
               keyboardType="default"
-              placeholderTextColor="#212121"
+              placeholderTextColor= {theme === 'light' ? '#212121' : '#FFFFFF'}
             />
-            <Icon name="caret-down" size={20} style={styles.icon1} />
+            <Icon name="caret-down" size={20} style={{
+    alignSelf: "center",
+    color :theme === 'light' ? '#212121' : '#FFFFFF'
+  }} />
           </View>
         </View>
-        <View style={styles.middle}>
-          <Text style={styles.select}>Your Age</Text>
+        <View style={{
+    marginTop: 10,
+  }}>
+          <Text style={{
+    fontSize: 16,
+    fontWeight: "500",
+    color:  theme === 'light' ? '#212121' : '#FFFFFF',
+  }}>Your Age</Text>
           {/* <Text>Gender</Text> */}
 
-          <View style={styles.inputs1}>
+          <View style={{
+    width: "95%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    backgroundColor:  theme === 'light' ? '#FAFAFA' : '#1F222A',
+    margin: 10,
+    marginTop: 20,
+    marginBottom: 10,
+    padding: 10,
+    borderRadius: 10,
+    paddingHorizontal: 10,
+  }}>
             <TextInput
-              style={styles.email}
+              style={{
+                fontSize: 15,
+                color: theme === "light" ? '#212121' : '#FAFAFA',
+                fontWeight: "400",
+              }}
               placeholder="27 years"
               keyboardType="default"
-              placeholderTextColor="#212121"
+              placeholderTextColor= {theme === 'light' ? '#212121' : '#FFFFFF'}
             />
-            <Icon name="caret-down" size={20} style={styles.icon1} />
+            <Icon name="caret-down" size={20} style={{
+    alignSelf: "center",
+    color :theme === 'light' ? '#212121' : '#FFFFFF'
+  }} />
           </View>
         </View>
-        <View style={styles.middle}>
-          <Text style={styles.select}>Write Your Problem</Text>
+        <View style={{
+    marginTop: 10,
+  }}>
+          <Text style={{
+    fontSize: 16,
+    fontWeight: "500",
+    color:  theme === 'light' ? '#212121' : '#FFFFFF',
+  }}>Write Your Problem</Text>
           {/* <Text>Gender</Text> */}
 
-          <View style={styles.inputs1}>
+          <View style={{
+    width: "95%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    backgroundColor:  theme === 'light' ? '#FAFAFA' : '#1F222A',
+    margin: 10,
+    marginTop: 20,
+    marginBottom: 10,
+    padding: 10,
+    borderRadius: 10,
+    paddingHorizontal: 10,
+  }}>
             <TextInput
               value={text}
               onChangeText={(text) => setText(text)}
-              style={styles.email}
+              style={{
+                fontSize: 15,
+                color: theme === "light" ? '#212121' : '#FAFAFA',
+                fontWeight: "400",
+              }}
               placeholder="type in your info"
               keyboardType="default"
-              placeholderTextColor="#212121"
+              textAlignVertical="top"
+              placeholderTextColor= {theme === 'light' ? '#212121' : '#FFFFFF'}
               multiline={true}
               numberOfLines={9}
               onContentSizeChange={(event) => {
@@ -84,14 +190,30 @@ const PatientDetails = () => {
             />
           </View>
         </View>
-        <View style={styles.btn}>
+        <View style={{
+    height: 150,
+    justifyContent: "flex-end",
+  }}>
           <TouchableOpacity
             onPress={() =>
               router.push("(app)/ActionMenu/Booking/SelectPayment")
             }
-            style={styles.button}
+            style={{
+              width: 350,
+              alignSelf: "center",
+              backgroundColor: Colors.main.primary._500,
+              paddingTop: 18,
+              paddingBottom: 18,
+              paddingLeft: 16,
+              paddingRight: 16,
+              borderRadius: 100,
+            }}
           >
-            <Text style={styles.buttonText}>Next</Text>
+            <Text style={{
+    alignSelf: "center",
+    color: Colors.others.white,
+    fontWeight: "bold",
+  }}>Next</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -102,84 +224,4 @@ const PatientDetails = () => {
 export default PatientDetails;
 
 const styles = StyleSheet.create({
-  Main: {
-    backgroundColor: Colors.others.white,
-    width: "100%",
-    height: 900,
-    padding: 20,
-  },
-  container: {
-    marginTop: 40,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    width: "60%",
-    height: 60,
-  },
-  icon1: {
-    alignSelf: "center",
-  },
-  fill: {
-    fontSize: 24,
-    fontWeight: "600",
-  },
-  select: {
-    fontSize: 16,
-    fontWeight: "500",
-  },
-  middle: {
-    marginTop: 10,
-  },
-  inputs11: {
-    width: "100%",
-    flexDirection: "row",
-    backgroundColor: Colors.grayScale._50,
-    margin: 10,
-    marginTop: 20,
-    marginBottom: 10,
-    padding: 10,
-    borderRadius: 10,
-    paddingHorizontal: 10,
-  },
-  email1: {
-    fontSize: 15,
-    color: Colors.grayScale._900,
-    fontWeight: "400",
-  },
-  inputs1: {
-    width: "100%",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    backgroundColor: Colors.grayScale._50,
-    margin: 10,
-    marginTop: 20,
-    marginBottom: 10,
-    padding: 10,
-    borderRadius: 10,
-    paddingHorizontal: 10,
-  },
-  email: {
-    fontSize: 15,
-    color: Colors.grayScale._900,
-    fontWeight: "400",
-  },
-  btn: {
-    height: 150,
-    justifyContent: "flex-end",
-  },
-  button: {
-    width: 350,
-    alignSelf: "center",
-    backgroundColor: Colors.main.primary._500,
-    paddingTop: 18,
-    paddingBottom: 18,
-    paddingLeft: 16,
-    paddingRight: 16,
-    borderRadius: 100,
-  },
-  buttonText: {
-    alignSelf: "center",
-    color: Colors.others.white,
-    fontWeight: "bold",
-  },
 });
