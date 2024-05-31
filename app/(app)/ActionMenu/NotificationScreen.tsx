@@ -1,5 +1,6 @@
-import React, { ReactElement } from 'react';
-import { StyleSheet, Text, Image, View, TouchableHighlight, SafeAreaView, Button, Alert, Platform, StatusBar, Dimensions,TextInput, ScrollView, Pressable} from 'react-native'
+import React, { ReactElement, useEffect } from 'react';
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, Text, Image, View, TouchableHighlight, SafeAreaView, Button, Alert, Platform, Dimensions,TextInput, ScrollView, Pressable} from 'react-native'
 import { Feather } from '@expo/vector-icons';
 import Notficationtab from '@/components/Notficationtab';
 import { AntDesign } from '@expo/vector-icons';
@@ -40,10 +41,18 @@ function NotificationScreen() {
     const containerStyle = theme === "dark" ? styles.containerDark : styles.containerLight
     const textColor = theme === "dark" ? styles.textDark : styles.textLight
     const iconColor = theme === 'dark' ? '#FFFFFF' : 'black'
-    const moreIcon=theme==='dark'?MorewhiteIcon:more
+    const moreIcon = theme === 'dark' ? MorewhiteIcon : more
+    
     
     return (
-        <SafeAreaView style={[styles.container,containerStyle]}>
+        <SafeAreaView style={[styles.container, containerStyle]}>
+            <StatusBar
+                style={theme === "light" ? "dark" : "light"}
+                
+                
+               
+            
+            />
             <View>
              <View style={styles.upper}>
             <View style={styles.upperInner}>
@@ -67,9 +76,6 @@ function NotificationScreen() {
             showsVerticalScrollIndicator={false}
              style={styles.scroll}
               contentContainerStyle={{
-           
-            // justifyContent: "center",
-            // alignItems: 'center',
           }}
                     
             >
@@ -117,7 +123,8 @@ const styles = StyleSheet.create({
        
     },
     containerDark: {
-        backgroundColor:"#181A20"
+        backgroundColor: "#181820"
+        
         
     },
     containerLight: {
