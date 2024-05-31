@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import {
+  Alert,
   StyleSheet,
   Text,
   View,
@@ -9,6 +10,7 @@ import {
   TouchableWithoutFeedback,
   KeyboardAvoidingView,
   Platform,
+  AppState,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import CheckBox from "expo-checkbox";
@@ -25,10 +27,21 @@ import {
 } from "@/components/Icons/Icons";
 import { SvgXml } from "react-native-svg";
 import { appleBlackIcon, appleWhiteIcon } from "@/constants/icon";
+import { supabase } from "@/lib/supabase";
+
+AppState.addEventListener('change', (state) => {
+  if(state === 'active'){
+    supabase.auth.startAutoRefresh()
+  }else{
+    supabase.auth.stopAutoRefresh()
+  }
+})
 
 const Signup = () => {
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const [isChecked, setIsChecked] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
@@ -60,6 +73,25 @@ const Signup = () => {
   const handlePasswordBlur = () => {
     setPasswordFocused(false);
   };
+
+  async function signUpWithEmail(){
+    setLoading(true)
+    const{
+      data:{ session },
+      error,
+    } = await supabase.auth.signUp({
+      email: email,
+      password: password,
+    })
+
+    if(error){
+      Alert.alert(error.message)
+      if(!session) Alert.alert('Please check your inbox for email verification!')
+        setLoading(false)
+    }else{
+      await router.push('/(auth)/SignIn&SignOut/YourProfile')
+    }
+  }
 
   return (
     <View
@@ -103,14 +135,15 @@ const Signup = () => {
                 style={[styles.icon, isFocused && styles.iconFocused]}
               />
               <TextInput
-                style={[styles.email, isFocused && styles.emailFocused]}
+                style={[{fontSize: 16,flex: 1,color: theme === "dark"? Colors.grayScale._50 : "black"}, isFocused && styles.emailFocused]}
                 placeholder="Email"
                 keyboardType="email-address"
                 placeholderTextColor="#9E9E9E"
                 value={email}
-                onChangeText={handleEmailChange}
+                onChangeText={(text) => setEmail(text)}
                 onFocus={handleEmailFocused}
                 onBlur={handleEmailBlur}
+                autoCapitalize={'none'}
               />
             </View>
 
@@ -126,14 +159,17 @@ const Signup = () => {
                 style={[styles.icon, passwordFocused && styles.iconFocused]}
               />
               <TextInput
-                style={styles.email}
+                style={{fontSize: 16,flex: 1,color: theme === "dark"? Colors.grayScale._50 : "black"}}
                 placeholder="Password"
                 placeholderTextColor="#9E9E9E"
                 secureTextEntry={secureTextEntry}
                 value={password}
-                onChangeText={handlePasswordChange}
+                onChangeText={(text) => setPassword(text)}
                 onFocus={handlePasswordFocused}
                 onBlur={handlePasswordBlur}
+                autoCapitalize={'none'}
+                
+                
               />
               <View
                 style={[
@@ -173,7 +209,7 @@ const Signup = () => {
       </View>
 
       <TouchableOpacity
-        onPress={() => router.push("/(auth)/SignIn&SignOut/SignInBlankForm")}
+        onPress={() => signUpWithEmail()}
         style={styles.signinBtn}
       >
         <Text style={[Typography.bold.large, { color: Colors.others.white }]}>
@@ -252,7 +288,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
   },
   emailFocused: {
-    color: "#212121",
+    color: "#868a94",
     fontSize: 16,
   },
   iconFocused: {
@@ -308,7 +344,6 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   passwordInputContainer: {
-    // flex: 1,
     flexDirection: "row",
     alignItems: "center",
   },
@@ -389,7 +424,6 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    // backgroundColor: "#FFFFFF",
     gap: 20,
     paddingTop: 24,
     paddingLeft: 24,

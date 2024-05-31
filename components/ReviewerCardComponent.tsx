@@ -1,3 +1,4 @@
+import React, { useContext } from "react";
 import Typography from "@/constants/Typography";
 import { useState } from "react";
 import { Image, Pressable, StyleSheet, Text } from "react-native";
@@ -5,8 +6,9 @@ import { View } from "react-native";
 import { SvgXml } from "react-native-svg";
 import { blueHeart, fullyColoredBlueHeart } from "./UI/icons/blueHeart";
 import { fullSmallBlueStar } from "./UI/icons/star";
-import { circleWithDots } from "./UI/icons/circleWithDots";
 import {Colors} from "@/constants/Colors";
+import { moreBlackIcon, moreWhiteIcon } from "@/constants/icon";
+import { ThemeContext } from "@/ctx/ThemeContext";
 
 interface ReviewType {
     id: string;
@@ -20,6 +22,8 @@ interface ReviewType {
 const unLike = <SvgXml xml={blueHeart} />
 
 const ReviewerCardComponent = () => {
+  const { theme, changeTheme } = useContext(ThemeContext);
+
     const [isLike, setIsLike] = useState(false)
     function handleLike(){
         setIsLike(!isLike)
@@ -119,7 +123,7 @@ const ReviewerCardComponent = () => {
                         source={item?.image}
                       />
                     </View>
-                    <Text style={Typography.bold.large}>{item?.name}</Text>
+                    <Text style={[Typography.bold.large,{color: theme==="dark"? "white":"black" }]}>{item?.name}</Text>
                   </View>
                   <View
                     style={{
@@ -131,15 +135,15 @@ const ReviewerCardComponent = () => {
                   >
                     <View style={[styles.ratings, { alignItems: "center" }]}>
                       <SvgXml xml={fullSmallBlueStar} />
-                      <Text>{item?.stars}</Text>
+                      <Text style={{color: Colors.main.primary._500}}>{item?.stars}</Text>
                     </View>
                     <View>
-                      <SvgXml xml={circleWithDots} />
+                      <SvgXml xml={theme === "dark"?moreWhiteIcon: moreBlackIcon} />
                     </View>
                   </View>
                 </View>
                 <View style={{ gap: 10 }}>
-                  <Text>{item?.reviewMsg}</Text>
+                  <Text style={{color: theme==="dark"? "white":"black"}}>{item?.reviewMsg}</Text>
                   <View
                     style={{
                       flexDirection: "row",
@@ -157,9 +161,9 @@ const ReviewerCardComponent = () => {
                         onPress={handleLike}>
                             <SvgXml xml={isLike ? blueHeart : fullyColoredBlueHeart} />
                         </Pressable>
-                      <Text style={Typography.medium.small}>{item?.likes}</Text>
+                      <Text style={[Typography.medium.small, {color: theme==="dark"? "white":"black"}]}>{item?.likes}</Text>
                     </View>
-                    <Text> 6 days ago</Text>
+                    <Text style={{color: theme==="dark"? "white":"black"}}> 6 days ago</Text>
                   </View>
                 </View>
               </View>

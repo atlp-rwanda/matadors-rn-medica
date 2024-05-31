@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
-  StatusBar,
   StyleSheet,
   Text,
   ScrollView,
@@ -13,27 +12,35 @@ import { Colors } from "@/constants/Colors";
 import { router } from "expo-router";
 import { SvgXml } from "react-native-svg";
 import ReviewerCardComponent from "@/components/ReviewerCardComponent";
-import { LeftArrow } from "@/components/UI/Icons";
 import { fullSmallBlueStar, fullSmallWhiteStar } from "@/components/UI/icons/star";
-import { moreBlackIcon } from "@/constants/icon";
+import { backArrowWhite, moreBlackIcon, moreWhiteIcon } from "@/constants/icon";
+import { ThemeContext } from "@/ctx/ThemeContext";
+import { StatusBar } from "expo-status-bar";
 
 
 
 const DoctorRatingAndReview = () => {
+  const { theme, changeTheme } = useContext(ThemeContext);
+
   return (
-    <View style={styles.container}>
+    <View style={{
+      flex: 1,
+      padding: 24,
+      gap: 20,
+      backgroundColor: theme === "dark"? Colors.dark._1: Colors.others.white
+    }}>
       <SafeAreaView>
         <View style={styles.navBar}>
           <View style={styles.leftSide}>
             <Pressable onPress={() => router.back()}>
-              <LeftArrow fillColor="black" />
+            <SvgXml xml={theme === "dark"? backArrowWhite:backArrowWhite } />
             </Pressable>
             <View>
-              <Text style={Typography.heading._4}>4.8 (4,942 reviews)</Text>
+              <Text style={[Typography.heading._4, {color: theme==="dark"? "white":"black" }]}>4.8 (4,942 reviews)</Text>
             </View>
           </View>
           <View style={styles.rightSide}>
-            <SvgXml xml={moreBlackIcon} />
+            <SvgXml xml={theme === "dark" ? moreWhiteIcon: moreBlackIcon} />
           </View>
         </View>
       </SafeAreaView>
@@ -46,7 +53,7 @@ const DoctorRatingAndReview = () => {
             <Text
               style={[
                 Typography.semiBold.medium,
-                { color: Colors.others.white },
+                { color: theme ===  "dark"?Colors.others.white: Colors.others.black },
               ]}
             >
               All
@@ -164,7 +171,7 @@ const DoctorRatingAndReview = () => {
           <ReviewerCardComponent />
         </ScrollView>
       </View>
-      <StatusBar backgroundColor={"black"} />
+      <StatusBar style={theme==="dark"? "light":"dark"} />
     </View>
   );
 };
