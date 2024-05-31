@@ -8,28 +8,22 @@ import {
   Pressable,
 } from "react-native";
 import { useState, useContext } from "react";
-import { LeftArrow } from "@/components/UI/Icons";
 import { router } from "expo-router";
 import Typography from "../../../constants/Typography";
 import { Colors } from "../../../constants/Colors";
 import { ThemeContext } from "@/ctx/ThemeContext";
 import { StatusBar } from "expo-status-bar";
 import {
-  BackArrow,
-  blackArrow,
   OrLine,
   greyOrLine,
-  BlackApple,
-  WhiteApple,
 } from "@/components/Icons/Icons";
 import { SvgXml } from "react-native-svg";
+import { appleBlackIcon, appleWhiteIcon, backArrowBlack, backArrowWhite } from "@/constants/icon";
 
 const LetsYouIn = () => {
   const [visible, setVisible] = React.useState(false);
   const hideDialog = () => setVisible(false);
   const { theme, changeTheme } = useContext(ThemeContext);
-  changeTheme("dark");
-
   return (
     <View
       style={[
@@ -39,7 +33,7 @@ const LetsYouIn = () => {
     >
       <StatusBar style={theme === "dark" ? "light" : "dark"} />
       <Pressable onPress={() => router.back()} style={styles.arrow}>
-        <SvgXml xml={theme === "dark" ? BackArrow : blackArrow} />
+        <SvgXml xml={theme === "dark" ? backArrowWhite : backArrowBlack} />
       </Pressable>
 
       <Image source={require("../../../assets/icons/FrameOne.png")} />
@@ -97,7 +91,7 @@ const LetsYouIn = () => {
               { backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF", borderColor: theme === 'dark' ? '#35383F' : '#EEEEEE' },
             ]}
           >
-            <SvgXml xml={theme === 'dark' ? WhiteApple : BlackApple } />
+            <SvgXml xml={theme === 'dark' ? appleWhiteIcon : appleBlackIcon } />
             <Text
               style={[
                 Typography.semiBold.large,

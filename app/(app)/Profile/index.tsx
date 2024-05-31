@@ -41,6 +41,8 @@ const index = () => {
   const { theme, changeTheme } = useContext(ThemeContext);
   const [image, setImage] = useState<null | string>(null);
 
+  console.log(theme)
+
   return (
     <ScrollView
       style={{

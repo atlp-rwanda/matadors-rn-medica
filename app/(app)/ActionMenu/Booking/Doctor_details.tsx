@@ -14,14 +14,13 @@ import { Image } from "react-native";
 import { Colors } from "@/constants/Colors";
 import { router } from "expo-router";
 import { fullSmallBlueStar } from "@/components/UI/icons/star";
-import { circleWithDots } from "@/components/UI/icons/circleWithDots";
 import { blueHeart } from "@/components/UI/icons/blueHeart";
 import { bluePeopleIcon } from "@/components/UI/icons/bluePeople";
 import { statisticIcon } from "@/components/UI/icons/statistics";
 import { halfTransparentStar } from "@/components/UI/icons/halfTransparentStart";
 import { blueMessageIcon } from "@/components/UI/icons/blueMessage";
 import { ThemeContext } from "@/ctx/ThemeContext";
-import { WhiteThreeDots } from "@/components/UI/icons/WhiteThreeDots";
+import { moreBlackIcon, moreWhiteIcon } from "@/constants/icon";
 
 export const ReviewerCardComponent = () => {
   const { theme, changeTheme } = useContext(ThemeContext);
@@ -82,7 +81,7 @@ export const ReviewerCardComponent = () => {
           <View>
             <TouchableOpacity>
               <SvgXml
-                xml={theme === "dark" ? WhiteThreeDots : circleWithDots}
+                xml={theme === "dark" ? moreWhiteIcon : moreBlackIcon}
               />
             </TouchableOpacity>
           </View>
@@ -134,7 +133,7 @@ export const ReviewerCardComponent = () => {
 
 const DoctorDetails = () => {
   const { theme, changeTheme } = useContext(ThemeContext);
-  changeTheme("light");
+
   return (
     <View
       style={{

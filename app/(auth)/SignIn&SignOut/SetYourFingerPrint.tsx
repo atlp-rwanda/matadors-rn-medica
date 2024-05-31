@@ -1,7 +1,4 @@
-import ModalScreen from "@/app/modal";
 import { Text, View } from "@/components/Themed";
-import { SvgUri, SvgXml } from "react-native-svg";
-
 import Button from "@/components/UI/Button";
 import { Colors } from "@/constants/Colors";
 import Typography from "@/constants/Typography";
@@ -9,7 +6,6 @@ import { Image, ScrollView } from "react-native";
 import { ThemeContext } from "@/ctx/ThemeContext";
 import React, { useContext, useEffect } from "react";
 import * as LocalAuthentication from "expo-local-authentication";
-import ModalContainer from "@/components/UI/Modal";
 import { useModal } from "@/ctx/ModalContext";
 import Animated, {
   useAnimatedStyle,

@@ -7,25 +7,20 @@ import {
   TouchableOpacity,
   TextInput,
   TouchableWithoutFeedback,
-  Pressable,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import CheckBox from "expo-checkbox";
-import { LeftArrow } from "@/components/UI/Icons";
 import { router } from "expo-router";
 import Typography from "../../../constants/Typography";
 import { Colors } from "../../../constants/Colors";
 import { ThemeContext } from "@/ctx/ThemeContext";
 import { SvgXml } from "react-native-svg";
 import {
-  BackArrow,
-  BlackApple,
   DarkContinueLine,
   LightContinueLine,
-  WhiteApple,
-  blackArrow,
 } from "@/components/Icons/Icons";
 import { StatusBar } from "expo-status-bar";
+import { appleBlackIcon, appleWhiteIcon, backArrowBlack, backArrowWhite } from "@/constants/icon";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -35,7 +30,6 @@ const Login = () => {
   const [emailFocused, setEmailFocused] = useState(false);
   const [passwordFocused, setPasswordFocused] = useState(false);
   const { theme, changeTheme } = useContext(ThemeContext);
-  changeTheme("dark");
 
   const handleEmailChange = (text: string) => {
     setEmail(text);
@@ -80,14 +74,13 @@ const Login = () => {
         style={styles.arrow}
         onPress={() => router.replace("/(auth)/SignIn&SignOut/SignUpBlankForm")}
       >
-        <SvgXml xml={theme === "dark" ? BackArrow : blackArrow} />
+        <SvgXml xml={theme === "dark" ? backArrowWhite : backArrowBlack} />
       </TouchableOpacity>
 
       <View>
         <Image source={require("../../../assets/icons/HeartPlus.png")} />
       </View>
 
-      {/* <View style={styles.middlePart}> */}
       <View style={styles.midPartOne}>
         <Text
           style={[
@@ -245,7 +238,7 @@ const Login = () => {
               { backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF", borderColor: theme === 'dark' ? '#35383F' : '#EEEEEE'  },
             ]}
           >
-            <SvgXml xml={theme === 'dark' ? WhiteApple : BlackApple} />
+            <SvgXml xml={theme === 'dark' ? appleWhiteIcon : appleBlackIcon} />
 
           </View>
         </TouchableOpacity>
