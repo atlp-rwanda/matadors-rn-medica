@@ -1,9 +1,9 @@
 
- 
-import Colors from '@/constants/Colors';
-import { router, useNavigation } from 'expo-router';
-import React from 'react';
-import { View, Text, Image, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native';
+import { Ionicons, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import { router } from 'expo-router';
+import React, { useContext } from 'react';
+import { ThemeContext } from "@/ctx/ThemeContext";
+import { View, Text, Image, SafeAreaView, ScrollView, TouchableOpacity, Pressable } from 'react-native';
 
 const articlesData = [
   {
@@ -28,19 +28,23 @@ const articlesData = [
 ];
 
 export default function ArticlesDetails() {
-  const navigation=useNavigation()
+  const { theme, changeTheme } = useContext(ThemeContext);
   return (
-    <SafeAreaView style={{paddingTop:50, backgroundColor: Colors.light.background}}>
+    <SafeAreaView style={{paddingTop:50, backgroundColor: theme === "light" ? "#FFFFFF" : "#181A20"}}>
       <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
         <View style={{ display: "flex", flexDirection: "row", gap: 15, padding: 15 }}>
-          <TouchableOpacity
-          onPress={()=> router.back()}
-          ><Image style={{ marginTop: 10 }} source={require("../../../assets/images/Arrow.png")} /></TouchableOpacity>
+          
+        <Pressable onPress={() => router.back()}>
+          <MaterialIcons name="arrow-back" size={25} style={{
+            alignSelf: "center",
+            color:  theme === 'light' ? '#212121' : '#FFFFFF',
+          }} />
+        </Pressable>
         </View>
         <View style={{ display: "flex", flexDirection: "row", gap: 10, padding: 15 }}>
-          <TouchableOpacity><Image style={{ height: 22.57, width: 18.13, padding: 10 }} source={require("../../../assets/images/Notify.png")} /></TouchableOpacity>
-          <TouchableOpacity><Image style={{ height: 11.07, width: 11.07, padding: 10 }} source={require("../../../assets/images/send.png")} /></TouchableOpacity>
-          <TouchableOpacity><Image style={{ height: 1.17, width: 1.17, padding: 10 }} source={require("../../../assets/images/circledots.png")} /></TouchableOpacity>
+      <MaterialIcons name="bookmark-outline" size={24} style={{color: theme === 'light' ? "#212121" : '#FFFFFF'}}/>
+      <Ionicons name="paper-plane-outline" size={22} style={{color: theme === 'light' ? "#212121" : '#FFFFFF'}} />
+      <MaterialCommunityIcons name="dots-horizontal-circle-outline" size={24} style={{color: theme === 'light' ? "#212121" : '#FFFFFF'}} />
         </View>
       </View>
 
@@ -52,12 +56,11 @@ export default function ArticlesDetails() {
             
             <TouchableOpacity>{article.image && <Image style={{ height: 240, width: "100%",borderRadius:24,justifyContent:"center"}} source={article.image} />}</TouchableOpacity>
             <View >
-              
-              <Text style={{ fontSize: 21, color: "#212121",paddingLeft:10,position:"relative",marginTop:3}}>{article.title}</Text>
+              <Text style={{ fontSize: 21, color: theme === 'light' ? "#212121" : '#FFFFFF',paddingLeft:10,position:"relative",marginTop:3, fontWeight: "600"}}>{article.title}</Text>
               {index === 0 && (
                 <View style={{ display: "flex", flexDirection: "row", padding: 15, gap: 10,marginTop: 5, }}>
-                  <Text style={{ color: "#424242", fontSize: 10, marginTop: 10}}>{article.date}</Text>
-                  <Text style={{ color: "#246BFD", fontSize: 10, backgroundColor: "#E0E7FF",
+                  <Text style={{ color: theme === 'light' ? "#424242" : '#FFFFFF', fontSize: 10, marginTop: 10}}>{article.date}</Text>
+                  <Text style={{ color: theme === 'light' ? "#246BFD" : '#246BFD', fontSize: 10, backgroundColor: theme === 'light' ? "rgba(36, 107, 253, 0.08)" : "rgba(36, 107, 253, 0.08)",
                    borderRadius: 6, height: 24, width: 59,
                     textAlign: "center", padding: 5,
                      marginTop: 5}}>
@@ -67,7 +70,7 @@ export default function ArticlesDetails() {
             </View>
             <View style={{ flexWrap: "wrap", margin: -10,paddingLeft:20}}>
               <View style={{ paddingRight: 15 }}>
-                <Text style={{ fontSize: 18, color: "#424242"}}>
+                <Text style={{ fontSize: 18, color: theme === 'light' ? "#424242" : '#FFFFFF'}}>
                   {article.description}</Text>
               </View>
             </View>
