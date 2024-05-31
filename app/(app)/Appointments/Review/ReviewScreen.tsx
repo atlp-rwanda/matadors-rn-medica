@@ -7,7 +7,6 @@ import Typography  from '@/constants/Typography'
 import StarRating from 'react-native-star-rating-widget'
 import { HorizontalLine } from '@/assets/icons/HorizantalLine'
 import { StatusBar } from 'expo-status-bar'
-import { color } from 'react-native-elements/dist/helpers'
 
 interface RadioButtonProps {
   label: string;

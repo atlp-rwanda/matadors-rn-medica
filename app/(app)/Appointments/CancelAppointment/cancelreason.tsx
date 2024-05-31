@@ -171,11 +171,11 @@ export default function Selectreason(){
         /><Text style={[Typography.medium.xLarge,{color: theme==='light'?  Colors.grayScale._900: Colors.others.white}]}>Others</Text>
       </View>
       {  selectedValue==='option8'? <TextInput
-    multiline={true}
-    numberOfLines={5}
-    style={[Typography.semiBold.medium,{ width: '100%',height:200,backgroundColor: theme==='light'? Colors.grayScale._100: Colors.dark._2,borderRadius:16, }]}
-    placeholder="Write Your other reason"
-    placeholderTextColor={theme==='light'?  Colors.grayScale._900: Colors.others.white}
+      multiline={true}
+      numberOfLines={5}
+      style={[Typography.semiBold.medium,{ width: '100%',height:200,backgroundColor: theme==='light'? Colors.grayScale._100: Colors.dark._2,borderRadius:16, }]}
+      placeholder="Write Your other reason"
+      placeholderTextColor={theme==='light'?  Colors.grayScale._900: Colors.others.white}
     
 
     /> :<></>}
