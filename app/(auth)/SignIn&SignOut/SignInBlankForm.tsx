@@ -8,6 +8,8 @@ import {
   TextInput,
   TouchableWithoutFeedback,
   Pressable,
+  AppState,
+  Alert
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import CheckBox from "expo-checkbox";
@@ -26,10 +28,20 @@ import {
   blackArrow,
 } from "@/components/Icons/Icons";
 import { StatusBar } from "expo-status-bar";
+import { supabase } from "@/lib/supabase";
+
+AppState.addEventListener('change', (state) => {
+  if(state === 'active'){
+    supabase.auth.startAutoRefresh()
+  }else{
+    supabase.auth.stopAutoRefresh()
+  }
+})
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false)
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const [isChecked, setIsChecked] = useState(false);
   const [emailFocused, setEmailFocused] = useState(false);
@@ -66,6 +78,21 @@ const Login = () => {
     setPasswordFocused(false);
   };
 
+async function signInWithEmail(){
+  setLoading(true)
+  const{error} = await supabase.auth.signInWithPassword({
+    email: email,
+    password: password,
+  }) 
+  if(error){
+    Alert.alert(error.message)
+    setLoading(false)
+  }else{
+    await router.push('/(app)/ActionMenu');
+    setLoading(false);
+  }
+}
+
   return (
     <View
       style={[
@@ -88,7 +115,6 @@ const Login = () => {
         >
           Login to Your Account
         </Text>
-        {/* </View> */}
       </View>
 
       <View style={styles.Buttons}>
@@ -112,7 +138,7 @@ const Login = () => {
             keyboardType="email-address"
             placeholderTextColor="#9E9E9E"
             value={email}
-            onChangeText={handleEmailChange}
+            onChangeText={(text) => setEmail(text)}
             onFocus={handleEmailFocus}
             onBlur={handleEmailBlur}
           />
@@ -139,7 +165,7 @@ const Login = () => {
             placeholderTextColor="#9E9E9E"
             secureTextEntry={secureTextEntry}
             value={password}
-            onChangeText={handlePasswordChange}
+            onChangeText={(text) => setPassword(text)}
             onFocus={handlePasswordFocus}
             onBlur={handlePasswordBlur}
           />
@@ -179,8 +205,8 @@ const Login = () => {
       </View>
 
       <View>
-        <TouchableOpacity
-          onPress={() => router.push("/(app)/ActionMenu")}
+        <TouchableOpacity disabled={loading}
+          onPress={() => signInWithEmail()}
           style={styles.signinBtn}
         >
           <Text style={styles.signText}>Sign in</Text>
@@ -249,7 +275,7 @@ const Login = () => {
             { color: theme === "dark" ? "#FFFFFF" : Colors.grayScale._500 },
           ]}
         >
-          Don’t have an account?{" "}
+          Don’t have an account?
         </Text>
         <Text
           style={[

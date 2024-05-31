@@ -118,7 +118,7 @@ const LetsYouIn = () => {
       <SvgXml xml={theme === "dark" ? OrLine : greyOrLine} />
 
       <TouchableOpacity
-        onPress={() => router.push("/(auth)/SignIn&SignOut/YourProfile")}
+        onPress={() => router.push("/(auth)/SignIn&SignOut/SignInBlankForm")}
         style={styles.signinBtn}
       >
         <Text style={[Typography.bold.large, { color: Colors.others.white }]}>
