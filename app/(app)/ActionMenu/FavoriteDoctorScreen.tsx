@@ -19,6 +19,8 @@ import NofoundComponent from '@/components/NofoundComponent';
 import RemovefavoritePopup from '@/components/RemovefavoritePopup';
 import FilterPopup from '@/components/FilterSearchComponent';
 import NotFoundScreen from '@/app/+not-found';
+import { ThemeContext } from '@/ctx/ThemeContext';
+import { useContext } from 'react';
 
 
 interface imageMapProp{
@@ -66,7 +68,10 @@ function DoctorScreen() {
     const [selectedCategory, setSelectedCategory] = useState(data.categories[0])
     const [showpopUp, setShowPopup] = useState(false)
     const [selectedDoctor, setSelectedDoctor] = useState()
-    const [showFilter,setShowfilter]=useState(false)
+    const [showFilter, setShowfilter] = useState(false)
+    const { theme, changeTheme } = useContext(ThemeContext)
+    const containerStyle = theme === "dark" ? styles.outerDark : styles.outerLight
+    const scrollbackColor=theme === "dark" ? styles.scrollDark : styles.scrollLight
 
     const handleSearchPressed = () => {
         setShowSearch(true)
@@ -90,10 +95,10 @@ function DoctorScreen() {
 
     const filteredDoctors=searchTerm.length>0 ? selectedCategory.Doctors.filter(doctor=>doctor.name.toLowerCase().includes(searchTerm)):selectedCategory.Doctors
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={[styles.container,containerStyle]}>
             <View>
                 
-                <View style={styles.upper}>
+                <View style={[styles.upper,containerStyle]}>
                     {
                         !showSearch ? (
                             <HeaderComponent
@@ -112,7 +117,7 @@ function DoctorScreen() {
                         )
                     }
                 </View>
-                <View style={styles.categoryBtnView}>
+                <View style={[styles.categoryBtnView,containerStyle]}>
                 <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.categoryScroll}
                     contentContainerStyle={{
                         flexDirection: "row",
@@ -215,8 +220,15 @@ export default DoctorScreen;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "white",
         zIndex:1
+    },
+    outerDark: {
+        backgroundColor:"#181A20"
+        
+    },
+    outerLight: {
+     backgroundColor: "white",
+        
     },
     upper: {
         display: "flex",
@@ -226,7 +238,6 @@ const styles = StyleSheet.create({
         width:"100%",
          marginBottom: "7%",
         marginTop: "8%",
-        backgroundColor:"white"
     },
     foundDoctorView: {
         width: "100%",
@@ -293,8 +304,14 @@ const styles = StyleSheet.create({
     scroll: {
         width: "100%",
         height: "100%",
-        zIndex: 1,
-        backgroundColor: "#F7F7F7",
+        zIndex: 1, 
+    },
+    scrollDark: {
+        backgroundColor:"#181A20"
+        
+    },
+    scrollLight: {
+        backgroundColor: "#F7F7F7"
         
     },
     searchView: {

@@ -254,6 +254,7 @@ const index = () => {
                   onPress={() => {
                     const newTheme = theme === "light" ? "dark" : "light";
                     changeTheme(newTheme);
+                    console.log("Changed theme")
                   }}
                 />
                 <SvgXml

@@ -14,7 +14,7 @@ export default function Index() {
     setTimeout(() => {
       router.push("/onBoarding/FirstScreen");
     });
-  });
+  }, []);
 
   return (
     <>

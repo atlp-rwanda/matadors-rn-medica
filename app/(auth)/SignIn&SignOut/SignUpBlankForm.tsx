@@ -8,13 +8,10 @@ import {
   TextInput,
   TouchableWithoutFeedback,
   KeyboardAvoidingView,
-  ScrollView,
   Platform,
-  Pressable,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import CheckBox from "expo-checkbox";
-import { LeftArrow } from "@/components/UI/Icons";
 import { router } from "expo-router";
 import Typography from "../../../constants/Typography";
 import { Colors } from "../../../constants/Colors";
@@ -25,10 +22,9 @@ import {
   blackArrow,
   DarkContinueLine,
   LightContinueLine,
-  BlackApple,
-  WhiteApple
 } from "@/components/Icons/Icons";
 import { SvgXml } from "react-native-svg";
+import { appleBlackIcon, appleWhiteIcon } from "@/constants/icon";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
@@ -39,7 +35,6 @@ const Signup = () => {
   const [passwordFocused, setPasswordFocused] = useState(false);
   const { theme, changeTheme } = useContext(ThemeContext);
 
-  changeTheme("dark");
 
   const handleEmailChange = (text: string) => {
     setEmail(text);
@@ -74,12 +69,6 @@ const Signup = () => {
       ]}
     >
       <StatusBar style={theme === "dark" ? "light" : "dark"} />
-      <TouchableOpacity
-        style={styles.arrow}
-        onPress={() => router.replace("/(auth)/SignIn&SignOut/LetsYouIn")}
-      >
-        <SvgXml xml={theme === "dark" ? BackArrow : blackArrow} />
-      </TouchableOpacity>
 
       <Image source={require("../../../assets/icons/HeartPlus.png")} />
 
@@ -224,7 +213,7 @@ const Signup = () => {
               { backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF", borderColor: theme === 'dark' ? '#35383F' : '#EEEEEE'  },
             ]}
           >
-            <SvgXml xml={theme === 'dark' ? WhiteApple : BlackApple} />
+            <SvgXml xml={theme === 'dark' ? appleWhiteIcon : appleBlackIcon} />
 
           </View>
         </TouchableOpacity>

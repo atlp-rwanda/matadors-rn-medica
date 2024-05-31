@@ -28,7 +28,6 @@ const LetsYouIn = () => {
   const [visible, setVisible] = React.useState(false);
   const hideDialog = () => setVisible(false);
   const { theme, changeTheme } = useContext(ThemeContext);
-  changeTheme("dark");
 
   return (
     <View
@@ -38,9 +37,6 @@ const LetsYouIn = () => {
       ]}
     >
       <StatusBar style={theme === "dark" ? "light" : "dark"} />
-      <Pressable onPress={() => router.back()} style={styles.arrow}>
-        <SvgXml xml={theme === "dark" ? BackArrow : blackArrow} />
-      </Pressable>
 
       <Image source={require("../../../assets/icons/FrameOne.png")} />
 
@@ -60,7 +56,10 @@ const LetsYouIn = () => {
           <TouchableOpacity
             style={[
               styles.middleButton,
-              { backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF", borderColor: theme === 'dark' ? '#35383F' : '#EEEEEE' },
+              {
+                backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF",
+                borderColor: theme === "dark" ? "#35383F" : "#EEEEEE",
+              },
             ]}
           >
             <Image source={require("../../../assets/icons/facebook.png")} />
@@ -77,7 +76,10 @@ const LetsYouIn = () => {
           <TouchableOpacity
             style={[
               styles.middleButton,
-              { backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF", borderColor: theme === 'dark' ? '#35383F' : '#EEEEEE' },
+              {
+                backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF",
+                borderColor: theme === "dark" ? "#35383F" : "#EEEEEE",
+              },
             ]}
           >
             <Image source={require("../../../assets/icons/Google.png")} />
@@ -94,10 +96,13 @@ const LetsYouIn = () => {
           <TouchableOpacity
             style={[
               styles.middleButton,
-              { backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF", borderColor: theme === 'dark' ? '#35383F' : '#EEEEEE' },
+              {
+                backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF",
+                borderColor: theme === "dark" ? "#35383F" : "#EEEEEE",
+              },
             ]}
           >
-            <SvgXml xml={theme === 'dark' ? WhiteApple : BlackApple } />
+            <SvgXml xml={theme === "dark" ? WhiteApple : BlackApple} />
             <Text
               style={[
                 Typography.semiBold.large,
@@ -211,7 +216,5 @@ const styles = StyleSheet.create({
     paddingLeft: 24,
     paddingBottom: 24,
     paddingRight: 24,
-    // borderWidth: 4,
-    // borderColor: 'red',
   },
 });

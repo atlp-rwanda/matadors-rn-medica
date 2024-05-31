@@ -27,7 +27,6 @@ export default function Index() {
     return activeIcon === iconName;
   };
   const { theme, changeTheme } = useContext(ThemeContext);
-    //changeTheme("light");
   const navigation = useNavigation();
   const [text, setText] = useState("");
   const [fontsLoaded] = useFontsExpo({

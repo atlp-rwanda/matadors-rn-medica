@@ -14,14 +14,13 @@ import { Image } from "react-native";
 import { Colors } from "@/constants/Colors";
 import { router } from "expo-router";
 import { fullSmallBlueStar } from "@/components/UI/icons/star";
-import { circleWithDots } from "@/components/UI/icons/circleWithDots";
 import { blueHeart } from "@/components/UI/icons/blueHeart";
 import { bluePeopleIcon } from "@/components/UI/icons/bluePeople";
 import { statisticIcon } from "@/components/UI/icons/statistics";
 import { halfTransparentStar } from "@/components/UI/icons/halfTransparentStart";
 import { blueMessageIcon } from "@/components/UI/icons/blueMessage";
 import { ThemeContext } from "@/ctx/ThemeContext";
-import { WhiteThreeDots } from "@/components/UI/icons/WhiteThreeDots";
+import { moreBlackIcon, moreWhiteIcon } from "@/constants/icon";
 
 export const ReviewerCardComponent = () => {
   const { theme, changeTheme } = useContext(ThemeContext);
@@ -30,8 +29,6 @@ export const ReviewerCardComponent = () => {
   const handleLikes = () => {
     setLikes(likes + 1);
   };
-
-
 
   return (
     <View style={{ gap: 10, marginVertical: 10 }}>
@@ -82,7 +79,7 @@ export const ReviewerCardComponent = () => {
           <View>
             <TouchableOpacity>
               <SvgXml
-                xml={theme === "dark" ? WhiteThreeDots : circleWithDots}
+                xml={theme === "dark" ? moreWhiteIcon : moreBlackIcon}
               />
             </TouchableOpacity>
           </View>
@@ -134,7 +131,6 @@ export const ReviewerCardComponent = () => {
 
 const DoctorDetails = () => {
   const { theme, changeTheme } = useContext(ThemeContext);
-  changeTheme("light");
   return (
     <View
       style={{
@@ -397,18 +393,8 @@ const DoctorDetails = () => {
       </ScrollView>
       <View
         style={{
-          borderWidth: 1,
-          width: 395,
           height: 118,
-          paddingLeft: 24,
-          paddingRight: 24,
-          paddingTop: 24,
-          paddingBottom: 36,
-          gap: 24,
-          backgroundColor: theme === "dark" ? "#181A20" : "#FFFFFF",
-          borderColor: theme === "dark" ? "#35383F" : "#F5F5F5",
-          borderTopRightRadius: 50,
-          borderTopLeftRadius: 50,
+          padding: 24,
         }}
       >
         <Pressable
