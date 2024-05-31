@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -19,6 +19,16 @@ import { router } from "expo-router";
 import Typography from "../../../constants/Typography";
 import { Colors } from "../../../constants/Colors";
 import { StatusBar } from "expo-status-bar";
+import { ThemeContext } from "@/ctx/ThemeContext";
+import {
+  BackArrow,
+  blackArrow,
+  DarkContinueLine,
+  LightContinueLine,
+  BlackApple,
+  WhiteApple
+} from "@/components/Icons/Icons";
+import { SvgXml } from "react-native-svg";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
@@ -27,6 +37,9 @@ const Signup = () => {
   const [isChecked, setIsChecked] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const [passwordFocused, setPasswordFocused] = useState(false);
+  const { theme, changeTheme } = useContext(ThemeContext);
+
+  changeTheme("dark");
 
   const handleEmailChange = (text: string) => {
     setEmail(text);
@@ -42,25 +55,30 @@ const Signup = () => {
 
   const handleEmailFocused = () => {
     setIsFocused(true);
-  }
+  };
   const handleEmailBlur = () => {
     setIsFocused(false);
-  }
-  const handlePasswordFocused = () =>{
+  };
+  const handlePasswordFocused = () => {
     setPasswordFocused(true);
-  }
+  };
   const handlePasswordBlur = () => {
     setPasswordFocused(false);
-  }
+  };
 
   return (
-    <View style={styles.container}>
-      <StatusBar style="light"/>
+    <View
+      style={[
+        styles.container,
+        { backgroundColor: theme === "dark" ? "#181A20" : "#FFFFFF" },
+      ]}
+    >
+      <StatusBar style={theme === "dark" ? "light" : "dark"} />
       <TouchableOpacity
         style={styles.arrow}
         onPress={() => router.replace("/(auth)/SignIn&SignOut/LetsYouIn")}
       >
-        <LeftArrow fillColor={"#23272f"} />
+        <SvgXml xml={theme === "dark" ? BackArrow : blackArrow} />
       </TouchableOpacity>
 
       <Image source={require("../../../assets/icons/HeartPlus.png")} />
@@ -68,7 +86,10 @@ const Signup = () => {
       <View style={styles.middlePart}>
         <View style={styles.midPartOne}>
           <Text
-            style={[Typography.heading._3, { color: Colors.grayScale._900 }]}
+            style={[
+              Typography.heading._3,
+              { color: theme === "dark" ? "#FFFFFF" : Colors.grayScale._900 },
+            ]}
           >
             Create new account
           </Text>
@@ -77,44 +98,69 @@ const Signup = () => {
 
       <View style={styles.Buttons}>
         <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+          behavior={Platform.OS === "ios" ? "padding" : undefined}
           keyboardVerticalOffset={60}
         >
-          <View style={[styles.inputOne, isFocused && styles.inputOneFocused]}>
-            <Image source={require("../../../assets/icons/Message.png")} style={[styles.icon, isFocused && styles.iconFocused]}/>
-            <TextInput
-              style={[styles.email, isFocused && styles.emailFocused]}
-              placeholder="Email"
-              keyboardType="email-address"
-              placeholderTextColor="rgba(45, 45, 45, 0.5)"
-              value={email}
-              onChangeText={handleEmailChange}
-              onFocus={handleEmailFocused}
-              onBlur={handleEmailBlur}
-            />
-          </View>
+          <View style={{ gap: 20 }}>
+            <View
+              style={[
+                styles.inputOne,
+                isFocused && styles.inputOneFocused,
+                { backgroundColor: theme === "dark" ? "#1F222A" : Colors.grayScale._50 },
+              ]}
+            >
+              <Image
+                source={require("../../../assets/icons/Message.png")}
+                style={[styles.icon, isFocused && styles.iconFocused]}
+              />
+              <TextInput
+                style={[styles.email, isFocused && styles.emailFocused]}
+                placeholder="Email"
+                keyboardType="email-address"
+                placeholderTextColor="#9E9E9E"
+                value={email}
+                onChangeText={handleEmailChange}
+                onFocus={handleEmailFocused}
+                onBlur={handleEmailBlur}
+              />
+            </View>
 
-          <View style={[styles.inputOne, passwordFocused && styles.inputOneFocused]}>
-            <Image source={require("../../../assets/icons/Lock.png")} style={[styles.icon, passwordFocused && styles.iconFocused]}/>
-            <TextInput
-              style={styles.email}
-              placeholder="Password"
-              placeholderTextColor="rgba(45, 45, 45, 0.5)"
-              secureTextEntry={secureTextEntry}
-              value={password}
-              onChangeText={handlePasswordChange}
-              onFocus={handlePasswordFocused}
-              onBlur={handlePasswordBlur}
-            />
-            <View style={[styles.passwordInputContainer, passwordFocused && styles.passwordInputContainerFocused]}>
-              <TouchableWithoutFeedback onPress={togglePasswordVisibility}>
-                <Ionicons
-                  name={secureTextEntry ? "eye-outline" : "eye-off-outline"}
-                  size={24}
-                  color={passwordFocused ? "#246BFD" : "gray"}
-                  style={styles.eye}
-                />
-              </TouchableWithoutFeedback>
+            <View
+              style={[
+                styles.inputOne,
+                passwordFocused && styles.inputOneFocused,
+                { backgroundColor: theme === "dark" ? "#1F222A" : Colors.grayScale._50 },
+              ]}
+            >
+              <Image
+                source={require("../../../assets/icons/Lock.png")}
+                style={[styles.icon, passwordFocused && styles.iconFocused]}
+              />
+              <TextInput
+                style={styles.email}
+                placeholder="Password"
+                placeholderTextColor="#9E9E9E"
+                secureTextEntry={secureTextEntry}
+                value={password}
+                onChangeText={handlePasswordChange}
+                onFocus={handlePasswordFocused}
+                onBlur={handlePasswordBlur}
+              />
+              <View
+                style={[
+                  styles.passwordInputContainer,
+                  passwordFocused && styles.passwordInputContainerFocused,
+                ]}
+              >
+                <TouchableWithoutFeedback onPress={togglePasswordVisibility}>
+                  <Ionicons
+                    name={secureTextEntry ? "eye-outline" : "eye-off-outline"}
+                    size={24}
+                    color={passwordFocused ? "#246BFD" : "gray"}
+                    style={styles.eye}
+                  />
+                </TouchableWithoutFeedback>
+              </View>
             </View>
           </View>
         </KeyboardAvoidingView>
@@ -125,48 +171,84 @@ const Signup = () => {
           value={isChecked}
           onValueChange={setIsChecked}
           style={styles.checkbox}
-          
+          color="#246BFD"
         />
         <Text
-          style={[Typography.semiBold.medium, { color: Colors.grayScale._900 }]}
+          style={[
+            Typography.semiBold.medium,
+            { color: theme === "dark" ? "#FFFFFF" : Colors.grayScale._900 },
+          ]}
         >
           Remember me
         </Text>
       </View>
 
-      <Pressable 
-      onPress={()=> router.push("/(auth)/SignIn&SignOut/SignInBlankForm")}
-      style={styles.signinBtn}>
+      <TouchableOpacity
+        onPress={() => router.push("/(auth)/SignIn&SignOut/SignInBlankForm")}
+        style={styles.signinBtn}
+      >
         <Text style={[Typography.bold.large, { color: Colors.others.white }]}>
           Sign up
         </Text>
-      </Pressable>
+      </TouchableOpacity>
 
-      <Image source={require("../../../assets/icons/continue.png")} />
+      <SvgXml xml={theme === "dark" ? DarkContinueLine : LightContinueLine} />
 
       <View style={styles.overCont}>
-        <View style={styles.smallCont}>
-          <Image source={require("../../../assets/icons/facebook.png")} />
-        </View>
-        <View style={styles.smallCont}>
-          <Image source={require("../../../assets/icons/Google.png")} />
-        </View>
-        <View style={styles.smallCont}>
-          <Image source={require("../../../assets/icons/AppleIcon.png")} />
-        </View>
+        <TouchableOpacity>
+          <View
+            style={[
+              styles.smallCont,
+              { backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF", borderColor: theme === 'dark' ? '#35383F' : '#EEEEEE' },
+            ]}
+          >
+            <Image source={require("../../../assets/icons/facebook.png")} />
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity>
+          <View
+            style={[
+              styles.smallCont,
+              { backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF", borderColor: theme === 'dark' ? '#35383F' : '#EEEEEE'  },
+            ]}
+          >
+            <Image source={require("../../../assets/icons/Google.png")} />
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity>
+          <View
+            style={[
+              styles.smallCont,
+              { backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF", borderColor: theme === 'dark' ? '#35383F' : '#EEEEEE'  },
+            ]}
+          >
+            <SvgXml xml={theme === 'dark' ? WhiteApple : BlackApple} />
+
+          </View>
+        </TouchableOpacity>
       </View>
 
-      <View>
-        <Text style={[Typography.regular.medium]}>
-          Already have an account? 
-          <Text
-           style={[Typography.semiBold.medium, {color:Colors.main.primary._500, marginLeft: 10}]}
-            onPress={() =>
-              router.replace("/(auth)/SignIn&SignOut/SignInBlankForm")
-            }
-          >
-            Sign In
-          </Text>
+      <View style={{ gap: 3, flexDirection: "row" }}>
+        <Text
+          style={[
+            Typography.regular.medium,
+            { color: theme === "dark" ? "#FFFFFF" : Colors.grayScale._500 },
+          ]}
+        >
+          Already have an account?
+        </Text>
+        <Text
+          style={[
+            Typography.semiBold.medium,
+            { color: Colors.main.primary._500, marginLeft: 10 },
+          ]}
+          onPress={() =>
+            router.replace("/(auth)/SignIn&SignOut/SignInBlankForm")
+          }
+        >
+          Sign In
         </Text>
       </View>
     </View>
@@ -176,14 +258,13 @@ const Signup = () => {
 export default Signup;
 
 const styles = StyleSheet.create({
-
   inputOneFocused: {
     borderColor: "#246BFD",
     borderWidth: 2,
   },
   emailFocused: {
     color: "#212121",
-    fontSize: 16
+    fontSize: 16,
   },
   iconFocused: {
     tintColor: "#246BFD",
@@ -228,7 +309,6 @@ const styles = StyleSheet.create({
     width: 80,
     height: 60,
     backgroundColor: "#FFFFFF",
-    borderColor: "#eeeeee",
     borderWidth: 1,
     borderRadius: 16,
     justifyContent: "center",
@@ -254,14 +334,14 @@ const styles = StyleSheet.create({
   },
   inputOne: {
     borderRadius: 16,
-    backgroundColor: "#FAFAFA",
-    width: 380,
+    width: 360,
     height: 60,
     padding: 8,
     flexDirection: "row",
     paddingLeft: 20,
     alignItems: "center",
     gap: 10,
+  
   },
   email: {
     fontSize: 16,
@@ -271,20 +351,15 @@ const styles = StyleSheet.create({
     color: "#246BFD",
     fontWeight: "600",
   },
-  // signText: {
-  //   fontSize: 16,
-  //   color: "#FFFFFF",
-  //   fontWeight: "bold",
-  // },
   signinBtn: {
     backgroundColor: "#246BFD",
-    width: "90%",
+    width: 360,
     height: 58,
     borderRadius: 100,
     justifyContent: "center",
     alignItems: "center",
     shadowColor: "#246BFD",
-    elevation: 15,
+    elevation: 10,
   },
   textBtn: {
     fontSize: 16,
@@ -301,7 +376,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
   },
   Buttons: {
-    gap: 10,
+    gap: 20,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -325,7 +400,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#FFFFFF",
+    // backgroundColor: "#FFFFFF",
     gap: 20,
     paddingTop: 24,
     paddingLeft: 24,
