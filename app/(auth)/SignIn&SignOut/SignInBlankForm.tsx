@@ -133,7 +133,7 @@ async function signInWithEmail(){
             style={[styles.icon, emailFocused && styles.iconFocused]}
           />
           <TextInput
-            style={[styles.email, emailFocused && styles.emailFocused]}
+            style={[{fontSize: 16,flex: 1,color: theme === "dark"? Colors.grayScale._50 : "black"}, emailFocused && styles.emailFocused]}
             placeholder="Email"
             keyboardType="email-address"
             placeholderTextColor="#9E9E9E"
@@ -160,7 +160,7 @@ async function signInWithEmail(){
           />
 
           <TextInput
-            style={[styles.email, passwordFocused && styles.emailFocused]}
+            style={[{fontSize: 16,flex: 1,color: theme === "dark"? Colors.grayScale._50 : "black"}, passwordFocused && styles.emailFocused]}
             placeholder="Password"
             placeholderTextColor="#9E9E9E"
             secureTextEntry={secureTextEntry}
@@ -299,7 +299,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
   },
   emailFocused: {
-    color: "#212121",
+    color: "#868a94",
     fontSize: 16,
   },
   iconFocused: {

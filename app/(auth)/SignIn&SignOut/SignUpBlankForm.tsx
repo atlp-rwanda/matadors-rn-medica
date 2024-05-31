@@ -135,7 +135,7 @@ const Signup = () => {
                 style={[styles.icon, isFocused && styles.iconFocused]}
               />
               <TextInput
-                style={[styles.email, isFocused && styles.emailFocused]}
+                style={[{fontSize: 16,flex: 1,color: theme === "dark"? Colors.grayScale._50 : "black"}, isFocused && styles.emailFocused]}
                 placeholder="Email"
                 keyboardType="email-address"
                 placeholderTextColor="#9E9E9E"
@@ -159,7 +159,7 @@ const Signup = () => {
                 style={[styles.icon, passwordFocused && styles.iconFocused]}
               />
               <TextInput
-                style={styles.email}
+                style={{fontSize: 16,flex: 1,color: theme === "dark"? Colors.grayScale._50 : "black"}}
                 placeholder="Password"
                 placeholderTextColor="#9E9E9E"
                 secureTextEntry={secureTextEntry}
@@ -288,7 +288,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
   },
   emailFocused: {
-    color: "#212121",
+    color: "#868a94",
     fontSize: 16,
   },
   iconFocused: {
@@ -344,7 +344,6 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   passwordInputContainer: {
-    // flex: 1,
     flexDirection: "row",
     alignItems: "center",
   },
@@ -427,7 +426,6 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    // backgroundColor: "#FFFFFF",
     gap: 20,
     paddingTop: 24,
     paddingLeft: 24,
