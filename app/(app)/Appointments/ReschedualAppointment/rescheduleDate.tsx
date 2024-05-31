@@ -13,18 +13,12 @@ import {
 import DatePicker, { getFormatedDate } from "react-native-modern-datepicker";
 import { Colors } from "@/constants/Colors";
 import { router } from "expo-router";
-import { MaterialIcons } from "@expo/vector-icons";
 import { ThemeContext } from "@/ctx/ThemeContext";
 import { StatusBar } from "expo-status-bar";
 import Typography from "@/constants/Typography";
 import { useModal } from "@/ctx/ModalContext";
 import { LeftArrow, LoadingIcon } from "@/components/UI/Icons";
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withRepeat,
-  withTiming,
-} from "react-native-reanimated";
+
 export default function RescheduleAppointment() {
   const { theme, changeTheme } = useContext(ThemeContext);
   const [selectedTime, setSelectedTime] = useState(null);

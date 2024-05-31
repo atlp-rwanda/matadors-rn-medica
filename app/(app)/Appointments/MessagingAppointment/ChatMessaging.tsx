@@ -1,9 +1,8 @@
 import { BlueAttachIcon } from "@/components/UI/icons/attachIcon";
-import { WhiteMessageIcon } from "@/components/UI/icons/blueMessage";
 import { BlueCameraIcon } from "@/components/UI/icons/cameraIcon";
-import { circleWithDots } from "@/components/UI/icons/circleWithDots";
+import {  moreWhiteIcon } from "@/components/UI/icons/circleWithDots";
 import { WhiteDoubleTick, BlueDoubleTick } from "@/components/UI/icons/doubleTickIcon";
-import { BlackFilterIcon } from "@/components/UI/icons/filterIcon";
+import { BlackFilterIcon, filterWhiteIcon } from "@/components/UI/icons/filterIcon";
 import { blueImojiIcon } from "@/components/UI/icons/imojiIcon";
 import { WhiteVoiceIcon } from "@/components/UI/icons/voiceIcon";
 import { Colors } from "@/constants/Colors";
@@ -28,6 +27,8 @@ import { TouchableOpacity } from "react-native";
 import AttachComponent from "./AttachComponent";
 import { Image } from "react-native";
 import PlaySound from "./Playsound";
+import { backArrowBlack, backArrowWhite } from "@/components/UI/icons/backArrow";
+import { MoreIcon } from "@/assets/icons/MoreCircleSvg";
 
 function ChatMessaging() {
   const date = new Date();
@@ -79,9 +80,9 @@ function ChatMessaging() {
 
   return (
     <SafeAreaView
-      style={{ flex: 1, paddingTop: ios ? 10 : 30, backgroundColor: "white" }}
+      style={{ flex: 1, paddingTop: ios ? 10 : 30, backgroundColor:theme==="dark"? Colors.dark._1: "white" }}
     >
-      <StatusBar style="dark" />
+      <StatusBar style={theme ==="dark"? "light": "dark"} />
       <View
         style={{
           flexDirection: "row",
@@ -90,7 +91,7 @@ function ChatMessaging() {
           gap: 30,
           padding: 20,
           backgroundColor:
-            theme === "light" ? Colors.others.white : Colors.others.black,
+            theme === "light" ? Colors.others.white : Colors.dark._1,
         }}
       >
         <Pressable
@@ -100,19 +101,17 @@ function ChatMessaging() {
             alignItems: "center",
             justifyContent: "space-between",
             gap: 20,
-            backgroundColor:
-              theme === "light" ? Colors.others.white : Colors.others.black,
+        
           }}
         >
-          <MaterialIcons
-            name="arrow-back"
-            size={25}
-            style={{ alignSelf: "center" }}
-          />
+         <View>
+          <SvgXml xml={theme=== "dark"? backArrowWhite : backArrowBlack} />
+         </View>
           <Text
             style={{
               fontSize: 24,
               fontWeight: "600",
+              color: theme==="dark"? Colors.others.white: Colors.others.black
             }}
           >
             Dr. Drake Boeson
@@ -122,24 +121,19 @@ function ChatMessaging() {
           <View
             style={[
               {
-                backgroundColor: Colors.others.white,
-                borderRadius: 10,
-                padding: 20,
                 position: "absolute",
                 right: 20,
                 top: 50,
-                zIndex:10
               },
-              styles.shadowProp,
             ]}
           >
             <MenuComponent closeMenu={handleChatMenu} />
           </View>
         )}
         <View style={{ flexDirection: "row", gap: 10 }}>
-          <SvgXml xml={BlackFilterIcon} />
+          <SvgXml xml={ theme === "dark" ? filterWhiteIcon : BlackFilterIcon} />
           <TouchableOpacity onPress={handleChatMenu}>
-            <SvgXml xml={circleWithDots} />
+            <SvgXml xml={ theme==="dark"?  moreWhiteIcon:MoreIcon} />
           </TouchableOpacity>
         </View>
       </View>
@@ -169,6 +163,7 @@ function ChatMessaging() {
               backgroundColor: "rgba(117, 117, 117, 0.2)",
               borderRadius: 10,
               marginBottom: 10,
+              color: theme==="dark"? Colors.grayScale._50 : Colors.others.black
             }}
           >
             Session Start
@@ -188,7 +183,7 @@ function ChatMessaging() {
                 flexDirection: "row",
                 alignItems: "baseline",
                 justifyContent:
-                  message.user === "user" ? "flex-start" : "flex-end",
+                message.user === "user" ? "flex-start" : "flex-end",
                 borderBottomEndRadius: message.user === "user" ? 10 : 20,
                 borderBottomStartRadius: message.user === "user1" ? 10 : 20,
                 borderRadius: 20,
@@ -202,9 +197,11 @@ function ChatMessaging() {
                   Typography.medium.xLarge,
                   {
                     color:
-                      message.user === "user" ? Colors.others.white : "black",
+                    message.user === "user" ? Colors.others.white : "black",
                     maxWidth: 250,
-                  },
+                  },{
+                    color: theme ==="dark"? Colors.grayScale._50: "black"
+                  }
                 ]}
               >
                 {message.chat}
@@ -305,13 +302,13 @@ function ChatMessaging() {
             <Text
               style={[
                 Typography.medium.xLarge,
-                { color: Colors.others.black, maxWidth: 250 },
+                { color: theme ==="dark"? Colors.grayScale._50: "black", maxWidth: 250 },
               ]}
             >
               Hi, good afternoon Dr. Drake... 😁😁
             </Text>
             <View>
-              <Text style={{ color: "rgba(117, 117, 117, 0.5)" }}>16:00</Text>
+              <Text style={{ color:  Colors.grayScale._50 }}>16:00</Text>
             </View>
           </View>
           <View
@@ -390,6 +387,7 @@ function ChatMessaging() {
               backgroundColor: "rgba(117, 117, 117, 0.2)",
               borderRadius: 10,
               marginVertical: 10,
+              color: theme==="dark"? Colors.grayScale._50 : "black"
             }}
           >
             Session End
@@ -401,11 +399,8 @@ function ChatMessaging() {
             <View
               style={[
                 {
-                  backgroundColor: Colors.others.white,
-                  padding: 40,
                   position: "absolute",
                   top: -190,
-                  borderRadius: 20,
                   left: 40,
                 },
                 styles.shadowProp,
@@ -486,8 +481,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 3,
     elevation: 10,
-    backgroundColor:Colors.others.white
-
   },
 });
 export default ChatMessaging;

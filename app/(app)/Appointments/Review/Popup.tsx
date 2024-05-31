@@ -13,13 +13,8 @@ interface PopupProps {
   onClose: () => void;
 }
 
-const Popup: React.FC<PopupProps> = ({
-  message,
-  show,
-  onClose,
-  bigMessage,
-}) => {
-  const { theme, changeTheme } = useContext(ThemeContext);
+const Popup: React.FC<PopupProps> = ({ message, show, onClose,bigMessage }) => {
+    const {theme, changeTheme} = useContext(ThemeContext);
   return (
     <View style={[styles.overlay, { display: show ? "flex" : "none" }]}>
       <View

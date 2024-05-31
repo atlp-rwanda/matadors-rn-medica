@@ -1,3 +1,4 @@
+import React from "react";
 import { Colors } from "@/constants/Colors";
 import { StatusBar } from "expo-status-bar";
 import { createContext, useContext, useState } from "react";

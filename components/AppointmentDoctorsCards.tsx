@@ -1,6 +1,8 @@
 // DoctorCard.tsx
 import {Colors} from '@/constants/Colors';
-import React from 'react';
+import Typography from '@/constants/Typography';
+import { ThemeContext } from '@/ctx/ThemeContext';
+import React, { useContext } from 'react';
 import { View, Text, Image, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 
@@ -18,18 +20,20 @@ interface DoctorCardProps {
 }
 
 const DoctorCard: React.FC<DoctorCardProps> = ({ name, date, time, image, status, statusColor, type, icon, buttons, iconOnPress }) => {
+    const { theme, changeTheme } = useContext(ThemeContext);
+
   return (
-    <ImageBackground style={styles.card}>
+    <ImageBackground style={[styles.card,{backgroundColor: theme === "dark" ? Colors.dark._3 : "#f5f5f5"}]}>
       <View style={styles.upperSection}>
-        <Image style={styles.cardImage} source={image}></Image>
-        <ImageBackground style={styles.docDescription}>
+        <Image style={styles.cardImage} source={image}/>
+        <ImageBackground>
           <View style={styles.cardHeader}>
-            <Text style={styles.docName}>{name}</Text>
+            <Text style={[styles.docName, {color: theme==="dark"?  Colors.others.white: Colors.others.black}]}>{name}</Text>
           </View>
           <View style={styles.docStatus}>
-            <Text style={{ color: '#424242', fontSize: 12, fontFamily: "Urbanist-regular" }}>{type} - </Text>
-            <View style={[styles.statusContainer, { borderColor: statusColor }]}>
-              <Text style={{ fontFamily: "Urbanist-regular", color: statusColor, fontSize: 12 }}>{status}</Text>
+            <Text style={[Typography.medium.small,{ color: theme === "dark"? "#D3D3D3" : '#424242'}]}>{type} - </Text>
+            <View style={[styles.statusContainer, { borderColor: statusColor,backgroundColor: theme==="dark"? Colors.dark._3 : "white" }]}>
+              <Text style={[Typography.medium.small,{ color: statusColor}]}>{status}</Text>
             </View>
             <TouchableOpacity 
             onPress={iconOnPress}
@@ -38,16 +42,16 @@ const DoctorCard: React.FC<DoctorCardProps> = ({ name, date, time, image, status
             {icon}
             </TouchableOpacity>
           </View>
-          <Text style={styles.date}>{date} | {time}</Text>
+          <Text style={[Typography.medium.small,{ color: theme === "dark"? "#D3D3D3" : '#424242', marginLeft: 10}]}>{date} | {time}</Text>
         </ImageBackground>
       </View>
       {buttons && (
-        
+      
         <View style={styles.CardButtons}>
           {buttons.map((button, index) => (
             <TouchableOpacity
               key={index}
-              style={button.styleType === 'cancel' ? styles.cancelButton : styles.primaryButton}
+              style={button.styleType === 'cancel' ? ([styles.cancelButton, {backgroundColor: theme==="dark"? Colors.dark._3 : "white"}]) : (styles.primaryButton)}
               onPress={button.action}
             >
               <Text style={button.styleType === 'cancel' ? styles.cancelButtonText : styles.primaryButtonText}>{button.label}</Text>
@@ -66,7 +70,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginLeft: '2%',
     borderRadius: 20,
-    backgroundColor: '#FFFFFF',
     padding: 15,
     flexDirection: 'column'
   },
@@ -83,17 +86,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent'
   },
   docName: {
-    fontFamily: 'Urbanist-bold',
-    color: '#000000',
-    marginLeft: '3%',
+    marginLeft: 15,
     marginRight: '18%',
     marginTop: '1%',
     fontSize: 20,
     padding: 0,
-  },
-  docDescription: {
-    flexDirection: 'column',
-    backgroundColor: 'transparent'
   },
   docStatus: {
     backgroundColor: 'transparent',
@@ -104,7 +101,6 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   statusContainer: {
-    backgroundColor: "#ffffff",
     padding: 5,
     paddingHorizontal: 10,
     borderWidth: 2,
@@ -113,14 +109,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginRight:10
   },
-  date: {
-    backgroundColor: 'transparent',
-    color: '#424242',
-    fontFamily: 'Urbanist-regular',
-    fontSize: 12,
-    marginLeft: '5%',
-    marginTop: '0%'
-  },
   
   CardButtons: {
     flexDirection: 'row',
@@ -128,9 +116,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   cancelButton: {
-    backgroundColor: "#ffffff",
     padding: 5,
-    //paddingHorizontal: 15,
     borderColor: '#246BFD',
     borderWidth: 2,
     borderRadius: 20,
@@ -151,11 +137,9 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   cancelButtonText: {
-    fontFamily: "Urbanist-regular",
     color: '#246BFD'
   },
   primaryButtonText: {
-    fontFamily: "Urbanist-regular",
     color: "white"
   }
 });
