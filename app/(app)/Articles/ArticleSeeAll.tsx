@@ -1,20 +1,19 @@
 
-import React from 'react';
+import React ,{ useContext }from 'react';
 import { View, Text, Image, SafeAreaView, ScrollView,TouchableOpacity, Pressable } from 'react-native';
 import {router, useNavigation } from 'expo-router';
 import FieldComponent from "@/components/FieldComponent";
 import ArticleCard from '@/components/cards/ArticleCard';
 import { articles } from "@/constants/Articles";
-import { MaterialIcons } from '@expo/vector-icons';
-import Colors from '@/constants/Colors';
+import { Ionicons, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import { ThemeContext } from "@/ctx/ThemeContext";
 
 
 export default function SeeAllArticles() {
-  const navigation = useNavigation();
+  const { theme, changeTheme } = useContext(ThemeContext);
   return (
-    <SafeAreaView style={{ paddingTop: 40, backgroundColor: Colors.light.background }}>
+    <SafeAreaView style={{ paddingTop: 40, backgroundColor: theme === "light" ? "#FFFFFF" : "#181A20" ,height: "100%"}}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        {/* <FieldComponent/> */}
         <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
           <View style={{ display: "flex", flexDirection: "row", gap: 15, padding: 15 }}>
           <Pressable 
@@ -22,18 +21,19 @@ export default function SeeAllArticles() {
                 style={{
                     paddingTop: 5
                 }}
-                ><MaterialIcons name="arrow-back" size={23} />
+                ><MaterialIcons name="arrow-back" size={23} style={{
+                  alignSelf: "center",
+                  color:  theme === 'light' ? '#212121' : '#FFFFFF',
+                }}/>
                 </Pressable>
-            <Text style={{ fontSize: 24, color: "#212121" }}>Articles</Text>
+            <Text style={{ fontSize: 24,color: theme === 'light' ? '#212121' : '#FFFFFF',}}>Articles</Text>
           </View>
           <View style={{ display: "flex", flexDirection: "row", gap: 15, padding: 15 }}>
             <TouchableOpacity>
-                <Image style={{ position: "relative", marginTop: 7 }}
-                 source={require("../../../assets/images/search1.png")} />
+              <Ionicons name="search-outline" size={24} style={{ color: theme === 'light' ? "#212121" : '#FFFFFF' }} />
                  </TouchableOpacity>
             <TouchableOpacity>
-                <Image style={{ position: "relative", marginTop: 5 }} 
-                source={require("../../../assets/images/circledots.png")} />
+      <MaterialCommunityIcons name="dots-horizontal-circle-outline" size={24} style={{color: theme === 'light' ? "#212121" : '#FFFFFF'}} />
                 </TouchableOpacity>
           </View>
         </View>

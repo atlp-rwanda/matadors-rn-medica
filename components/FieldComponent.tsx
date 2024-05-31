@@ -19,14 +19,27 @@ export default function FieldComponent() {
         <TouchableOpacity 
           key={index} 
           style={[
-            styles.button,
-            selectedField === field ? styles.activeButton : null,
+            {
+              borderWidth: 2,
+              borderColor: '#246BFD',
+              borderRadius: 50,
+              paddingVertical: 8,
+              paddingHorizontal: 20,
+              marginLeft: 10,
+            },
+            selectedField === field ? {
+              backgroundColor: '#246BFD',
+            } : null,
           ]}
           onPress={() => setSelectedField(field)}
         >
           <Text style={[
-            styles.buttonText, 
-            selectedField === field ? styles.activeText : null
+            {
+              fontSize: 16,
+              textAlign: "center",
+              color: '#246BFD',
+            }, 
+            selectedField === field ? {color: "#FFFFFF"} : null
           ]}>
             {fields[field as keyof typeof fields]}
           </Text>
@@ -35,44 +48,3 @@ export default function FieldComponent() {
     </ScrollView>
   )
 }
-
-const styles = StyleSheet.create({
-  date: {
-    color: "#246BFD",
-    fontSize: 10,
-    backgroundColor: "#D9F1FF",
-    borderRadius: 6,
-    height: 20,
-    width: 50,
-    textAlign: "center",
-    padding: 4,
-    margin: 10,
-  },
-  scrollView: {
-    flexDirection: "row",
-    paddingVertical: 5,
-    paddingHorizontal: 10,
-    alignItems: "center",
-  },
-  button: {
-    backgroundColor: "#FFFFFF",
-    borderWidth: 2,
-    borderColor: '#246BFD',
-    borderRadius: 50,
-    paddingVertical: 8,
-    paddingHorizontal: 20,
-    marginLeft: 10,
-  },
-  activeButton: {
-    backgroundColor: '#246BFD',
-  },
-  buttonText: {
-    fontSize: 16,
-    // fontFamily:"UrbanistSemiBold",
-    textAlign: "center",
-    color: '#246BFD',
-  },
-  activeText: {
-    color: "#FFFFFF", 
-  },
-});
