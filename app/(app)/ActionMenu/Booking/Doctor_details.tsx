@@ -394,18 +394,8 @@ const DoctorDetails = () => {
       </ScrollView>
       <View
         style={{
-          borderWidth: 1,
-          width: 395,
           height: 118,
-          paddingLeft: 24,
-          paddingRight: 24,
-          paddingTop: 24,
-          paddingBottom: 36,
-          gap: 24,
-          backgroundColor: theme === "dark" ? "#181A20" : "#FFFFFF",
-          borderColor: theme === "dark" ? "#35383F" : "#F5F5F5",
-          borderTopRightRadius: 50,
-          borderTopLeftRadius: 50,
+          padding: 24,
         }}
       >
         <Pressable
