@@ -8,7 +8,6 @@ import {
   Platform,
   TouchableWithoutFeedback,
   Image,
-  TouchableOpacity,
 } from "react-native";
 import { Colors } from "@/constants/Colors";
 import { router } from "expo-router";
@@ -17,31 +16,30 @@ import { ThemeContext } from "@/ctx/ThemeContext";
 import { StatusBar } from "expo-status-bar";
 import Typography from "@/constants/Typography";
 import { SvgXml } from "react-native-svg";
+import { circleWithDots } from "@/components/UI/icons/circleWithDots";
 import DoctorCard from "@/components/DoctorCard";
 import {
   WhiteMessageIcon,
   blueMessageIcon,
 } from "@/components/UI/icons/blueMessage";
-import { backArrowWhite } from "@/components/UI/icons/backArrow";
-import { WhiteMenuCircle } from "@/components/UI/icons/WhiteMenuCircle";
-import { MoreIcon } from "@/assets/icons/MoreCircleSvg";
 
-interface PatientType {
-  id: string;
-  name: string;
-  gender: "male" | "female";
-  age: string;
-  problem: string;
-  appointmentMethod: "Messaging" | "voice call" | "video call";
-  appointmentDate: string;
-  time: string;
-  price: string;
-  paid: boolean;
+interface PatientType{
+  id: string
+  name: string
+  gender: "male" | "female"
+  age: string
+  problem: string,
+  appointmentMethod: "Messaging" | "voice call" | "video call"
+  appointmentDate:string
+  time: string
+  price: string
+  paid: boolean,
 }
 
 function AppointmentMessaging() {
   const { theme, changeTheme } = useContext(ThemeContext);
   const ios = Platform.OS === "ios";
+
 
   const PatientDetails: PatientType[] = [
     {
@@ -60,15 +58,9 @@ function AppointmentMessaging() {
   ];
 
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor:
-          theme === "dark" ? Colors.dark._1 : Colors.others.white,
-      }}
-    >
+    <View style={{ flex: 1, backgroundColor: "white" }}>
       <SafeAreaView style={{ marginBottom: ios ? 10 : 40 }}>
-        <StatusBar style={theme === "dark" ? "light" : "dark"} />
+        <StatusBar style="dark" />
       </SafeAreaView>
       <View style={{ flex: 1, paddingHorizontal: 20 }}>
         <View
@@ -79,7 +71,9 @@ function AppointmentMessaging() {
             gap: 30,
             padding: 20,
             backgroundColor:
-              theme === "light" ? Colors.others.white : Colors.dark._1,
+            theme === "light"
+              ? Colors.others.white
+              : Colors.others.black,
           }}
         >
           <Pressable
@@ -90,35 +84,39 @@ function AppointmentMessaging() {
               justifyContent: "space-between",
               gap: 30,
               backgroundColor:
-                theme === "light" ? Colors.others.white : Colors.dark._1,
+                theme === "light" ? Colors.others.white : Colors.others.black,
             }}
           >
-            <SvgXml xml={backArrowWhite} />
+            <MaterialIcons
+              name="arrow-back"
+              size={25}
+              style={{ alignSelf: "center" }}
+            />
             <Text
               style={{
                 fontSize: 24,
                 fontWeight: "600",
-                color:
-                  theme === "dark" ? Colors.others.white : Colors.others.black,
               }}
             >
-              My Appointment
+              Book Appointment
             </Text>
           </Pressable>
           <View>
-            <SvgXml xml={theme === "dark" ? WhiteMenuCircle : MoreIcon} />
+            <SvgXml xml={circleWithDots} />
           </View>
         </View>
-        <View style={{ flex: 1, paddingBottom: 30 }}>
+        <View style={{flex: 1, paddingBottom: 30}}>
           {PatientDetails &&
             PatientDetails.map((data: PatientType) => (
               <View
-                key={data?.id}
+              key={data?.id}
                 style={{
                   flex: 1,
                   justifyContent: "space-around",
-                  backgroundColor:
-                    theme === "light" ? Colors.others.white : Colors.dark._1,
+                  backgroundColor: 
+                    theme === "light"
+                      ? Colors.others.white
+                      : Colors.others.black,
                 }}
               >
                 <View
@@ -129,7 +127,7 @@ function AppointmentMessaging() {
                 >
                   <DoctorCard />
                 </View>
-                <View style={{ gap: 10 }}>
+                <View style={{ backgroundColor: "white", gap: 10 }}>
                   <Text
                     style={[
                       Typography.heading._5,
@@ -143,30 +141,10 @@ function AppointmentMessaging() {
                   >
                     Scheduled appointment
                   </Text>
-                  <Text
-                    style={[
-                      Typography.regular.large,{
-                      color:
-                        theme === "dark"
-                          ? Colors?.others?.white
-                          : Colors?.grayScale?._900,
-                    }]}
-                  >
-                    {data.appointmentDate}
-                  </Text>
-                  <Text
-                    style={[
-                      Typography.regular.large,{
-                      color:
-                        theme === "dark"
-                          ? Colors?.others?.white
-                          : Colors?.grayScale?._900,
-                    }]}
-                  >
-                    {data.time}
-                  </Text>
+                  <Text>{data.appointmentDate}</Text>
+                  <Text>{data.time}</Text>
                 </View>
-                <View style={{ gap: 16 }}>
+                <View>
                   <Text
                     style={[
                       Typography.heading._5,
@@ -180,58 +158,19 @@ function AppointmentMessaging() {
                   >
                     Patient Information
                   </Text>
-                  <View style={{ gap: 10 }}>
-                    <Text
-                      style={[
-                        Typography.regular.large,
-                        {
-                          gap: 8,
-                          color: theme === "dark" ? "#E0E0E0" : "#212121",
-                        },
-                      ]}
-                    >
+                  <View style={{ backgroundColor: "white", gap: 10 }}>
+                    <Text>
+                      {" "}
                       Full Name: <Text>{data?.name}</Text>
                     </Text>
-                    <Text
-                      style={[
-                        Typography.regular.large,
-                        { color: theme === "dark" ? "#E0E0E0" : "#212121" },
-                      ]}
-                    >
+                    <Text>
                       Gender: <Text>{data?.gender}</Text>
                     </Text>
-                    <Text
-                      style={[
-                        Typography.regular.large,
-                        { color: theme === "dark" ? "#E0E0E0" : "#212121" },
-                      ]}
-                    >
+                    <Text>
                       Age: <Text>{data?.age}</Text>
                     </Text>
-                    <Text
-                      style={[
-                        Typography.regular.large,
-                        {
-                          color: theme === "dark" ? "#E0E0E0" : "#212121",
-                          flexDirection: "row",
-                          gap: 10,
-                        },
-                      ]}
-                    >
-                      Problem:{" "}
-                      <Text>
-                        {data?.problem}{" "}
-                        <TouchableOpacity>
-                          <Text
-                            style={[
-                              Typography.regular.large,
-                                {color: "#246BFD"}
-                            ]}
-                          >
-                            view more
-                          </Text>
-                        </TouchableOpacity>
-                      </Text>
+                    <Text>
+                      Problem: <Text>{data?.problem}</Text>
                     </Text>
                   </View>
                 </View>
@@ -288,14 +227,7 @@ function AppointmentMessaging() {
                         >
                           {data.appointmentMethod}
                         </Text>
-                        <Text style={[
-                        Typography.regular.large,
-                        {
-                          color: theme === "dark" ? "#E0E0E0" : "#212121",
-                          flexDirection: "row",
-                          gap: 10,
-                        },
-                      ]}>Chat message with doctor</Text>
+                        <Text>Chat message with doctor</Text>
                       </View>
                     </View>
                     <View style={{ gap: 5 }}>
@@ -307,24 +239,13 @@ function AppointmentMessaging() {
                       >
                         ${data.price}
                       </Text>
-                      <Text style={[
-                        Typography.regular.large,
-                        {
-                          color: theme === "dark" ? "#E0E0E0" : "#212121",
-                          flexDirection: "row",
-                          gap: 10,
-                        },
-                      ]}>{data.paid ? "Paid" : "not paid"}</Text>
+                      <Text>{data.paid ? "Paid" : "not paid"}</Text>
                     </View>
                   </View>
                 </View>
 
                 <Pressable
-                  onPress={() =>
-                    router.push(
-                      "(app)/Appointments/MessagingAppointment/ChatMessaging"
-                    )
-                  }
+                onPress={()=> router.push("(app)/Appointments/MessagingAppointment/ChatMessaging")}
                   style={{
                     backgroundColor: Colors.main.primary._500,
                     borderRadius: 100,

@@ -3,6 +3,11 @@ export const rightArrowBlackIcon = `<svg width="8" height="14" viewBox="0 0 8 14
 </svg>
 `;
 
+export const rightArrowBlackIcon = `<svg width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M1.08398 1.16732L6.91732 7.00065L1.08398 12.834" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+`;
+
 export const backArrowWhiteIcon =  `
 <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M23.334 14.3203C23.334 14.7633 23.0048 15.1294 22.5777 15.1873L22.459 15.1953L4.95898 15.1953C4.47574 15.1953 4.08398 14.8036 4.08398 14.3203C4.08398 13.8773 4.41316 13.5112 4.84025 13.4533L4.95898 13.4453L22.459 13.4453C22.9422 13.4453 23.334 13.8371 23.334 14.3203Z" fill="white"/>
