@@ -8,7 +8,6 @@ import {
   Platform,
   TouchableWithoutFeedback,
   Image,
-  TouchableOpacity,
 } from "react-native";
 import { Colors } from "@/constants/Colors";
 import { router } from "expo-router";
@@ -20,54 +19,49 @@ import { SvgXml } from "react-native-svg";
 import { circleWithDots } from "@/components/UI/icons/circleWithDots";
 import { WhiteMenuCircle } from "@/components/UI/icons/WhiteMenuCircle";
 import DoctorCard from "@/components/DoctorCard";
-import {
-  VideoCall,
-  CallWhiteIcon,
-  VideoCallWhiteIcon,
-} from "@/components/Icons/Icons";
+import { Call, CallWhiteIcon } from "@/components/Icons/Icons"
 import { BackArrow, blackArrow } from "@/components/Icons/Icons";
 
-interface PatientType {
-  id: string;
-  name: string;
-  gender: "Male" | "female";
-  age: string;
-  problem: string;
-  appointmentMethod: "Messaging" | "Voice Call" | "Video Call";
-  appointmentDate: string;
-  time: string;
-  price: string;
-  paid: boolean;
+interface PatientType{
+  id: string
+  name: string
+  gender: "male" | "female"
+  age: string
+  problem: string,
+  appointmentMethod: "Messaging" | "Voice Call" | "video call"
+  appointmentDate:string
+  time: string
+  price: string
+  paid: boolean,
 }
 
 function AppointmentMessaging() {
   const { theme, changeTheme } = useContext(ThemeContext);
   const ios = Platform.OS === "ios";
 
+
   const PatientDetails: PatientType[] = [
     {
       id: "23",
-      name: "Andrew Ainsley",
-      gender: "Male",
-      age: "27",
+      name: "Rhys manners",
+      gender: "male",
+      age: "23",
       problem:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
-      appointmentMethod: "Video Call",
-      appointmentDate: "Today December 22, 2022",
-      time: "10:00 - 10:30 AM (30 minutes)",
-      price: "60",
+      appointmentMethod: "Voice Call",
+      appointmentDate: "Today December 22,, 2022",
+      time: "14:00 PM",
+      price: "20",
       paid: true,
     },
   ];
 
   return (
-    <View
-      style={[
-        { backgroundColor: theme === "dark" ? "#181A20" : "#FFFFFF", flex: 1 },
-      ]}
-    >
+    <View style={[{backgroundColor: theme === 'dark' ? '#181A20' : '#FFFFFF', flex: 1}]}>
       <SafeAreaView style={{ marginBottom: ios ? 10 : 40 }}>
-        <StatusBar style={theme === "light" ? "dark" : "light"} />
+
+        <StatusBar style={theme === "light" ? "dark" : "light"}/>
+        
       </SafeAreaView>
       <View style={{ flex: 1, paddingHorizontal: 20 }}>
         <View
@@ -86,28 +80,27 @@ function AppointmentMessaging() {
               alignItems: "center",
               justifyContent: "space-between",
               gap: 30,
+
             }}
           >
-            <SvgXml xml={theme === "dark" ? BackArrow : blackArrow} />
+
+            <SvgXml xml={theme === 'dark' ? BackArrow : blackArrow } />
 
             <Text
-              style={[
-                Typography.heading._4,
-                {
-                  fontSize: 24,
-                  fontWeight: "600",
-                  color: theme === "dark" ? "#FFFFFF" : "#212121",
-                },
-              ]}
+              style={[Typography.heading._4,{
+                fontSize: 24,
+                fontWeight: "600",
+                color: theme === 'dark' ? '#FFFFFF' : '#212121'
+              }]}
             >
               My Appointment
             </Text>
           </Pressable>
           <View>
-            <SvgXml xml={theme === "dark" ? WhiteMenuCircle : circleWithDots} />
+            <SvgXml xml={theme === 'dark' ? WhiteMenuCircle : circleWithDots} />
           </View>
         </View>
-        <View style={{ flex: 1, paddingBottom: 30 }}>
+        <View style={{flex: 1, paddingBottom: 30}}>
           {PatientDetails &&
             PatientDetails.map((data: PatientType) => (
               <View
@@ -124,7 +117,8 @@ function AppointmentMessaging() {
                 >
                   <DoctorCard />
                 </View>
-                <View style={{ gap: 16 }}>
+                <View style={{gap: 16}}>
+
                   <Text
                     style={[
                       Typography.heading._5,
@@ -139,26 +133,12 @@ function AppointmentMessaging() {
                     Scheduled appointment
                   </Text>
 
-                  <View style={{ gap: 12 }}>
-                    <Text
-                      style={[
-                        Typography.regular.large,
-                        { color: theme === "dark" ? "#E0E0E0" : "#212121" },
-                      ]}
-                    >
-                      {data.appointmentDate}
-                    </Text>
-                    <Text
-                      style={[
-                        Typography.regular.large,
-                        { color: theme === "dark" ? "#E0E0E0" : "#212121" },
-                      ]}
-                    >
-                      {data.time}
-                    </Text>
-                  </View>
+                    <View style={{gap: 12}}>
+                  <Text style={[Typography.regular.large, {color: theme === 'dark' ? '#E0E0E0' : '#212121'}]}>{data.appointmentDate}</Text>
+                  <Text style={[Typography.regular.large, {color: theme === 'dark' ? '#E0E0E0' : '#212121'}]}>{data.time}</Text>
+                    </View>
                 </View>
-                <View style={{ gap: 16 }}>
+                <View style={{gap: 16}}>
                   <Text
                     style={[
                       Typography.heading._5,
@@ -172,60 +152,18 @@ function AppointmentMessaging() {
                   >
                     Patient Information
                   </Text>
-                  <View style={{ gap: 10 }}>
-                    <Text
-                      style={[
-                        Typography.regular.large,
-                        {
-                          gap: 8,
-                          color: theme === "dark" ? "#E0E0E0" : "#212121",
-                        },
-                      ]}
-                    >
+                  <View style={{gap: 10 }}>
+                    <Text style={[Typography.regular.large,{gap: 8,color: theme === 'dark' ? '#E0E0E0' : '#212121'}]}>
                       Full Name: <Text>{data?.name}</Text>
                     </Text>
-                    <Text
-                      style={[
-                        Typography.regular.large,
-                        { color: theme === "dark" ? "#E0E0E0" : "#212121" },
-                      ]}
-                    >
+                    <Text style={[Typography.regular.large,  {color: theme === 'dark' ? '#E0E0E0' : '#212121'}]}>
                       Gender: <Text>{data?.gender}</Text>
                     </Text>
-                    <Text
-                      style={[
-                        Typography.regular.large,
-                        { color: theme === "dark" ? "#E0E0E0" : "#212121" },
-                      ]}
-                    >
+                    <Text style={[Typography.regular.large, {color: theme === 'dark' ? '#E0E0E0' : '#212121'}]}>
                       Age: <Text>{data?.age}</Text>
                     </Text>
-                    <Text
-                      style={[
-                        Typography.regular.large,
-                        {
-                          color: theme === "dark" ? "#E0E0E0" : "#212121",
-                          flexDirection: "row",
-                          gap: 10,
-                        },
-                      ]}
-                    >
-                      Problem:{" "}
-                      <Text>
-                        {data?.problem}{" "}
-                        <TouchableOpacity>
-                          <Text
-                            style={[
-                              Typography.regular.large,
-                              {
-                                color: theme === "dark" ? "#E0E0E0" : "#246BFD",
-                              },
-                            ]}
-                          >
-                            view more
-                          </Text>
-                        </TouchableOpacity>
-                      </Text>
+                    <Text style={[Typography.regular.large, {color: theme === 'dark' ? '#E0E0E0' : '#212121'}]}>
+                      Problem: <Text>{data?.problem}</Text>
                     </Text>
                   </View>
                 </View>
@@ -250,7 +188,8 @@ function AppointmentMessaging() {
                       alignItems: "center",
                       padding: 20,
                       borderRadius: 20,
-                      backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF",
+                      backgroundColor: theme === 'dark' ? '#1F222A' : '#FFFFFF',
+                      
                     }}
                   >
                     <View
@@ -267,7 +206,7 @@ function AppointmentMessaging() {
                           borderRadius: 100,
                         }}
                       >
-                        <SvgXml xml={VideoCall} />
+                        <SvgXml xml={Call} />
                       </View>
                       <View style={{ gap: 5 }}>
                         <Text
@@ -283,42 +222,25 @@ function AppointmentMessaging() {
                         >
                           {data.appointmentMethod}
                         </Text>
-                        <Text
-                          style={[
-                            Typography.medium.small,
-                            { color: theme === "dark" ? "#E0E0E0" : "#212121" },
-                          ]}
-                        >
-                          Video call with doctor
-                        </Text>
+                        <Text style={[Typography.medium.small,{color: theme === 'dark' ? '#E0E0E0' : '#212121'}]}>Voice call with doctor</Text>
                       </View>
                     </View>
                     <View style={{ gap: 5 }}>
                       <Text
                         style={[
                           Typography.bold.xLarge,
-                          { color: theme === "dark" ? "#246BFD" : "#212121" },
+                          {color: theme === 'dark' ? '#246BFD' : '#212121'},
                         ]}
                       >
                         ${data.price}
                       </Text>
-                      <Text
-                        style={[
-                          { color: theme === "dark" ? "#E0E0E0" : "#212121" },
-                        ]}
-                      >
-                        {data.paid ? "(paid)" : "not paid"}
-                      </Text>
+                      <Text style={[{color: theme === 'dark' ? '#E0E0E0' : '#212121'}]}>{data.paid ? "(paid)" : "not paid"}</Text>
                     </View>
                   </View>
                 </View>
 
                 <Pressable
-                  onPress={() =>
-                    router.push(
-                      "(app)/Appointments/VideoCallAppointment/VideoCallRinging"
-                    )
-                  }
+                onPress={()=> router.push("(app)/Appointments/VoiceCallAppointment/VoiceCallRinging")}
                   style={{
                     backgroundColor: Colors.main.primary._500,
                     borderRadius: 100,
@@ -333,14 +255,15 @@ function AppointmentMessaging() {
                       gap: 20,
                     }}
                   >
-                    <SvgXml xml={VideoCallWhiteIcon} />
+                    <SvgXml xml={CallWhiteIcon} />
                     <Text
                       style={[
                         Typography.bold.large,
                         { color: Colors.others.white },
                       ]}
                     >
-                      {data?.appointmentMethod}(<Text>Start at 10:00 AM</Text>)
+                      {data?.appointmentMethod}(
+                      <Text>Start at {data?.time}</Text>)
                     </Text>
                   </View>
                 </Pressable>
@@ -353,3 +276,4 @@ function AppointmentMessaging() {
 }
 
 export default AppointmentMessaging;
+
