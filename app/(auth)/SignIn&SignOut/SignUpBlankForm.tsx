@@ -48,7 +48,6 @@ const Signup = () => {
   const [passwordFocused, setPasswordFocused] = useState(false);
   const { theme, changeTheme } = useContext(ThemeContext);
 
-
   const handleEmailChange = (text: string) => {
     setEmail(text);
   };

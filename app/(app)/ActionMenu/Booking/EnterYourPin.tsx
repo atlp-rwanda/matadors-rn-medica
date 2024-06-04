@@ -21,7 +21,6 @@ export default function EnterYourPin() {
   const modal = useModal();
 
   const { theme, changeTheme } = useContext(ThemeContext);
-
   async function handlePIN() {
     modal.show({
       children: (

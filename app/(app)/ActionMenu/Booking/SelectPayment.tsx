@@ -10,11 +10,11 @@ import Button from "@/components/UI/Button";
 import { PaymentMethods } from "@/constants/PaymentMethods";
 import PaymentChooseContainer from "@/components/UI/PaymentChooseContainer/Index";
 import { router } from "expo-router";
+import React from "react";
 
 export default function SelectPayment() {
   const { theme, changeTheme } = useContext(ThemeContext);
   const [selected, setSelected] = useState(false);
-
   return (
     <>
       <StatusBar style={theme === "light" ? "dark" : "light"} />

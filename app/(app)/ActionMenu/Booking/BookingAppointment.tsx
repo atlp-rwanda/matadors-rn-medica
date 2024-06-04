@@ -22,6 +22,7 @@ import { LeftArrow, LoadingIcon } from "@/components/UI/Icons";
 
 export default function BookingAppointment() {
   const { theme, changeTheme } = useContext(ThemeContext);
+  changeTheme("dark");
   const [selectedTime, setSelectedTime] = useState(null);
   const [selectedDate, setSelectedDate] = useState("");
   const modal = useModal();
@@ -74,63 +75,76 @@ export default function BookingAppointment() {
   const ios = Platform.OS === "ios";
 
   return (
-    <View style={{ flex: 1, backgroundColor: theme === "light" ? Colors.others.white : Colors.dark._1, }}>
-      <SafeAreaView style={{ marginBottom: ios ? 10 : 5 }}>
-        <StatusBar style="dark" />
-      </SafeAreaView>
-      <View style={{ flex: 1, justifyContent: "space-around"}}>
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: theme === "dark" ? "#181A20" : "#FFFFFF",
+      }}
+    >
+      <StatusBar style={theme === "dark" ? "light" : "dark"} />
+
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View
           style={{
-            backgroundColor:
-              theme === "light" ? Colors.others.white : Colors.dark._1,
+            padding: 20,
+            justifyContent: "space-between",
+            gap: 24,
           }}
         >
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            style={{ marginBottom: 30 }}
-          >
-            <View
-              style={{
-                padding: 20,
-                justifyContent: "space-between",
-              }}
+          <View style={{ gap: 24 }}>
+            <Text
+              style={[
+                Typography.bold.xLarge,
+                { color: theme === "dark" ? "#FFFFFF" : "#212121" },
+              ]}
             >
-              <View style={{ gap: 10 }}>
-                <Text style={[Typography.bold.xLarge,{color:theme === 'light'? Colors.grayScale._900: Colors.others.white}]}>Select Date</Text>
-                <View style={{ borderRadius: 20 }}>
-                  <DatePicker
-                    onSelectedChange={(date) => handleDate(date)}
-                    mode="calendar"
-                    options={{
-                      backgroundColor: theme === 'light'? Colors.transparent.blue : Colors.dark._2 ,
-                      textHeaderColor:theme === 'light'? Colors.grayScale._900: Colors.others.white,
-                      textDefaultColor: theme === 'light'? Colors.grayScale._900: Colors.grayScale._300,
-                      selectedTextColor: Colors.others.white,
-                      mainColor: "#246BFD",
-                      textSecondaryColor: theme === 'light'? Colors.grayScale._900: Colors.others.white,
-                      borderColor: "rgba(122, 146, 165, 0.1)",
-                    }}
-                    current="2020-07-13"
-                    style={{
-                      borderRadius: 20,
-                    }}
-                  />
-                </View>
-                <View style={{ gap: 10 }}>
-                  <Text style={[Typography.bold.xLarge,{color: theme === 'light'? Colors.grayScale._900: Colors.others.white}]}>Select Hour</Text>
-                  <View style={styles.change}>{generateTimeSlots()}</View>
-                </View>
-              </View>
-
-              <TouchableOpacity 
-              onPress={()=> router.push("(app)/ActionMenu/Booking/Select-package")}
-              style={styles.btn}>
-                <Text style={styles.btnText}>Next</Text>
-              </TouchableOpacity>
+              Select Date
+            </Text>
+            <View style={{ borderRadius: 20 }}>
+              <DatePicker
+                onSelectedChange={(date) => handleDate(date)}
+                mode="calendar"
+                options={{
+                  backgroundColor:
+                    theme === "dark" ? "#1F222A" : Colors.transparent.blue,
+                  textHeaderColor: theme === "dark" ? "#FFFFFF" : "#212121",
+                  textDefaultColor: theme === "dark" ? "#FFFFFF" : "#212121",
+                  selectedTextColor: "#fff",
+                  mainColor: "#246BFD",
+                  textSecondaryColor: theme === "dark" ? "#FFFFFF" : "#212121",
+                  borderColor: "rgba(122, 146, 165, 0.1)",
+                }}
+                current="2020-07-13"
+                style={{
+                  borderRadius: 20,
+                }}
+              />
             </View>
-          </ScrollView>
+            <View style={{ gap: 10 }}>
+              <Text
+                style={[
+                  Typography.bold.xLarge,
+                  { color: theme === "dark" ? "#FFFFFF" : "#212121" },
+                ]}
+              >
+                Select Date
+              </Text>
+              <View style={styles.change}>{generateTimeSlots()}</View>
+            </View>
+          </View>
+
+          <View>
+            <TouchableOpacity
+              onPress={() =>
+                router.push("(app)/ActionMenu/Booking/Select-package")
+              }
+              style={styles.btn}
+            >
+              <Text style={styles.btnText}>Next</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
+      </ScrollView>
     </View>
   );
 }
@@ -156,10 +170,11 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     backgroundColor: "transparent",
     borderRadius: 100,
-    marginVertical: 10,
-    marginHorizontal: "1%",
-    width:118,
-    height:45
+    paddingHorizontal: 1,
+    paddingVertical: 2,
+    marginVertical: 8,
+    marginHorizontal: 5,
+    flexWrap: "nowrap",
   },
   buttonSelected: {
     backgroundColor: Colors.main.primary._500,

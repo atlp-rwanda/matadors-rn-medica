@@ -26,7 +26,32 @@ export default function BookingLayout() {
         <Stack.Screen
           name="Doctor_details"
           options={{
-            header: () => <Header title="Dr. Jenny Watson" options={{}} />,
+            header: () => (
+              <Header
+                title=" Dr.Jenny Watson"
+                options={{
+                  rightComponent: () => {
+                    return (
+                      <View style={{ flexDirection: "row", gap: 20 }}>
+                        <TouchableOpacity>
+                          <SvgXml
+                            xml={theme === "dark" ? WhiteHeart : blackHeart}
+                          />
+                        </TouchableOpacity>
+
+                        <TouchableOpacity onPress={() => {}}>
+                          <SvgXml
+                            xml={
+                              theme === "dark" ? WhiteThreeDots : ThreeDotCircle
+                            }
+                          />
+                        </TouchableOpacity>
+                      </View>
+                    );
+                  },
+                }}
+              />
+            ),
           }}
         />
         <Stack.Screen

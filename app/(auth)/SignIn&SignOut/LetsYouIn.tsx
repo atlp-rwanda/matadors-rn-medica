@@ -151,10 +151,6 @@ const LetsYouIn = () => {
 export default LetsYouIn;
 
 const styles = StyleSheet.create({
-  //   signupText: {
-  //     color: "#246BFD",
-  //     fontWeight: "600",
-  //   },
   signText: {
     fontSize: 16,
     color: "#FFFFFF",

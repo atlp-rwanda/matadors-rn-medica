@@ -40,6 +40,9 @@ export default function AddNewCard() {
 
   const { theme, changeTheme } = useContext(ThemeContext);
 
+  useEffect(() => {
+  }, [changeTheme]);
+
   const onDateChange = (event: Event | AndroidEvent, selectedDate?: Date) => {
     const currentDate = selectedDate || date;
     setShowDatePicker(false);
