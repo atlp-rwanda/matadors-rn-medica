@@ -99,6 +99,8 @@ import {
       gap: 20,
     },
     middlePart: {
+    //   justifyContent: "center",
+    //   alignItems: "center",
       gap: 16,
     },
     middleText: {

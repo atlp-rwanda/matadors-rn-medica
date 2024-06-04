@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import {
   View,
@@ -27,10 +27,6 @@ import NofoundComponent from "@/components/NofoundComponent";
 import { blueMessageIcon } from "@/components/UI/icons/blueMessage";
 import { BlueVideoCall } from "@/components/UI/icons/videoCallIcon";
 import { BlueVoiceCall } from "@/components/UI/icons/callIcon";
-import { ThemeContext } from "@/ctx/ThemeContext";
-import {Colors} from "@/constants/Colors";
-import { filterWhiteIcon } from "@/components/UI/icons/filterIcon";
-import { moreWhiteIcon } from "@/components/UI/icons/circleWithDots";
 
 interface imageMapProp {
   [key: string]: ReturnType<typeof require>;
@@ -65,9 +61,6 @@ interface DoctorsData {
 type TabKey = "Upcoming" | "Completed" | "Cancelled";
 
 const AppointmentScreen: React.FC = () => {
-  const { theme, changeTheme } = useContext(ThemeContext);
-
-
   const [activeTab, setActiveTab] = useState<TabKey>("Upcoming");
   const [headerWidth, setHeaderWidth] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
@@ -137,11 +130,9 @@ const AppointmentScreen: React.FC = () => {
       </TouchableOpacity>
     );
   };
-
   const Handlecancel = () => {
     setShowPopup(true);
   };
-
   const activeTabLinePosition = {
     width: headerWidth / 3,
     left:
@@ -184,25 +175,20 @@ const AppointmentScreen: React.FC = () => {
     return [];
   };
   return (
-    <View style={[styles.container,{backgroundColor: theme === "dark" ? Colors.dark._1: Colors.others.white}]}>
-      <ImageBackground style={[styles.header, {backgroundColor: theme === "dark" ? Colors.dark._1: Colors.others.white}]}>
+    <View style={styles.container}>
+      <ImageBackground style={styles.header}>
         <View style={styles.heading}>
-        <View style={{flexDirection: "row", gap: 20}}>
           <Image
             style={styles.headerLogo}
             source={require("@/assets/images/DefaultLogo.png")}
           ></Image>
-          <Text style={[Typography.heading._4, {color: theme === "dark" ? Colors.others.white: Colors.others.black,}]}>My Appointment</Text>
-          </View>
-        <View style={{flexDirection: "row", gap: 20}}>
-            <TouchableOpacity>
-              <SvgXml xml={ theme === "dark"? filterWhiteIcon: SearchIcon} />
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <SvgXml xml={theme === "dark" ? moreWhiteIcon : MoreIcon} />
-            </TouchableOpacity>
-          </View>
-        
+          <Text style={styles.headerTitle}>My Appointment</Text>
+          <TouchableOpacity>
+            <SvgXml xml={SearchIcon} style={styles.searchIcon} />
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <SvgXml xml={MoreIcon} style={styles.moreIcon} />
+          </TouchableOpacity>
         </View>
         <View style={styles.headerNav}>
           {renderTab("Upcoming", "Upcoming")}
@@ -268,7 +254,11 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
   },
-
+  headerTitle: {
+    color: "#000000",
+    fontSize: 20,
+    fontFamily: "Urbanist-bold",
+  },
   searchIcon: {
     color: "#FFFFFF",
     width: 20,
@@ -293,6 +283,7 @@ const styles = StyleSheet.create({
     borderBottomColor: "#246BFD",
   },
   tabText: {
+    fontFamily: "Urbanist-bold",
     fontSize: 16,
     color: "#D3D3D3",
   },
