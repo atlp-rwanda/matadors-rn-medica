@@ -23,25 +23,30 @@ import {
   WhiteApple,
 } from "@/components/Icons/Icons";
 import { SvgXml } from "react-native-svg";
+import Button from "@/components/UI/Button";
+import { appleBlackIcon, facebookBlueIcon, googleIcon } from "@/constants/icon";
+import { ScrollView } from "react-native";
 
 const LetsYouIn = () => {
   const [visible, setVisible] = React.useState(false);
   const hideDialog = () => setVisible(false);
   const { theme, changeTheme } = useContext(ThemeContext);
-  changeTheme("dark");
 
   return (
-    <View
-      style={[
-        styles.container,
-        { backgroundColor: theme === "dark" ? "#181A20" : "#FFFFFF" },
-      ]}
+    <ScrollView
+      style={{
+        backgroundColor: theme === "dark" ? "#181A20" : "#FFFFFF",
+      }}
+      contentContainerStyle={{
+        paddingHorizontal: 20,
+        height: "100%",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        gap: 20,
+      }}
     >
       <StatusBar style={theme === "dark" ? "light" : "dark"} />
-      <Pressable onPress={() => router.back()} style={styles.arrow}>
-        <SvgXml xml={theme === "dark" ? BackArrow : blackArrow} />
-      </Pressable>
-
       <Image source={require("../../../assets/icons/FrameOne.png")} />
 
       <View style={styles.midPartOne}>
@@ -55,71 +60,43 @@ const LetsYouIn = () => {
         </Text>
       </View>
 
-      <View style={styles.middlePart}>
-        <View style={styles.Buttons}>
-          <TouchableOpacity
-            style={[
-              styles.middleButton,
-              { backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF", borderColor: theme === 'dark' ? '#35383F' : '#EEEEEE' },
-            ]}
-          >
-            <Image source={require("../../../assets/icons/facebook.png")} />
-            <Text
-              style={[
-                Typography.semiBold.large,
-                { color: theme === "dark" ? "#FFFFFF" : Colors.grayScale._900 },
-              ]}
-            >
-              Continue with facebook
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[
-              styles.middleButton,
-              { backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF", borderColor: theme === 'dark' ? '#35383F' : '#EEEEEE' },
-            ]}
-          >
-            <Image source={require("../../../assets/icons/Google.png")} />
-            <Text
-              style={[
-                Typography.semiBold.large,
-                { color: theme === "dark" ? "#FFFFFF" : Colors.grayScale._900 },
-              ]}
-            >
-              Continue with Google
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[
-              styles.middleButton,
-              { backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF", borderColor: theme === 'dark' ? '#35383F' : '#EEEEEE' },
-            ]}
-          >
-            <SvgXml xml={theme === 'dark' ? WhiteApple : BlackApple } />
-            <Text
-              style={[
-                Typography.semiBold.large,
-                { color: theme === "dark" ? "#FFFFFF" : Colors.grayScale._900 },
-              ]}
-            >
-              Continue with Apple
-            </Text>
-          </TouchableOpacity>
-        </View>
+      <View style={{ width: "100%", flexDirection: "column", gap: 10 }}>
+        <Button
+          title="Continue with facebook"
+          type="outline"
+          radius="medium"
+          style={{ width: "100%" }}
+          leftIcon={() => <SvgXml xml={facebookBlueIcon} />}
+          onPress={() => {}}
+        />
+        <Button
+          title="Continue with Google"
+          type="outline"
+          radius="medium"
+          style={{ width: "100%" }}
+          leftIcon={() => <SvgXml xml={googleIcon} />}
+          onPress={() => {}}
+        />
+        <Button
+          title="Continue with Apple"
+          type="outline"
+          radius="medium"
+          style={{ width: "100%" }}
+          leftIcon={() => <SvgXml xml={appleBlackIcon} />}
+          onPress={() => {}}
+        />
       </View>
 
       <SvgXml xml={theme === "dark" ? OrLine : greyOrLine} />
 
-      <TouchableOpacity
-        onPress={() => router.push("/(auth)/SignIn&SignOut/YourProfile")}
-        style={styles.signinBtn}
-      >
-        <Text style={[Typography.bold.large, { color: Colors.others.white }]}>
-          Sign in with password
-        </Text>
-      </TouchableOpacity>
+      <Button
+        title="Sign in with password"
+        style={{ width: "100%" }}
+        onPress={() => {
+          router.push("/(auth)/SignIn&SignOut/YourProfile");
+        }}
+        active={true}
+      />
 
       <View style={{ flexDirection: "row", gap: 5 }}>
         <Text
@@ -139,7 +116,7 @@ const LetsYouIn = () => {
           Sign up
         </Text>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 

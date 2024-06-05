@@ -47,12 +47,11 @@ const YourProfile = () => {
       contentContainerStyle={{
         gap: 15,
         alignItems: "center",
-        // paddingTop: 20,
-        paddingHorizontal: 15,
-        // paddingBottom: 30,
-        height: "100%",
+        // paddingHorizontal: 15,
+        // height: "100%",
         paddingVertical: 20,
       }}
+      alwaysBounceVertical={false}
     >
       <View>
         <SelectProfile image={image} setImage={setImage} />
@@ -60,11 +59,13 @@ const YourProfile = () => {
 
       <View
         style={{
-          gap: 20,
           paddingHorizontal: 20,
+          gap: 20,
           paddingVertical: 20,
           width: "100%",
           height: "100%",
+          flexGrow: 1,
+          flex: 1,
         }}
       >
         <Input placeholder="First Name" />
@@ -131,7 +132,9 @@ const YourProfile = () => {
             setIsFocus(false);
           }}
           renderRightIcon={() => (
-            <SvgXml xml={theme === "light" ? DropDownIconGray : DropDownIconDark} />
+            <SvgXml
+              xml={theme === "light" ? DropDownIconGray : DropDownIconDark}
+            />
           )}
           itemTextStyle={{
             color:
@@ -151,14 +154,12 @@ const YourProfile = () => {
         />
       </View>
 
-      <View style={{ marginTop: "auto", width: "100%" }}>
+      <View style={{ marginTop: "auto", width: "100%", paddingHorizontal: 20 }}>
         <Button
           title="Update"
           onPress={() => {
-            router.push("/(auth)/SignIn&SignOut/Create-NewPin")
+            router.push("/(auth)/SignIn&SignOut/Create-NewPin");
           }}
-          shadowColor={Colors.main.primary._500}
-          backgroundColor={Colors.main.primary._500}
         />
       </View>
     </ScrollView>

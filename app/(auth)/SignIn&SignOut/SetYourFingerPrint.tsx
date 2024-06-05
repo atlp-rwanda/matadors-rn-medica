@@ -110,16 +110,15 @@ export default function SetYourFingerPrint() {
                 style={{
                   flexGrow: 1,
                   backgroundColor:
-                    theme === "light"
-                      ? Colors.others.white
-                      : Colors.dark._1,
+                    theme === "light" ? Colors.others.white : Colors.dark._1,
                 }}
               >
                 <Button
-                  backgroundColor={Colors.main.primary._100}
                   title="Skip"
-                  textColor={{ color: Colors.main.primary._500 }}
-                  onPress={() => {}}
+                  type="light"
+                  onPress={() => {
+                    router.push("/(app)/ActionMenu");
+                  }}
                 />
               </View>
               <View
@@ -131,16 +130,12 @@ export default function SetYourFingerPrint() {
                     shadowOpacity: 1,
                     shadowRadius: 20,
                     backgroundColor:
-                      theme === "light"
-                        ? Colors.others.white
-                        : Colors.dark._1,
+                      theme === "light" ? Colors.others.white : Colors.dark._1,
                   },
                 ]}
               >
                 <Button
-                  backgroundColor={Colors.main.primary._500}
                   title="Continue"
-                  shadowColor={Colors.main.primary._500}
                   onPress={async () => {
                     try {
                       const { success } =
@@ -211,7 +206,7 @@ export default function SetYourFingerPrint() {
 
                         setTimeout(() => {
                           modal.hide();
-                          router.push("/(app)/ActionMenu")
+                          router.push("/(app)/ActionMenu");
                         }, 4000);
                       }
                     } catch (err) {

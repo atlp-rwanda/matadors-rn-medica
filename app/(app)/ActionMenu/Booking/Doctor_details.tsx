@@ -134,7 +134,6 @@ export const ReviewerCardComponent = () => {
 
 const DoctorDetails = () => {
   const { theme, changeTheme } = useContext(ThemeContext);
-  changeTheme("light");
   return (
     <View
       style={{
