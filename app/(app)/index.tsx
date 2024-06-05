@@ -10,11 +10,11 @@ import { StatusBar } from "expo-status-bar";
 export default function Index() {
   const { theme, changeTheme } = useContext(ThemeContext);
 
-  useEffect(() => {
-    setTimeout(() => {
-      router.push("/onBoarding/FirstScreen");
-    });
-  });
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     router.push("/onBoarding/FirstScreen");
+  //   });
+  // });
 
   return (
     <>
