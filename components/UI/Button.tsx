@@ -84,7 +84,7 @@ export default function Button({
           borderRadius: variableStyles.borderRadius,
           width: "100%",
           shadowColor: isActive ? variableStyles.shadowColor : "none",
-          elevation: isActive ? variableStyles.elevation : 0,
+          elevation: variableStyles.elevation,
           borderWidth: type === "outline" ? 1 : 0,
           borderColor: type === "outline" ? Colors.grayScale._200 : "none",
           flexDirection: "row",
