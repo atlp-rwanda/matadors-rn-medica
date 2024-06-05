@@ -23,8 +23,6 @@ interface Props {
 export default function Header({ title, options }: Props) {
   const { theme, changeTheme } = useContext(ThemeContext);
 
-  // changeTheme("light");
-
   return (
     <>
       <StatusBar style={theme === "light" ? "dark" : "light"} />

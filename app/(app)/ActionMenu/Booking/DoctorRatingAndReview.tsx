@@ -9,14 +9,13 @@ import {
 import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Typography from "@/constants/Typography";
-import { Image } from "react-native";
 import { Colors } from "@/constants/Colors";
 import { router } from "expo-router";
 import { SvgXml } from "react-native-svg";
 import ReviewerCardComponent from "@/components/ReviewerCardComponent";
 import { LeftArrow } from "@/components/UI/Icons";
-import { circleWithDots } from "@/components/UI/icons/circleWithDots";
 import { fullSmallBlueStar, fullSmallWhiteStar } from "@/components/UI/icons/star";
+import { moreBlackIcon } from "@/constants/icon";
 
 
 
@@ -34,7 +33,7 @@ const DoctorRatingAndReview = () => {
             </View>
           </View>
           <View style={styles.rightSide}>
-            <SvgXml xml={circleWithDots} />
+            <SvgXml xml={moreBlackIcon} />
           </View>
         </View>
       </SafeAreaView>

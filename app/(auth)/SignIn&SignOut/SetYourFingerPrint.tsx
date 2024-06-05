@@ -1,7 +1,4 @@
-import ModalScreen from "@/app/modal";
 import { Text, View } from "@/components/Themed";
-import { SvgUri, SvgXml } from "react-native-svg";
-
 import Button from "@/components/UI/Button";
 import { Colors } from "@/constants/Colors";
 import Typography from "@/constants/Typography";
@@ -9,7 +6,6 @@ import { Image, ScrollView } from "react-native";
 import { ThemeContext } from "@/ctx/ThemeContext";
 import React, { useContext, useEffect } from "react";
 import * as LocalAuthentication from "expo-local-authentication";
-import ModalContainer from "@/components/UI/Modal";
 import { useModal } from "@/ctx/ModalContext";
 import Animated, {
   useAnimatedStyle,
@@ -110,16 +106,16 @@ export default function SetYourFingerPrint() {
                 style={{
                   flexGrow: 1,
                   backgroundColor:
-                    theme === "light"
-                      ? Colors.others.white
-                      : Colors.dark._1,
+                    theme === "light" ? Colors.others.white : Colors.dark._1,
                 }}
               >
                 <Button
                   backgroundColor={Colors.main.primary._100}
                   title="Skip"
                   textColor={{ color: Colors.main.primary._500 }}
-                  onPress={() => {}}
+                  onPress={() => {
+                    router.push("/(app)/ActionMenu");
+                  }}
                 />
               </View>
               <View
@@ -131,9 +127,7 @@ export default function SetYourFingerPrint() {
                     shadowOpacity: 1,
                     shadowRadius: 20,
                     backgroundColor:
-                      theme === "light"
-                        ? Colors.others.white
-                        : Colors.dark._1,
+                      theme === "light" ? Colors.others.white : Colors.dark._1,
                   },
                 ]}
               >
@@ -211,7 +205,7 @@ export default function SetYourFingerPrint() {
 
                         setTimeout(() => {
                           modal.hide();
-                          router.push("/(app)/ActionMenu")
+                          router.push("/(app)/ActionMenu");
                         }, 4000);
                       }
                     } catch (err) {

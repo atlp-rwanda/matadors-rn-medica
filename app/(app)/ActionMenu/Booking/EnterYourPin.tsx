@@ -14,6 +14,7 @@ import { OtpInput } from "react-native-otp-entry";
 import { router } from "expo-router";
 import { useModal } from "@/ctx/ModalContext";
 import { ThemeContext } from "@/ctx/ThemeContext";
+import React from "react";
 
 export default function EnterYourPin() {
   const [isDark, setIsDark] = useState(false);
@@ -31,7 +32,7 @@ export default function EnterYourPin() {
             gap: 20,
             borderRadius: 48,
             backgroundColor:
-              theme === "light" ? Colors.others.white : Colors.dark._2,
+              theme === "light" ? Colors.others.white : '#181A20',
           }}
         >
           <Image source={require("@/assets/images/calendarmodal.png")} />
@@ -114,27 +115,16 @@ export default function EnterYourPin() {
 
   return (
     <>
-      <View style={isDark ? styles.containerdark : styles.container}>
+      <View style={[isDark ? styles.containerdark : styles.container,{backgroundColor:
+              theme === "light" ? Colors.others.white : '#181A20',}]}>
         <View style={isDark ? styles.headerdark : styles.header}>
-          <Pressable onPress={() => router.back()}>
-            <LeftArrow
-              fillColor={isDark ? Colors.others.white : Colors.grayScale._900}
-            />
-          </Pressable>
-          <Text
-            style={[
-              Typography.heading._4,
-              { color: isDark ? Colors.others.white : Colors.grayScale._900 },
-            ]}
-          >
-            Enter Your Pin
-          </Text>
+
         </View>
         <View style={{ gap: 60, alignItems: "center" }}>
           <Text
             style={[
               Typography.medium.xLarge,
-              { color: isDark ? Colors.others.white : Colors.grayScale._900 },
+              { color: theme === "dark" ? "#FFFFFF" : "#212121" },
             ]}
           >
             Enter your PIN to confirm appointment
@@ -147,11 +137,12 @@ export default function EnterYourPin() {
                 pinCodeContainerStyle: {
                   width: 83,
                   height: 61,
-                  backgroundColor: isDark
-                    ? Colors.dark._2
+                  
+                  backgroundColor: theme === 'dark'
+                    ? '#1F222A'
                     : Colors.grayScale._50,
                   borderRadius: 16,
-                  borderColor: isDark ? Colors.dark._3 : Colors.grayScale._200,
+                  borderColor: theme === 'dark' ? '#35383F' : Colors.grayScale._200,
                   borderWidth: 1,
                 },
                 focusedPinCodeContainerStyle: {
@@ -167,7 +158,7 @@ export default function EnterYourPin() {
                   paddingRight: 32,
                 },
                 pinCodeTextStyle: {
-                  color: isDark ? Colors.others.white : Colors.grayScale._900,
+                  color: theme === 'dark' ? Colors.others.white : Colors.grayScale._900,
                 },
               }}
             />
