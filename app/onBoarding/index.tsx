@@ -39,7 +39,13 @@ const data = [
   },
 ];
 
-const OnboardingComponent = ({}: {
+const OnboardingComponent = ({
+  action,
+  children,
+  direction,
+  image,
+  text,
+}: {
   image: any;
   text: string;
   action: string;
@@ -74,78 +80,110 @@ const OnboardingComponent = ({}: {
           theme === "dark" ? Colors.dark._1 : Colors.others.white,
       }}
     >
-      <StatusBar style={theme === "light" ? "dark" : "light"} />
-      <View
+      <ScrollView
+        contentContainerStyle={{
+          height: "100%",
+          justifyContent: "flex-end",
+          gap: 20,
+          paddingBottom: 20,
+        }}
         style={{
-          width: "100%",
-          justifyContent: "center",
-          alignItems: "center",
+          backgroundColor:
+            theme === "dark" ? Colors.dark._1 : Colors.others.white,
         }}
       >
-        <FlatList
-          data={data}
-          contentContainerStyle={{ flexGrow: 1, flexDirection: "row" }}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          pagingEnabled
-          bounces={false}
-          keyExtractor={(item) => item.id}
-          onScroll={Animated.event(
-            [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-            {
-              useNativeDriver: false,
-            }
-          )}
-          scrollEventThrottle={32}
-          onViewableItemsChanged={viewableItemsChanged}
-          viewabilityConfig={viewConfig}
-          ref={slidesRef}
-          renderItem={({ item }) => (
-            <View
-              style={{
-                width: width,
-                alignItems: "center",
-                paddingHorizontal: 20,
-                gap: 40,
-              }}
-            >
-              <View>
-                <Image source={theme === "dark" ? item.darkImg : item.image} />
-              </View>
-              <View>
-                <Text
-                  style={[
-                    Typography.heading._2,
-                    {
-                      color:
-                        theme === "light"
-                          ? Colors.main.primary._500
-                          : Colors.others.white,
-                      textAlign: "center",
-                    },
-                  ]}
-                >
-                  {item.text}
-                </Text>
-              </View>
-            </View>
-          )}
-        />
-      </View>
-
-      <View
-        style={{ padding: 20, alignItems: "center", justifyContent: "center" }}
-      >
-        <View style={{ alignSelf: "center" }}>
-          <Paginator data={data} scrollX={scrollX} />
-        </View>
-        <Pressable
-          onPress={() => router.push("(auth)/SignIn&SignOut/LetsYouIn")}
-          style={styles.btn}
+        <StatusBar style={theme === "light" ? "dark" : "light"} />
+        <View
+          style={{
+            width: "100%",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
         >
-          <Text style={styles.btnText}>Get started</Text>
-        </Pressable>
-      </View>
+          <View
+            style={{
+              width: "100%",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <FlatList
+              data={data}
+              contentContainerStyle={{ flexGrow: 1, flexDirection: "row" }}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              pagingEnabled
+              bounces={false}
+              keyExtractor={(item) => item.id}
+              onScroll={Animated.event(
+                [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+                {
+                  useNativeDriver: false,
+                }
+              )}
+              scrollEventThrottle={32}
+              onViewableItemsChanged={viewableItemsChanged}
+              viewabilityConfig={viewConfig}
+              ref={slidesRef}
+              renderItem={({ item }) => (
+                <View
+                  style={{
+                    width: width,
+                    alignItems: "center",
+                    paddingHorizontal: 20,
+                    gap: 40,
+                  }}
+                >
+                  <View>
+                    <View>
+                      <Image
+                        source={theme === "dark" ? item.darkImg : item.image}
+                      />
+                    </View>
+                    <View>
+                      <Text
+                        style={[
+                          Typography.heading._2,
+                          {
+                            color:
+                              theme === "light"
+                                ? Colors.main.primary._500
+                                : Colors.others.white,
+                            color:
+                              theme === "light"
+                                ? Colors.main.primary._500
+                                : Colors.others.white,
+                            textAlign: "center",
+                          },
+                        ]}
+                      >
+                        {item.text}
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+              )}
+            />
+          </View>
+        </View>
+        <View
+          style={{
+            padding: 20,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <View style={{ alignSelf: "center" }}>
+            <Paginator data={data} scrollX={scrollX} />
+          </View>
+          <Pressable
+            onPress={() => router.push("(auth)/SignIn&SignOut/LetsYouIn")}
+            style={styles.btn}
+          >
+            <Text style={styles.btnText}>Get started</Text>
+          </Pressable>
+        </View>
+      </ScrollView>
     </ScrollView>
   );
 };

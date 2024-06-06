@@ -57,6 +57,7 @@ export default function Index() {
     "Urbanist-Semibold": require("@/assets/fonts/Urbanist-SemiBold.ttf"),
     "Urbanist-Medium": require("@/assets/fonts/Urbanist-Medium.ttf"),
   });
+
   if (!fontsLoaded) {
     return null;
   }

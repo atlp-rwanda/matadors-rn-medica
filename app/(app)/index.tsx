@@ -6,9 +6,13 @@ import { router } from "expo-router";
 import React from "react";
 import { ThemeContext } from "@/ctx/ThemeContext";
 import { StatusBar } from "expo-status-bar";
+import { useAuth } from "@/ctx/AuthContext";
 
 export default function Index() {
   const { theme, changeTheme } = useContext(ThemeContext);
+  const { isLoggedIn } = useAuth();
+
+  console.log("isLoggedIn: ", isLoggedIn);
 
   useEffect(() => {
     setTimeout(() => {

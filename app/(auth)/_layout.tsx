@@ -33,7 +33,7 @@ export default function Layout() {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="SignIn&SignOut/YourProfile"
+          name="SignIn&SignOut/YourProfile/[email]"
           options={{ header: () => <Header title="Fill Your Profile" /> }}
         />
         <Stack.Screen

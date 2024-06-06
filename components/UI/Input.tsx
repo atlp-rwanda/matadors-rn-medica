@@ -7,18 +7,24 @@ import { TextInput } from "react-native";
 
 interface Props {
   placeholder: string;
-  value?: string;
+  value: string;
   textInputConfig?: object;
   rightElement?: () => React.JSX.Element;
   leftElement?: () => React.JSX.Element;
+  name: string;
+  onChange: (name: string, value: string) => void;
+  disabled?: boolean;
 }
 
 export default function Input({
+  name,
+  onChange,
   placeholder,
   value,
   textInputConfig,
   rightElement,
   leftElement,
+  disabled,
 }: Props) {
   const { theme } = useContext(ThemeContext);
   return (
@@ -47,6 +53,10 @@ export default function Input({
           },
         ]}
         placeholderTextColor={Colors.grayScale._500}
+        onChangeText={(val) => {
+          onChange(name, val);
+        }}
+        editable={!disabled}
       />
 
       {rightElement && rightElement()}

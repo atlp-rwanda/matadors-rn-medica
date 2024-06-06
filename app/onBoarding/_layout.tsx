@@ -1,8 +1,9 @@
 import React from "react";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { Link, Stack } from "expo-router";
+import { Link, Redirect, Stack } from "expo-router";
 import { Pressable } from "react-native";
-
+import * as SecureStore from "expo-secure-store";
+import { useAuth } from "@/ctx/AuthContext";
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
@@ -13,16 +14,30 @@ function TabBarIcon(props: {
 }
 
 export default function Layout() {
+  const { isLoggedIn } = useAuth();
+  async function userViewedOnboarding() {
+    if ((await SecureStore.getItemAsync("viewedOnboardingScreen")) !== "true") {
+      await SecureStore.setItemAsync("viewedOnboardingScreen", "true");
+    }
+
+    return true;
+  }
+
+  const displayOnboarding = !userViewedOnboarding();
+
+  if (displayOnboarding && !isLoggedIn) {
+    return <Redirect href="/(auth)/SignIn&SignOut/SignInBlankForm" />;
+  }
 
   return (
     <Stack>
-        <Stack.Screen
+      <Stack.Screen
         name="index"
         options={{
           headerShown: false,
         }}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         name="FirstScreen"
         options={{
           headerShown: false,
@@ -41,7 +56,7 @@ export default function Layout() {
         options={{
           headerShown: false,
         }}
-      />
+      /> */}
     </Stack>
   );
 }

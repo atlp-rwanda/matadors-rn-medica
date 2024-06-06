@@ -10,6 +10,34 @@ export interface ModalType {
   content: { children: React.JSX.Element | React.JSX.Element[] | null };
 }
 
+export interface ImageType {
+  uri: string;
+  name: string;
+  mimeType: string;
+}
+
+export interface UserInfo {
+  firstName: string;
+  lastName: string;
+  birthDate: string;
+  email: string;
+  gender: string;
+  image: ImageType;
+}
+
+export interface AuthType {
+  email: string;
+  isLoggedIn: boolean;
+  token: string;
+  refreshToken: string;
+  activated: boolean;
+  userId: string;
+  refreshSession: () => void;
+  logout: () => void;
+  login: (email: string, password: string) => Promise<void>;
+  register: (email: string, password: string) => Promise<void>;
+  setUpUserInfo: (user: UserInfo) => Promise<void>;
+}
 export interface PaymentOption {
   id: number;
   title: string;
