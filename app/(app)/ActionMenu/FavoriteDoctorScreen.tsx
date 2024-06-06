@@ -1,5 +1,5 @@
 import React,{ReactElement, useState} from 'react';
-import { StyleSheet, Text, Image, View, TouchableHighlight, SafeAreaView, Button, Alert, Platform, StatusBar, Dimensions,TextInput, ScrollView, Pressable} from 'react-native'
+import { StyleSheet, Text, Image, View, TouchableHighlight, SafeAreaView, Button, Alert, Platform, Dimensions,TextInput, ScrollView, Pressable} from 'react-native'
 import { Feather } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
@@ -18,9 +18,11 @@ import FoundDoctorCount from '@/components/FoundDoctorCount';
 import NofoundComponent from '@/components/NofoundComponent';
 import RemovefavoritePopup from '@/components/RemovefavoritePopup';
 import FilterPopup from '@/components/FilterSearchComponent';
+import { StatusBar } from 'expo-status-bar';
 import NotFoundScreen from '@/app/+not-found';
 import { ThemeContext } from '@/ctx/ThemeContext';
 import { useContext } from 'react';
+
 
 
 interface imageMapProp{
@@ -95,7 +97,8 @@ function DoctorScreen() {
 
     const filteredDoctors=searchTerm.length>0 ? selectedCategory.Doctors.filter(doctor=>doctor.name.toLowerCase().includes(searchTerm)):selectedCategory.Doctors
     return (
-        <SafeAreaView style={[styles.container,containerStyle]}>
+        <SafeAreaView style={[styles.container, containerStyle]}>
+           <StatusBar style={theme === "dark" ? "light" : "dark"} />
             <View>
                 
                 <View style={[styles.upper,containerStyle]}>
@@ -237,7 +240,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         width:"100%",
          marginBottom: "7%",
-        marginTop: "8%",
+        marginTop: "18%",
     },
     foundDoctorView: {
         width: "100%",

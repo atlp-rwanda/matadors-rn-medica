@@ -6,13 +6,20 @@ import { filter } from '@/assets/icons/Search&FilterIcons/filter';
 import { inputSearch } from '@/assets/icons/Search&FilterIcons/inputSearch';
 import { leftArrow } from '@/assets/icons/left';
 import { router } from 'expo-router';
+import { ThemeContext } from '@/ctx/ThemeContext';
+import { useContext } from 'react';
+import { LeftArrowWhite } from '@/assets/icons/LeftArrowWhite';
 
 
 interface searchComponentProps{
     onSearchSubmit: (searchTerm: string) => void,
     filterAction?:()=>void
 }
-function SearchComponent({onSearchSubmit,filterAction}:searchComponentProps) {
+function SearchComponent({ onSearchSubmit, filterAction }: searchComponentProps) {
+    const { theme, changeTheme } = useContext(ThemeContext)
+    const leftArrowIcon = theme === "dark" ? LeftArrowWhite : leftArrow
+    const inputStyle = theme === "dark" ? styles.inputDarkStyle : styles.input
+    const outerStyle=theme==="dark"?styles.outerDark:styles.outer
     const [value, setValue] = useState("")
     const handleSearchClick = () => {
         onSearchSubmit(value)
@@ -24,9 +31,9 @@ function SearchComponent({onSearchSubmit,filterAction}:searchComponentProps) {
     return (
         <View style={styles.upperInner}>
             <Pressable style={styles.leftArrowVIew} onPress={()=>router.back()}>
-                    <SvgXml xml={leftArrow} />
+                    <SvgXml xml={leftArrowIcon} />
                 </Pressable>
-        <View style={styles.outer}>
+        <View style={[styles.outer,outerStyle]}>
             <Pressable style={styles.searchView}  onPress={handleSearchClick}>
                 <SvgXml xml={inputSearch} />
 
@@ -35,7 +42,7 @@ function SearchComponent({onSearchSubmit,filterAction}:searchComponentProps) {
                 <TextInput
                     onChangeText={handleTextChange}
                     value={value}
-                    style={styles.input}
+                    style={[styles.input,inputStyle]}
                 
                 />
                 
@@ -70,9 +77,13 @@ const styles = StyleSheet.create({
         display: "flex",
         flexDirection: "row",
         justifyContent: "space-between",
-        borderRadius:15
+        borderRadius:15    
         
-        
+    },
+    outerDark: {
+        borderWidth:2,
+         borderColor: "#246BFD",
+        backgroundColor: "#192032",
         
     },
     leftArrowVIew: {
@@ -82,7 +93,6 @@ const styles = StyleSheet.create({
         flexDirection:"row",
         justifyContent: "flex-start",
         alignItems: "center",
-        backgroundColor:"white"
     },
     searchView: {
         height: "100%",
@@ -100,6 +110,10 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",   
         
+    },
+    inputDarkStyle: {
+        backgroundColor: "#192032",
+        color:"white"
     },
     input: {
         width: 200,

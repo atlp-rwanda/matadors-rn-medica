@@ -3,6 +3,8 @@ import { StyleSheet, Text, Image, View, TouchableHighlight, SafeAreaView, Button
 import Typography from '@/constants/Typography';
 import { SvgXml } from "react-native-svg"
 import { defaultIcon } from '@/assets/icons/Defaulticon';
+import { ThemeContext } from '@/ctx/ThemeContext';
+import { useContext } from 'react';
  
 interface foundDoctorProps{
     count: number,
@@ -10,12 +12,15 @@ interface foundDoctorProps{
 }
 
 function FoundDoctorCount({ count }: foundDoctorProps) {
-    const foundText=count===0 ?"0 found":`${count} founds`
+    const foundText = count === 0 ? "0 found" :count===1?"1 found": `${count} founds`
+    const { theme, changeTheme } = useContext(ThemeContext)
+    const textColor=theme==="dark"?styles.countTextWhite:styles.countText
+
     return (
         <View style={styles.outer}>
             <View style={styles.leftView}>
                 <View style={styles.countView}>
-                    <Text style={styles.countText} >{foundText}</Text>
+                    <Text style={[styles.countText,textColor]} >{foundText}</Text>
 
                 </View>
 
@@ -65,6 +70,10 @@ const styles = StyleSheet.create({
     },
     countView: {
         
+        
+    },
+    countTextWhite: {
+        color:"white"
         
     },
     countText: {

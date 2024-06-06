@@ -6,11 +6,12 @@ import { search } from '@/assets/icons/search';
 import { more } from '@/assets/icons/more';
 import { leftArrow } from '@/assets/icons/left';
 import { router } from 'expo-router';
-import { ThemeContext } from '@/ctx/ThemeContext';
-import { useContext } from 'react';
 import { searchWhiteIcon } from '@/assets/icons/SearchWhiteIcon';
 import { LeftArrowWhite } from '@/assets/icons/LeftArrowWhite';
 import { moreWhiteIcon } from '@/assets/icons/MoreWhite';
+import { ThemeContext } from '@/ctx/ThemeContext';
+import { useContext } from 'react';
+
 
 interface Headerprops{
     onSearchPressed: () => void,
@@ -27,7 +28,7 @@ function HeaderComponent({ onSearchPressed, headerText }: Headerprops) {
     return (
         <View style={styles.upperInner}>
             <View style={styles.upperLeft}>
-                <Pressable onPress={()=>router.back()}>
+                <Pressable onPress={()=>router.back()} style={styles.leftArrowVIew}>
                     <SvgXml xml={leftArrowIcon} />
                 </Pressable>
                 <View style={styles.NotificationView}>
@@ -61,6 +62,14 @@ const styles = StyleSheet.create({
          marginBottom: "5%",
         marginTop: "12%",
     },
+    leftArrowVIew: {
+       height: "100%",
+        width:"12%",
+        display: "flex",
+        flexDirection:"row",
+        justifyContent: "center",
+        alignItems: "center",
+    },
     searchComponent: {
         
     },
@@ -74,9 +83,10 @@ const styles = StyleSheet.create({
     upperLeft: {
         display: "flex",
         flexDirection: "row",
+        alignItems:"center",
         justifyContent: 'space-between',
         width: "70%",
-        height:"100%",
+        height: "100%",
     },
     searchView: {
         display: "flex",

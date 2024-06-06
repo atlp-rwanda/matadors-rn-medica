@@ -7,6 +7,8 @@ import { star } from '@/assets/icons/star';
 import Removebtn from './Removebtn';
 import { overlay } from 'react-native-paper';
 import DoctorComponent from './DoctorComponent';
+import { ThemeContext } from '@/ctx/ThemeContext';
+import { useContext } from 'react';
 
 interface imageMapProp{
     [key:string]:ReturnType<typeof require>
@@ -37,6 +39,14 @@ const imageMap: imageMapProp = {
 
 
 function RemovefavoritePopup({ visible, onClose, cancel, doctor }: RemovefavoritepopProps) {
+    const { theme, changeTheme } = useContext(ThemeContext)
+    const viewBackgroundColor = theme === "dark" ? styles.viewDark : styles.viewLight
+    const titleColor = theme === "dark" ? styles.whiteTitle : styles.introColor
+    const horizontalColor = theme === 'dark' ? styles.darkHorizontal : styles.greyHorizontal
+    const cancelButtonColor = theme === "dark" ? "#35383F" : "#E9F0FF"
+    const cancelbtnTextColor = theme === "dark" ? "white" : "#246BFD"
+    const doctorComponenetColor = theme === "dark" ? "#181A20" : "white"
+    const componentViewColor=theme==="dark"?styles.componenetViewdark:styles.componentView
     const [showpopUp, setShowPopup] = useState(false)
     const [selectedDoctor,setSelectedDoctor]=useState()
      const handleRemove = (doctor:any) => {
@@ -63,13 +73,13 @@ function RemovefavoritePopup({ visible, onClose, cancel, doctor }: Removefavorit
     if(!visible) return null
     return (
         <SafeAreaView style={styles.overlay}>
-        <Animated.View style={[styles.outer,{ transform: [{ translateY: translateY.interpolate({ inputRange: [-1, 1], outputRange: [0, 300] }) }] }]}>
-            <View style={styles.inner}>
-                    <View style={styles.intro}><Text style={styles.introText}>Remove From Favorites?</Text></View>
-                    <View style={styles.horizontal}></View>
+        <Animated.View style={[styles.outer,viewBackgroundColor,{ transform: [{ translateY: translateY.interpolate({ inputRange: [-1, 1], outputRange: [0, 300] }) }] }]}>
+            <View style={[styles.inner,viewBackgroundColor]}>
+                    <View style={styles.intro}><Text style={[styles.introText,titleColor]}>Remove From Favorites?</Text></View>
+                    <View style={[styles.horizontal,horizontalColor]}></View>
                     <View style={styles.displayComponent}>
                         
-                        <View  style={styles.componentView}>
+                        <View  style={[styles.componentView,componentViewColor]}>
                                         <DoctorComponent
 
                                             imageSource={imageMap[doctor.imageSource]}
@@ -80,7 +90,8 @@ function RemovefavoritePopup({ visible, onClose, cancel, doctor }: Removefavorit
                                             star={iconMapping[doctor.star]}
                                             review={doctor.review}
                                             rate={doctor.rate}
-                                            remove={()=>handleRemove(doctor)}
+                                          remove={() => handleRemove(doctor)}
+                                backgroundStyle={{backgroundColor: doctorComponenetColor }}
 
                                         />
                                     </View>
@@ -88,9 +99,9 @@ function RemovefavoritePopup({ visible, onClose, cancel, doctor }: Removefavorit
                 <View style={styles.btnView}>
                     <Removebtn
                         action={cancel} 
-                        backColor="#E9F0FF"
+                        backColor={cancelButtonColor}
                         text="Cancel"
-                        textColor="#246BFD"
+                        textColor={cancelbtnTextColor}
 
                     />
                     <Removebtn
@@ -125,11 +136,18 @@ const styles = StyleSheet.create({
          zIndex: 1000,
         
     },
+    viewDark: {
+        backgroundColor: '#1F222A',
+        
+    },
+    viewLight: {
+         backgroundColor: '#FAFAFA',
+        
+    },
     outer: {
         width: "100%",
         height: "40%",
         zIndex:1000,
-        backgroundColor: '#FAFAFA',
         borderTopLeftRadius: 20,
          borderTopRightRadius: 20,
        shadowColor: '#000',
@@ -152,14 +170,18 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: 'center',
     },
+    whiteTitle: {
+        color: "white", 
+    },
+    introColor: {
+         color: "#212121",  
+    },
     introText: {
-        color: "#212121",
         fontWeight: "bold",
         fontSize:20
     },
     inner: {  
         width: "90%",
-        backgroundColor:"#FAFAFA"
     },
     displayComponent: {
         
@@ -169,6 +191,10 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems:'center'      
+    },
+    componenetViewdark: {
+        backgroundColor:"#181A20"
+        
     },
     componentView: {
         backgroundColor:"#FDFDFD",
@@ -182,12 +208,25 @@ const styles = StyleSheet.create({
         alignItems: "center",
         zIndex:10000
     },
+    darkHorizontal: {
+        borderColor:"#35383E",    
+    },
+    greyHorizontal: {
+        borderColor:"#EEEEEE",
+        
+    },
     horizontal: {
         width: "100%",
         borderWidth: 1,
-        borderColor:"#EEEEEE",
         marginBottom: "6%",
-         backgroundColor:"#EEEEEE"
+    },
+    btnDark: {
+        backgroundColor:"#35383F"
+   
+    },
+    btnLight: {
+        backgroundColor:"#E9F0FF"
+        
     }
 
 })
