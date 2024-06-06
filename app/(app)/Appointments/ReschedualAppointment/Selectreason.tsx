@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
       justifyContent: "flex-start",
       gap: 20,
       alignItems: "center",
-      marginTop: 60,
+      marginTop:10,
       backgroundColor: "transparent",
     },
     container: {
@@ -136,8 +136,8 @@ const styles = StyleSheet.create({
       justifyContent: "flex-start",
       gap: 20,
       alignItems: "center",
-      marginTop: 60,
       backgroundColor: "transparent",
+      marginTop:10
     },
     containerdark: {
       gap: 20,

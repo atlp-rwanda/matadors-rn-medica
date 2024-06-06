@@ -8,6 +8,7 @@ import {
   Pressable,
   Platform,
   ScrollView,
+  Image,
 } from "react-native";
 import DatePicker, { getFormatedDate } from "react-native-modern-datepicker";
 import { Colors } from "@/constants/Colors";
@@ -16,11 +17,14 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { ThemeContext } from "@/ctx/ThemeContext";
 import { StatusBar } from "expo-status-bar";
 import Typography from "@/constants/Typography";
+import { useModal } from "@/ctx/ModalContext";
+import { LeftArrow, LoadingIcon } from "@/components/UI/Icons";
 
-function BookingAppointment() {
+export default function BookingAppointment() {
   const { theme, changeTheme } = useContext(ThemeContext);
   const [selectedTime, setSelectedTime] = useState(null);
   const [selectedDate, setSelectedDate] = useState("");
+  const modal = useModal();
 
   const handleTimeSlotPress = ({ time }: { time: any }) => {
     setSelectedTime(time === selectedTime ? null : time);
@@ -32,7 +36,7 @@ function BookingAppointment() {
     for (let hour = 9; hour <= 14; hour++) {
       for (let minute = 0; minute < 60; minute += 30) {
         const hourFormat = hour < 12 ? "AM" : "PM";
-        const formattedHour = hour <= 12 ? hour : hour + 1;
+        const formattedHour = hour <= 12 ? hour : hour - 12;
         const time = `${formattedHour.toString().padStart(2, "0")}:${minute
           .toString()
           .padStart(2, "0")} ${hourFormat}`;
@@ -43,7 +47,7 @@ function BookingAppointment() {
               styles.button,
               selectedTime === time && styles.buttonSelected,
             ]}
-            onPress={(time: any) => handleTimeSlotPress(time)}
+            onPress={() => handleTimeSlotPress({ time })} // Corrected line
           >
             <Text
               style={[
@@ -61,83 +65,72 @@ function BookingAppointment() {
     return timeSlots;
   };
 
+
   function handleDate(select: string) {
     setSelectedDate(select);
     console.log(select);
   }
+
   const ios = Platform.OS === "ios";
 
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: theme === "dark" ? "#181A20" : "#FFFFFF",
-      }}
-    >
-      <StatusBar style={theme === "dark" ? "light" : "dark"} />
-
-      <ScrollView showsVerticalScrollIndicator={false}>
+    <View style={{ flex: 1, backgroundColor: theme === "light" ? Colors.others.white : Colors.dark._1, }}>
+      <SafeAreaView style={{ marginBottom: ios ? 10 : 5 }}>
+        <StatusBar style="dark" />
+      </SafeAreaView>
+      <View style={{ flex: 1, justifyContent: "space-around"}}>
         <View
           style={{
-            padding: 20,
-            justifyContent: "space-between",
-            gap: 24,
+            backgroundColor:
+              theme === "light" ? Colors.others.white : Colors.dark._1,
           }}
         >
-          <View style={{ gap: 24 }}>
-            <Text
-              style={[
-                Typography.bold.xLarge,
-                { color: theme === "dark" ? "#FFFFFF" : "#212121" },
-              ]}
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            style={{ marginBottom: 30 }}
+          >
+            <View
+              style={{
+                padding: 20,
+                justifyContent: "space-between",
+              }}
             >
-              Select Date
-            </Text>
-            <View style={{ borderRadius: 20 }}>
-              <DatePicker
-                onSelectedChange={(date) => handleDate(date)}
-                mode="calendar"
-                options={{
-                  backgroundColor:
-                    theme === "dark" ? "#1F222A" : Colors.transparent.blue,
-                  textHeaderColor: theme === "dark" ? "#FFFFFF" : "#212121",
-                  textDefaultColor: theme === "dark" ? "#FFFFFF" : "#212121",
-                  selectedTextColor: "#fff",
-                  mainColor: "#246BFD",
-                  textSecondaryColor: theme === "dark" ? "#FFFFFF" : "#212121",
-                  borderColor: "rgba(122, 146, 165, 0.1)",
-                }}
-                current="2020-07-13"
-                style={{
-                  borderRadius: 20,
-                }}
-              />
-            </View>
-            <View style={{ gap: 10 }}>
-              <Text
-                style={[
-                  Typography.bold.xLarge,
-                  { color: theme === "dark" ? "#FFFFFF" : "#212121" },
-                ]}
-              >
-                Select Date
-              </Text>
-              <View style={styles.change}>{generateTimeSlots()}</View>
-            </View>
-          </View>
+              <View style={{ gap: 10 }}>
+                <Text style={[Typography.bold.xLarge,{color:theme === 'light'? Colors.grayScale._900: Colors.others.white}]}>Select Date</Text>
+                <View style={{ borderRadius: 20 }}>
+                  <DatePicker
+                    onSelectedChange={(date) => handleDate(date)}
+                    mode="calendar"
+                    options={{
+                      backgroundColor: theme === 'light'? Colors.transparent.blue : Colors.dark._2 ,
+                      textHeaderColor:theme === 'light'? Colors.grayScale._900: Colors.others.white,
+                      textDefaultColor: theme === 'light'? Colors.grayScale._900: Colors.grayScale._300,
+                      selectedTextColor: Colors.others.white,
+                      mainColor: "#246BFD",
+                      textSecondaryColor: theme === 'light'? Colors.grayScale._900: Colors.others.white,
+                      borderColor: "rgba(122, 146, 165, 0.1)",
+                    }}
+                    current="2020-07-13"
+                    style={{
+                      borderRadius: 20,
+                    }}
+                  />
+                </View>
+                <View style={{ gap: 10 }}>
+                  <Text style={[Typography.bold.xLarge,{color: theme === 'light'? Colors.grayScale._900: Colors.others.white}]}>Select Hour</Text>
+                  <View style={styles.change}>{generateTimeSlots()}</View>
+                </View>
+              </View>
 
-          <View>
-            <TouchableOpacity
-              onPress={() =>
-                router.push("(app)/ActionMenu/Booking/Select-package")
-              }
-              style={styles.btn}
-            >
-              <Text style={styles.btnText}>Next</Text>
-            </TouchableOpacity>
-          </View>
+              <TouchableOpacity 
+              onPress={()=> router.push("(app)/ActionMenu/Booking/Select-package")}
+              style={styles.btn}>
+                <Text style={styles.btnText}>Next</Text>
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
         </View>
-      </ScrollView>
+      </View>
     </View>
   );
 }
@@ -163,11 +156,10 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     backgroundColor: "transparent",
     borderRadius: 100,
-    paddingHorizontal: 1,
-    paddingVertical: 2,
-    marginVertical: 8,
-    marginHorizontal: 5,
-    flexWrap: "nowrap",
+    marginVertical: 10,
+    marginHorizontal: "1%",
+    width:118,
+    height:45
   },
   buttonSelected: {
     backgroundColor: Colors.main.primary._500,
@@ -176,8 +168,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: Colors.main.primary._500,
-    fontSize: 16,
-    padding: 5,
+    padding: 3,
     alignSelf: "center",
   },
 
@@ -187,6 +178,7 @@ const styles = StyleSheet.create({
   btn: {
     backgroundColor: Colors.main.primary._500,
     textAlign: "center",
+    alignItems: "center",
     padding: 18,
     borderRadius: 100,
     marginTop: 10,
@@ -198,5 +190,3 @@ const styles = StyleSheet.create({
     color: "white",
   },
 });
-
-export default BookingAppointment;

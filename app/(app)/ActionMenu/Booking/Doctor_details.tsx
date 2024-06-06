@@ -50,7 +50,8 @@ export const ReviewerCardComponent = () => {
             style={[
               Typography.bold.large,
               {
-                color: theme === "dark" ? Colors.others.white : "#212121",
+                color:
+                  theme === "dark" ? Colors.others.white : Colors.dark._1,
               },
             ]}
           >

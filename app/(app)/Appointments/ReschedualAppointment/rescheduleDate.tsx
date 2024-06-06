@@ -43,7 +43,7 @@ export default function RescheduleAppointment() {
     for (let hour = 9; hour <= 14; hour++) {
       for (let minute = 0; minute < 60; minute += 30) {
         const hourFormat = hour < 12 ? "AM" : "PM";
-        const formattedHour = hour <= 12 ? hour : hour + 1;
+        const formattedHour = hour <= 12 ? hour : hour - 12;
         const time = `${formattedHour.toString().padStart(2, "0")}:${minute
           .toString()
           .padStart(2, "0")} ${hourFormat}`;
@@ -54,7 +54,7 @@ export default function RescheduleAppointment() {
               styles.button,
               selectedTime === time && styles.buttonSelected,
             ]}
-            onPress={(time: any) => handleTimeSlotPress(time)}
+            onPress={() => handleTimeSlotPress({ time })} // Corrected line
           >
             <Text
               style={[
@@ -71,6 +71,7 @@ export default function RescheduleAppointment() {
     }
     return timeSlots;
   };
+  
   function handlebackhome(){
     modal.hide();
     router.push('/(app)/Appointments');
@@ -166,7 +167,7 @@ export default function RescheduleAppointment() {
       <SafeAreaView style={{ marginBottom: ios ? 10 : 50 }}>
         <StatusBar style="dark" />
       </SafeAreaView>
-      <View style={{ flex: 1, justifyContent: "space-around",marginTop:40 }}>
+      <View style={{ flex: 1, justifyContent: "space-around"}}>
         <View
           style={{
             backgroundColor:
@@ -268,6 +269,8 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     marginVertical: 10,
     marginHorizontal: "1%",
+    width:118,
+    height:45
   },
   buttonSelected: {
     backgroundColor: Colors.main.primary._500,
@@ -276,8 +279,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: Colors.main.primary._500,
-    fontSize: 16,
-    padding: 5,
+    padding: 3,
     alignSelf: "center",
   },
 
