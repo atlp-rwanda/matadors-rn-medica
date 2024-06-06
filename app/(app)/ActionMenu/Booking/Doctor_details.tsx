@@ -22,6 +22,7 @@ import { halfTransparentStar } from "@/components/UI/icons/halfTransparentStart"
 import { blueMessageIcon } from "@/components/UI/icons/blueMessage";
 import { ThemeContext } from "@/ctx/ThemeContext";
 import { WhiteThreeDots } from "@/components/UI/icons/WhiteThreeDots";
+import Button from "@/components/UI/Button";
 
 export const ReviewerCardComponent = () => {
   const { theme, changeTheme } = useContext(ThemeContext);
@@ -31,7 +32,7 @@ export const ReviewerCardComponent = () => {
     setLikes(likes + 1);
   };
 
-
+  changeTheme("light")
 
   return (
     <View style={{ gap: 10, marginVertical: 10 }}>
@@ -410,28 +411,10 @@ const DoctorDetails = () => {
           borderTopLeftRadius: 50,
         }}
       >
-        <Pressable
+        <Button
+          title="Book Appointment"
           onPress={() => router.push("/ActionMenu/Booking/BookingAppointment")}
-          style={{
-            backgroundColor: Colors.main.primary._500,
-            paddingVertical: 20,
-            borderRadius: 100,
-            shadowColor: "#246bFD",
-            elevation: 7,
-          }}
-        >
-          <Text
-            style={[
-              Typography.bold.medium,
-              {
-                color: Colors.others.white,
-                textAlign: "center",
-              },
-            ]}
-          >
-            Book Appointment
-          </Text>
-        </Pressable>
+        />
       </View>
     </View>
   );

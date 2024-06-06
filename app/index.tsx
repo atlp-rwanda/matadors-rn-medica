@@ -7,15 +7,17 @@ import { ThemeContext } from "@/ctx/ThemeContext";
 import { Colors } from "@/constants/Colors";
 import Typography from "@/constants/Typography";
 import { StatusBar } from "expo-status-bar";
+import BookingAppointment from "./(app)/ActionMenu/Booking/BookingAppointment";
 
 export default function SplashScreen() {
   const { theme, changeTheme } = useContext(ThemeContext);
   useEffect(() => {
     setTimeout(() => {
-      router.push("/(app)/");
+      // router.push("/(app)/");
+      router.push("/ActionMenu/Booking/BookingAppointment");
     }, 1000);
   }, []);
-
+  changeTheme("light");
 
   return (
     <>
@@ -58,6 +60,7 @@ export default function SplashScreen() {
           <Loading />
         </View>
       </View>
+      {/* <BookingAppointment /> */}
     </>
   );
 }

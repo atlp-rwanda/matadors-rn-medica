@@ -103,7 +103,6 @@ function RootLayoutNav() {
   return (
     <>
       <Stack
-        initialRouteName="(app)"
         screenOptions={{ statusBarTranslucent: true, headerShown: false }}
       >
         <Stack.Screen name="index" options={{ headerShown: false }} />

@@ -31,10 +31,10 @@ export default function Index() {
   const navigation = useNavigation();
   const [text, setText] = useState("");
   const [fontsLoaded] = useFontsExpo({
-    "Urbanist-regular": require("../../../assets/fonts/Urbanist-Regular.ttf"),
-    "Urbanist-bold": require("../../../assets/fonts/Urbanist-Bold.ttf"),
-    "Urbanist-Semibold": require("../../../assets/fonts/Urbanist-SemiBold.ttf"),
-    "Urbanist-Medium": require("../../../assets/fonts/Urbanist-Medium.ttf"),
+    "Urbanist-regular": require("@/assets/fonts/Urbanist-Regular.ttf"),
+    "Urbanist-bold": require("@/assets/fonts/Urbanist-Bold.ttf"),
+    "Urbanist-Semibold": require("@/assets/fonts/Urbanist-SemiBold.ttf"),
+    "Urbanist-Medium": require("@/assets/fonts/Urbanist-Medium.ttf"),
   });
   if (!fontsLoaded) {
     return null;

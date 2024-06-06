@@ -20,6 +20,7 @@ import PaymentChooseInputCard from "@/components/UI/PaymentChooseContainer/Payme
 import { PaymentMethods } from "@/constants/PaymentMethods";
 import PaymentChooseContainer from "@/components/UI/PaymentChooseContainer/Index";
 import { router } from "expo-router";
+import React from "react";
 
 export default function SelectPayment() {
   const { theme, changeTheme } = useContext(ThemeContext);
@@ -54,28 +55,15 @@ export default function SelectPayment() {
         <PaymentChooseContainer data={PaymentMethods} />
 
         <Button
-          backgroundColor={
-            theme === "light" ? Colors.main.primary._100 : Colors.dark._3
-          }
           title="Add New Card"
-          textColor={{
-            color:
-              theme === "light"
-                ? Colors.main.primary._500
-                : Colors.others.white,
-            opacity: 8,
-          }}
-          onPress={() => router.push('(app)/ActionMenu/Booking/AddNewCard')}
-          // shadowColor={Colors.main.primary._100}
+          onPress={() => router.push("(app)/ActionMenu/Booking/AddNewCard")}
+          type="light"
         />
         <Button
-          backgroundColor={Colors.main.primary._500}
           title="Next"
-          textColor={{ color: Colors.others.white, opacity: 8 }}
           onPress={() => {
             router.push("(app)/ActionMenu/Booking/reviewSummary");
           }}
-          shadowColor={Colors.main.primary._500}
           style={{ marginTop: "auto" }}
         />
       </ScrollView>

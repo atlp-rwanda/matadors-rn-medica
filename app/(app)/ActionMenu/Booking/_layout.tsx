@@ -1,4 +1,3 @@
-
 import React from "react";
 import Header from "@/components/UI/Header";
 import Modal from "@/components/UI/Modal";
@@ -11,15 +10,14 @@ export default function BookingLayout() {
         <Stack.Screen name="reviewSummary" options={{ headerShown: false }} />
         <Stack.Screen
           name="BookingAppointment"
-          options={{ headerShown: false }}
+          options={{ header: () => <Header title="Book Appointment" /> }}
         />
-        <Stack.Screen name="Doctor_details" options={{ header: () => (
-            <Header
-              title="Dr. Jenny Watson"
-              options={{
-              }}
-            />
-          ), }} />
+        <Stack.Screen
+          name="Doctor_details"
+          options={{
+            header: () => <Header title="Dr. Jenny Watson" options={{}} />,
+          }}
+        />
         <Stack.Screen
           name="DoctorRatingAndReview"
           options={{ headerShown: false }}

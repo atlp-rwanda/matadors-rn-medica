@@ -3,11 +3,19 @@ import { LeftArrow } from "@/components/UI/Icons";
 import { Colors } from "@/constants/Colors";
 import Typography from "@/constants/Typography";
 import { useContext, useState } from "react";
-import { StyleSheet, Image, TouchableOpacity, View, Pressable } from "react-native";
+import {
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  View,
+  Pressable,
+} from "react-native";
 import { colors } from "react-native-elements";
 import { Mastercard, Mastercarddark } from "@/components/UI/Icons";
 import { ThemeContext } from "@/ctx/ThemeContext";
 import { router } from "expo-router";
+import Button from "@/components/UI/Button";
+import React from "react";
 
 export default function Reviewsummary() {
   const { theme, changeTheme } = useContext(ThemeContext);
@@ -15,8 +23,10 @@ export default function Reviewsummary() {
   return (
     <>
       <View style={theme === "dark" ? styles.containerdark : styles.container}>
-        <Pressable onPress={()=> router.back()}
-        style={theme === "dark" ? styles.headerdark : styles.header}>
+        <Pressable
+          onPress={() => router.back()}
+          style={theme === "dark" ? styles.headerdark : styles.header}
+        >
           <LeftArrow
             fillColor={
               theme === "dark" ? Colors.others.white : Colors.grayScale._900
@@ -360,21 +370,11 @@ export default function Reviewsummary() {
             </Text>
           </View>
         </View>
-        <TouchableOpacity
-        onPress={()=> router.push("(app)/ActionMenu/Booking/EnterYourPin")}
-          style={{
-            width: 380,
-            height: 58,
-            borderRadius: 100,
-            backgroundColor: Colors.main.primary._500,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Text style={[Typography.bold.large, { color: Colors.others.white }]}>
-            Next
-          </Text>
-        </TouchableOpacity>
+        <Button
+          title="Next"
+          onPress={() => router.push("(app)/ActionMenu/Booking/EnterYourPin")}
+          style={{ width: "100%" }}
+        />
       </View>
     </>
   );

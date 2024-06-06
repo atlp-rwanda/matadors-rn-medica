@@ -74,7 +74,8 @@ export default function Button({
       theme === "light" ? Colors.grayScale._900 : Colors.others.white;
     variableStyles.shadowColor = "none";
     variableStyles.elevation = 0;
-    variableStyles.borderColor = Colors.dark._3;
+    variableStyles.borderColor =
+      theme === "light" ? Colors.main.primary._200 : Colors.dark._3;
   } else {
     variableStyles.elevation = 8;
   }
