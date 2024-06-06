@@ -19,14 +19,14 @@
       "infoPlist": {
         "NSFaceIDUsageDescription": "This app uses Face ID and Touch ID for some features"
       },
-      "bundleIdentifier": "medical.app"
+      "bundleIdentifier": "com.andela.medica"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#000000"
       },
-      "package": "medical.app",
+      "package": "com.andela.medica",
       "softwareKeyboardLayoutMode": "pan",
       "permissions": [
         "android.permission.USE_BIOMETRIC",
