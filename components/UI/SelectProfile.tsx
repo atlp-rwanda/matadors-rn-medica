@@ -38,10 +38,12 @@ export default function SelectProfile({ image, setImage }: Props) {
     <>
       <View style={{ position: "relative" }}>
         {image ? (
-          <Image
+          <View style={{width: 200, height:200}}>
+             <Image
             source={{ uri: image }}
             style={{ width: 170, height: 170, borderRadius: 100 }}
           />
+          </View>
         ) : (
           <SvgXml
             xml={

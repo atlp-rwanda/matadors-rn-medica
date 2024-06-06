@@ -16,6 +16,15 @@ export interface PaymentOption {
   iconSvgStringLight: string;
   iconSvgStringDark?: string;
 }
+export interface AuthType {
+  isLoggedIn: boolean;
+  token: string;
+  refreshToken: string;
+  loading: boolean;
+  refreshSession: () => void;
+  logout: () => void;
+  login: ( email: string, password: string) => Promise<void>;
+}
 
 export interface Countries extends TCountries {
   [key: string]: any;

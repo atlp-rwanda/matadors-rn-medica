@@ -14,9 +14,8 @@ export default function SplashScreen() {
   const { theme, changeTheme } = useContext(ThemeContext);
   useEffect(() => {
     setTimeout(() => {
-      router.push("/(app)/");
-
-    }, 1000);
+      router.push("onBoarding");
+    },1000);
   }, []);
   
   return (
