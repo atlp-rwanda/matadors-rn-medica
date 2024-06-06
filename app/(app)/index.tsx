@@ -28,14 +28,20 @@ export default function Index() {
             theme === "light" ? Colors.others.white : Colors.dark._1,
         }}
       >
-        <View style={{ width: "110%" }}>
+        <View
+          style={{
+            width: "100%",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <Image
             source={require("../../assets/images/Group.png")}
             style={{ width: "100%" }}
           />
         </View>
 
-        <View style={{ gap: 20 }}>
+        <View style={{ gap: 20, paddingHorizontal: 20 }}>
           <Text
             style={[
               Typography.heading._1,

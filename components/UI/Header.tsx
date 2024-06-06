@@ -1,5 +1,4 @@
 import { StatusBar } from "expo-status-bar";
-// import { Text, View } from "react-native";
 import { Text, View } from "../Themed";
 import { Colors } from "@/constants/Colors";
 import { Input, LeftArrow } from "./Icons";
@@ -17,7 +16,6 @@ interface Props {
     leftComponent?: () => React.JSX.Element;
     rightComponent?: () => React.JSX.Element;
   };
-  // navigation: NavigationState;
 }
 
 export default function Header({ title, options }: Props) {

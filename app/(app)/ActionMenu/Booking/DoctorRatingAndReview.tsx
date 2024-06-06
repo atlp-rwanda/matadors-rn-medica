@@ -1,10 +1,5 @@
 import React, { useContext } from "react";
-import {
-  StyleSheet,
-  Text,
-  ScrollView,
-  Pressable,
-} from "react-native";
+import { StyleSheet, Text, ScrollView, Pressable } from "react-native";
 import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Typography from "@/constants/Typography";
@@ -12,157 +7,97 @@ import { Colors } from "@/constants/Colors";
 import { router } from "expo-router";
 import { SvgXml } from "react-native-svg";
 import ReviewerCardComponent from "@/components/ReviewerCardComponent";
-import { fullSmallBlueStar, fullSmallWhiteStar } from "@/components/UI/icons/star";
-import { backArrowWhite, moreBlackIcon, moreWhiteIcon } from "@/constants/icon";
-import { ThemeContext } from "@/ctx/ThemeContext";
+import { LeftArrow } from "@/components/UI/Icons";
+import { moreGrayIcon } from "@/components/UI/icons/circleWithDots";
+import {
+  fullSmallBlueStar,
+  fullSmallWhiteStar,
+} from "@/components/UI/icons/star";
+import Chips from "@/components/UI/ChipsComponent";
+import { backArrowBlack, backArrowWhite } from "@/constants/icon";
 import { StatusBar } from "expo-status-bar";
-
-
+import { ThemeContext } from "@/ctx/ThemeContext";
 
 const DoctorRatingAndReview = () => {
   const { theme, changeTheme } = useContext(ThemeContext);
 
   return (
-    <View style={{
-      flex: 1,
-      padding: 24,
-      gap: 20,
-      backgroundColor: theme === "dark"? Colors.dark._1: Colors.others.white
-    }}>
+    <View
+      style={{
+        flex: 1,
+        padding: 24,
+        gap: 20,
+        backgroundColor:
+          theme === "dark" ? Colors.dark._1 : Colors.others.white,
+      }}
+    >
       <SafeAreaView>
         <View style={styles.navBar}>
           <View style={styles.leftSide}>
             <Pressable onPress={() => router.back()}>
-            <SvgXml xml={theme === "dark"? backArrowWhite:backArrowWhite } />
+              <SvgXml
+                xml={theme === "dark" ? backArrowWhite : backArrowBlack}
+              />
             </Pressable>
             <View>
-              <Text style={[Typography.heading._4, {color: theme==="dark"? "white":"black" }]}>4.8 (4,942 reviews)</Text>
+              <Text
+                style={[
+                  Typography.heading._4,
+                  { color: theme === "dark" ? "white" : "black" },
+                ]}
+              >
+                4.8 (4,942 reviews)
+              </Text>
             </View>
           </View>
           <View style={styles.rightSide}>
-            <SvgXml xml={theme === "dark" ? moreWhiteIcon: moreBlackIcon} />
+            <SvgXml xml={moreGrayIcon} />
           </View>
         </View>
       </SafeAreaView>
       <View style={{ alignItems: "center" }}>
         <ScrollView showsHorizontalScrollIndicator={false} horizontal>
-          <View
-            style={[styles.ratings, { marginRight: 10, alignItems: "center", backgroundColor: Colors.main.primary._500 }]}
-          >
-            <SvgXml xml={fullSmallWhiteStar} />
-            <Text
-              style={[
-                Typography.semiBold.medium,
-                { color: theme ===  "dark"?Colors.others.white: Colors.others.black },
-              ]}
-            >
-              All
-            </Text>
-          </View>
-          <View
-            style={[styles.ratings, { marginRight: 10, alignItems: "center" }]}
-          >
-            <SvgXml xml={fullSmallBlueStar} />
-            <Text
-              style={[
-                Typography.semiBold.medium,
-                { color: Colors.main.primary._500 },
-              ]}
-            >
-              5
-            </Text>
-          </View>
-          <View
-            style={[styles.ratings, { marginRight: 10, alignItems: "center" }]}
-          >
-            <SvgXml xml={fullSmallBlueStar} />
-            <Text
-              style={[
-                Typography.semiBold.medium,
-                { color: Colors.main.primary._500 },
-              ]}
-            >
-              5
-            </Text>
-          </View>
-          <View
-            style={[styles.ratings, { marginRight: 10, alignItems: "center" }]}
-          >
-            <SvgXml xml={fullSmallBlueStar} />
-            <Text
-              style={[
-                Typography.semiBold.medium,
-                { color: Colors.main.primary._500 },
-              ]}
-            >
-              5
-            </Text>
-          </View>
-          <View
-            style={[styles.ratings, { marginRight: 10, alignItems: "center" }]}
-          >
-            <SvgXml xml={fullSmallBlueStar} />
-            <Text
-              style={[
-                Typography.semiBold.medium,
-                { color: Colors.main.primary._500 },
-              ]}
-            >
-              5
-            </Text>
-          </View>
-          <View
-            style={[styles.ratings, { marginRight: 10, alignItems: "center" }]}
-          >
-            <SvgXml xml={fullSmallBlueStar} />
-            <Text
-              style={[
-                Typography.semiBold.medium,
-                { color: Colors.main.primary._500 },
-              ]}
-            >
-              5
-            </Text>
-          </View>
-          <View
-            style={[styles.ratings, { marginRight: 10, alignItems: "center" }]}
-          >
-            <SvgXml xml={fullSmallBlueStar} />
-            <Text
-              style={[
-                Typography.semiBold.medium,
-                { color: Colors.main.primary._500 },
-              ]}
-            >
-              5
-            </Text>
-          </View>
-          <View
-            style={[styles.ratings, { marginRight: 10, alignItems: "center" }]}
-          >
-            <SvgXml xml={fullSmallBlueStar} />
-            <Text
-              style={[
-                Typography.semiBold.medium,
-                { color: Colors.main.primary._500 },
-              ]}
-            >
-              5
-            </Text>
-          </View>
-          <View
-            style={[styles.ratings, { marginRight: 10, alignItems: "center" }]}
-          >
-            <SvgXml xml={fullSmallBlueStar} />
-            <Text
-              style={[
-                Typography.semiBold.medium,
-                { color: Colors.main.primary._500 },
-              ]}
-            >
-              5
-            </Text>
-          </View>
+          <Chips
+            text="All"
+            type="filled"
+            size="medium"
+            leftIcon={() => <SvgXml xml={fullSmallWhiteStar} />}
+          />
+          <Chips
+            text="5"
+            type="border"
+            size="medium"
+            leftIcon={() => <SvgXml xml={fullSmallBlueStar} />}
+            style={{ marginLeft: 10 }}
+          />
+          <Chips
+            text="4"
+            type="border"
+            size="medium"
+            leftIcon={() => <SvgXml xml={fullSmallBlueStar} />}
+            style={{ marginLeft: 10 }}
+          />
+          <Chips
+            text="3"
+            type="border"
+            size="medium"
+            leftIcon={() => <SvgXml xml={fullSmallBlueStar} />}
+            style={{ marginLeft: 10 }}
+          />
+          <Chips
+            text="2"
+            type="border"
+            size="medium"
+            leftIcon={() => <SvgXml xml={fullSmallBlueStar} />}
+            style={{ marginLeft: 10 }}
+          />
+          <Chips
+            text="1"
+            type="border"
+            size="medium"
+            leftIcon={() => <SvgXml xml={fullSmallBlueStar} />}
+            style={{ marginLeft: 10 }}
+          />
         </ScrollView>
       </View>
 
@@ -171,7 +106,7 @@ const DoctorRatingAndReview = () => {
           <ReviewerCardComponent />
         </ScrollView>
       </View>
-      <StatusBar style={theme==="dark"? "light":"dark"} />
+      <StatusBar style={theme === "dark" ? "light" : "dark"} />
     </View>
   );
 };

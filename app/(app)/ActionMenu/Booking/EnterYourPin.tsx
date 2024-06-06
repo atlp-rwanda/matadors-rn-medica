@@ -1,5 +1,5 @@
 import { Text } from "@/components/Themed";
-import { LeftArrow, } from "@/components/UI/Icons";
+import { LeftArrow } from "@/components/UI/Icons";
 import { Colors } from "@/constants/Colors";
 import Typography from "@/constants/Typography";
 import { useContext, useState } from "react";
@@ -14,6 +14,7 @@ import { OtpInput } from "react-native-otp-entry";
 import { router } from "expo-router";
 import { useModal } from "@/ctx/ModalContext";
 import { ThemeContext } from "@/ctx/ThemeContext";
+import Button from "@/components/UI/Button";
 import React from "react";
 
 export default function EnterYourPin() {
@@ -32,7 +33,7 @@ export default function EnterYourPin() {
             gap: 20,
             borderRadius: 48,
             backgroundColor:
-              theme === "light" ? Colors.others.white : '#181A20',
+              theme === "light" ? Colors.others.white : Colors.dark._2,
           }}
         >
           <Image source={require("@/assets/images/calendarmodal.png")} />
@@ -69,30 +70,28 @@ export default function EnterYourPin() {
               Appointment successfully booked. You will receive a notification
               and the doctor you selected will contact you.
             </Text>
-            <TouchableOpacity style={{
-                 backgroundColor: Colors.main.primary._500,
-                 alignItems: "center",
-                 padding: 18,
-                 borderRadius: 100,
-                 marginTop: 10,
-            }} onPress={()=> {
-              modal.hide()
-              router.push("Appointments")
-            }}>
-              <Text
-                style={[Typography.bold.large, { color: Colors.others.white,textAlign: "center"}]}
-              >
-                View Appointment
-              </Text>
-            </TouchableOpacity>
+            <View
+              style={{
+                width: "100%",
+                backgroundColor: "red",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            ></View>
+            <Button
+              title="View Appointment"
+              onPress={() => {
+                router.push("Appointments");
+              }}
+            />
             <TouchableOpacity
-              onPress={()=> {
-                modal.hide()
-                router.push("ActionMenu")
+              onPress={() => {
+                modal.hide();
+                router.push("ActionMenu");
               }}
               style={{
-                backgroundColor: theme === "light"
-                ? Colors.main.primary._100:Colors.dark._3,
+                backgroundColor:
+                  theme === "light" ? Colors.main.primary._100 : Colors.dark._3,
                 borderRadius: 100,
                 padding: 18,
                 alignItems: "center",
@@ -101,7 +100,12 @@ export default function EnterYourPin() {
               <Text
                 style={[
                   Typography.bold.large,
-                  {  color:theme === "light" ? Colors.main.primary._500:Colors.others.white },
+                  {
+                    color:
+                      theme === "light"
+                        ? Colors.main.primary._500
+                        : Colors.others.white,
+                  },
                 ]}
               >
                 cancel
@@ -115,16 +119,27 @@ export default function EnterYourPin() {
 
   return (
     <>
-      <View style={[isDark ? styles.containerdark : styles.container,{backgroundColor:
-              theme === "light" ? Colors.others.white : '#181A20',}]}>
+      <View style={isDark ? styles.containerdark : styles.container}>
         <View style={isDark ? styles.headerdark : styles.header}>
-
+          <Pressable onPress={() => router.back()}>
+            <LeftArrow
+              fillColor={isDark ? Colors.others.white : Colors.grayScale._900}
+            />
+          </Pressable>
+          <Text
+            style={[
+              Typography.heading._4,
+              { color: isDark ? Colors.others.white : Colors.grayScale._900 },
+            ]}
+          >
+            Enter Your Pin
+          </Text>
         </View>
         <View style={{ gap: 60, alignItems: "center" }}>
           <Text
             style={[
               Typography.medium.xLarge,
-              { color: theme === "dark" ? "#FFFFFF" : "#212121" },
+              { color: isDark ? Colors.others.white : Colors.grayScale._900 },
             ]}
           >
             Enter your PIN to confirm appointment
@@ -137,12 +152,11 @@ export default function EnterYourPin() {
                 pinCodeContainerStyle: {
                   width: 83,
                   height: 61,
-                  
-                  backgroundColor: theme === 'dark'
-                    ? '#1F222A'
+                  backgroundColor: isDark
+                    ? Colors.dark._2
                     : Colors.grayScale._50,
                   borderRadius: 16,
-                  borderColor: theme === 'dark' ? '#35383F' : Colors.grayScale._200,
+                  borderColor: isDark ? Colors.dark._3 : Colors.grayScale._200,
                   borderWidth: 1,
                 },
                 focusedPinCodeContainerStyle: {
@@ -158,27 +172,17 @@ export default function EnterYourPin() {
                   paddingRight: 32,
                 },
                 pinCodeTextStyle: {
-                  color: theme === 'dark' ? Colors.others.white : Colors.grayScale._900,
+                  color: isDark ? Colors.others.white : Colors.grayScale._900,
                 },
               }}
             />
           </View>
         </View>
-        <TouchableOpacity
+        <Button
+          title="Continue"
           onPress={handlePIN}
-          style={{
-            width: 380,
-            height: 58,
-            borderRadius: 100,
-            backgroundColor: Colors.main.primary._500,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Text style={[Typography.bold.large, { color: Colors.others.white }]}>
-            Continue
-          </Text>
-        </TouchableOpacity>
+          style={{ width: "100%" }}
+        />
       </View>
     </>
   );

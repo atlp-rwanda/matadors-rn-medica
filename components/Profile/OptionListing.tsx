@@ -31,14 +31,12 @@ export default function OptionListing({
           flexDirection: "row",
           justifyContent: "flex-start",
           width: "100%",
-          // backgroundColor: "red",
           gap: 15,
           alignItems: "center",
           backgroundColor:
             theme === "light" ? Colors.others.white : Colors.dark._1,
         }}
       >
-        {/* <View style={{ flexDirection: "row", gap: 15, alignItems: "center" }}> */}
         {icon()}
         <Text style={[Typography.semiBold.xLarge, { color: textColor }]}>
           {title}

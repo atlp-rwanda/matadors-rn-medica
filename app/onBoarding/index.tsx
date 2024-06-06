@@ -15,7 +15,7 @@ import { ThemeContext } from "@/ctx/ThemeContext";
 import Paginator from "@/utils/Paginator";
 import { StatusBar } from "expo-status-bar";
 import Typography from "@/constants/Typography";
-import { router } from "expo-router"
+import { router } from "expo-router";
 import { ScrollView } from "react-native";
 
 const data = [
@@ -39,7 +39,7 @@ const data = [
   },
 ];
 
-const OnboardingComponent = ({ }: {
+const OnboardingComponent = ({}: {
   image: any;
   text: string;
   action: string;
@@ -47,7 +47,6 @@ const OnboardingComponent = ({ }: {
   children: React.ReactNode;
 }) => {
   const { theme, changeTheme } = useContext(ThemeContext);
-
   const [currentIndex, setCurrentIndex] = useState(0);
   const scrollX = useRef(new Animated.Value(0)).current;
   const slidesRef = useRef(null);
@@ -60,19 +59,29 @@ const OnboardingComponent = ({ }: {
 
   const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
 
-  const { width } = Dimensions.get("window")
+  const { width } = Dimensions.get("window");
 
   return (
-    <ScrollView contentContainerStyle={{
-      // flex: 1,
-      height: "100%",
-      justifyContent: "flex-end",
-      // alignItems: "center"
-      gap: 20,
-      paddingBottom: 20
-    }} style={{ backgroundColor: theme === "dark" ? Colors.dark._1 : Colors.others.white }}>
+    <ScrollView
+      contentContainerStyle={{
+        height: "100%",
+        justifyContent: "flex-end",
+        gap: 20,
+        paddingBottom: 20,
+      }}
+      style={{
+        backgroundColor:
+          theme === "dark" ? Colors.dark._1 : Colors.others.white,
+      }}
+    >
       <StatusBar style={theme === "light" ? "dark" : "light"} />
-      <View style={{ width: "100%", justifyContent: "center", alignItems: "center" }}>
+      <View
+        style={{
+          width: "100%",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         <FlatList
           data={data}
           contentContainerStyle={{ flexGrow: 1, flexDirection: "row" }}
@@ -97,11 +106,10 @@ const OnboardingComponent = ({ }: {
                 width: width,
                 alignItems: "center",
                 paddingHorizontal: 20,
-                gap: 40
+                gap: 40,
               }}
             >
-              <View
-              >
+              <View>
                 <Image source={theme === "dark" ? item.darkImg : item.image} />
               </View>
               <View>
@@ -109,7 +117,10 @@ const OnboardingComponent = ({ }: {
                   style={[
                     Typography.heading._2,
                     {
-                      color: theme === "light" ? Colors.main.primary._500 : Colors.others.white,
+                      color:
+                        theme === "light"
+                          ? Colors.main.primary._500
+                          : Colors.others.white,
                       textAlign: "center",
                     },
                   ]}
@@ -120,21 +131,22 @@ const OnboardingComponent = ({ }: {
             </View>
           )}
         />
-
       </View>
 
-      <View style={{ padding: 20, alignItems: "center", justifyContent: "center" }}>
+      <View
+        style={{ padding: 20, alignItems: "center", justifyContent: "center" }}
+      >
         <View style={{ alignSelf: "center" }}>
           <Paginator data={data} scrollX={scrollX} />
         </View>
         <Pressable
           onPress={() => router.push("(auth)/SignIn&SignOut/LetsYouIn")}
-          style={styles.btn}>
+          style={styles.btn}
+        >
           <Text style={styles.btnText}>Get started</Text>
         </Pressable>
       </View>
-
-    </  ScrollView>
+    </ScrollView>
   );
 };
 
@@ -146,7 +158,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     alignContent: "flex-end",
     marginHorizontal: 20,
-    width: "100%"
+    width: "100%",
   },
 
   btnText: {

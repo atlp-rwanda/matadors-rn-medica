@@ -14,13 +14,15 @@ import { Image } from "react-native";
 import { Colors } from "@/constants/Colors";
 import { router } from "expo-router";
 import { fullSmallBlueStar } from "@/components/UI/icons/star";
+import { moreGrayIcon } from "@/components/UI/icons/circleWithDots";
 import { blueHeart } from "@/components/UI/icons/blueHeart";
 import { bluePeopleIcon } from "@/components/UI/icons/bluePeople";
 import { statisticIcon } from "@/components/UI/icons/statistics";
 import { halfTransparentStar } from "@/components/UI/icons/halfTransparentStart";
 import { blueMessageIcon } from "@/components/UI/icons/blueMessage";
 import { ThemeContext } from "@/ctx/ThemeContext";
-import { moreBlackIcon, moreWhiteIcon } from "@/constants/icon";
+import { WhiteThreeDots } from "@/components/UI/icons/WhiteThreeDots";
+import Button from "@/components/UI/Button";
 
 export const ReviewerCardComponent = () => {
   const { theme, changeTheme } = useContext(ThemeContext);
@@ -80,7 +82,7 @@ export const ReviewerCardComponent = () => {
           <View>
             <TouchableOpacity>
               <SvgXml
-                xml={theme === "dark" ? moreWhiteIcon : moreBlackIcon}
+                xml={theme === "dark" ? WhiteThreeDots : moreGrayIcon}
               />
             </TouchableOpacity>
           </View>
@@ -168,7 +170,6 @@ const DoctorDetails = () => {
               >
                 Dr. Jenny Watson
               </Text>
-
               <View style={{ flex: 1, justifyContent: "space-around" }}>
                 <Text
                   style={[
@@ -398,28 +399,10 @@ const DoctorDetails = () => {
           padding: 24,
         }}
       >
-        <Pressable
+        <Button
+          title="Book Appointment"
           onPress={() => router.push("/ActionMenu/Booking/BookingAppointment")}
-          style={{
-            backgroundColor: Colors.main.primary._500,
-            paddingVertical: 20,
-            borderRadius: 100,
-            shadowColor: "#246bFD",
-            elevation: 7,
-          }}
-        >
-          <Text
-            style={[
-              Typography.bold.medium,
-              {
-                color: Colors.others.white,
-                textAlign: "center",
-              },
-            ]}
-          >
-            Book Appointment
-          </Text>
-        </Pressable>
+        />
       </View>
     </View>
   );

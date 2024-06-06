@@ -23,10 +23,6 @@ export default function CreateNewPassword() {
   };
 
   const handleCreatePassword = () => {
-    // if (password !== confirmPassword) {
-    //   Alert.alert('Error', 'Passwords do not match.');
-    //   return;
-    // }
     router.push("/(auth)/SignIn&SignOut/SignInBlankForm")
 
     // Your password creation logic here

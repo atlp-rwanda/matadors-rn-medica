@@ -6,10 +6,10 @@ import { Text } from "react-native";
 import { ThemeContext } from "@/ctx/ThemeContext";
 import Typography from "@/constants/Typography";
 import Button from "@/components/UI/Button";
-
 import { PaymentMethods } from "@/constants/PaymentMethods";
 import PaymentChooseContainer from "@/components/UI/PaymentChooseContainer/Index";
 import { router } from "expo-router";
+import React from "react";
 
 export default function SelectPayment() {
   const { theme, changeTheme } = useContext(ThemeContext);
@@ -19,10 +19,10 @@ export default function SelectPayment() {
     <>
       <StatusBar style={theme === "light" ? "dark" : "light"} />
       <ScrollView
-        style={{ backgroundColor: "white" }}
+        style={{ backgroundColor: "white", flex: 1 }}
         contentContainerStyle={{
+          flexGrow: 1,
           paddingHorizontal: 20,
-          height: "100%",
           backgroundColor:
             theme === "light" ? Colors.others.white : Colors.dark._1,
           gap: 20,
@@ -44,27 +44,15 @@ export default function SelectPayment() {
         <PaymentChooseContainer data={PaymentMethods} />
 
         <Button
-          backgroundColor={
-            theme === "light" ? Colors.main.primary._100 : Colors.dark._3
-          }
           title="Add New Card"
-          textColor={{
-            color:
-              theme === "light"
-                ? Colors.main.primary._500
-                : Colors.others.white,
-            opacity: 8,
-          }}
-          onPress={() => router.push('(app)/ActionMenu/Booking/AddNewCard')}
+          onPress={() => router.push("(app)/ActionMenu/Booking/AddNewCard")}
+          type={theme === "light" ? "light" : "gray"}
         />
         <Button
-          backgroundColor={Colors.main.primary._500}
           title="Next"
-          textColor={{ color: Colors.others.white, opacity: 8 }}
           onPress={() => {
             router.push("(app)/ActionMenu/Booking/reviewSummary");
           }}
-          shadowColor={Colors.main.primary._500}
           style={{ marginTop: "auto" }}
         />
       </ScrollView>
