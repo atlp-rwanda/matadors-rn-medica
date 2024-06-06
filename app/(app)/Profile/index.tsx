@@ -44,16 +44,22 @@ import { router } from "expo-router";
 import Switch from "@/components/UI/Switch";
 import SelectProfile from "@/components/UI/SelectProfile";
 import { supabase } from "@/lib/supabase";
-import { getUserImageUrl, fetchPatientData, getPatientData } from "@/utils/LoggedInUser";
+import {
+  getUserImageUrl,
+  fetchPatientData,
+  getPatientData,
+} from "@/utils/LoggedInUser";
+import { useAuth } from "@/ctx/AuthContext";
 
 const index = () => {
   const { theme, changeTheme } = useContext(ThemeContext);
   const [userData, setUserData] = useState<any[]>([]);
   const [patientData, setPatientData] = useState(null);
-  const [imageUrl, setImageUrl] = useState([])
-  const [profilePhoto, setProfilePhoto] =  useState("");
-  const CDNURL = "https://vbwbfflzxuhktdvpbspd.supabase.co/storage/v1/object/public/patients/"
-
+  const [imageUrl, setImageUrl] = useState([]);
+  const [profilePhoto, setProfilePhoto] = useState("");
+  const CDNURL =
+    "https://vbwbfflzxuhktdvpbspd.supabase.co/storage/v1/object/public/patients/";
+  const { authType, imageUrl: otherAuthImageUrl } = useAuth();
 
   useEffect(() => {
     getPatientData(supabase, setUserData);
@@ -62,7 +68,7 @@ const index = () => {
   useEffect(() => {
     if (userData?.id) {
       fetchPatientData(userData?.id, setPatientData);
-      getUserImageUrl('patients', userData, setImageUrl);
+      getUserImageUrl("patients", userData, setImageUrl);
     }
   }, [userData]);
 
@@ -79,7 +85,10 @@ const index = () => {
     },
   });
 
-  const image  = `${CDNURL + userData?.id + '/' + profilePhoto}`;
+  const image =
+    authType !== "email"
+      ? otherAuthImageUrl
+      : `${CDNURL + userData?.id + "/" + profilePhoto}`;
 
   function handleImagePicker(name: string, value: string) {
     setFormData((prevVal) => {
@@ -107,13 +116,21 @@ const index = () => {
                 style={{
                   justifyContent: "start",
                   alignItems: "center",
-                  gap:10,
+                  gap: 10,
                 }}
               >
-                <View style={{borderRadius:100, width: 200, height: 200}}>
-                  <Image 
-                  style={{width: "100%", height: "100%", borderRadius:100}}
-                  source={{ uri: `${CDNURL + userData?.id + '/' + profilePhoto}` }}/>
+                <View style={{ borderRadius: 100, width: 200, height: 200 }}>
+                  <Image
+                    style={{ width: "100%", height: "100%", borderRadius: 100 }}
+                    source={{
+                      uri:
+                        authType !== "email"
+                          ? authType
+                            ? otherAuthImageUrl
+                            : `${CDNURL + userData?.id + "/" + profilePhoto}`
+                          : `${CDNURL + userData?.id + "/" + profilePhoto}`,
+                    }}
+                  />
                 </View>
                 {/* <SelectProfile image={item?.image} onChange={handleImagePicker}/> */}
                 <Text
@@ -140,7 +157,7 @@ const index = () => {
                     },
                   ]}
                 >
-                  {!item?.phone ? "add your phone number": item?.phone}
+                  {!item?.phone ? "add your phone number" : item?.phone}
                 </Text>
               </View>
               <View
@@ -149,7 +166,7 @@ const index = () => {
                   width: "100%",
                   backgroundColor: Colors.grayScale._200,
                   marginHorizontal: 24,
-                  marginBottom: 20
+                  marginBottom: 20,
                 }}
               ></View>
 
@@ -453,4 +470,3 @@ const index = () => {
 };
 
 export default index;
-

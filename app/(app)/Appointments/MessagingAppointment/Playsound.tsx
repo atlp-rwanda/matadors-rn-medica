@@ -21,14 +21,14 @@ export default function PlaySound() {
   }
 
   async function playSound() {
-    console.log("Loading Sound");
+    // console.log("Loading Sound");
     const { sound } = await Audio.Sound.createAsync(
       require("@/assets/images/sound.mp3")
     );
-    console.log(sound);
+    // console.log(sound);
     setSound(sound);
 
-    console.log("Playing Sound");
+    // console.log("Playing Sound");
     await sound.playAsync();
   }
 

@@ -113,9 +113,14 @@ function RootLayoutNav() {
       console.log("Not logged in");
       return router.replace("/(auth)/SignIn&SignOut/LetsYouIn");
     }
+    
+    // if (isLoggedIn && !activated && !email) {
+    //   console.log("Logged in, not activated, without email");
+    //   return router.replace("/(auth)/SignIn&SignOut/LetsYouIn");
+    // }
 
     if (isLoggedIn && !activated && email) {
-      console.log("Logged and not activated");
+      console.log("Logged, not activated, and with email");
       return router.replace("/(auth)/SignIn&SignOut/YourProfile/" + email);
     }
 

@@ -27,7 +27,7 @@ const YourProfile = () => {
   const [image, setImage] = useState<null | string>(null);
   const [value, setValue] = useState<string>(" ");
   const { theme } = useContext(ThemeContext);
-  const { setUpUserInfo } = useAuth();
+  const { setUpUserInfo, name, authType, imageUrl } = useAuth();
   const { email } = useLocalSearchParams<{ email: string }>();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -56,7 +56,16 @@ const YourProfile = () => {
   async function handleSubmit() {
     try {
       setIsLoading(true);
-      await setUpUserInfo(formData);
+      await setUpUserInfo(
+        authType
+          ? {
+              ...formData,
+              firstName: String(name).split(" ")[0],
+              lastName: String(name).split(" ")[1],
+              imageUrl: { uri: imageUrl, mimeType: "image/jpeg" },
+            }
+          : formData
+      );
     } catch (err) {
       setIsLoading(false);
       const error: Error = err as Error;
@@ -82,7 +91,16 @@ const YourProfile = () => {
       alwaysBounceVertical={false}
     >
       <View>
-        <SelectProfile image={formData.image} onChange={handleFormChange} />
+        <SelectProfile
+          image={
+            authType
+              ? authType
+                ? { uri: imageUrl, mimeType: "image/jpeg" }
+                : formData
+              : formData.image
+          }
+          onChange={handleFormChange}
+        />
       </View>
 
       <View
@@ -99,13 +117,25 @@ const YourProfile = () => {
         <Input
           placeholder="First Name"
           name="firstName"
-          value={formData.firstName}
+          value={
+            authType !== "email"
+              ? authType
+                ? String(name).split(" ")[0]
+                : formData.firstName
+              : formData.firstName
+          }
           onChange={handleFormChange}
         />
         <Input
           placeholder="Last Name"
           name="lastName"
-          value={formData.lastName}
+          value={
+            authType !== "email"
+              ? authType
+                ? String(name).split(" ")[1]
+                : formData.lastName
+              : formData.lastName
+          }
           onChange={handleFormChange}
         />
         <Input

@@ -37,10 +37,11 @@ import DoctorDetails from "./Booking/Doctor_details";
 import DoctorComponent from "@/components/DoctorComponent";
 import { star } from "@/assets/icons/star";
 import NofoundComponent from "@/components/NofoundComponent";
+import { useAuth } from "@/ctx/AuthContext";
 
 export default function Index() {
   const [session, setSession] = useState<Session | null>(null);
-  const [searchTerm, setSearchTerm] = useState<string>('')
+  const [searchTerm, setSearchTerm] = useState<string>("");
   const [userData, setUserData] = useState<[]>([]);
   const [patientData, setPatientData] = useState(null);
   const [imageUrl, setImageUrl] = useState([]);
@@ -49,9 +50,10 @@ export default function Index() {
   const { theme, changeTheme } = useContext(ThemeContext);
   const navigation = useNavigation();
   const [text, setText] = useState("");
-  const [isLoading , setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
   const [doctors, setDoctors] = useState<Doctor[]>([]);
-  const [greeting, setGreeting] = useState('');
+  const [greeting, setGreeting] = useState("");
+  const { authType, imageUrl: otherAuthImageUrl } = useAuth();
 
   const [fontsLoaded] = useFontsExpo({
     "Urbanist-regular": require("@/assets/fonts/Urbanist-Regular.ttf"),
@@ -59,8 +61,10 @@ export default function Index() {
     "Urbanist-Semibold": require("@/assets/fonts/Urbanist-SemiBold.ttf"),
     "Urbanist-Medium": require("@/assets/fonts/Urbanist-Medium.ttf"),
   });
-  const CDNURL = "https://vbwbfflzxuhktdvpbspd.supabase.co/storage/v1/object/public/patients/";
-  const scrollbackColor = theme === "dark" ? styles.scrollDark : styles.scrollLight;
+  const CDNURL =
+    "https://vbwbfflzxuhktdvpbspd.supabase.co/storage/v1/object/public/patients/";
+  const scrollbackColor =
+    theme === "dark" ? styles.scrollDark : styles.scrollLight;
 
   useEffect(() => {
     getPatientData(supabase, setUserData);
@@ -84,10 +88,10 @@ export default function Index() {
       const { data, error } = await supabase.from("doctors").select("*");
 
       if (error) {
-        setIsLoading(false)
-        throw new Error("Error fetching data:" +  error.message);
+        setIsLoading(false);
+        throw new Error("Error fetching data:" + error.message);
       }
-      setIsLoading(true)
+      setIsLoading(true);
       setDoctors(data);
     }
     fetchData();
@@ -99,11 +103,11 @@ export default function Index() {
       const hours = now.getHours();
 
       if (hours >= 12 && hours < 17) {
-        setGreeting('Good Afternoon');
+        setGreeting("Good Afternoon");
       } else if (hours >= 17 || hours < 1) {
-        setGreeting('Good Evening');
+        setGreeting("Good Evening");
       } else {
-        setGreeting('Good Morning');
+        setGreeting("Good Morning");
       }
     };
 
@@ -120,12 +124,21 @@ export default function Index() {
     return activeIcon === iconName;
   };
 
-
-
   if (!fontsLoaded) {
     return null;
   }
-  const filteredDoctors=searchTerm.length>0 ? doctors.filter(doctor=>doctor.last_name.toLowerCase().includes(searchTerm)):doctors
+  const filteredDoctors =
+    searchTerm.length > 0
+      ? doctors.filter((doctor) =>
+          doctor.last_name.toLowerCase().includes(searchTerm)
+        )
+      : doctors;
+
+        console.log(authType !== "email"
+          ? authType
+            ? otherAuthImageUrl
+            : `${CDNURL + userData?.id + "/" + profilePhoto}`
+          : `${CDNURL + userData?.id + "/" + profilePhoto}`)
 
   return (
     <View
@@ -153,7 +166,12 @@ export default function Index() {
                 <Image
                   style={{ width: "100%", height: "100%", borderRadius: 100 }}
                   source={{
-                    uri: `${CDNURL + userData?.id + "/" + profilePhoto}`,
+                    uri:
+                      authType !== "email"
+                        ? authType
+                          ? otherAuthImageUrl
+                          : `${CDNURL + userData?.id + "/" + profilePhoto}`
+                        : `${CDNURL + userData?.id + "/" + profilePhoto}`,
                   }}
                 />
               </View>
@@ -557,16 +575,19 @@ export default function Index() {
           >
             {filteredDoctors.length > 0 ? (
               filteredDoctors.map((doctor: any, index: any) => (
-                <View key={index} style={{
-                  marginBottom: "5%",
-                  width: "100%",
-                  height: 150,
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  backgroundColor: theme === "dark" ? "#181A20" : "#EEEEEE",
-                }}>
+                <View
+                  key={index}
+                  style={{
+                    marginBottom: "5%",
+                    width: "100%",
+                    height: 150,
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    backgroundColor: theme === "dark" ? "#181A20" : "#EEEEEE",
+                  }}
+                >
                   <DoctorComponent
                     imageSource={{ uri: doctor.image }}
                     name={`${doctor.first_name} ${doctor.last_name}`}
