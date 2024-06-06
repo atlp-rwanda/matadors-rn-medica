@@ -22,8 +22,7 @@ import { StatusBar } from 'expo-status-bar';
 import NotFoundScreen from '@/app/+not-found';
 import { ThemeContext } from '@/ctx/ThemeContext';
 import { useContext } from 'react';
-import { ThemeContext } from '@/ctx/ThemeContext';
-import { useContext } from 'react';
+
 
 
 interface imageMapProp{

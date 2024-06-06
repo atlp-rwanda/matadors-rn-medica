@@ -6,16 +6,12 @@ import { search } from '@/assets/icons/search';
 import { more } from '@/assets/icons/more';
 import { leftArrow } from '@/assets/icons/left';
 import { router } from 'expo-router';
-import { ThemeContext } from '@/ctx/ThemeContext';
-import { useContext } from 'react';
 import { searchWhiteIcon } from '@/assets/icons/SearchWhiteIcon';
 import { LeftArrowWhite } from '@/assets/icons/LeftArrowWhite';
 import { moreWhiteIcon } from '@/assets/icons/MoreWhite';
 import { ThemeContext } from '@/ctx/ThemeContext';
 import { useContext } from 'react';
-import { searchWhiteIcon } from '@/assets/icons/SearchWhiteIcon';
-import { LeftArrowWhite } from '@/assets/icons/LeftArrowWhite';
-import { moreWhiteIcon } from '@/assets/icons/MoreWhite';
+
 
 interface Headerprops{
     onSearchPressed: () => void,
