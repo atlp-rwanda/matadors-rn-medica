@@ -1,7 +1,7 @@
 {
   "name": "matadors-rn-medica",
   "main": "expo-router/entry",
-  "version": "1.0.0",
+  "version": "1.5.5",
   "scripts": {
     "start": "expo start",
     "android": "expo run:android",
