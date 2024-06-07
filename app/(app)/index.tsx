@@ -12,7 +12,7 @@ export default function Index() {
 
   useEffect(() => {
     setTimeout(() => {
-      router.push("/onBoarding/FirstScreen");
+      router.push("onBoarding");
     });
   }, []);
 

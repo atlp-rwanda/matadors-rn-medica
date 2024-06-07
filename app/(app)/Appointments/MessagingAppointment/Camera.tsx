@@ -1,10 +1,6 @@
-import { circleWithDots } from "@/components/UI/icons/circleWithDots";
-import { BlackFilterIcon } from "@/components/UI/icons/filterIcon";
 import { Colors } from "@/constants/Colors";
 import { ThemeContext } from "@/ctx/ThemeContext";
-import { MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import { StatusBar } from "expo-status-bar";
 import React, { useContext, useRef, useState } from "react";
 import {
   Button,
