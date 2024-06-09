@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "matadors-rn-medica",
-    "slug": "medical",
+    "slug": "medica-matadors",
     "scheme": "matadors-rn-medica",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -11,22 +11,20 @@
       "resizeMode": "contain",
       "backgroundColor": "#000000"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
         "NSFaceIDUsageDescription": "This app uses Face ID and Touch ID for some features"
       },
-      "bundleIdentifier": "com.andela.medica"
+      "bundleIdentifier": "com.andela.matadors.medica"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#000000"
       },
-      "package": "com.andela.medica",
+      "package": "com.andela.matadors.medica",
       "softwareKeyboardLayoutMode": "pan",
       "permissions": [
         "android.permission.USE_BIOMETRIC",
@@ -73,7 +71,7 @@
         "origin": false
       },
       "eas": {
-        "projectId": "3a17d659-91e3-4105-837b-5f88bdee8d37"
+        "projectId": "3a6a34bd-fe90-43f9-9508-8c6cf7700ef6"
       }
     },
     "runtimeVersion": {
@@ -82,6 +80,6 @@
     "updates": {
       "url": "https://u.expo.dev/3a17d659-91e3-4105-837b-5f88bdee8d37"
     },
-    "owner": "tuyishimerwanda"
+    "owner": "apiimperfect"
   }
 }
