@@ -29,10 +29,17 @@ import { SvgXml } from "react-native-svg";
 export default function Reviewsummary() {
   const { theme, changeTheme } = useContext(ThemeContext);
 
+  changeTheme("dark");
+
   return (
     <>
       <ScrollView
-        style={{ backgroundColor: "white", height: "100%", flex: 1 }}
+        style={{
+          backgroundColor:
+            theme === "light" ? Colors.others.white : Colors.dark._1,
+          height: "100%",
+          flex: 1,
+        }}
         contentContainerStyle={{
           gap: 10,
           flexGrow: 1,
@@ -42,11 +49,12 @@ export default function Reviewsummary() {
         <View style={{ paddingHorizontal: 20, gap: 20 }}>
           <View
             style={{
-              elevation: 20,
+              elevation: theme === "light" ? 20 : 0,
               shadowColor: Colors.grayScale._400,
               flexDirection: "row",
               gap: 15,
-              backgroundColor: "white",
+              backgroundColor:
+                theme === "light" ? Colors.others.white : Colors.dark._2,
               padding: 15,
               borderRadius: 20,
             }}
@@ -56,12 +64,33 @@ export default function Reviewsummary() {
             ></Image>
 
             <View style={{ gap: 10, paddingVertical: 4 }}>
-              <Text style={[Typography.bold.xLarge]}>Dr Jenny Watson</Text>
-              <HorizontalSeparator color={Colors.grayScale._200} />
+              <Text
+                style={[
+                  Typography.bold.xLarge,
+                  {
+                    color:
+                      theme === "light"
+                        ? Colors.grayScale._900
+                        : Colors.others.white,
+                  },
+                ]}
+              >
+                Dr Jenny Watson
+              </Text>
+              <HorizontalSeparator
+                color={
+                  theme === "light" ? Colors.grayScale._200 : Colors.dark._3
+                }
+              />
               <Text
                 style={[
                   Typography.medium.small,
-                  { color: Colors.grayScale._800 },
+                  {
+                    color:
+                      theme === "light"
+                        ? Colors.grayScale._900
+                        : Colors.grayScale._300,
+                  },
                 ]}
               >
                 Immunologists
@@ -69,7 +98,12 @@ export default function Reviewsummary() {
               <Text
                 style={[
                   Typography.medium.small,
-                  { color: Colors.grayScale._800 },
+                  {
+                    color:
+                      theme === "light"
+                        ? Colors.grayScale._900
+                        : Colors.grayScale._300,
+                  },
                 ]}
               >
                 Christ Hospital in London, UK
@@ -79,10 +113,11 @@ export default function Reviewsummary() {
 
           <View
             style={{
-              elevation: 20,
+              elevation: theme === "light" ? 20 : 0,
               shadowColor: Colors.grayScale._400,
               gap: 15,
-              backgroundColor: "white",
+              backgroundColor:
+                theme === "light" ? Colors.others.white : Colors.dark._2,
               borderRadius: 20,
               padding: 20,
             }}
@@ -97,7 +132,12 @@ export default function Reviewsummary() {
               <Text
                 style={[
                   Typography.medium.medium,
-                  { color: Colors.grayScale._700 },
+                  {
+                    color:
+                      theme === "light"
+                        ? Colors.grayScale._700
+                        : Colors.grayScale._300,
+                  },
                 ]}
               >
                 Date & Hour
@@ -105,7 +145,12 @@ export default function Reviewsummary() {
               <Text
                 style={[
                   Typography.semiBold.large,
-                  { color: Colors.grayScale._800 },
+                  {
+                    color:
+                      theme === "light"
+                        ? Colors.grayScale._900
+                        : Colors.others.white,
+                  },
                 ]}
               >
                 Dec 23, 2024 | 10:00 AM
@@ -121,7 +166,12 @@ export default function Reviewsummary() {
               <Text
                 style={[
                   Typography.medium.medium,
-                  { color: Colors.grayScale._700 },
+                  {
+                    color:
+                      theme === "light"
+                        ? Colors.grayScale._700
+                        : Colors.grayScale._300,
+                  },
                 ]}
               >
                 Package
@@ -129,7 +179,12 @@ export default function Reviewsummary() {
               <Text
                 style={[
                   Typography.semiBold.large,
-                  { color: Colors.grayScale._800 },
+                  {
+                    color:
+                      theme === "light"
+                        ? Colors.grayScale._900
+                        : Colors.others.white,
+                  },
                 ]}
               >
                 Messaging
@@ -145,7 +200,12 @@ export default function Reviewsummary() {
               <Text
                 style={[
                   Typography.medium.medium,
-                  { color: Colors.grayScale._700 },
+                  {
+                    color:
+                      theme === "light"
+                        ? Colors.grayScale._700
+                        : Colors.grayScale._300,
+                  },
                 ]}
               >
                 Duration
@@ -153,7 +213,12 @@ export default function Reviewsummary() {
               <Text
                 style={[
                   Typography.semiBold.large,
-                  { color: Colors.grayScale._800 },
+                  {
+                    color:
+                      theme === "light"
+                        ? Colors.grayScale._900
+                        : Colors.others.white,
+                  },
                 ]}
               >
                 30 minutes
@@ -163,10 +228,11 @@ export default function Reviewsummary() {
 
           <View
             style={{
-              elevation: 20,
+              elevation: theme === "light" ? 20 : 0,
               shadowColor: Colors.grayScale._400,
               gap: 20,
-              backgroundColor: "white",
+              backgroundColor:
+                theme === "light" ? Colors.others.white : Colors.dark._2,
               borderRadius: 20,
               padding: 20,
             }}
@@ -181,7 +247,12 @@ export default function Reviewsummary() {
               <Text
                 style={[
                   Typography.medium.medium,
-                  { color: Colors.grayScale._700 },
+                  {
+                    color:
+                      theme === "light"
+                        ? Colors.grayScale._700
+                        : Colors.grayScale._300,
+                  },
                 ]}
               >
                 Amount
@@ -189,7 +260,12 @@ export default function Reviewsummary() {
               <Text
                 style={[
                   Typography.semiBold.large,
-                  { color: Colors.grayScale._800 },
+                  {
+                    color:
+                      theme === "light"
+                        ? Colors.grayScale._700
+                        : Colors.grayScale._300,
+                  },
                 ]}
               >
                 $20
@@ -205,7 +281,12 @@ export default function Reviewsummary() {
               <Text
                 style={[
                   Typography.medium.medium,
-                  { color: Colors.grayScale._700 },
+                  {
+                    color:
+                      theme === "light"
+                        ? Colors.grayScale._700
+                        : Colors.grayScale._300,
+                  },
                 ]}
               >
                 Duration (30 mins)
@@ -213,14 +294,21 @@ export default function Reviewsummary() {
               <Text
                 style={[
                   Typography.semiBold.large,
-                  { color: Colors.grayScale._800 },
+                  {
+                    color:
+                      theme === "light"
+                        ? Colors.grayScale._700
+                        : Colors.grayScale._300,
+                  },
                 ]}
               >
                 1 x $20
               </Text>
             </View>
 
-            <HorizontalSeparator />
+            <HorizontalSeparator
+              color={theme === "light" ? Colors.grayScale._200 : Colors.dark._3}
+            />
 
             <View
               style={{
@@ -232,7 +320,12 @@ export default function Reviewsummary() {
               <Text
                 style={[
                   Typography.medium.medium,
-                  { color: Colors.grayScale._700 },
+                  {
+                    color:
+                      theme === "light"
+                        ? Colors.grayScale._700
+                        : Colors.grayScale._300,
+                  },
                 ]}
               >
                 Total
@@ -240,7 +333,12 @@ export default function Reviewsummary() {
               <Text
                 style={[
                   Typography.semiBold.large,
-                  { color: Colors.grayScale._800 },
+                  {
+                    color:
+                      theme === "light"
+                        ? Colors.grayScale._700
+                        : Colors.others.white,
+                  },
                 ]}
               >
                 $20
@@ -263,7 +361,9 @@ export default function Reviewsummary() {
         <View style={{ paddingHorizontal: 20, marginTop: "auto" }}>
           <Button
             title="Next"
-            onPress={() => router.push("(app)/ActionMenu/Booking/EnterYourPin")}
+            onPress={() =>
+              router.push("(app)/ActionMenu/Booking/EnterYourP in")
+            }
             style={{}}
           />
         </View>
