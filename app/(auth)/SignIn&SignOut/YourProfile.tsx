@@ -8,7 +8,7 @@ import {
   MessageIconGray,
 } from "@/assets/icons/Profile/Icons";
 import Button from "@/components/UI/Button";
-import CustomDropdown from "@/components/UI/Dropdown";
+import CustomDropdown from "@/components/UI/CustomDropdown";
 import Input from "@/components/UI/Input";
 import SelectProfile from "@/components/UI/SelectProfile";
 import { Colors } from "@/constants/Colors";

@@ -17,7 +17,7 @@ import Typography from "@/constants/Typography";
 import { typedCountries } from "@/constants/Languages";
 import { ThemeContext } from "@/ctx/ThemeContext";
 import PhoneInput from "react-native-phone-number-input";
-import CustomDropdown from "@/components/UI/Dropdown";
+import CustomDropdown from "@/components/UI/CustomDropdown";
 
 interface Props {}
 
