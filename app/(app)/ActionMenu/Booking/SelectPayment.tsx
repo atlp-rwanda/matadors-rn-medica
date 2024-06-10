@@ -4,19 +4,8 @@ import { createContext, useContext, useState } from "react";
 import { Image, Pressable, ScrollView } from "react-native";
 import { Text } from "react-native";
 import { ThemeContext } from "@/ctx/ThemeContext";
-import { SvgXml, Use } from "react-native-svg";
 import Typography from "@/constants/Typography";
-import { View } from "react-native";
 import Button from "@/components/UI/Button";
-import {
-  applePayDark,
-  applePayLight,
-  googlePay,
-  masterCardDark,
-  masterCardLight,
-  paypal,
-} from "@/components/UI/Icons";
-import PaymentChooseInputCard from "@/components/UI/PaymentChooseContainer/PaymentChooseInputCard";
 import { PaymentMethods } from "@/constants/PaymentMethods";
 import PaymentChooseContainer from "@/components/UI/PaymentChooseContainer/Index";
 import { router } from "expo-router";
@@ -57,7 +46,7 @@ export default function SelectPayment() {
         <Button
           title="Add New Card"
           onPress={() => router.push("(app)/ActionMenu/Booking/AddNewCard")}
-          type="light"
+          type={theme === "light" ? "light" : "gray"}
         />
         <Button
           title="Next"

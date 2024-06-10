@@ -1,5 +1,9 @@
 import { Text } from "@/components/Themed";
-import { LeftArrow } from "@/components/UI/Icons";
+import {
+  LeftArrow,
+  masterCardDark,
+  masterCardLight,
+} from "@/components/UI/Icons";
 import { Colors } from "@/constants/Colors";
 import Typography from "@/constants/Typography";
 import { useContext, useState } from "react";
@@ -16,405 +20,254 @@ import { ThemeContext } from "@/ctx/ThemeContext";
 import { router } from "expo-router";
 import Button from "@/components/UI/Button";
 import React from "react";
+import { ScrollView } from "react-native";
+import HorizontalSeparator from "@/components/UI/HorizontalSeparator";
+import PaymentChooseInputCard from "@/components/UI/PaymentChooseContainer/PaymentChooseInputCard";
+import SelectPaymentCardListing from "@/components/Profile/SelectedPaymentCardListing";
+import { SvgXml } from "react-native-svg";
 
 export default function Reviewsummary() {
   const { theme, changeTheme } = useContext(ThemeContext);
 
   return (
     <>
-      <View style={theme === "dark" ? styles.containerdark : styles.container}>
-        <Pressable
-          onPress={() => router.back()}
-          style={theme === "dark" ? styles.headerdark : styles.header}
-        >
-          <LeftArrow
-            fillColor={
-              theme === "dark" ? Colors.others.white : Colors.grayScale._900
-            }
-          />
-          <Text
-            style={[
-              Typography.heading._4,
-              {
-                color:
-                  theme === "dark"
-                    ? Colors.others.white
-                    : Colors.grayScale._900,
-              },
-            ]}
-          >
-            Review Summary
-          </Text>
-        </Pressable>
-        <View
-          style={{
-            flexDirection: "row",
-            padding: 16,
-            width: 380,
-            borderRadius: 24,
-            backgroundColor:
-              theme === "dark" ? Colors.dark._2 : Colors.others.white,
-            gap: 16,
-          }}
-        >
-          <Image
-            source={require("@/assets/images/BookingImages/doctor.png")}
-            style={{ width: 110, height: 110 }}
-          ></Image>
+      <ScrollView
+        style={{ backgroundColor: "white", height: "100%", flex: 1 }}
+        contentContainerStyle={{
+          gap: 10,
+          flexGrow: 1,
+          paddingBottom: 20,
+        }}
+      >
+        <View style={{ paddingHorizontal: 20, gap: 20 }}>
           <View
             style={{
-              justifyContent: "space-around",
-              backgroundColor: "transparent",
+              elevation: 20,
+              shadowColor: Colors.grayScale._400,
+              flexDirection: "row",
+              gap: 15,
+              backgroundColor: "white",
+              padding: 15,
+              borderRadius: 20,
             }}
           >
-            <Text
-              style={[
-                Typography.heading._5,
-                {
-                  color:
-                    theme === "dark"
-                      ? Colors.others.white
-                      : Colors.grayScale._900,
-                },
-              ]}
-            >
-              Dr Jenny Watson
-            </Text>
+            <Image
+              source={require("@/assets/images/BookingImages/doctor.png")}
+            ></Image>
+
+            <View style={{ gap: 10, paddingVertical: 4 }}>
+              <Text style={[Typography.bold.xLarge]}>Dr Jenny Watson</Text>
+              <HorizontalSeparator color={Colors.grayScale._200} />
+              <Text
+                style={[
+                  Typography.medium.small,
+                  { color: Colors.grayScale._800 },
+                ]}
+              >
+                Immunologists
+              </Text>
+              <Text
+                style={[
+                  Typography.medium.small,
+                  { color: Colors.grayScale._800 },
+                ]}
+              >
+                Christ Hospital in London, UK
+              </Text>
+            </View>
+          </View>
+
+          <View
+            style={{
+              elevation: 20,
+              shadowColor: Colors.grayScale._400,
+              gap: 15,
+              backgroundColor: "white",
+              borderRadius: 20,
+              padding: 20,
+            }}
+          >
             <View
               style={{
-                width: 222,
-                height: 1,
-                backgroundColor:
-                  theme === "dark" ? Colors.dark._3 : Colors.grayScale._200,
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
               }}
-            ></View>
-            <Text
-              style={[
-                Typography.medium.small,
-                {
-                  color:
-                    theme === "dark"
-                      ? Colors.others.white
-                      : Colors.grayScale._800,
-                },
-              ]}
             >
-              Immunologist
-            </Text>
-            <Text
-              style={[
-                Typography.medium.small,
-                {
-                  color:
-                    theme === "dark"
-                      ? Colors.others.white
-                      : Colors.grayScale._800,
-                },
-              ]}
+              <Text
+                style={[
+                  Typography.medium.medium,
+                  { color: Colors.grayScale._700 },
+                ]}
+              >
+                Date & Hour
+              </Text>
+              <Text
+                style={[
+                  Typography.semiBold.large,
+                  { color: Colors.grayScale._800 },
+                ]}
+              >
+                Dec 23, 2024 | 10:00 AM
+              </Text>
+            </View>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
             >
-              Christ hospital London,uk
-            </Text>
-          </View>
-        </View>
-
-        <View
-          style={{
-            width: 380,
-            padding: 24,
-            gap: 20,
-            borderRadius: 20,
-            backgroundColor:
-              theme === "dark" ? Colors.dark._2 : Colors.others.white,
-          }}
-        >
-          <View
-            style={{ flexDirection: "row", justifyContent: "space-between" }}
-          >
-            <Text
-              style={[
-                Typography.medium.medium,
-                {
-                  color:
-                    theme === "dark"
-                      ? Colors.grayScale._300
-                      : Colors.grayScale._700,
-                },
-              ]}
+              <Text
+                style={[
+                  Typography.medium.medium,
+                  { color: Colors.grayScale._700 },
+                ]}
+              >
+                Package
+              </Text>
+              <Text
+                style={[
+                  Typography.semiBold.large,
+                  { color: Colors.grayScale._800 },
+                ]}
+              >
+                Messaging
+              </Text>
+            </View>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
             >
-              Date & Hour
-            </Text>
-            <Text
-              style={[
-                Typography.semiBold.large,
-                {
-                  color:
-                    theme === "dark"
-                      ? Colors.others.white
-                      : Colors.grayScale._800,
-                },
-              ]}
-            >
-              Dec 23, 2024 | 10:00 AM
-            </Text>
-          </View>
-          <View
-            style={{ flexDirection: "row", justifyContent: "space-between" }}
-          >
-            <Text
-              style={[
-                Typography.medium.medium,
-                {
-                  color:
-                    theme === "dark"
-                      ? Colors.grayScale._300
-                      : Colors.grayScale._700,
-                },
-              ]}
-            >
-              Packaging
-            </Text>
-            <Text
-              style={[
-                Typography.semiBold.large,
-                {
-                  color:
-                    theme === "dark"
-                      ? Colors.others.white
-                      : Colors.grayScale._800,
-                },
-              ]}
-            >
-              Messaging
-            </Text>
-          </View>
-          <View
-            style={{ flexDirection: "row", justifyContent: "space-between" }}
-          >
-            <Text
-              style={[
-                Typography.medium.medium,
-                {
-                  color:
-                    theme === "dark"
-                      ? Colors.grayScale._300
-                      : Colors.grayScale._700,
-                },
-              ]}
-            >
-              Duration
-            </Text>
-            <Text
-              style={[
-                Typography.semiBold.large,
-                {
-                  color:
-                    theme === "dark"
-                      ? Colors.others.white
-                      : Colors.grayScale._800,
-                },
-              ]}
-            >
-              30 minutes
-            </Text>
-          </View>
-        </View>
-
-        <View
-          style={{
-            width: 380,
-            padding: 24,
-            gap: 20,
-            borderRadius: 20,
-            backgroundColor:
-              theme === "dark" ? Colors.dark._2 : Colors.others.white,
-          }}
-        >
-          <View
-            style={{ flexDirection: "row", justifyContent: "space-between" }}
-          >
-            <Text
-              style={[
-                Typography.medium.medium,
-                {
-                  color:
-                    theme === "dark"
-                      ? Colors.grayScale._300
-                      : Colors.grayScale._700,
-                },
-              ]}
-            >
-              Amount
-            </Text>
-            <Text
-              style={[
-                Typography.semiBold.large,
-                {
-                  color:
-                    theme === "dark"
-                      ? Colors.others.white
-                      : Colors.grayScale._800,
-                },
-              ]}
-            >
-              $20
-            </Text>
-          </View>
-
-          <View
-            style={{ flexDirection: "row", justifyContent: "space-between" }}
-          >
-            <Text
-              style={[
-                Typography.medium.medium,
-                {
-                  color:
-                    theme === "dark"
-                      ? Colors.grayScale._300
-                      : Colors.grayScale._700,
-                },
-              ]}
-            >
-              Duration(30 mins)
-            </Text>
-            <Text
-              style={[
-                Typography.semiBold.large,
-                {
-                  color:
-                    theme === "dark"
-                      ? Colors.others.white
-                      : Colors.grayScale._800,
-                },
-              ]}
-            >
-              1 * $20
-            </Text>
+              <Text
+                style={[
+                  Typography.medium.medium,
+                  { color: Colors.grayScale._700 },
+                ]}
+              >
+                Duration
+              </Text>
+              <Text
+                style={[
+                  Typography.semiBold.large,
+                  { color: Colors.grayScale._800 },
+                ]}
+              >
+                30 minutes
+              </Text>
+            </View>
           </View>
 
           <View
             style={{
-              width: 332,
-              height: 1,
-              backgroundColor:
-                theme === "dark" ? Colors.dark._3 : Colors.grayScale._200,
+              elevation: 20,
+              shadowColor: Colors.grayScale._400,
+              gap: 20,
+              backgroundColor: "white",
+              borderRadius: 20,
+              padding: 20,
             }}
-          ></View>
-
-          <View
-            style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
-            <Text
-              style={[
-                Typography.medium.medium,
-                {
-                  color:
-                    theme === "dark"
-                      ? Colors.grayScale._300
-                      : Colors.grayScale._700,
-                },
-              ]}
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
             >
-              Total
-            </Text>
-            <Text
-              style={[
-                Typography.semiBold.large,
-                {
-                  color:
-                    theme === "dark"
-                      ? Colors.others.white
-                      : Colors.grayScale._800,
-                },
-              ]}
-            >
-              $20
-            </Text>
-          </View>
-        </View>
-        <View
-          style={{
-            width: 380,
-            padding: 24,
-            gap: 20,
-            borderRadius: 20,
-            backgroundColor:
-              theme === "dark" ? Colors.dark._2 : Colors.others.white,
-          }}
-        >
-          <View
-            style={{ flexDirection: "row", justifyContent: "space-between" }}
-          >
-            <View>
-              {theme === "dark" ? <Mastercarddark /> : <Mastercard />}
+              <Text
+                style={[
+                  Typography.medium.medium,
+                  { color: Colors.grayScale._700 },
+                ]}
+              >
+                Amount
+              </Text>
+              <Text
+                style={[
+                  Typography.semiBold.large,
+                  { color: Colors.grayScale._800 },
+                ]}
+              >
+                $20
+              </Text>
             </View>
-            <Text
-              style={[
-                Typography.heading._5,
-                {
-                  color:
-                    theme === "dark"
-                      ? Colors.grayScale._300
-                      : Colors.grayScale._900,
-                },
-              ]}
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
             >
-              •••• •••• •••• •••• 4679
-            </Text>
-            <Text
-              style={[
-                Typography.bold.large,
-                { color: Colors.main.primary._500 },
-              ]}
+              <Text
+                style={[
+                  Typography.medium.medium,
+                  { color: Colors.grayScale._700 },
+                ]}
+              >
+                Duration (30 mins)
+              </Text>
+              <Text
+                style={[
+                  Typography.semiBold.large,
+                  { color: Colors.grayScale._800 },
+                ]}
+              >
+                1 x $20
+              </Text>
+            </View>
+
+            <HorizontalSeparator />
+
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
             >
-              change
-            </Text>
+              <Text
+                style={[
+                  Typography.medium.medium,
+                  { color: Colors.grayScale._700 },
+                ]}
+              >
+                Total
+              </Text>
+              <Text
+                style={[
+                  Typography.semiBold.large,
+                  { color: Colors.grayScale._800 },
+                ]}
+              >
+                $20
+              </Text>
+            </View>
           </View>
+
+          <SelectPaymentCardListing
+            icon={() => {
+              return (
+                <SvgXml
+                  xml={theme === "light" ? masterCardLight : masterCardDark}
+                />
+              );
+            }}
+            title="•••• •••• •••• •••• 4679"
+          />
         </View>
-        <Button
-          title="Next"
-          onPress={() => router.push("(app)/ActionMenu/Booking/EnterYourPin")}
-          style={{ width: "100%" }}
-        />
-      </View>
+
+        <View style={{ paddingHorizontal: 20, marginTop: "auto" }}>
+          <Button
+            title="Next"
+            onPress={() => router.push("(app)/ActionMenu/Booking/EnterYourPin")}
+            style={{}}
+          />
+        </View>
+      </ScrollView>
     </>
   );
 }
-const styles = StyleSheet.create({
-  itemcontainer: {},
-
-  header: {
-    width: "100%",
-    flexDirection: "row",
-    justifyContent: "flex-start",
-    gap: 20,
-    alignItems: "center",
-    marginTop: 60,
-    backgroundColor: "transparent",
-  },
-  container: {
-    justifyContent: "space-around",
-    gap: 20,
-    alignItems: "center",
-    backgroundColor: Colors.grayScale._50,
-    flex: 1,
-    padding: 20,
-  },
-
-  headerdark: {
-    width: "100%",
-    flexDirection: "row",
-    justifyContent: "flex-start",
-    gap: 20,
-    alignItems: "center",
-    marginTop: 60,
-    backgroundColor: "transparent",
-  },
-  containerdark: {
-    justifyContent: "space-between",
-    gap: 20,
-    backgroundColor: Colors.dark._1,
-    alignItems: "center",
-    flex: 1,
-    padding: 20,
-  },
-});

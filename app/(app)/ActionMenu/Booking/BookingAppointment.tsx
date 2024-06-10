@@ -50,6 +50,8 @@ function BookingAppointment() {
         flex: 1,
         backgroundColor:
           theme === "light" ? Colors.others.white : Colors.dark._1,
+      }}
+      contentContainerStyle={{
         height: "100%",
       }}
     >
@@ -98,7 +100,7 @@ function BookingAppointment() {
                 return (
                   <Tag
                     title={item.item}
-                    padding={{ horizontal: 15, vertical: 8 }}
+                    padding={{ horizontal: 20, vertical: 8 }}
                     onPress={() => {}}
                   />
                 );
@@ -107,28 +109,28 @@ function BookingAppointment() {
               contentContainerStyle={{
                 flexDirection: "row",
                 alignItems: "center",
-                justifyContent: "space-around",
-                gap: 15,
+                justifyContent: "space-between",
+                // gap: 4
+                gap: 8,
                 flexWrap: "wrap",
               }}
             />
           </View>
         </View>
-
-        <View
-          style={{
-            paddingHorizontal: 20,
-            marginTop: "auto",
-            marginBottom: 20,
+      </View>
+      <View
+        style={{
+          paddingHorizontal: 20,
+          marginTop: "auto",
+          marginBottom: 20,
+        }}
+      >
+        <Button
+          title="Next"
+          onPress={() => {
+            router.push("(app)/ActionMenu/Booking/Select-package");
           }}
-        >
-          <Button
-            title="Next"
-            onPress={() => {
-              router.push("(app)/ActionMenu/Booking/Select-package");
-            }}
-          />
-        </View>
+        />
       </View>
     </ScrollView>
   );

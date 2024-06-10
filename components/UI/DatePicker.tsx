@@ -16,7 +16,7 @@ function DateElement({ item, disabled }: { item: string; disabled?: boolean }) {
     <Pressable
       style={{
         flex: 1 / 7,
-        padding: 4,
+        // padding: 1,
         borderRadius: 100,
         alignItems: "center",
         justifyContent: "center",
@@ -43,10 +43,10 @@ function DateElement({ item, disabled }: { item: string; disabled?: boolean }) {
               color: isPressed
                 ? Colors.others.white
                 : !disabled
-                ? theme === "light"
-                  ? Colors.grayScale._900
-                  : Colors.grayScale._300
-                : Colors.grayScale._500,
+                  ? theme === "light"
+                    ? Colors.grayScale._900
+                    : Colors.grayScale._300
+                  : Colors.grayScale._500,
               textAlign: "center",
             },
           ]}
@@ -97,26 +97,16 @@ export default function DatePicker() {
         }
         break;
       }
+
+      
+      // for (let j = daysInMonth; j <  42 - daysInMonth - firstDayOfWeek + 1; j++) {
+      //   console.log("here ", j)
+      //   datesArr.push(<DateElement item={`${j}`} />);
+      // }
     }
 
-    // for (let i = firstDayOfWeek; i < days.length; i++) {
-    //   if (i >= firstDayOfWeek) {
-    //     const nextMonthDays = getDaysInMonth(currentMonth + 1, currentYear);
-    //     const nextMonthfirstDayOfWeek = getFirstDayOfWeek(
-    //       currentMonth + 1,
-    //       currentYear
-    //     );
 
-    //     for (
-    //       let j = 0;
-    //       j < nextMonthDays;
-    //       j++
-    //     ) {
-    //       datesArr.push(<DateElement item={`${j}`} disabled />);
-    //       console.log("next", j);
-    //     }
-    //   }
-    // }
+    console.log(daysInMonth, 42 - daysInMonth - firstDayOfWeek + 1)
 
     setDates(datesArr);
   }, [currentMonth, currentYear]);

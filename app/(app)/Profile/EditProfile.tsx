@@ -28,13 +28,12 @@ const EditProfile: React.FC<Props> = () => {
   const [isFocus, setIsFocus] = useState(false);
   const { theme } = useContext(ThemeContext);
 
-
   const countryNames: { label: string; value: string }[] = Object.keys(
     typedCountries
   ).map((key: string) => {
     return { label: typedCountries[key].name, value: typedCountries[key].name };
   });
-  
+
   return (
     <ScrollView
       style={{
@@ -82,38 +81,53 @@ const EditProfile: React.FC<Props> = () => {
             );
           }}
         />
-         <CustomDropdown
+        <CustomDropdown
           placeholder="Select Country"
           items={countryNames}
           selectedValue={country}
           onValueChange={setCountry}
         />
-        <View style={{  }}>
+        <View style={{}}>
           <PhoneInput
             defaultValue={phone}
             defaultCode="US"
             layout="first"
-            onChangeFormattedText={text => setPhone(text)}
-            containerStyle={{ flexDirection: 'row', 
-            alignItems: 'center',
-            
-            justifyContent:'center',borderRadius: 20,
-            backgroundColor:
-            theme === "light" ? Colors.grayScale._50 : Colors.dark._2,
-            borderWidth: 0,
-            width:'auto',
-            height:56
+            onChangeFormattedText={(text) => setPhone(text)}
+            containerStyle={{
+              flexDirection: "row",
+              alignItems: "center",
+
+              justifyContent: "center",
+              borderRadius: 20,
+              backgroundColor:
+                theme === "light" ? Colors.grayScale._50 : Colors.dark._2,
+              borderWidth: 0,
+              width: "auto",
+              height: 56,
             }}
-            
-          textContainerStyle={{  backgroundColor: 'transparent',
-          }}
-          codeTextStyle={[Typography.semiBold.medium,{color: theme==='light'? Colors.grayScale._900 : Colors.others.white}]}
-          
-          textInputStyle={[Typography.semiBold.medium,{color: theme==='light'? Colors.grayScale._900 : Colors.others.white}]}
-          textInputProps={{
-            placeholderTextColor: theme==='light'? Colors.grayScale._900 : Colors.others.white,
-            
-          }}
+            textContainerStyle={{ backgroundColor: "transparent" }}
+            codeTextStyle={[
+              Typography.semiBold.medium,
+              {
+                color:
+                  theme === "light"
+                    ? Colors.grayScale._900
+                    : Colors.others.white,
+              },
+            ]}
+            textInputStyle={[
+              Typography.semiBold.medium,
+              {
+                color:
+                  theme === "light"
+                    ? Colors.grayScale._900
+                    : Colors.others.white,
+              },
+            ]}
+            textInputProps={{
+              placeholderTextColor:
+                theme === "light" ? Colors.grayScale._900 : Colors.others.white,
+            }}
           />
         </View>
 
@@ -142,8 +156,6 @@ const EditProfile: React.FC<Props> = () => {
 export default EditProfile;
 
 const styles = StyleSheet.create({
-  
-  
   container: {
     backgroundColor: "white",
     padding: 16,
