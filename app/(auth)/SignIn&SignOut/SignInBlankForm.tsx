@@ -29,6 +29,7 @@ import {
 } from "@/components/Icons/Icons";
 import { StatusBar } from "expo-status-bar";
 import { supabase } from "@/lib/supabase";
+import Alerts from '../../../components/UI/alerts'
 
 AppState.addEventListener('change', (state) => {
   if(state === 'active'){
@@ -85,8 +86,7 @@ async function signInWithEmail(){
     password: password,
   }) 
   if(error){
-    Alert.alert(error.message)
-    setLoading(false)
+   <Alerts text="no wahala" status="error"/>
   }else{
     await router.push('/(app)/ActionMenu');
     setLoading(false);

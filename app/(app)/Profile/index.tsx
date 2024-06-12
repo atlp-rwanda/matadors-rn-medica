@@ -11,6 +11,7 @@ import * as ImagePicker from "expo-image-picker";
 import { LightDivider } from "@/assets/icons/LightDivider";
 import OptionListing from "@/components/Profile/OptionListing";
 import { Colors } from "@/constants/Colors";
+import { supabase } from "@/lib/supabase";
 import {
   ChevronRight,
   ChevronRightDark,
@@ -36,10 +37,23 @@ import { ThemeContext } from "@/ctx/ThemeContext";
 import { router } from "expo-router";
 import Switch from "@/components/UI/Switch";
 import SelectProfile from "@/components/UI/SelectProfile";
+// import Signup from "@/app/(auth)/SignIn&SignOut/SignUpBlankForm";
 
 const index = () => {
   const { theme, changeTheme } = useContext(ThemeContext);
   const [image, setImage] = useState<null | string>(null);
+
+  const handleSignOut = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.log('Error signing out:', error.message);
+      // return Signin()
+    } else {
+      console.log('Signed out successfully');
+      router.push('SignIn&SignOut/SignInBlankForm')
+     
+    }
+  };
 
   return (
     <ScrollView
@@ -323,6 +337,7 @@ const index = () => {
           icon={() => {
             return <SvgXml xml={LogoutIcon} width={30} />;
           }}
+          onPress={handleSignOut}
           // rightComponent={() => {
           //   return <SvgXml xml={ChevronRight} />;
           // }}

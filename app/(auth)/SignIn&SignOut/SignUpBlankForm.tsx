@@ -25,6 +25,7 @@ import {
   DarkContinueLine,
   LightContinueLine,
 } from "@/components/Icons/Icons";
+import Alerts from '../../../components/UI/alerts'
 import { SvgXml } from "react-native-svg";
 import { appleBlackIcon, appleWhiteIcon } from "@/constants/icon";
 import { supabase } from "@/lib/supabase";
@@ -85,9 +86,7 @@ const Signup = () => {
     })
 
     if(error){
-      Alert.alert(error.message)
-      if(!session) Alert.alert('Please check your inbox for email verification!')
-        setLoading(false)
+      <Alerts text="fail to create account" status="warning"/>
     }else{
       await router.push('/(auth)/SignIn&SignOut/YourProfile')
     }
