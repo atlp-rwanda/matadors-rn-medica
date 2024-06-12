@@ -88,6 +88,7 @@ const Signup = () => {
     if(error){
       <Alerts text="fail to create account" status="warning"/>
     }else{
+      <Alerts text="account created" status="success"/>
       await router.push('/(auth)/SignIn&SignOut/YourProfile')
     }
   }

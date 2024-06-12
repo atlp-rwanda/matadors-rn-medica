@@ -88,6 +88,7 @@ async function signInWithEmail(){
   if(error){
    <Alerts text="no wahala" status="error"/>
   }else{
+    <Alerts text="login successfully" status="success"/>
     await router.push('/(app)/ActionMenu');
     setLoading(false);
   }
