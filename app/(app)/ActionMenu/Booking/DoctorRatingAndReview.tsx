@@ -15,8 +15,9 @@ import { router } from "expo-router";
 import { SvgXml } from "react-native-svg";
 import ReviewerCardComponent from "@/components/ReviewerCardComponent";
 import { LeftArrow } from "@/components/UI/Icons";
-import { circleWithDots } from "@/components/UI/icons/circleWithDots";
+import {moreGrayIcon } from "@/components/UI/icons/circleWithDots";
 import { fullSmallBlueStar, fullSmallWhiteStar } from "@/components/UI/icons/star";
+import Chips from "@/components/UI/ChipsComponent";
 
 
 
@@ -34,129 +35,18 @@ const DoctorRatingAndReview = () => {
             </View>
           </View>
           <View style={styles.rightSide}>
-            <SvgXml xml={circleWithDots} />
+            <SvgXml xml={moreGrayIcon} />
           </View>
         </View>
       </SafeAreaView>
       <View style={{ alignItems: "center" }}>
         <ScrollView showsHorizontalScrollIndicator={false} horizontal>
-          <View
-            style={[styles.ratings, { marginRight: 10, alignItems: "center", backgroundColor: Colors.main.primary._500 }]}
-          >
-            <SvgXml xml={fullSmallWhiteStar} />
-            <Text
-              style={[
-                Typography.semiBold.medium,
-                { color: Colors.others.white },
-              ]}
-            >
-              All
-            </Text>
-          </View>
-          <View
-            style={[styles.ratings, { marginRight: 10, alignItems: "center" }]}
-          >
-            <SvgXml xml={fullSmallBlueStar} />
-            <Text
-              style={[
-                Typography.semiBold.medium,
-                { color: Colors.main.primary._500 },
-              ]}
-            >
-              5
-            </Text>
-          </View>
-          <View
-            style={[styles.ratings, { marginRight: 10, alignItems: "center" }]}
-          >
-            <SvgXml xml={fullSmallBlueStar} />
-            <Text
-              style={[
-                Typography.semiBold.medium,
-                { color: Colors.main.primary._500 },
-              ]}
-            >
-              5
-            </Text>
-          </View>
-          <View
-            style={[styles.ratings, { marginRight: 10, alignItems: "center" }]}
-          >
-            <SvgXml xml={fullSmallBlueStar} />
-            <Text
-              style={[
-                Typography.semiBold.medium,
-                { color: Colors.main.primary._500 },
-              ]}
-            >
-              5
-            </Text>
-          </View>
-          <View
-            style={[styles.ratings, { marginRight: 10, alignItems: "center" }]}
-          >
-            <SvgXml xml={fullSmallBlueStar} />
-            <Text
-              style={[
-                Typography.semiBold.medium,
-                { color: Colors.main.primary._500 },
-              ]}
-            >
-              5
-            </Text>
-          </View>
-          <View
-            style={[styles.ratings, { marginRight: 10, alignItems: "center" }]}
-          >
-            <SvgXml xml={fullSmallBlueStar} />
-            <Text
-              style={[
-                Typography.semiBold.medium,
-                { color: Colors.main.primary._500 },
-              ]}
-            >
-              5
-            </Text>
-          </View>
-          <View
-            style={[styles.ratings, { marginRight: 10, alignItems: "center" }]}
-          >
-            <SvgXml xml={fullSmallBlueStar} />
-            <Text
-              style={[
-                Typography.semiBold.medium,
-                { color: Colors.main.primary._500 },
-              ]}
-            >
-              5
-            </Text>
-          </View>
-          <View
-            style={[styles.ratings, { marginRight: 10, alignItems: "center" }]}
-          >
-            <SvgXml xml={fullSmallBlueStar} />
-            <Text
-              style={[
-                Typography.semiBold.medium,
-                { color: Colors.main.primary._500 },
-              ]}
-            >
-              5
-            </Text>
-          </View>
-          <View
-            style={[styles.ratings, { marginRight: 10, alignItems: "center" }]}
-          >
-            <SvgXml xml={fullSmallBlueStar} />
-            <Text
-              style={[
-                Typography.semiBold.medium,
-                { color: Colors.main.primary._500 },
-              ]}
-            >
-              5
-            </Text>
-          </View>
+        <Chips text="All" type="filled" size="medium" leftIcon={()=>  <SvgXml xml={fullSmallWhiteStar} /> } />
+        <Chips text="5" type="border" size="medium" leftIcon={()=>  <SvgXml xml={fullSmallBlueStar} /> }  style={{marginLeft:10}} />
+        <Chips text="4" type="border" size="medium" leftIcon={()=>  <SvgXml xml={fullSmallBlueStar} /> }  style={{marginLeft:10}} />
+        <Chips text="3" type="border" size="medium" leftIcon={()=>  <SvgXml xml={fullSmallBlueStar} /> }  style={{marginLeft:10}} />
+        <Chips text="2" type="border" size="medium" leftIcon={()=>  <SvgXml xml={fullSmallBlueStar} /> }  style={{marginLeft:10}} />
+        <Chips text="1" type="border" size="medium" leftIcon={()=>  <SvgXml xml={fullSmallBlueStar} /> }  style={{marginLeft:10}} />   
         </ScrollView>
       </View>
 

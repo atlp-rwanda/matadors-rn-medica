@@ -16,6 +16,8 @@ import { SvgXml } from "react-native-svg";
 import {NotificationIcon,NotificationIconDark} from "@/assets/icons/Profile/Icons";
 import { ThemeContext } from "@/ctx/ThemeContext";
 import { blackHeart, whiteHeart } from "@/components/UI/icons/blackHeart";
+import Chips from "@/components/UI/ChipsComponent";
+import { fullSmallBlueStar, fullSmallWhiteStar } from "@/components/UI/icons/star";
 
 export default function Index() {
   //const {user, isLoading}=useUser();
@@ -187,99 +189,12 @@ export default function Index() {
             backgroundColor: theme === "dark" ? "#181A20" : "#ffffff",
           }}
         >
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <View
-              style={{
-                backgroundColor:  "#246BFD",
-                padding: 5,
-                paddingHorizontal: 10,
-                borderRadius: 20,
-                justifyContent: "center",
-                width: 65,
-                height: 34,
-                alignItems: "center",
-              }}
-            >
-              <Text style={{ fontFamily: "Urbanist-regular", color: "white" }}>
-                All
-              </Text>
-            </View>
-            <View
-              style={{
-                backgroundColor: theme === "dark" ? "#181A20" : "#ffffff",
-                marginLeft: 10,
-                padding: 5,
-                paddingHorizontal: 10,
-                borderColor: "#246BFD",
-                borderWidth: 2,
-                borderRadius: 20,
-                height: 34,
-                alignItems: "center",
-              }}
-            >
-              <Text
-                style={{ fontFamily: "Urbanist-regular", color: "#246BFD" }}
-              >
-                General
-              </Text>
-            </View>
-            <View
-              style={{
-                backgroundColor: theme === "dark" ? "#181A20" : "#ffffff",
-                marginLeft: 10,
-                padding: 5,
-                paddingHorizontal: 10,
-                borderColor: "#246BFD",
-                borderWidth: 2,
-                borderRadius: 20,
-                height: 34,
-                alignItems: "center",
-              }}
-            >
-              <Text
-                style={{ fontFamily: "Urbanist-regular", color: "#246BFD" }}
-              >
-                Dentist
-              </Text>
-            </View>
-            <View
-              style={{
-                backgroundColor: theme === "dark" ? "#181A20" : "#ffffff",
-                marginLeft: 10,
-                padding: 5,
-                paddingHorizontal: 10,
-                borderColor: "#246BFD",
-                borderWidth: 2,
-                borderRadius: 20,
-                height: 34,
-                alignItems: "center",
-              }}
-            >
-              <Text
-                style={{ fontFamily: "Urbanist-regular", color: "#246BFD" }}
-              >
-                Nutritionist
-              </Text>
-            </View>
-            <View
-              style={{
-                backgroundColor: theme === "dark" ? "#181A20" : "#ffffff",
-                marginLeft: 10,
-                padding: 5,
-                paddingHorizontal: 10,
-                borderColor: "#246BFD",
-                borderWidth: 2,
-                borderRadius: 20,
-                height: 34,
-                alignItems: "center",
-              }}
-            >
-              <Text
-                style={{ fontFamily: "Urbanist-regular", color: "#246BFD" }}
-              >
-                Neurologist
-              </Text>
-            </View>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} >
+            <Chips text="All" type="filled" size="medium" />
+            <Chips text="General" type="border" size="medium" style={{marginLeft:10}} />
+            <Chips text="Dentist" type="border" size="medium" style={{marginLeft:10}} />
+            <Chips text="Nutritionist" type="border" size="medium" style={{marginLeft:10}} />
+            <Chips text="Neurologist" type="border" size="medium" style={{marginLeft:10}} />
           </ScrollView>
         </View>
 

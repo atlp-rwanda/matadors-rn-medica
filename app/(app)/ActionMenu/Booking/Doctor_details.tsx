@@ -14,7 +14,7 @@ import { Image } from "react-native";
 import { Colors } from "@/constants/Colors";
 import { router } from "expo-router";
 import { fullSmallBlueStar } from "@/components/UI/icons/star";
-import { circleWithDots } from "@/components/UI/icons/circleWithDots";
+import { moreGrayIcon } from "@/components/UI/icons/circleWithDots";
 import { blueHeart } from "@/components/UI/icons/blueHeart";
 import { bluePeopleIcon } from "@/components/UI/icons/bluePeople";
 import { statisticIcon } from "@/components/UI/icons/statistics";
@@ -83,7 +83,7 @@ export const ReviewerCardComponent = () => {
           <View>
             <TouchableOpacity>
               <SvgXml
-                xml={theme === "dark" ? WhiteThreeDots : circleWithDots}
+                xml={theme === "dark" ? WhiteThreeDots : moreGrayIcon}
               />
             </TouchableOpacity>
           </View>
@@ -171,7 +171,6 @@ const DoctorDetails = () => {
               >
                 Dr. Jenny Watson
               </Text>
-
               <View style={{ flex: 1, justifyContent: "space-around" }}>
                 <Text
                   style={[

@@ -8,13 +8,14 @@ import { Colors } from "@/constants/Colors";
 import Typography from "@/constants/Typography";
 import { StatusBar } from "expo-status-bar";
 import BookingAppointment from "./(app)/ActionMenu/Booking/BookingAppointment";
+import Chips from "@/components/UI/ChipsComponent";
 
 export default function SplashScreen() {
   const { theme, changeTheme } = useContext(ThemeContext);
   useEffect(() => {
     setTimeout(() => {
-      // router.push("/(app)/");
-      router.push("/ActionMenu/Booking/BookingAppointment");
+      router.push("/(app)/");
+
     }, 1000);
   }, []);
   changeTheme("light");

@@ -20,6 +20,7 @@ import DatePicker from "@/components/UI/DatePicker";
 import Tag from "@/components/UI/Tags/Tag";
 import { FlatList } from "react-native";
 import Button from "@/components/UI/Button";
+import Chips from "@/components/UI/ChipsComponent";
 
 function BookingAppointment() {
   const { theme, changeTheme } = useContext(ThemeContext);
@@ -98,20 +99,21 @@ function BookingAppointment() {
               data={timeSlots}
               renderItem={(item) => {
                 return (
-                  <Tag
-                    title={item.item}
-                    padding={{ horizontal: 20, vertical: 8 }}
-                    onPress={() => {}}
-                  />
+                  <>
+                   
+                  <Chips text={item.item} type= "border"size="large" style={{ paddingHorizontal:5, width:'32%',marginRight:5}} />
+                  </>
+                 
+                  
                 );
               }}
-              // numColumns={3}
+               numColumns={3}
               contentContainerStyle={{
                 flexDirection: "row",
                 alignItems: "center",
-                justifyContent: "space-between",
-                // gap: 4
-                gap: 8,
+                justifyContent:'space-between',
+                
+                gap: 10,
                 flexWrap: "wrap",
               }}
             />

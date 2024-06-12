@@ -19,6 +19,7 @@ import NofoundComponent from '@/components/NofoundComponent';
 import RemovefavoritePopup from '@/components/RemovefavoritePopup';
 import FilterPopup from '@/components/FilterSearchComponent';
 import NotFoundScreen from '@/app/+not-found';
+import Chips from '@/components/UI/ChipsComponent';
 
 
 interface imageMapProp{
@@ -122,16 +123,10 @@ function DoctorScreen() {
                     }}>
                     
                     {data.categories.map((category, index) =>
-                        <Pressable key={index} onPress={() => handleCategoryChange(category)} style={[styles.categoryBtn,
-                            selectedCategory === category ? styles.firstCategoryBtn : {},
-                            ]}>
-                            
-                            <Text style={[
-                                styles.categoryBtnText,
-                                selectedCategory === category ? styles.firstCategoryBtnText : {},
-                                ]}>{category.name}</Text>  
-                            
-                    </Pressable>
+                    
+                        <>
+                        <Chips key={index} text={category.name} type={selectedCategory === category ?'filled':'border'} onPress={() => handleCategoryChange(category)} size='medium' style={{marginLeft:10}}  />
+                             </>
                         )}
                     </ScrollView>
                     

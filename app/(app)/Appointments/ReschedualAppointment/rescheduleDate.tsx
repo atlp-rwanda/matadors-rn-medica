@@ -25,6 +25,7 @@ import Animated, {
   withRepeat,
   withTiming,
 } from "react-native-reanimated";
+import Chips from "@/components/UI/ChipsComponent";
 export default function RescheduleAppointment() {
   const { theme, changeTheme } = useContext(ThemeContext);
   const [selectedTime, setSelectedTime] = useState(null);
@@ -48,24 +49,8 @@ export default function RescheduleAppointment() {
           .toString()
           .padStart(2, "0")} ${hourFormat}`;
         timeSlots.push(
-          <TouchableOpacity
-            key={time}
-            style={[
-              styles.button,
-              selectedTime === time && styles.buttonSelected,
-            ]}
-            onPress={(time: any) => handleTimeSlotPress(time)}
-          >
-            <Text
-              style={[
-                styles.buttonText,
-                selectedTime === time && styles.buttonTextSelected,
-                Typography.bold.xLarge,
-              ]}
-            >
-              {time}
-            </Text>
-          </TouchableOpacity>
+         
+          <Chips key={time} type={selectedTime === time?"filled":"border"} size="large" text={time} onPress={() => setSelectedTime(time)} style={{ paddingHorizontal:5, width:'30%',marginRight:5}} />
         );
       }
     }
@@ -255,9 +240,10 @@ const styles = StyleSheet.create({
   change: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
-    marginHorizontal: 10,
     flexWrap: "wrap",
+    gap:10,
+    
+    
   },
   button: {
     flexBasis: "30%",

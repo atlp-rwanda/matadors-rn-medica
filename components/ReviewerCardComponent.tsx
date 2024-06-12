@@ -5,8 +5,10 @@ import { View } from "react-native";
 import { SvgXml } from "react-native-svg";
 import { blueHeart, fullyColoredBlueHeart } from "./UI/icons/blueHeart";
 import { fullSmallBlueStar } from "./UI/icons/star";
-import { circleWithDots } from "./UI/icons/circleWithDots";
+import { moreGrayIcon } from "./UI/icons/circleWithDots";
 import {Colors} from "@/constants/Colors";
+import Chips from "./UI/ChipsComponent";
+import React from "react";
 
 interface ReviewType {
     id: string;
@@ -14,7 +16,7 @@ interface ReviewType {
     image: any;
     reviewMsg: string;
     likes: number;
-    stars: number;
+    stars: string;
   }
 
 const unLike = <SvgXml xml={blueHeart} />
@@ -33,7 +35,7 @@ const ReviewerCardComponent = () => {
         reviewMsg:
           "    Dr. Jenny is very professional in her work and responsive. I haveconsulted and my problem is solved. 😍😍",
         likes: 5,
-        stars: 4,
+        stars: '4',
       },
       {
         id: "2",
@@ -42,7 +44,7 @@ const ReviewerCardComponent = () => {
         reviewMsg:
           "Dr. Jenny is very professional in her work and responsive. I haveconsulted and my problem is solved. 😍😍",
         likes: 5,
-        stars: 4,
+        stars: '4',
       },
       {
         id: "3",
@@ -51,7 +53,7 @@ const ReviewerCardComponent = () => {
         reviewMsg:
           "Dr. Jenny is very professional in her work and responsive. I haveconsulted and my problem is solved. 😍😍",
         likes: 5,
-        stars: 4,
+        stars: '4',
       },
       {
         id: "4",
@@ -59,7 +61,7 @@ const ReviewerCardComponent = () => {
         image: require("../assets/images/jenny_watson.png"),
         reviewMsg:"Dr. Jenny is very professional in her work and responsive. I haveconsulted and my problem is solved. 😍😍",
         likes: 5,
-        stars: 3,
+        stars: '3',
       },
       {
         id: "5",
@@ -68,7 +70,7 @@ const ReviewerCardComponent = () => {
         reviewMsg:
           "Dr. Jenny is very professional in her work and responsive. I haveconsulted and my problem is solved. 😍😍",
         likes: 5,
-        stars: 4,
+        stars: '4',
       },
       {
         id: "6",
@@ -77,7 +79,7 @@ const ReviewerCardComponent = () => {
         reviewMsg:
           "Dr. Jenny is very professional in her work and responsive. I haveconsulted and my problem is solved. 😍😍",
         likes: 5,
-        stars: 4,
+        stars: '4',
       },
       {
         id: "7",
@@ -86,7 +88,7 @@ const ReviewerCardComponent = () => {
         reviewMsg:
           "Dr. Jenny is very professional in her work and responsive. I haveconsulted and my problem is solved. 😍😍",
         likes: 5,
-        stars: 4,
+        stars: '4',
       },
     ];
     return (
@@ -129,12 +131,9 @@ const ReviewerCardComponent = () => {
                       gap: 10,
                     }}
                   >
-                    <View style={[styles.ratings, { alignItems: "center" }]}>
-                      <SvgXml xml={fullSmallBlueStar} />
-                      <Text>{item?.stars}</Text>
-                    </View>
+                    <Chips text={item?.stars} type="border" size="medium" leftIcon={()=>  <SvgXml xml={fullSmallBlueStar} /> }  style={{marginLeft:10}} />
                     <View>
-                      <SvgXml xml={circleWithDots} />
+                      <SvgXml xml={moreGrayIcon} />
                     </View>
                   </View>
                 </View>

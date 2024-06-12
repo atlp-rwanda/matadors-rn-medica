@@ -10,6 +10,8 @@ import { overlay } from 'react-native-paper';
 import DoctorComponent from './DoctorComponent';
 import Ratebtn from './Ratebtn';
 import { Rating } from 'react-native-elements';
+import Chips from './UI/ChipsComponent';
+import { fullSmallBlueStar, fullSmallWhiteStar } from './UI/icons/star';
 
 
 interface iconMappingProp{
@@ -77,16 +79,9 @@ function FilterPopup({ visible, onClose, cancel, }: RemovefavoritepopProps) {
                     }}>
                     
                     {data.categories.map((category:any, index:any) =>
-                        <Pressable key={index} onPress={() => handleCategoryChange(category)} style={[styles.categoryBtn,
-                            selectedCategory === category ? styles.firstCategoryBtn : {},
-                            ]}>
-                            
-                            <Text style={[
-                                styles.categoryBtnText,
-                                selectedCategory === category ? styles.firstCategoryBtnText : {},
-                                ]}>{category.name}</Text>  
-                            
-                    </Pressable>
+                         <>
+                         <Chips key={index} text={category.name} type={selectedCategory === category ?'filled':'border'} onPress={() => handleCategoryChange(category)} size='medium' style={{marginLeft:10}}  />
+                              </>
                         )}
                     </ScrollView>
                     
@@ -101,16 +96,10 @@ function FilterPopup({ visible, onClose, cancel, }: RemovefavoritepopProps) {
                                             alignItems:"center"
                                         }}
                                     >
-                                        {["All", "2", "3", "4", "5"].map((Rating, index) => (
-                                            
-                                            <Ratebtn
-                                                key={index}
-                                                text={Rating}
-                                                isSelected={selectedRating === Rating}
-                                                selectedAction={()=>handleSelectedRating(Rating)}
+                                        {["All", "5", "4", "3", "2","1"].map((Rating, index) => (
                                             
                                             
-                                            />
+                                            <Chips key={index} text={Rating} type={selectedRating === Rating ?'filled':'border'} onPress={() => handleSelectedRating(Rating)} size='medium' style={{marginLeft:10}} leftIcon={()=> selectedRating === Rating ? <SvgXml xml={fullSmallWhiteStar} /> : <SvgXml xml={fullSmallBlueStar} />}  />
                                         ))}
                                         
                                         

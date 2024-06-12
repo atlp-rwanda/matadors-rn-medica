@@ -6,6 +6,7 @@ import Tag from "@/components/UI/Tags/Tag";
 import { Colors } from "@/constants/Colors";
 import Typography from "@/constants/Typography";
 import { ThemeContext } from "@/ctx/ThemeContext";
+import React from "react";
 import { useContext, useState } from "react";
 import { ScrollView } from "react-native";
 import { View } from "react-native";
@@ -70,6 +71,7 @@ export default function FAQ() {
           contentContainerStyle={{ gap: 20, paddingHorizontal: 20 }}
         >
           <TagsContainer data={tags} />
+          
         </ScrollView>
 
         <View
