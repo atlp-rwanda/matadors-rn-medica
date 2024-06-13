@@ -16,6 +16,7 @@ import { SvgXml } from "react-native-svg";
 import {NotificationIcon,NotificationIconDark} from "@/assets/icons/Profile/Icons";
 import { ThemeContext } from "@/ctx/ThemeContext";
 import { blackHeart, whiteHeart } from "@/components/UI/icons/blackHeart";
+import SpecialityItem from "@/components/UI/SpecialDoctor";
 
 export default function Index() {
   //const {user, isLoading}=useUser();
@@ -23,6 +24,7 @@ export default function Index() {
   const handleIconPress = (iconName: string) => {
     setActiveIcon(iconName); // Update active icon state when an icon is pressed
   };
+  
   const isIconActive = (iconName: string) => {
     return activeIcon === iconName;
   };
@@ -38,7 +40,18 @@ export default function Index() {
   if (!fontsLoaded) {
     return null;
   }
-
+ 
+ 
+  const specialties = [
+    { imageSource: require('../../../assets/images/GeneralDoctor.png'), name: 'General..' },
+    { imageSource: require('../../../assets/images/Dentist.png'), name: 'Dentist' },
+    { imageSource: require('../../../assets/images/Optician.png'), name: 'Ophthal..' },
+    { imageSource: require('../../../assets/images/Nutritionist.png'), name: 'Nutrition..' },
+    { imageSource: require('../../../assets/images/Neurologist.png'), name: 'Neurolo..' },
+    { imageSource: require('../../../assets/images/Pediatric.png'), name: 'Pediatric' },
+    { imageSource: require('../../../assets/images/Radiologist.png'), name: 'Radiolo..' },
+    { imageSource: require('../../../assets/images/More.png'), name: 'More' },
+  ];
   return (
     <View style={{
       backgroundColor: theme === "dark" ? "#181A20" : "#FFFFFF",
@@ -114,60 +127,17 @@ export default function Index() {
             <Text style={styles.seeTxt}>See All</Text>
           </TouchableOpacity>
         </View>
-        <View style={styles.specialityContainer1}>
-          <TouchableOpacity>
-            <Image
-              source={require("../../../assets/images/GeneralDoctor.png")}
-            ></Image>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Image
-              source={require("../../../assets/images/Dentist.png")}
-            ></Image>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Image
-              source={require("../../../assets/images/Optician.png")}
-            ></Image>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Image
-              source={require("../../../assets/images/Nutritionist.png")}
-            ></Image>
-          </TouchableOpacity>
+        <View style={styles.specialityGrid}>
+      {specialties.map((specialty, index) => (
+        <View key={index} style={styles.itemContainer}>
+          <SpecialityItem
+            imageSource={specialty.imageSource}
+            name={specialty.name}
+            theme={theme}
+          />
         </View>
-        <View style={styles.NameTxt}>
-          <Text style={{color: theme === "dark" ? "#FFFFFF" : "#000000",fontSize: 14, marginLeft: "2%",fontFamily: "Urbanist-bold",}}>General..</Text>
-          <Text style={{color: theme === "dark" ? "#FFFFFF" : "#000000",fontSize: 14, marginLeft: "2%",fontFamily: "Urbanist-bold",}}>Dentist</Text>
-          <Text style={{color: theme === "dark" ? "#FFFFFF" : "#000000",fontSize: 14, marginLeft: "2%",fontFamily: "Urbanist-bold",}}>Ophthal..</Text>
-          <Text style={{color: theme === "dark" ? "#FFFFFF" : "#000000",fontSize: 14, marginLeft: "2%",fontFamily: "Urbanist-bold",}}>Nutrition..</Text>
-        </View>
-        <View style={styles.specialityContainer1}>
-          <TouchableOpacity>
-            <Image
-              source={require("../../../assets/images/Neurologist.png")}
-            ></Image>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Image
-              source={require("../../../assets/images/Pediatric.png")}
-            ></Image>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Image
-              source={require("../../../assets/images/Radiologist.png")}
-            ></Image>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Image source={require("../../../assets/images/More.png")}></Image>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.NameTxt}>
-          <Text style={{color: theme === "dark" ? "#FFFFFF" : "#000000",fontSize: 14, marginLeft: "2%",fontFamily: "Urbanist-bold",}}>Neurolo..</Text>
-          <Text style={{color: theme === "dark" ? "#FFFFFF" : "#000000",fontSize: 14, marginLeft: "2%",fontFamily: "Urbanist-bold",}}>Pediatric</Text>
-          <Text style={{color: theme === "dark" ? "#FFFFFF" : "#000000",fontSize: 14, marginLeft: "2%",fontFamily: "Urbanist-bold",}}>Radiolo..</Text>
-          <Text style={{color: theme === "dark" ? "#FFFFFF" : "#000000",fontSize: 14, marginLeft: "2%",fontFamily: "Urbanist-bold",}}>More</Text>
-        </View>
+      ))}
+   </View>
         <View style={styles.TopDocs}>
           <Text style={{color: theme === "dark" ? "#FFFFFF" : "#000000",fontFamily: "Urbanist-bold", fontSize: 19,marginLeft: "4%",}}>Top Doctors</Text>
           <TouchableOpacity onPress={() => router.push("/ActionMenu/FavoriteDoctorScreen")}>
@@ -315,8 +285,7 @@ export default function Index() {
                 ></Image>
                 <Text style={{color: theme === "dark" ? "#FFFFFF": "#000000", backgroundColor: "transparent", fontSize: 15, marginLeft: "5%",}}>4.8 (3,379 reviews)</Text>
    
-   
-   
+
               </View>
             </ImageBackground>
           </TouchableOpacity>
@@ -368,6 +337,19 @@ const styles = StyleSheet.create({
     shadowColor: "#A7C4FE",
     shadowOpacity: 5,
     flexDirection: "row",
+  },
+  specialityGrid: {
+    backgroundColor: "transparent",
+    flexDirection: "row",
+    flexWrap: 'wrap',
+    marginTop: "8%",
+    justifyContent: 'space-around',
+  },
+  itemContainer: {
+    width: '22%', 
+    alignItems: 'center',
+    backgroundColor:'transparent',
+    marginBottom: 15, 
   },
   FrameText: {
     backgroundColor: "transparent",
