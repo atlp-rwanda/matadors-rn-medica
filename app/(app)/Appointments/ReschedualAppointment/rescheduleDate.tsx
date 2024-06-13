@@ -28,7 +28,7 @@ import Animated, {
 import Chips from "@/components/UI/ChipsComponent";
 export default function RescheduleAppointment() {
   const { theme, changeTheme } = useContext(ThemeContext);
-  const [selectedTime, setSelectedTime] = useState(null);
+  const [selectedTime, setSelectedTime] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
   const modal = useModal();
 
@@ -37,8 +37,6 @@ export default function RescheduleAppointment() {
     console.log(time);
   };
   console.log(selectedTime);
-  //  documentation : https://hosseinshabani.github.io/react-native-modern-datepicker/?ref=retool-blog
-  // Function to generate time slots from 9:00 AM to 15:00 PM
   const generateTimeSlots = () => {
     const timeSlots = [];
     for (let hour = 9; hour <= 14; hour++) {

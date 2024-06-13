@@ -54,3 +54,20 @@ export async function getPatientData(supabase: any, userInfo: any): Promise<any>
         return;
       }
     }
+
+   export  async function getUserImageUrl(storageName: string,userId:any, imageUrlState:any) {
+      const { data, error } = await supabase
+      .storage
+      .from(storageName)
+      .list(userId?.id + '/', {
+        limit: 100,
+        offset: 0,
+        sortBy: { column: 'name', order: 'asc' },
+      });
+  
+      if (error) {
+        return
+      } else {
+        imageUrlState(data);
+      }
+    }

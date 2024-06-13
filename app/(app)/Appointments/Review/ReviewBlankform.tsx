@@ -59,7 +59,7 @@ import {
           </Text>
         </View>
         <View style={{ gap: 24, justifyContent: "center", alignItems: "center" }}>
-          <Image source={require("@/assets/images/Drake.png")} />
+          <Image source={require("@/assets/images/Drake.png")} style={{width: 200, height: 200, borderRadius: 100}}/>
           <Text
             style={[
               Typography.heading._5,

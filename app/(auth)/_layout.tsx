@@ -21,7 +21,7 @@ export default function Layout() {
           options={{ header: () => (<Header title="" />) }}
         />
         <Stack.Screen
-          name="ForgotPassword&Reset/OTPform"
+          name="ForgotPassword&Reset/[OTPform]"
           options={{ headerShown: false }}
         />
         <Stack.Screen
@@ -29,11 +29,11 @@ export default function Layout() {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="ForgotPassword&Reset/ForgotPassword"
+          name="ForgotPassword&Reset/index"
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="SignIn&SignOut/YourProfile"
+          name="SignIn&SignOut/YourProfile/[email]"
           options={{ header: () => <Header title="Fill Your Profile" /> }}
         />
         <Stack.Screen

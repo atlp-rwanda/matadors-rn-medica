@@ -28,7 +28,7 @@ import {
           </View>
   
           <View style={styles.middlePart}>
-            <Image source={require("@/assets/images/MariaEllipse.png")} />
+            <Image source={require("@/assets/images/Dr jenny.png")} style={{width: 200, height: 200, borderRadius: 100}}/>
   
             <View style={styles.middleText}>
               <Text style={[Typography.heading._3, { color: "#FFFFFF" }]}>

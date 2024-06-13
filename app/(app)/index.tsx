@@ -13,7 +13,7 @@ export default function Index() {
   useEffect(() => {
     setTimeout(() => {
       router.push("onBoarding");
-    });
+    },3000);
   }, []);
 
   return (

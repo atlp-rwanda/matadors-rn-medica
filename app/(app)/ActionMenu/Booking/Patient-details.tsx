@@ -1,6 +1,7 @@
 import { Colors } from "@/constants/Colors";
 import { MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import React, { useContext, useState } from "react";
 import {
   View,
@@ -19,11 +20,60 @@ import Typography from "@/constants/Typography";
 import TextArea from "@/components/UI/TextArea";
 import Button from "@/components/UI/Button";
 import { StatusBar } from "expo-status-bar";
+import { useEffect } from "react";
+import { supabase } from "@/lib/supabase";
+import { err } from "react-native-svg";
 
 const PatientDetails = () => {
   const [text, setText] = useState("");
   const [height, setHeight] = useState(40);
   const { theme, changeTheme } = useContext(ThemeContext);
+  const {Doctor_id,hour,date,packageTitle,packagePrice} = useLocalSearchParams()
+  const [loggeduser, setLoggedUser] = useState<string>()
+  const [profile, setProfile] = useState<any>(null)
+  const [patient_id,setPatient_id]=useState<string>()
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      
+      const { data: { user },error } = await supabase.auth.getUser()
+      if (error) {
+        console.error("error fetching user")
+      } else {
+        setLoggedUser(user?.id)
+      }
+    }
+    fetchUser()
+   
+  }, [loggeduser])
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      if (loggeduser) {
+        const { data, error } = await supabase
+          .from("patients")
+          .select("*")
+          .eq('auth_id', loggeduser)
+          .single()
+        if (error) {
+          console.error("error while retrieving profile",error)
+        } else {
+          setProfile(data)
+          setPatient_id(data.id)
+          console.log(data)
+         
+        }
+        
+        
+      }
+    }
+    fetchUserProfile()
+  }, [loggeduser])
+  console.log("this is profile:",profile)
+  console.log("this is logged user:", loggeduser)
+  console.log("this is patient_id:",patient_id)
+  const handleInputChange = (name: string, value: string) => {
+    setProfile({ ...profile, [name]: value });
+  }
 
   return (
     <>
@@ -54,7 +104,7 @@ const PatientDetails = () => {
           >
             Full Name
           </Text>
-          <Input placeholder="Full Names" value="Andrew Ainsley" />
+          <Input onChange={handleInputChange} placeholder="Full Names" value={`${profile?.first_name} ${profile?.last_name}`} name={`${profile?.first_name} ${profile?.last_name}`} />
         </View>
 
         <View style={{ flexDirection: "column", gap: 10 }}>
@@ -73,9 +123,11 @@ const PatientDetails = () => {
           </Text>
           <DropDown
             data={[
+               { value: `${profile?.gender}`, label:`${profile?.gender} ` },
               { value: "Male", label: "Male" },
               { value: "Female", label: "Female" },
             ]}
+            defaultvalue={profile?.Gender}
           />
         </View>
 
@@ -95,9 +147,12 @@ const PatientDetails = () => {
           </Text>
           <DropDown
             data={[
+              { value: `${profile?.age} Years`, label:`${profile?.age} Years` },
               { value: "27 years", label: "27 years" },
               { value: "28 years", label: "28 years" },
+             
             ]}
+            defaultvalue={profile?.age}
           />
         </View>
 
@@ -116,7 +171,7 @@ const PatientDetails = () => {
             Write Your Problem
           </Text>
           {/* <Input placeholder="Describe how you are feeling here ..."  /> */}
-          <TextArea text="Hello Dr. Jenny, I have a problem with my immune system. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident." />
+          <TextArea text={text} onChangeText={setText} />
         </View>
 
         <View
@@ -128,7 +183,7 @@ const PatientDetails = () => {
           <Button
             title="Next"
             onPress={() => {
-              router.push("/(app)/ActionMenu/Booking/EnterYourPin");
+              router.push({ pathname: "/(app)/ActionMenu/Booking/SelectPayment",params:{doctor_id:Doctor_id,hour:hour,date:date,packageTitle:packageTitle,packagePrice:packagePrice,problem:text,user_id:loggeduser,patient_id:patient_id} });
             }}
           />
         </View>

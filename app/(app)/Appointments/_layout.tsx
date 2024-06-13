@@ -1,6 +1,8 @@
 import { Stack } from "expo-router";
 import React from "react";
+import { register } from "@videosdk.live/react-native-sdk";
 
+register();
 export default function Layout() {
   return (
     <Stack>

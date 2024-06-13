@@ -1,6 +1,6 @@
 import { Colors } from "@/constants/Colors";
 import { MaterialIcons } from "@expo/vector-icons";
-import { router } from "expo-router";
+import { router,useLocalSearchParams } from "expo-router";
 import React, { useContext, useState } from "react";
 import {
   View,
@@ -32,6 +32,9 @@ import { StatusBar } from "expo-status-bar";
 
 const SelectPackage = () => {
   const { theme, changeTheme } = useContext(ThemeContext);
+  const { Doctor_id, hour, date,patient_id } = useLocalSearchParams()
+  const [selectedPackageTitle, setSelectedPackageTitle] = useState<{ title: string, price: string }>({title:"",price:""})
+  console.log("this is new:",Doctor_id,hour,date)
 
   const packages = [
     {
@@ -85,8 +88,8 @@ const SelectPackage = () => {
           </Text>
           <DropDown
             data={[
-              { label: "Here", value: "Here" },
-              { label: "There", value: "And" },
+              { label: "a half", value: "30" },
+              { label: "an hour", value: "30" },
             ]}
             leftIcon={() => (
               <SvgXml xml={theme === "light" ? clockIcon : lightClockIcon} />
@@ -108,13 +111,13 @@ const SelectPackage = () => {
           </Text>
 
           <View>
-            {/* <PackageItem
-              title="Messaging"
-              description="Chat messages with doctor"
-              price="$20"
-              icon={() => <SvgXml xml={chatIcon} />}
-            /> */}
-            <PackagesContainer data={packages} />
+            
+            <PackagesContainer
+              data={packages}
+              onPackageSelect={(title, price) => setSelectedPackageTitle({ title, price })}
+            
+            
+            />
           </View>
         </View>
 
@@ -127,7 +130,7 @@ const SelectPackage = () => {
         >
           <Button
             title="Next"
-            onPress={() => router.push("ActionMenu/Booking/Patient-details")}
+            onPress={() => router.push({ pathname:"ActionMenu/Booking/Patient-details",params:{ Doctor_id:Doctor_id,hour:hour,date:date,packageTitle:selectedPackageTitle.title,packagePrice:selectedPackageTitle.price,patient_id:patient_id}})}
           />
         </View>
       </ScrollView>

@@ -14,19 +14,19 @@ interface DoctorComponentProps{
     rate: string,
     review: string,
     remove: () => void,
-    backgroundStyle?:any
+    backgroundStyle?: any,
+    path?:()=>void
 }
-function DoctorComponent({ imageSource, name, iconComponent, professionalTitle, hospital, star, rate, review, remove,backgroundStyle }: DoctorComponentProps) {
+function DoctorComponent({ imageSource, name, iconComponent,path, professionalTitle, hospital, star, rate, review, remove,backgroundStyle }: DoctorComponentProps) {
     const { theme, changeTheme } = useContext(ThemeContext)
     const containerStyle = theme === "dark" ? styles.outerDark : styles.outerLight
     const nameColor = theme === "dark" ? styles.textDark : styles.textLight
     const descriptionColor = theme === "dark" ? styles.descriptionDark : styles.descriptionLight
     const horizontalColor = theme === "dark" ? styles.horizontalDark : styles.horizontalLight
-    console.log("image url", imageSource.uri)
   
 
     return (
-        <View style={[styles.outer,containerStyle,backgroundStyle]}>
+        <Pressable style={[styles.outer,containerStyle,backgroundStyle]} onPress={path}>
             <View style={styles.inner}>
                 <View style={styles.profileView}>
                     <Image source={imageSource } style={styles.image} />
@@ -85,7 +85,7 @@ function DoctorComponent({ imageSource, name, iconComponent, professionalTitle, 
 
                 </View>
            </View>
-        </View>
+        </Pressable>
     );
 }
 
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
         height: "100%",
         borderRadius: 10,
         borderWidth: 1,
-        zIndex:1000
+        zIndex:1000,
         
     },
     outerDark: {
@@ -240,6 +240,7 @@ const styles = StyleSheet.create({
     },
     image: {
         width: 110,
-        height:110
+        height:110,
+        borderRadius: 20
     }
 })

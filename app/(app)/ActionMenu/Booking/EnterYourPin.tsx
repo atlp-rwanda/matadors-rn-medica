@@ -3,6 +3,7 @@ import { LeftArrow } from "@/components/UI/Icons";
 import { Colors } from "@/constants/Colors";
 import Typography from "@/constants/Typography";
 import { useContext, useState } from "react";
+import { useLocalSearchParams } from "expo-router";
 import {
   View,
   StyleSheet,
@@ -15,15 +16,28 @@ import { router } from "expo-router";
 import { useModal } from "@/ctx/ModalContext";
 import { ThemeContext } from "@/ctx/ThemeContext";
 import Button from "@/components/UI/Button";
+import { useEffect } from "react";
 import React from "react";
+import { supabase } from "@/lib/supabase";
 
 export default function EnterYourPin() {
   const [isDark, setIsDark] = useState(false);
   const modal = useModal();
+  const {doctor_id,hour,date,packageTitle,packagePrice,problem,user_id,patient_id} = useLocalSearchParams()
 
   const { theme, changeTheme } = useContext(ThemeContext);
-
+  async function bookAppointment() {
+    const { error } = await supabase
+      .from('appointment')
+      .insert({ doctor_id: doctor_id, time:hour,date:date, package: packageTitle, price: packagePrice, illness_descr: problem,user_id:patient_id});
+    if (error) {
+      console.error("Error booking appointment:", error);
+    }
+  }
+  console.log("this is from lastpage",doctor_id,hour,packageTitle,packagePrice,problem)
   async function handlePIN() {
+    
+    await bookAppointment()
     modal.show({
       children: (
         <View

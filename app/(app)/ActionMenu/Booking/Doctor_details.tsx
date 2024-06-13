@@ -8,11 +8,12 @@ import {
   Text,
   TouchableOpacity,
 } from "react-native";
+import { useEffect,useState } from "react";
 import { View } from "react-native";
 import Typography from "@/constants/Typography";
 import { Image } from "react-native";
 import { Colors } from "@/constants/Colors";
-import { router } from "expo-router";
+import { router,useLocalSearchParams, useNavigation } from "expo-router";
 import { fullSmallBlueStar } from "@/components/UI/icons/star";
 import { moreGrayIcon } from "@/components/UI/icons/circleWithDots";
 import { blueHeart } from "@/components/UI/icons/blueHeart";
@@ -23,11 +24,49 @@ import { blueMessageIcon } from "@/components/UI/icons/blueMessage";
 import { ThemeContext } from "@/ctx/ThemeContext";
 import { WhiteThreeDots } from "@/components/UI/icons/WhiteThreeDots";
 import Button from "@/components/UI/Button";
+import { supabase } from "@/lib/supabase";
+import HeaderComponent from "@/components/HeaderComponent";
+
+interface Doctor{
+    id: number,
+    first_name: string,
+    last_name: string,
+    hospital_name: string,
+    rate: string,
+    review: string,
+    specialization: string,
+  about: string,
+  image:string
+}
 
 export const ReviewerCardComponent = () => {
   const { theme, changeTheme } = useContext(ThemeContext);
   const [likes, setLikes] = React.useState(0);
+  const [doctor,setDoctors]=useState<Doctor|null>(null)
+  const { id } = useLocalSearchParams()
+  console.log("this is id:",id)
+ const tableName='doctors'
+ useEffect(() => {
+        async function fetchData() {
+          const { data, error } = await supabase
+            .from(tableName)
+            .select('*')
+            .eq("id", id)
+             .single()
 
+  if (error) {
+    console.error('Error fetching data:', error);
+    return;
+            }
+            setDoctors(data)
+           
+  console.log('Fetched data:', data);
+}
+
+fetchData();
+ }, [id])
+  
+  
   const handleLikes = () => {
     setLikes(likes + 1);
   };
@@ -45,7 +84,7 @@ export const ReviewerCardComponent = () => {
           <View style={{ width: 50, height: 50 }}>
             <Image
               style={{ width: "100%", height: "100%", borderRadius: 100 }}
-              source={require("@/assets/images/Charly.png")}
+              source={{uri:doctor?.image}}
             />
           </View>
           <Text
@@ -57,7 +96,7 @@ export const ReviewerCardComponent = () => {
               },
             ]}
           >
-            Charlotte Hanlin
+           {doctor?.first_name} {doctor?.last_name}
           </Text>
         </View>
         <View
@@ -134,6 +173,31 @@ export const ReviewerCardComponent = () => {
 
 const DoctorDetails = () => {
   const { theme, changeTheme } = useContext(ThemeContext);
+  const [doctor,setDoctors]=useState<Doctor|null>(null)
+  const { id } = useLocalSearchParams()
+  const navigation=useNavigation()
+  console.log("this is id:",id)
+ const tableName='doctors'
+ useEffect(() => {
+        async function fetchData() {
+          const { data, error } = await supabase
+            .from(tableName)
+            .select('*')
+            .eq("id", id)
+             .single()
+
+  if (error) {
+    console.error('Error fetching data:', error);
+    return;
+            }
+          setDoctors(data)
+          navigation.setOptions({headerTitle:`${data?.first_name} ${data?.last_name}`})
+           
+  console.log('Fetched data:', data);
+}
+
+fetchData();
+ }, [id])
   return (
     <View
       style={{
@@ -144,6 +208,9 @@ const DoctorDetails = () => {
       <ScrollView>
         <View style={[styles.container]}>
           <StatusBar backgroundColor={theme === "dark" ? "light" : "dark"} />
+          <HeaderComponent
+          headerText={doctor?.first_name??"Doctor"}
+          />
 
           <View
             style={[
@@ -154,7 +221,7 @@ const DoctorDetails = () => {
             <View style={{ width: 100, height: 100 }}>
               <Image
                 style={{ width: "100%", height: "100%" }}
-                source={require("@/assets/images/jenny_watson.png")}
+                source={{ uri:doctor?.image}}
               />
             </View>
 
@@ -168,7 +235,7 @@ const DoctorDetails = () => {
                   },
                 ]}
               >
-                Dr. Jenny Watson
+                {doctor?.first_name} {doctor?.last_name}
               </Text>
               <View style={{ flex: 1, justifyContent: "space-around" }}>
                 <Text
@@ -179,7 +246,7 @@ const DoctorDetails = () => {
                     },
                   ]}
                 >
-                  Immunologists
+                   {doctor?.specialization} 
                 </Text>
                 <Text
                   style={[
@@ -189,7 +256,7 @@ const DoctorDetails = () => {
                     },
                   ]}
                 >
-                  Christ Hospital in London, UK
+                    {doctor?.hospital_name}
                 </Text>
               </View>
             </View>
@@ -329,10 +396,7 @@ const DoctorDetails = () => {
                 },
               ]}
             >
-              Dr. Jenny Watson is the top most Immunologists specialist in
-              Christ Hospital at London. She achived several awards for her
-              wonderful contribution in medical field. She is available for
-              private consultation.
+              {doctor?.about}
               <Text style={{ color: Colors.main.primary._500 }}>view more</Text>
             </Text>
           </View>
@@ -401,7 +465,7 @@ const DoctorDetails = () => {
       >
         <Button
           title="Book Appointment"
-          onPress={() => router.push("/ActionMenu/Booking/BookingAppointment")}
+          onPress={() => router.push({ pathname:"/ActionMenu/Booking/BookingAppointment",params:{id:id}})}
         />
       </View>
     </View>

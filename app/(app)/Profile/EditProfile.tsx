@@ -17,7 +17,7 @@ import Typography from "@/constants/Typography";
 import { typedCountries } from "@/constants/Languages";
 import { ThemeContext } from "@/ctx/ThemeContext";
 import { supabase } from "@/lib/supabase";
-import { fetchPatientData, getPatientData } from "@/helper/LoggedInUser";
+import { fetchPatientData, getPatientData } from "@/utils/LoggedInUser";
 
 interface Props {}
 

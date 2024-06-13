@@ -11,6 +11,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   AppState,
+  Pressable,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import CheckBox from "expo-checkbox";
@@ -19,43 +20,86 @@ import Typography from "../../../constants/Typography";
 import { Colors } from "../../../constants/Colors";
 import { StatusBar } from "expo-status-bar";
 import { ThemeContext } from "@/ctx/ThemeContext";
-import {
-  BackArrow,
-  blackArrow,
-  DarkContinueLine,
-  LightContinueLine,
-} from "@/components/Icons/Icons";
+import { DarkContinueLine, LightContinueLine } from "@/components/Icons/Icons";
 import { SvgXml } from "react-native-svg";
 import { appleBlackIcon, appleWhiteIcon } from "@/constants/icon";
 import { supabase } from "@/lib/supabase";
+import * as WebBrowser from "expo-web-browser";
+import * as Linking from "expo-linking";
+import { makeRedirectUri , useAuthRequest} from "expo-auth-session";
+import * as QueryParams from "expo-auth-session/build/QueryParams";
+import { useAuth } from "@/ctx/AuthContext";
+import { ActivityIndicator } from "react-native";
+import { Auth } from "@/components/AppleAuth";
 
-AppState.addEventListener('change', (state) => {
-  if(state === 'active'){
-    supabase.auth.startAutoRefresh()
-  }else{
-    supabase.auth.stopAutoRefresh()
+
+WebBrowser.maybeCompleteAuthSession();
+const redirectTo = makeRedirectUri({
+  native: "com.medica://",
+});
+
+const createSessionFromUrl = async (url: string) => {
+  const { params, errorCode } = QueryParams.getQueryParams(url);
+
+  if (errorCode) throw new Error(errorCode);
+  const { access_token, refresh_token } = params;
+
+  if (!access_token) return;
+
+  const { data, error } = await supabase.auth.setSession({
+    access_token,
+    refresh_token,
+  });
+  if (error) throw error;
+  return data.session;
+};
+
+const signInWithFacebook = async () => {
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "facebook",
+    options: {
+      redirectTo,
+      skipBrowserRedirect: true,
+    },
+  });
+  if (error) throw error;
+
+  const res = await WebBrowser.openAuthSessionAsync(
+    data?.url ?? "",
+    redirectTo
+  );
+
+  if (res.type === "success") {
+    const { url } = res;
+    await createSessionFromUrl(url);
+
+    router.push("/(app)/ActionMenu");
   }
-})
+};
 
-const Signup = () => {
+AppState.addEventListener("change", (state) => {
+  if (state === "active") {
+    supabase.auth.startAutoRefresh();
+  } else {
+    supabase.auth.stopAutoRefresh();
+  }
+});
 
+export default function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const [isChecked, setIsChecked] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const [passwordFocused, setPasswordFocused] = useState(false);
   const { theme, changeTheme } = useContext(ThemeContext);
+  const [isLoading, setIsLoading] = useState(false);
+  const { register } = useAuth();
 
+  const url = Linking.useURL();
+  if (url) createSessionFromUrl(url);
 
-  const handleEmailChange = (text: string) => {
-    setEmail(text);
-  };
-
-  const handlePasswordChange = (text: string) => {
-    setPassword(text);
-  };
+  if (url) createSessionFromUrl(url);
 
   const togglePasswordVisibility = () => {
     setSecureTextEntry(!secureTextEntry);
@@ -74,22 +118,14 @@ const Signup = () => {
     setPasswordFocused(false);
   };
 
-  async function signUpWithEmail(){
-    setLoading(true)
-    const{
-      data:{ session },
-      error,
-    } = await supabase.auth.signUp({
-      email: email,
-      password: password,
-    })
-
-    if(error){
-      Alert.alert(error.message)
-      if(!session) Alert.alert('Please check your inbox for email verification!')
-        setLoading(false)
-    }else{
-      await router.push('/(auth)/SignIn&SignOut/YourProfile')
+  async function signUpWithEmail() {
+    try {
+      setIsLoading(true);
+      await register(email, password);
+    } catch (error) {
+      const err: Error = error as Error;
+      Alert.alert(err.message);
+      setIsLoading(false);
     }
   }
 
@@ -114,6 +150,7 @@ const Signup = () => {
           >
             Create new account
           </Text>
+          {/* {alert && <Alerts text={alert.text} status={alert.status} />} */}
         </View>
       </View>
 
@@ -127,7 +164,14 @@ const Signup = () => {
               style={[
                 styles.inputOne,
                 isFocused && styles.inputOneFocused,
-                { backgroundColor: theme === "dark" ? "#1F222A" : Colors.grayScale._50 },
+                {
+                  backgroundColor:
+                    theme === "dark" ? "#1F222A" : Colors.grayScale._50,
+                },
+                {
+                  backgroundColor:
+                    theme === "dark" ? "#1F222A" : Colors.grayScale._50,
+                },
               ]}
             >
               <Image
@@ -135,7 +179,14 @@ const Signup = () => {
                 style={[styles.icon, isFocused && styles.iconFocused]}
               />
               <TextInput
-                style={[{fontSize: 16,flex: 1,color: theme === "dark"? Colors.grayScale._50 : "black"}, isFocused && styles.emailFocused]}
+                style={[
+                  {
+                    fontSize: 16,
+                    flex: 1,
+                    color: theme === "dark" ? Colors.grayScale._50 : "black",
+                  },
+                  isFocused && styles.emailFocused,
+                ]}
                 placeholder="Email"
                 keyboardType="email-address"
                 placeholderTextColor="#9E9E9E"
@@ -143,7 +194,7 @@ const Signup = () => {
                 onChangeText={(text) => setEmail(text)}
                 onFocus={handleEmailFocused}
                 onBlur={handleEmailBlur}
-                autoCapitalize={'none'}
+                autoCapitalize={"none"}
               />
             </View>
 
@@ -151,7 +202,14 @@ const Signup = () => {
               style={[
                 styles.inputOne,
                 passwordFocused && styles.inputOneFocused,
-                { backgroundColor: theme === "dark" ? "#1F222A" : Colors.grayScale._50 },
+                {
+                  backgroundColor:
+                    theme === "dark" ? "#1F222A" : Colors.grayScale._50,
+                },
+                {
+                  backgroundColor:
+                    theme === "dark" ? "#1F222A" : Colors.grayScale._50,
+                },
               ]}
             >
               <Image
@@ -159,7 +217,11 @@ const Signup = () => {
                 style={[styles.icon, passwordFocused && styles.iconFocused]}
               />
               <TextInput
-                style={{fontSize: 16,flex: 1,color: theme === "dark"? Colors.grayScale._50 : "black"}}
+                style={{
+                  fontSize: 16,
+                  flex: 1,
+                  color: theme === "dark" ? Colors.grayScale._50 : "black",
+                }}
                 placeholder="Password"
                 placeholderTextColor="#9E9E9E"
                 secureTextEntry={secureTextEntry}
@@ -167,9 +229,7 @@ const Signup = () => {
                 onChangeText={(text) => setPassword(text)}
                 onFocus={handlePasswordFocused}
                 onBlur={handlePasswordBlur}
-                autoCapitalize={'none'}
-                
-                
+                autoCapitalize={"none"}
               />
               <View
                 style={[
@@ -208,23 +268,47 @@ const Signup = () => {
         </Text>
       </View>
 
-      <TouchableOpacity
+      <Pressable
         onPress={() => signUpWithEmail()}
-        style={styles.signinBtn}
+        style={{
+          backgroundColor: isLoading
+            ? Colors.status.disabled_button
+            : Colors.main.primary._500,
+          width: 360,
+          height: 58,
+          borderRadius: 100,
+          justifyContent: "center",
+          alignItems: "center",
+          shadowColor: isLoading
+            ? Colors.status.disabled_button
+            : Colors.main.primary._500,
+          elevation: 10,
+        }}
       >
-        <Text style={[Typography.bold.large, { color: Colors.others.white }]}>
-          Sign up
-        </Text>
-      </TouchableOpacity>
+        {isLoading ? (
+          <ActivityIndicator color="white" />
+        ) : (
+          <Text style={[Typography.bold.large, { color: Colors.others.white }]}>
+            Sign up
+          </Text>
+        )}
+      </Pressable>
 
       <SvgXml xml={theme === "dark" ? DarkContinueLine : LightContinueLine} />
 
       <View style={styles.overCont}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={signInWithFacebook}>
           <View
             style={[
               styles.smallCont,
-              { backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF", borderColor: theme === 'dark' ? '#35383F' : '#EEEEEE' },
+              {
+                backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF",
+                borderColor: theme === "dark" ? "#35383F" : "#EEEEEE",
+              },
+              {
+                backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF",
+                borderColor: theme === "dark" ? "#35383F" : "#EEEEEE",
+              },
             ]}
           >
             <Image source={require("../../../assets/icons/facebook.png")} />
@@ -235,24 +319,21 @@ const Signup = () => {
           <View
             style={[
               styles.smallCont,
-              { backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF", borderColor: theme === 'dark' ? '#35383F' : '#EEEEEE'  },
+              {
+                backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF",
+                borderColor: theme === "dark" ? "#35383F" : "#EEEEEE",
+              },
+              {
+                backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF",
+                borderColor: theme === "dark" ? "#35383F" : "#EEEEEE",
+              },
             ]}
           >
             <Image source={require("../../../assets/icons/Google.png")} />
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity>
-          <View
-            style={[
-              styles.smallCont,
-              { backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF", borderColor: theme === 'dark' ? '#35383F' : '#EEEEEE'  },
-            ]}
-          >
-            <SvgXml xml={theme === 'dark' ? appleWhiteIcon : appleBlackIcon} />
-
-          </View>
-        </TouchableOpacity>
+        <Auth /> 
       </View>
 
       <View style={{ gap: 3, flexDirection: "row" }}>
@@ -278,9 +359,7 @@ const Signup = () => {
       </View>
     </View>
   );
-};
-
-export default Signup;
+}
 
 const styles = StyleSheet.create({
   inputOneFocused: {
@@ -365,27 +444,14 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     alignItems: "center",
     gap: 10,
-  
   },
   email: {
     fontSize: 16,
     flex: 1,
-  
-   
   },
   signupText: {
     color: "#246BFD",
     fontWeight: "600",
-  },
-  signinBtn: {
-    backgroundColor: "#246BFD",
-    width: 360,
-    height: 58,
-    borderRadius: 100,
-    justifyContent: "center",
-    alignItems: "center",
-    shadowColor: "#246BFD",
-    elevation: 10,
   },
   textBtn: {
     fontSize: 16,

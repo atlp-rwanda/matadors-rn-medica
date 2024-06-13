@@ -7,6 +7,7 @@ import {
   ImageBackground,
   ScrollView,
   FlatList,
+  Pressable
 } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { useFonts as useFontsExpo } from "expo-font";
@@ -21,101 +22,232 @@ import {
 import { ThemeContext } from "@/ctx/ThemeContext";
 import { blackHeart, whiteHeart } from "@/components/UI/icons/blackHeart";
 import Chips from "@/components/UI/ChipsComponent";
-import { fullSmallBlueStar, fullSmallWhiteStar } from "@/components/UI/icons/star";
+import {
+  fullSmallBlueStar,
+  fullSmallWhiteStar,
+} from "@/components/UI/icons/star";
 import { Session } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabase";
-import { fetchPatientData, getPatientData } from "@/helper/LoggedInUser";
+import {
+  getUserImageUrl,
+  fetchPatientData,
+  getPatientData,
+} from "@/utils/LoggedInUser";
+import { Doctor } from "@/constants/Types";
+import DoctorDetails from "./Booking/Doctor_details";
+import DoctorComponent from "@/components/DoctorComponent";
+import { star } from "@/assets/icons/star";
+import NofoundComponent from "@/components/NofoundComponent";
+import { useAuth } from "@/ctx/AuthContext";
 
 export default function Index() {
   const [session, setSession] = useState<Session | null>(null);
-  const [userData, setUserData] = useState<any[]>([]);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [userData, setUserData] = useState<[]>([]);
   const [patientData, setPatientData] = useState(null);
-  useEffect(() => {
-    getPatientData(supabase, setUserData);
-  }, []);
-
-  useEffect(() => {
-    const id: string = userData?.id;
-    if (id) {
-      fetchPatientData(id, setPatientData);
-    }
-  }, [userData]);
-
+  const [imageUrl, setImageUrl] = useState([]);
   const [activeIcon, setActiveIcon] = useState("Home");
-  const handleIconPress = (iconName: string) => {
-    setActiveIcon(iconName); // Update active icon state when an icon is pressed
-  };
-  const isIconActive = (iconName: string) => {
-    return activeIcon === iconName;
-  };
+  const [profilePhoto, setProfilePhoto] = useState("");
   const { theme, changeTheme } = useContext(ThemeContext);
   const navigation = useNavigation();
   const [text, setText] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [doctors, setDoctors] = useState<Doctor[]>([]);
+  const [greeting, setGreeting] = useState("");
+  const { authType, imageUrl: otherAuthImageUrl } = useAuth();
+  const [showpopUp, setShowPopup] = useState(false);
+  const [selectedDoctor, setSelectedDoctor] = useState();
+  const [selectedSpecilization, setSelectedSpecilization] = useState<string>("All")
+  const [specialization,setSpecialization]=useState<string[]>([])
+
   const [fontsLoaded] = useFontsExpo({
     "Urbanist-regular": require("@/assets/fonts/Urbanist-Regular.ttf"),
     "Urbanist-bold": require("@/assets/fonts/Urbanist-Bold.ttf"),
     "Urbanist-Semibold": require("@/assets/fonts/Urbanist-SemiBold.ttf"),
     "Urbanist-Medium": require("@/assets/fonts/Urbanist-Medium.ttf"),
   });
+  const CDNURL =
+    "https://vbwbfflzxuhktdvpbspd.supabase.co/storage/v1/object/public/patients/";
+  const scrollbackColor =
+    theme === "dark" ? styles.scrollDark : styles.scrollLight;
+
+  useEffect(() => {
+    getPatientData(supabase, setUserData);
+  }, []);
+
+  useEffect(() => {
+    if (userData?.id) {
+      fetchPatientData(userData?.id, setPatientData);
+      getUserImageUrl("patients", userData, setImageUrl);
+    }
+  }, [userData]);
+
+  useEffect(() => {
+    if (imageUrl.length > 0) {
+      setProfilePhoto(imageUrl[0]?.name);
+    }
+  }, [imageUrl]);
+
+  useEffect(() => {
+    async function fetchData() {
+      const { data, error } = await supabase.from("doctors").select("*");
+
+      if (error) {
+        setIsLoading(false);
+        throw new Error("Error fetching data:" + error.message);
+      }
+      setIsLoading(true);
+      setDoctors(data);
+      const uniqueSpecialization = Array.from(new Set(data.map((doctor: Doctor) => doctor.specialization)))
+      setSpecialization(["All",...uniqueSpecialization])
+    }
+
+    fetchData();
+  }, [doctors]);
+
+  useEffect(() => {
+    const updateGreeting = () => {
+      const now = new Date();
+      const hours = now.getHours();
+
+      if (hours >= 12 && hours < 17) {
+        setGreeting("Good Afternoon");
+      } else if (hours >= 17 || hours < 1) {
+        setGreeting("Good Evening");
+      } else {
+        setGreeting("Good Morning");
+      }
+    };
+
+    updateGreeting();
+    const intervalId = setInterval(updateGreeting, 60000);
+    return () => clearInterval(intervalId);
+  }, []);
+
+  const handleIconPress = (iconName: string) => {
+    setActiveIcon(iconName);
+  };
+
+  const isIconActive = (iconName: string) => {
+    return activeIcon === iconName;
+  };
+  const handleRemove = (doctor:any) => {
+        setSelectedDoctor(doctor)
+        
+        setShowPopup(true)
+    }
+
+ const handleSpecializationChange = (specialization: string) => {
+    setSelectedSpecilization(specialization)
+    setSearchTerm('')
+    
+  }
+  const filteredDoctors = doctors.filter(doctor => {
+    const matchSearchTerm = searchTerm.length > 0 ? doctor.last_name.toLowerCase().includes(searchTerm.toLowerCase())||doctor.first_name.toLowerCase().includes(searchTerm.toLowerCase()) : true
+    const matchSpecialization = selectedSpecilization === 'All' || doctor.specialization === selectedSpecilization
+    return matchSearchTerm&&matchSpecialization
+
+    })
   if (!fontsLoaded) {
     return null;
   }
-
-
- 
-
+  
   return (
-    <View style={{
-      backgroundColor: theme === "dark" ? "#181A20" : "#FFFFFF",
-    padding: 2,
-    paddingTop: 40,
-    }}>
-     
-        {patientData && (
-            <FlatList
-            data={patientData}
-            renderItem={({ item }) => (
-              <View style={{
+    <View
+      style={{
+        backgroundColor: theme === "dark" ? "#181A20" : "#FFFFFF",
+        padding: 2,
+        paddingTop: 40,
+      }}
+    >
+      {patientData && (
+        <FlatList
+          data={patientData}
+          renderItem={({ item }) => (
+            <View
+              style={{
                 flexDirection: "row",
                 alignItems: "center",
                 justifyContent: "flex-start",
                 backgroundColor: theme === "dark" ? "#181A20" : "#FFFFFF",
                 marginLeft: "3%",
-               marginTop: "5%",}}>
-                <View style={{borderRadius:100, width: 70, height: 70}}>
-                <Image 
-                style={{width: "100%", height: "100%", borderRadius:100}}
-                source={{uri: `${item?.image}`}}/>
-                </View>
-                <View style={{backgroundColor: theme === "dark" ? "#181A20" : "#FFFFFF" ,marginLeft: "2%",}}>
-                 <Text style={{color: theme==="dark" ? "#E0E0E0" : "#757575",fontFamily: "Urbanist-regular",}}> Good Morning👋</Text>
-                 <Text style={{ color: theme==="dark" ? "#FFFFFF" : "#000000", fontSize: 20, fontWeight: "bold",fontFamily: "Urbanist-bold",}}>{item?.first_name + " " + item?.last_name}</Text>
-                </View>
-                <View style={{backgroundColor: theme === "dark" ? "#181A20" : "#FFFFFF",flexDirection: "row",paddingLeft: "27%",}}>
-                  <TouchableOpacity
-                    onPress={() => router.push("/ActionMenu/NotificationScreen")}
-                  >
-                    <SvgXml
-                      xml={theme === "dark" ? NotificationIconDark : NotificationIcon}
-                    />
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={() => router.push("/ActionMenu/FavoriteDoctorScreen")} style={styles.heart}>
-                  <SvgXml xml={theme === 'dark' ? whiteHeart :blackHeart } />
-                  </TouchableOpacity>
-                </View>
+                marginTop: "5%",
+              }}
+            >
+              <View style={{ borderRadius: 100, width: 70, height: 70 }}>
+                <Image
+                  style={{ width: "100%", height: "100%", borderRadius: 100 }}
+                  source={{
+                    uri:authType && authType !== "apple"
+                        ? otherAuthImageUrl
+                        : `${CDNURL + userData?.id + "/" + profilePhoto}`,
+                  }}
+                />
               </View>
-            )}
-            keyExtractor={(item) => item.id}
-            contentContainerStyle={{
-              paddingBottom:20
-            }}
-          />
-        )}
-        <ScrollView
+              <View
+                style={{
+                  backgroundColor: theme === "dark" ? "#181A20" : "#FFFFFF",
+                  marginLeft: "2%",
+                }}
+              >
+                <Text
+                  style={{
+                    color: theme === "dark" ? "#E0E0E0" : "#757575",
+                    fontFamily: "Urbanist-regular",
+                  }}
+                >
+                  {" "}
+                  {greeting} 👋
+                </Text>
+                <Text
+                  style={{
+                    color: theme === "dark" ? "#FFFFFF" : "#000000",
+                    fontSize: 20,
+                    fontWeight: "bold",
+                    fontFamily: "Urbanist-bold",
+                  }}
+                >
+                  {item?.first_name + " " + item?.last_name}
+                </Text>
+              </View>
+              <View
+                style={{
+                  backgroundColor: theme === "dark" ? "#181A20" : "#FFFFFF",
+                  flexDirection: "row",
+                  paddingLeft: "27%",
+                }}
+              >
+                <TouchableOpacity
+                  onPress={() => router.push("/ActionMenu/NotificationScreen")}
+                >
+                  <SvgXml
+                    xml={
+                      theme === "dark" ? NotificationIconDark : NotificationIcon
+                    }
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() =>
+                    router.push("/ActionMenu/FavoriteDoctorScreen")
+                  }
+                  style={styles.heart}
+                >
+                  <SvgXml xml={theme === "dark" ? whiteHeart : blackHeart} />
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={{
+            paddingBottom: 20,
+          }}
+        />
+      )}
+      <ScrollView
         showsVerticalScrollIndicator={false}
         alwaysBounceVertical={true}
-        contentContainerStyle={{height: "150%"}}
-        >
+        contentContainerStyle={{ height: "150%" }}
+      >
         <View
           style={{
             backgroundColor: theme === "dark" ? "#35383F" : "#F5F5F5",
@@ -167,8 +299,19 @@ export default function Index() {
           </ImageBackground>
         </View>
         <View style={styles.TxtContainer}>
-          <Text style={{color: theme === "dark" ? "#FFFFFF" : "#000000",fontFamily: "Urbanist-bold", fontSize: 19,marginLeft: "4%",}}>Doctor Speciality</Text>
-          <TouchableOpacity onPress={()=> router.push("/ActionMenu/FavoriteDoctorScreen")}>
+          <Text
+            style={{
+              color: theme === "dark" ? "#FFFFFF" : "#000000",
+              fontFamily: "Urbanist-bold",
+              fontSize: 19,
+              marginLeft: "4%",
+            }}
+          >
+            Doctor Speciality
+          </Text>
+          <TouchableOpacity
+            onPress={() => router.push("/ActionMenu/FavoriteDoctorScreen")}
+          >
             <Text style={styles.seeTxt}>See All</Text>
           </TouchableOpacity>
         </View>
@@ -299,8 +442,19 @@ export default function Index() {
           </Text>
         </View>
         <View style={styles.TopDocs}>
-          <Text style={{color: theme === "dark" ? "#FFFFFF" : "#000000",fontFamily: "Urbanist-bold", fontSize: 19,marginLeft: "4%",}}>Top Doctors</Text>
-          <TouchableOpacity onPress={() => router.push("/ActionMenu/AllDoctorScreen")}>
+          <Text
+            style={{
+              color: theme === "dark" ? "#FFFFFF" : "#000000",
+              fontFamily: "Urbanist-bold",
+              fontSize: 19,
+              marginLeft: "4%",
+            }}
+          >
+            Top Doctors
+          </Text>
+          <TouchableOpacity
+            onPress={() => router.push("/ActionMenu/AllDoctorScreen")}
+          >
             <Text style={styles.seeTxt}>See All</Text>
           </TouchableOpacity>
         </View>
@@ -317,98 +471,18 @@ export default function Index() {
           }}
         >
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <View
-              style={{
-                backgroundColor: "#246BFD",
-                padding: 5,
-                paddingHorizontal: 10,
-                borderRadius: 20,
-                justifyContent: "center",
-                width: 65,
-                height: 34,
-                alignItems: "center",
-              }}
-            >
-              <Text style={{ fontFamily: "Urbanist-regular", color: "white" }}>
-                All
-              </Text>
-            </View>
-            <View
-              style={{
-                backgroundColor: theme === "dark" ? "#181A20" : "#ffffff",
-                marginLeft: 10,
-                padding: 5,
-                paddingHorizontal: 10,
-                borderColor: "#246BFD",
-                borderWidth: 2,
-                borderRadius: 20,
-                height: 34,
-                alignItems: "center",
-              }}
-            >
-              <Text
-                style={{ fontFamily: "Urbanist-regular", color: "#246BFD" }}
-              >
-                General
-              </Text>
-            </View>
-            <View
-              style={{
-                backgroundColor: theme === "dark" ? "#181A20" : "#ffffff",
-                marginLeft: 10,
-                padding: 5,
-                paddingHorizontal: 10,
-                borderColor: "#246BFD",
-                borderWidth: 2,
-                borderRadius: 20,
-                height: 34,
-                alignItems: "center",
-              }}
-            >
-              <Text
-                style={{ fontFamily: "Urbanist-regular", color: "#246BFD" }}
-              >
-                Dentist
-              </Text>
-            </View>
-            <View
-              style={{
-                backgroundColor: theme === "dark" ? "#181A20" : "#ffffff",
-                marginLeft: 10,
-                padding: 5,
-                paddingHorizontal: 10,
-                borderColor: "#246BFD",
-                borderWidth: 2,
-                borderRadius: 20,
-                height: 34,
-                alignItems: "center",
-              }}
-            >
-              <Text
-                style={{ fontFamily: "Urbanist-regular", color: "#246BFD" }}
-              >
-                Nutritionist
-              </Text>
-            </View>
-            <View
-              style={{
-                backgroundColor: theme === "dark" ? "#181A20" : "#ffffff",
-                marginLeft: 10,
-                padding: 5,
-                paddingHorizontal: 10,
-                borderColor: "#246BFD",
-                borderWidth: 2,
-                borderRadius: 20,
-                height: 34,
-                alignItems: "center",
-              }}
-            >
-              <Text
-                style={{ fontFamily: "Urbanist-regular", color: "#246BFD" }}
-              >
-                Neurologist
-              </Text>
-            </View>
+            {specialization.map((specialization, index) =>
+                        <Pressable key={index} onPress={()=>handleSpecializationChange(specialization)} style={[styles.categoryBtn,
+                            selectedSpecilization === specialization ? styles.firstCategoryBtn : {},
+                            ]}>
+                            
+                            <Text style={[
+                                styles.categoryBtnText,
+                                selectedSpecilization === specialization ? styles.firstCategoryBtnText : {},
+                                ]}>{specialization}</Text>  
+                            
+                    </Pressable>
+                        )}
           </ScrollView>
         </View>
 
@@ -419,79 +493,48 @@ export default function Index() {
             padding: 5,
           }}
         >
-          <TouchableOpacity
-            onPress={() => router.push("/ActionMenu/Booking/Doctor_details")}
-            style={{
-              width: "95%",
-              height: 150,
-              marginTop: "2%",
-              marginLeft: "2%",
-              borderRadius: 20,
-              backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF",
-              padding: 10,
-              flexDirection: "row",
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            style={[styles.scroll, scrollbackColor]}
+            contentContainerStyle={{
+              justifyContent: "center",
+              paddingBottom: 100,
+              paddingTop: 20,
             }}
           >
-            <Image
-              style={styles.cardImage}
-              source={require("../../../assets/images/Randy.png")}
-            ></Image>
-            <ImageBackground style={styles.DocDescription}>
-              <View style={styles.CardHeader}>
-                <Text
+            {filteredDoctors.length > 0 ? (
+              filteredDoctors.map((doctor: any, index: any) => (
+                <View
+                  key={index}
                   style={{
-                    fontFamily: "Urbanist-bold",
-                    color: theme === "dark" ? "#FFFFFF" : "#000000",
-                    marginLeft: "3%",
-                    marginRight: "18%",
-                    marginTop: "1%",
-                    fontSize: 20,
-                    padding: 0,
+                    marginBottom: "5%",
+                    width: "100%",
+                    height: 150,
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    backgroundColor: theme === "dark" ? "#181A20" : "#EEEEEE",
                   }}
                 >
-                  {" "}
-                  Dr. Randy Wigham
-                </Text>
-                <Image
-                  style={styles.DocHeart}
-                  source={require("../../../assets/images/BlueHeart.png")}
-                ></Image>
-              </View>
-              <Line
-                color="#E1E1E1"
-                thickness={2}
-                style={{ marginLeft: 10, marginTop: 20, width: "90%" }}
-              />
-
-              <Text
-                style={{
-                  backgroundColor: "transparent",
-                  color: theme === "dark" ? "#E0E0E0" : "#424242",
-                  fontFamily: "Urbanist-regular",
-                  fontSize: 15,
-                  marginLeft: "5%",
-                  marginTop: "5%",
-                }}
-              >
-                Cardiologist | The Valley Hospital
-              </Text>
-              <View style={styles.DocRating}>
-                <Image
-                  source={require("../../../assets/images/HalfStar.png")}
-                ></Image>
-                <Text
-                  style={{
-                    color: theme === "dark" ? "#FFFFFF" : "#000000",
-                    backgroundColor: "transparent",
-                    fontSize: 15,
-                    marginLeft: "5%",
-                  }}
-                >
-                  4.8 (3,379 reviews)
-                </Text>
-              </View>
-            </ImageBackground>
-          </TouchableOpacity>
+                  <DoctorComponent
+                    path={() => router.push({ pathname: "/ActionMenu/Booking/Doctor_details",params:{id:doctor.id} }) }
+                    imageSource={{ uri: doctor.image }}
+                    name={`${doctor.first_name} ${doctor.last_name}`}
+                    iconComponent={<SvgXml xml={whiteHeart} />}
+                    professionalTitle={doctor.specialization}
+                    hospital={doctor?.hospital_name}
+                    star={<SvgXml xml={star} />}
+                    review={doctor.review}
+                    rate={doctor.rate}
+                    remove={() => handleRemove(doctor)}
+                  />
+                </View>
+              ))
+            ) : (
+              <NofoundComponent />
+            )}
+          </ScrollView>
         </ImageBackground>
       </ScrollView>
     </View>
@@ -529,6 +572,17 @@ const styles = StyleSheet.create({
     height: 200,
     marginLeft: "0%",
     alignItems: "center",
+  },
+  scroll: {
+    width: "100%",
+    height: "100%",
+    zIndex: 1,
+  },
+  scrollDark: {
+    backgroundColor: "#181A20",
+  },
+  scrollLight: {
+    backgroundColor: "#F7F7F7",
   },
   FrameImage: {
     width: "101%",
@@ -636,5 +690,36 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginLeft: "5%",
     marginTop: "6%",
+  },
+  categoryBtnView: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: "5%",
+    backgroundColor: "white",
+  },
+  categoryBtn: {
+    borderWidth: 2,
+    borderColor: "#246BFD",
+    height: 40,
+    paddingHorizontal: 20,
+    paddingVertical: 7,
+    borderRadius: 20,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 8,
+    marginLeft: 10,
+  },
+  firstCategoryBtn: {
+    backgroundColor: "#246BFD",
+  },
+  firstCategoryBtnText: {
+    color: "white",
+  },
+  categoryBtnText: {
+    color: "#246BFD",
+    fontSize: 16,
   },
 });

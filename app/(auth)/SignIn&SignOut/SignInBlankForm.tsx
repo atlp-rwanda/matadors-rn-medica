@@ -7,42 +7,89 @@ import {
   TouchableOpacity,
   TextInput,
   TouchableWithoutFeedback,
-  Pressable,
   AppState,
-  Alert
+  Alert,
+  ActivityIndicator,
+  ScrollView,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import CheckBox from "expo-checkbox";
-import { LeftArrow } from "@/components/UI/Icons";
 import { router } from "expo-router";
 import Typography from "../../../constants/Typography";
 import { Colors } from "../../../constants/Colors";
 import { ThemeContext } from "@/ctx/ThemeContext";
 import { SvgXml } from "react-native-svg";
 import {
-  BackArrow,
   BlackApple,
   DarkContinueLine,
   LightContinueLine,
   WhiteApple,
-  blackArrow,
 } from "@/components/Icons/Icons";
+import Alerts from "@/components/UI/AlertComponent";
 import { StatusBar } from "expo-status-bar";
 import { supabase } from "@/lib/supabase";
-import { AuthContext } from "@/ctx/AuthContext";
+import * as WebBrowser from "expo-web-browser";
+import * as Linking from "expo-linking";
+import { makeRedirectUri } from "expo-auth-session";
+import * as QueryParams from "expo-auth-session/build/QueryParams";
+import { useAuth } from "@/ctx/AuthContext";
+import * as AppleAuthentication from 'expo-apple-authentication';
 
+WebBrowser.maybeCompleteAuthSession();
+const redirectTo = makeRedirectUri({
+  native: "com.medica://",
+});
 
-AppState.addEventListener('change', (state) => {
-  if(state === 'active'){
-    supabase.auth.startAutoRefresh()
-  }else{
-    supabase.auth.stopAutoRefresh()
+const createSessionFromUrl = async (url: string) => {
+  const { params, errorCode } = QueryParams.getQueryParams(url);
+
+  if (errorCode) throw new Error(errorCode);
+  const { access_token, refresh_token } = params;
+
+  if (!access_token) return;
+
+  const { data, error } = await supabase.auth.setSession({
+    access_token,
+    refresh_token,
+  });
+  if (error) throw error;
+  return data.session;
+};
+
+const signInWithFacebook = async () => {
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "facebook",
+    options: {
+      redirectTo,
+      skipBrowserRedirect: true,
+    },
+  });
+  if (error) throw error;
+
+  const res = await WebBrowser.openAuthSessionAsync(
+    data?.url ?? "",
+    redirectTo
+  );
+
+  if (res.type === "success") {
+    const { url } = res;
+    await createSessionFromUrl(url);
+
+    router.push("/(app)/ActionMenu");
   }
-})
+};
+
+AppState.addEventListener("change", (state) => {
+  if (state === "active") {
+    supabase.auth.startAutoRefresh();
+  } else {
+    supabase.auth.stopAutoRefresh();
+  }
+});
 
 const Login = () => {
-  // const {login, loading} = useContext(AuthContext)
-
+  const { signInWithApple } = useAuth();
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false)
@@ -51,13 +98,11 @@ const Login = () => {
   const [emailFocused, setEmailFocused] = useState(false);
   const [passwordFocused, setPasswordFocused] = useState(false);
   const { theme, changeTheme } = useContext(ThemeContext);
-  const handleEmailChange = (text: string) => {
-    setEmail(text);
-  };
 
-  const handlePasswordChange = (text: string) => {
-    setPassword(text);
-  };
+  const url = Linking.useURL();
+  if (url) createSessionFromUrl(url);
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const togglePasswordVisibility = () => {
     setSecureTextEntry(!secureTextEntry);
@@ -81,28 +126,49 @@ const Login = () => {
     setPasswordFocused(false);
   };
 
-async function signInWithEmail(){
-  setLoading(true)
-  const{data, error} = await supabase.auth.signInWithPassword({
-    email: email,
-    password: password,
-  }) 
-  if(error){
-    Alert.alert(error.message)
-    setLoading(false)
-  }else{
-    router.push('/(app)/ActionMenu');
-    setLoading(false);
+
+  async function signInWithEmail() {
+    try {
+      setIsLoading(true);
+      await login(email, password);
+    } catch (error) {
+      Alert.alert("Error signing in");
+      setIsLoading(false);
+    }
   }
 
-}
+  const supabaseAuth = supabase.schema('auth');
 
+  const handleSignInWithApple = async () => {
+    setLoading(true);
+    try {
+      await signInWithApple();
+      router.push("/(app)/ActionMenu");
+    } catch (error) {
+      console.error('Error signing in with Apple:', error);
+      // Handle error (show alert, reset loading state, etc.)
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  
   return (
-    <View
-      style={[
-        styles.container,
-        { backgroundColor: theme === "dark" ? "#181A20" : "#FFFFFF" },
-      ]}
+    <ScrollView
+      style={{
+        backgroundColor: theme === "dark" ? "#181A20" : "#FFFFFF",
+        flex: 1,
+      }}
+      contentContainerStyle={{
+        flexGrow: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        paddingTop: 24,
+        paddingLeft: 24,
+        paddingRight: 24,
+        paddingBottom: 48,
+        gap: 17,
+      }}
     >
       <StatusBar style={theme === "dark" ? "light" : "dark"} />
 
@@ -137,7 +203,14 @@ async function signInWithEmail(){
             style={[styles.icon, emailFocused && styles.iconFocused]}
           />
           <TextInput
-            style={[{fontSize: 16,flex: 1,color: theme === "dark"? Colors.grayScale._50 : "black"}, emailFocused && styles.emailFocused]}
+            style={[
+              {
+                fontSize: 16,
+                flex: 1,
+                color: theme === "dark" ? Colors.grayScale._50 : "black",
+              },
+              emailFocused && styles.emailFocused,
+            ]}
             placeholder="Email"
             keyboardType="email-address"
             placeholderTextColor="#9E9E9E"
@@ -164,7 +237,14 @@ async function signInWithEmail(){
           />
 
           <TextInput
-            style={[{fontSize: 16,flex: 1,color: theme === "dark"? Colors.grayScale._50 : "black"}, passwordFocused && styles.emailFocused]}
+            style={[
+              {
+                fontSize: 16,
+                flex: 1,
+                color: theme === "dark" ? Colors.grayScale._50 : "black",
+              },
+              passwordFocused && styles.emailFocused,
+            ]}
             placeholder="Password"
             placeholderTextColor="#9E9E9E"
             secureTextEntry={secureTextEntry}
@@ -209,17 +289,33 @@ async function signInWithEmail(){
       </View>
 
       <View>
-        <TouchableOpacity disabled={loading}
+        <TouchableOpacity
+          disabled={isLoading}
           onPress={() => signInWithEmail()}
-          style={styles.signinBtn}
+          style={{
+            backgroundColor: isLoading
+              ? Colors.status.disabled_button
+              : Colors.main.primary._500,
+            width: 360,
+            height: 58,
+            borderRadius: 100,
+            justifyContent: "center",
+            alignItems: "center",
+            shadowColor: "#246BFD",
+            elevation: 10,
+          }}
         >
-          <Text style={styles.signText}>Sign in</Text>
+          {isLoading ? (
+            <ActivityIndicator color="white" />
+          ) : (
+            <Text style={styles.signText}>Sign in</Text>
+          )}
         </TouchableOpacity>
       </View>
 
       <TouchableOpacity
         onPress={() =>
-          router.push("/(auth)/ForgotPassword&Reset/ForgotPassword")
+          router.push("/(auth)/ForgotPassword&Reset")
         }
       >
         <Text
@@ -237,11 +333,14 @@ async function signInWithEmail(){
       </View>
 
       <View style={styles.overCont}>
-      <TouchableOpacity>
+        <TouchableOpacity onPress={signInWithFacebook}>
           <View
             style={[
               styles.smallCont,
-              { backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF", borderColor: theme === 'dark' ? '#35383F' : '#EEEEEE' },
+              {
+                backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF",
+                borderColor: theme === "dark" ? "#35383F" : "#EEEEEE",
+              },
             ]}
           >
             <Image source={require("../../../assets/icons/facebook.png")} />
@@ -252,22 +351,27 @@ async function signInWithEmail(){
           <View
             style={[
               styles.smallCont,
-              { backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF", borderColor: theme === 'dark' ? '#35383F' : '#EEEEEE'  },
+              {
+                backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF",
+                borderColor: theme === "dark" ? "#35383F" : "#EEEEEE",
+              },
             ]}
           >
             <Image source={require("../../../assets/icons/Google.png")} />
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity>
+        <TouchableOpacity onPress={signInWithApple}>
           <View
             style={[
               styles.smallCont,
-              { backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF", borderColor: theme === 'dark' ? '#35383F' : '#EEEEEE'  },
+              {
+                backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF",
+                borderColor: theme === "dark" ? "#35383F" : "#EEEEEE",
+              },
             ]}
           >
-            <SvgXml xml={theme === 'dark' ? WhiteApple : BlackApple} />
-
+            <SvgXml xml={theme === "dark" ? WhiteApple : BlackApple} />
           </View>
         </TouchableOpacity>
       </View>
@@ -291,11 +395,9 @@ async function signInWithEmail(){
           Sign up
         </Text>
       </View>
-    </View>
+    </ScrollView>
   );
 };
-
-export default Login;
 
 const styles = StyleSheet.create({
   inputOneFocused: {
@@ -393,16 +495,6 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontWeight: "bold",
   },
-  signinBtn: {
-    backgroundColor: "#246BFD",
-    width: 360,
-    height: 58,
-    borderRadius: 100,
-    justifyContent: "center",
-    alignItems: "center",
-    shadowColor: "#246BFD",
-    elevation: 10,
-  },
   textBtn: {
     fontSize: 16,
     fontWeight: "bold",
@@ -448,17 +540,11 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: 17,
-    paddingTop: 24,
-    paddingLeft: 24,
-    paddingBottom: 48,
-    paddingRight: 24,
   },
   LoginText: {
     color: "#246BFD",
     fontWeight: "600",
   },
 });
+
+export default Login;

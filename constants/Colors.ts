@@ -6,6 +6,12 @@ export default {
     tabIconDefault: "#ccc",
     input : "#EEEEEE"
   },
+  dark: {
+    text: '#FFFFFF',
+    background: '#000000',
+    tabIconDefault: '#555',
+    input: '#333333',
+  },
 };
 
 export const Colors = {

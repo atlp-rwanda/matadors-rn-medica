@@ -11,7 +11,6 @@ import { star } from '@/assets/icons/star';
 import { search } from '@/assets/icons/search';
 import { more } from '@/assets/icons/more';
 import { leftArrow } from '@/assets/icons/left';
-import data from "../../doctors.json"
 import HeaderComponent from '@/components/HeaderComponent';
 import SearchComponent from '@/components/SearchComponent';
 import FoundDoctorCount from '@/components/FoundDoctorCount';
@@ -23,31 +22,19 @@ import NotFoundScreen from '@/app/+not-found';
 import { ThemeContext } from '@/ctx/ThemeContext';
 import { useContext } from 'react';
 import { supabase } from '@/lib/supabase';
+import { router } from 'expo-router';
 
 
 
-const tableName = 'doctors'
+const tableName = "doctors";
 
-
-
-
-interface imageMapProp{
-    [key:string]:ReturnType<typeof require>
+interface imageMapProp {
+  [key: string]: ReturnType<typeof require>;
 }
 
-const imageMap:imageMapProp = {
-    'doctor1.png': require("../../../assets/images/Doctors/doctor1.png"),
-    'doctor2.png': require("../../../assets/images/Doctors/doctor2.png"),
-    'doctor3.png': require("../../../assets/images/Doctors/doctor3.png"),
-    'doctor4.png': require("../../../assets/images/Doctors/doctor4.png"),
-    'doctor5.png':require("../../../assets/images/Doctors/doctor5.png")
-
+interface iconMappingProp {
+  [key: string]: ReactElement;
 }
-interface iconMappingProp{
-    [key :string]:ReactElement
-}
-
-
 interface Doctor{
     id: number,
     first_name: string,
@@ -58,46 +45,45 @@ interface Doctor{
     specialization: string,
     about:string
 }
-interface categoryProp{
-    name: string,
-    Doctors:Doctor[]
-}
 
-export const iconMapping:iconMappingProp = {
-    heart: <SvgXml xml={WhiteHeart } />,
-    star: <SvgXml xml={star} />,
-}
-
-
+export const iconMapping: iconMappingProp = {
+  heart: <SvgXml xml={WhiteHeart} />,
+  star: <SvgXml xml={star} />,
+};
 
 function DoctorScreen() {
-    const [showSearch, setShowSearch] = useState<boolean>(false)
-    const [searchTerm, setSearchTerm] = useState<string>('')
-    const [selectedCategory, setSelectedCategory] = useState(data.categories[0])
-    const [showpopUp, setShowPopup] = useState(false)
-    const [selectedDoctor, setSelectedDoctor] = useState()
-    const [showFilter, setShowfilter] = useState(false)
-    const [doctors,setDoctors]=useState<Doctor[]>([])
-    const { theme, changeTheme } = useContext(ThemeContext)
-    const containerStyle = theme === "dark" ? styles.outerDark : styles.outerLight
-    const scrollbackColor = theme === "dark" ? styles.scrollDark : styles.scrollLight
-    
-    useEffect(() => {
-        async function fetchData() {
-  const { data, error } = await supabase.from(tableName).select('*');
+  const [showSearch, setShowSearch] = useState<boolean>(false);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [showpopUp, setShowPopup] = useState(false);
+  const [selectedDoctor, setSelectedDoctor] = useState();
+  const [showFilter, setShowfilter] = useState(false);
+  const [doctors, setDoctors] = useState<Doctor[]>([]);
+  const { theme, changeTheme } = useContext(ThemeContext);
+  const [selectedSpecilization, setSelectedSpecilization] = useState<string>("All")
+  const [specialization,setSpecialization]=useState<string[]>([])
+  const containerStyle =
+    theme === "dark" ? styles.outerDark : styles.outerLight;
+  const scrollbackColor =
+    theme === "dark" ? styles.scrollDark : styles.scrollLight;
 
-  if (error) {
-    console.error('Error fetching data:', error);
-    return;
-            }
-            setDoctors(data)
-           
-  console.log('Fetched data:', data);
-}
+  useEffect(() => {
+    async function fetchData() {
+      const { data, error } = await supabase.from(tableName).select("*");
 
-fetchData();
-    },[])
+      if (error) {
+        console.error("Error fetching data:", error);
+        return;
+      }
+      setDoctors(data);
 
+   
+      const uniqueSpecialization = Array.from(new Set(data.map((doctor: Doctor) => doctor.specialization)))
+      setSpecialization(["All",...uniqueSpecialization])
+    }
+
+    fetchData();
+  }, []);
+ console.log("this is retrived specilization:",specialization)
     const handleSearchPressed = () => {
         setShowSearch(true)
     }
@@ -112,9 +98,20 @@ fetchData();
         setSelectedDoctor(doctor)
         
         setShowPopup(true)
-    }
+  }
+  const handleSpecializationChange = (specialization: string) => {
+    setSelectedSpecilization(specialization)
+    setSearchTerm('')
+    
+  }
+  const filteredDoctors = doctors.filter(doctor => {
+    const matchSearchTerm = searchTerm.length > 0 ? doctor.last_name.toLowerCase().includes(searchTerm.toLowerCase())||doctor.first_name.toLowerCase().includes(searchTerm.toLowerCase()) : true
+    const matchSpecialization = selectedSpecilization === 'All' || doctor.specialization === selectedSpecilization
+    return matchSearchTerm&&matchSpecialization
 
-    const filteredDoctors=searchTerm.length>0 ? doctors.filter(doctor=>doctor.last_name.toLowerCase().includes(searchTerm)):doctors
+    })
+
+
     return (
         <SafeAreaView style={[styles.container, containerStyle]}>
            <StatusBar style={theme === "dark" ? "light" : "dark"} />
@@ -148,15 +145,15 @@ fetchData();
 
                     }}>
                     
-                    {data.categories.map((category, index) =>
-                        <Pressable key={index} style={[styles.categoryBtn,
-                            selectedCategory === category ? styles.firstCategoryBtn : {},
+                    {specialization.map((specialization, index) =>
+                        <Pressable key={index} onPress={()=>handleSpecializationChange(specialization)} style={[styles.categoryBtn,
+                            selectedSpecilization === specialization ? styles.firstCategoryBtn : {},
                             ]}>
                             
                             <Text style={[
                                 styles.categoryBtnText,
-                                selectedCategory === category ? styles.firstCategoryBtnText : {},
-                                ]}>{category.name}</Text>  
+                                selectedSpecilization === specialization ? styles.firstCategoryBtnText : {},
+                                ]}>{specialization}</Text>  
                             
                     </Pressable>
                         )}
@@ -174,7 +171,7 @@ fetchData();
              style={[styles.scroll,scrollbackColor]}
               contentContainerStyle={{
             justifyContent: "center",
-            //  alignItems: 'center',
+         
             paddingBottom: 150,
             paddingTop:20
           }}
@@ -185,12 +182,12 @@ fetchData();
                         
                                     <View key={index} style={styles.componentView}>
                                         <DoctorComponent
-
+                                            path={() => router.push({ pathname: "/ActionMenu/Booking/Doctor_details",params:{id:doctor.id} }) }
                                             imageSource={{uri:doctor.image}}
                                             name={`${doctor.first_name} ${doctor.last_name}`}
                                             iconComponent={<SvgXml xml={WhiteHeart } />}
                                             professionalTitle={doctor.specialization}
-                                            hospital={doctor.hospital}
+                                            hospital={doctor.hospital_name}
                                             star={<SvgXml xml={star} />}
                                             review={doctor.review}
                                             rate={doctor.rate}
@@ -240,137 +237,127 @@ fetchData();
 export default DoctorScreen;
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        zIndex:1
-    },
-    outerDark: {
-        backgroundColor:"#181A20"
-        
-    },
-    outerLight: {
-     backgroundColor: "white",
-        
-    },
-    upper: {
-        display: "flex",
-        flexDirection: 'row',
-        justifyContent: "center",
-        alignItems: "center",
-        width:"100%",
-         marginBottom: "7%",
-        marginTop: "18%",
-    },
-    foundDoctorView: {
-        width: "100%",
-        display: "flex",
-        flexDirection: 'row',
-        justifyContent: "center",
-        alignItems: "center"
-    },
-    searchComponent: {
-        
-    },
-    upperInner: {
-        width: "95%",
-        display: "flex",
-        flexDirection: 'row',
-        justifyContent: "space-between",
-        alignItems: "center",
-    },
-    upperLeft: {
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: 'space-between',
-        width: "70%",
-        height:"100%",
-    },
-    categoryScroll: {
-    
-    },
-    categoryBtnView: {
-        display:"flex",
-        flexDirection: "row",
-        alignItems: 'center',
-        marginBottom: "5%",
-        backgroundColor: "white",
-    },
-    categoryBtn: {
-        borderWidth: 2,
-        borderColor: "#246BFD",
-        height: 40,
-        paddingHorizontal: 20,
-        paddingVertical:7,
-        borderRadius: 20,
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center",
-        marginRight: 8,
-        marginLeft:10
-    },
-    firstCategoryBtn: {
-      backgroundColor:  "#246BFD"
-    },
-    firstCategoryBtnText: {
-      color:"white"  
-    },
-    categoryBtnText: {
-        color: "#246BFD",
-        fontSize:16    
-    },
-    body: {
-        width: "98%",
-        backgroundColor:"#F7F7F7",
-    },
-    scroll: {
-        width: "100%",
-        height: "100%",
-        zIndex: 1, 
-    },
-    scrollDark: {
-        backgroundColor:"#181A20"
-        
-    },
-    scrollLight: {
-        backgroundColor: "#F7F7F7"
-        
-    },
-    searchView: {
-        display: "flex",
-        flexDirection: 'row',
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    moreOuter: {
-       display: "flex",
-        flexDirection: 'row',
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    Headstyle: {
-        color: "#212121",
-        fontWeight: "bold",
-        fontSize:20
-    },
-    NotificationView: {
-        width:"80%"
-    },
-    componentView: {
-        marginBottom: "5%",
-        width: "100%",
-        height:150,
-       display: "flex",
-        flexDirection: 'row',
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    rightView: {
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: 'space-between',
-        width:"25%"
-    },
-   
-    
-})
+  container: {
+    flex: 1,
+    zIndex: 1,
+  },
+  outerDark: {
+    backgroundColor: "#181A20",
+  },
+  outerLight: {
+    backgroundColor: "white",
+  },
+  upper: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+    marginBottom: "7%",
+    marginTop: "18%",
+  },
+  foundDoctorView: {
+    width: "100%",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  searchComponent: {},
+  upperInner: {
+    width: "95%",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  upperLeft: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "70%",
+    height: "100%",
+  },
+  categoryScroll: {},
+  categoryBtnView: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: "5%",
+    backgroundColor: "white",
+  },
+  categoryBtn: {
+    borderWidth: 2,
+    borderColor: "#246BFD",
+    height: 40,
+    paddingHorizontal: 20,
+    paddingVertical: 7,
+    borderRadius: 20,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 8,
+    marginLeft: 10,
+  },
+  firstCategoryBtn: {
+    backgroundColor: "#246BFD",
+  },
+  firstCategoryBtnText: {
+    color: "white",
+  },
+  categoryBtnText: {
+    color: "#246BFD",
+    fontSize: 16,
+  },
+  body: {
+    width: "98%",
+    backgroundColor: "#F7F7F7",
+  },
+  scroll: {
+    width: "100%",
+    height: "100%",
+    zIndex: 1,
+  },
+  scrollDark: {
+    backgroundColor: "#181A20",
+  },
+  scrollLight: {
+    backgroundColor: "#F7F7F7",
+  },
+  searchView: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  moreOuter: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  Headstyle: {
+    color: "#212121",
+    fontWeight: "bold",
+    fontSize: 20,
+  },
+  NotificationView: {
+    width: "80%",
+  },
+  componentView: {
+    marginBottom: "5%",
+    width: "100%",
+    height: 150,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  rightView: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "25%",
+  },
+});

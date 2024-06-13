@@ -11,12 +11,13 @@ interface Props {
     icon: () => React.JSX.Element;
     description: string;
   }[];
+  onPackageSelect:(title:string,price:string)=>void
 }
 
-export default function PackagesContainer({ data }: Props) {
+export default function PackagesContainer({ data,onPackageSelect}: Props) {
   const [selectedPackage, setSelectedPackage] = useState("0");
   const { theme, changeTheme } = useContext(ThemeContext);
-
+  
   return (
     <>
       <FlatList
@@ -36,6 +37,7 @@ export default function PackagesContainer({ data }: Props) {
             selected={selectedPackage === item.id}
             onPress={() => {
               setSelectedPackage(item.id);
+              onPackageSelect(item.title,item.price)
             }}
           />
         )}

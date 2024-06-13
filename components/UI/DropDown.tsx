@@ -12,11 +12,12 @@ interface Props {
   leftIcon?: () => React.JSX.Element;
   rightIcon?: () => React.JSX.Element;
   search?: boolean;
+  defaultvalue?:string
 }
 
-export default function DropDown({ data, leftIcon, rightIcon, search }: Props) {
+export default function DropDown({ data, leftIcon, rightIcon, search,defaultvalue }: Props) {
   const { theme } = useContext(ThemeContext);
-  const [value, setValue] = useState<string>(data[0].label);
+  const [value, setValue] = useState<string>(defaultvalue||data[0].label);
   const [isFocus, setIsFocus] = useState(false);
 
   return (

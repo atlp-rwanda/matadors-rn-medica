@@ -15,7 +15,7 @@ export default function SplashScreen() {
   useEffect(() => {
     setTimeout(() => {
       router.push("onBoarding");
-    },1000);
+    },3000);
   }, []);
   
   return (

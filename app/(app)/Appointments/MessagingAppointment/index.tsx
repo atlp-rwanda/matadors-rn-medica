@@ -25,6 +25,7 @@ import {
 import { backArrowWhite } from "@/components/UI/icons/backArrow";
 import { WhiteMenuCircle } from "@/components/UI/icons/WhiteMenuCircle";
 import { MoreIcon } from "@/assets/icons/MoreCircleSvg";
+import { backArrowBlackIcon } from '@/constants/icon'
 
 interface PatientType {
   id: string;
@@ -93,7 +94,7 @@ function AppointmentMessaging() {
                 theme === "light" ? Colors.others.white : Colors.dark._1,
             }}
           >
-            <SvgXml xml={backArrowWhite} />
+            <SvgXml xml={theme === 'dark' ? backArrowWhite : backArrowBlackIcon } />
             <Text
               style={{
                 fontSize: 24,

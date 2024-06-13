@@ -6,7 +6,7 @@ import {
 } from "@/components/UI/Icons";
 import { Colors } from "@/constants/Colors";
 import Typography from "@/constants/Typography";
-import { useContext, useState } from "react";
+import { useContext, useState,useEffect } from "react";
 import {
   StyleSheet,
   Image,
@@ -24,18 +24,46 @@ import { ScrollView } from "react-native";
 import HorizontalSeparator from "@/components/UI/HorizontalSeparator";
 import PaymentChooseInputCard from "@/components/UI/PaymentChooseContainer/PaymentChooseInputCard";
 import SelectPaymentCardListing from "@/components/Profile/SelectedPaymentCardListing";
+import { useLocalSearchParams } from "expo-router";
 import { SvgXml } from "react-native-svg";
+import { supabase } from "@/lib/supabase";
+import HeaderComponent from "@/components/HeaderComponent";
 
 export default function Reviewsummary() {
   const { theme, changeTheme } = useContext(ThemeContext);
+  const { doctor_id, hour, date, packageTitle, packagePrice, problem, user_id,patient_id } = useLocalSearchParams()
+  const [doctor,setDoctor]=useState<any>(null)
+  
+  useEffect(() => {
+    const fetchDoctordata = async () => {
+      const { data, error } = await supabase
+        .from("doctors")
+        .select("*")
+        .eq("id", doctor_id)
+        .single()
+      if (error) {
+        console.log("error fetching doctor data on Review summary",error)
+      } else {
+        setDoctor(data)
+      }
+    }
+    fetchDoctordata()
+  },[doctor_id])
+
+  if (!doctor) {
+  return (<Text>Loading Doctor's data .........</Text>)
+}
+
   return (
     <>
+      
       <ScrollView
         style={{
           backgroundColor:
             theme === "light" ? Colors.others.white : Colors.dark._1,
           height: "100%",
           flex: 1,
+          width:"100%"
         }}
         contentContainerStyle={{
           gap: 10,
@@ -43,6 +71,9 @@ export default function Reviewsummary() {
           paddingBottom: 20,
         }}
       >
+        <View style={{marginTop:50,display:"flex",flexDirection:"row",width:"100%",justifyContent:"center"}}><Text style={{fontSize:20}}>{doctor?.first_name??"Doctor"}</Text></View>
+        
+       
         <View style={{ paddingHorizontal: 20, gap: 20 }}>
           <View
             style={{
@@ -57,8 +88,10 @@ export default function Reviewsummary() {
             }}
           >
             <Image
-              source={require("@/assets/images/BookingImages/doctor.png")}
-            ></Image>
+              source={{ uri: doctor.image }}
+               style={{ width: 100, height: 100, borderRadius: 50 }}
+              // source={require("@/assets/images/BookingImages/doctor.png")}
+            />
 
             <View style={{ gap: 10, paddingVertical: 4 }}>
               <Text
@@ -72,7 +105,7 @@ export default function Reviewsummary() {
                   },
                 ]}
               >
-                Dr Jenny Watson
+                {doctor.first_name} {doctor.last_name}
               </Text>
               <HorizontalSeparator
                 color={
@@ -90,7 +123,7 @@ export default function Reviewsummary() {
                   },
                 ]}
               >
-                Immunologists
+               {doctor.specialization}
               </Text>
               <Text
                 style={[
@@ -103,7 +136,7 @@ export default function Reviewsummary() {
                   },
                 ]}
               >
-                Christ Hospital in London, UK
+               {doctor.hospital_name}
               </Text>
             </View>
           </View>
@@ -150,7 +183,7 @@ export default function Reviewsummary() {
                   },
                 ]}
               >
-                Dec 23, 2024 | 10:00 AM
+                { hour}| {date}
               </Text>
             </View>
             <View
@@ -184,7 +217,7 @@ export default function Reviewsummary() {
                   },
                 ]}
               >
-                Messaging
+               {packageTitle}
               </Text>
             </View>
             <View
@@ -265,7 +298,7 @@ export default function Reviewsummary() {
                   },
                 ]}
               >
-                $20
+                {packagePrice}
               </Text>
             </View>
             <View
@@ -299,7 +332,7 @@ export default function Reviewsummary() {
                   },
                 ]}
               >
-                1 x $20
+                1 x {packagePrice}
               </Text>
             </View>
 
@@ -338,7 +371,7 @@ export default function Reviewsummary() {
                   },
                 ]}
               >
-                $20
+                {packagePrice}
               </Text>
             </View>
           </View>
@@ -359,7 +392,7 @@ export default function Reviewsummary() {
           <Button
             title="Next"
             onPress={() =>
-              router.push("(app)/ActionMenu/Booking/EnterYourP in")
+              router.push({ pathname:"(app)/ActionMenu/Booking/EnterYourPin",params:{doctor_id:doctor_id,hour:hour,date:date,packageTitle:packageTitle,packagePrice:packagePrice,problem:problem,user_id:user_id,patient_id:patient_id}})
             }
             style={{}}
           />

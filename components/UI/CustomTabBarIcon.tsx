@@ -9,7 +9,7 @@ import { ProfileFocusedIcon, ProfileIcon } from "@/assets/icons/ProfileSvg";
 import { Text } from "react-native";
 import { SvgXml } from "react-native-svg";
 
-export default function CustomTabBarIcon({
+ function CustomTabBarIcon({
   name,
   isFocused,
 }: {
@@ -37,3 +37,4 @@ export default function CustomTabBarIcon({
     </>
   );
 }
+export default CustomTabBarIcon;

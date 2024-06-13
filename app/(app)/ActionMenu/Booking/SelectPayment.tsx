@@ -10,10 +10,12 @@ import { PaymentMethods } from "@/constants/PaymentMethods";
 import PaymentChooseContainer from "@/components/UI/PaymentChooseContainer/Index";
 import { router } from "expo-router";
 import React from "react";
+import { useLocalSearchParams } from "expo-router";
 
 export default function SelectPayment() {
   const { theme, changeTheme } = useContext(ThemeContext);
   const [selected, setSelected] = useState(false);
+const {doctor_id,hour,date,packageTitle,packagePrice,problem,user_id,patient_id}=useLocalSearchParams()
 
   return (
     <>
@@ -51,7 +53,7 @@ export default function SelectPayment() {
         <Button
           title="Next"
           onPress={() => {
-            router.push("(app)/ActionMenu/Booking/reviewSummary");
+            router.push({ pathname: "(app)/ActionMenu/Booking/reviewSummary",params: {doctor_id:doctor_id,hour:hour,date:date,packageTitle:packageTitle,packagePrice:packagePrice,problem:problem,user_id:user_id,patient_id:patient_id}});
           }}
           style={{ marginTop: "auto" }}
         />
