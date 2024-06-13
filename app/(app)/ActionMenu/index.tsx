@@ -24,6 +24,7 @@ export default function Index() {
   const handleIconPress = (iconName: string) => {
     setActiveIcon(iconName); // Update active icon state when an icon is pressed
   };
+  
   const isIconActive = (iconName: string) => {
     return activeIcon === iconName;
   };
@@ -39,6 +40,8 @@ export default function Index() {
   if (!fontsLoaded) {
     return null;
   }
+ 
+ 
   const specialties = [
     { imageSource: require('../../../assets/images/GeneralDoctor.png'), name: 'General..' },
     { imageSource: require('../../../assets/images/Dentist.png'), name: 'Dentist' },
@@ -125,16 +128,16 @@ export default function Index() {
           </TouchableOpacity>
         </View>
         <View style={styles.specialityGrid}>
-        {specialties.map((specialty, index) => (
+      {specialties.map((specialty, index) => (
+        <View key={index} style={styles.itemContainer}>
           <SpecialityItem
-            key={index}
             imageSource={specialty.imageSource}
             name={specialty.name}
             theme={theme}
           />
-        ))}
         </View>
-   
+      ))}
+   </View>
         <View style={styles.TopDocs}>
           <Text style={{color: theme === "dark" ? "#FFFFFF" : "#000000",fontFamily: "Urbanist-bold", fontSize: 19,marginLeft: "4%",}}>Top Doctors</Text>
           <TouchableOpacity onPress={() => router.push("/ActionMenu/FavoriteDoctorScreen")}>
@@ -336,15 +339,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   specialityGrid: {
-    backgroundColor:"transparent",
+    backgroundColor: "transparent",
     flexDirection: "row",
-    flexWrap:'wrap',
+    flexWrap: 'wrap',
     marginTop: "8%",
-    marginLeft:"5%",
-    marginRight:"5%",
-    marginBottom: "4%",
-  
     justifyContent: 'space-around',
+  },
+  itemContainer: {
+    width: '22%', 
+    alignItems: 'center',
+    backgroundColor:'transparent',
+    marginBottom: 15, 
   },
   FrameText: {
     backgroundColor: "transparent",
