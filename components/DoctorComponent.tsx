@@ -5,7 +5,7 @@ import { SvgXml } from "react-native-svg"
 import { ThemeContext } from '@/ctx/ThemeContext';
 import { useContext } from 'react';
 interface DoctorComponentProps{
-    imageSource: ImageURISource|number
+    imageSource: {uri:string}
     name: string,
     iconComponent: ReactElement,
     professionalTitle: string,
@@ -21,13 +21,15 @@ function DoctorComponent({ imageSource, name, iconComponent, professionalTitle, 
     const containerStyle = theme === "dark" ? styles.outerDark : styles.outerLight
     const nameColor = theme === "dark" ? styles.textDark : styles.textLight
     const descriptionColor = theme === "dark" ? styles.descriptionDark : styles.descriptionLight
-    const horizontalColor=theme==="dark"?styles.horizontalDark:styles.horizontalLight
+    const horizontalColor = theme === "dark" ? styles.horizontalDark : styles.horizontalLight
+    console.log("image url", imageSource.uri)
+  
 
     return (
         <View style={[styles.outer,containerStyle,backgroundStyle]}>
             <View style={styles.inner}>
                 <View style={styles.profileView}>
-                    <Image source={imageSource } />
+                    <Image source={imageSource } style={styles.image} />
                 </View>
                 <View style={styles.rightView}>
                     <View style={styles.rightViewInner}>
@@ -234,6 +236,10 @@ const styles = StyleSheet.create({
          color:"#424242"
     },
     allReviewView: {
-        
+       
+    },
+    image: {
+        width: 110,
+        height:110
     }
 })
