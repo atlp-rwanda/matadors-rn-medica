@@ -15,6 +15,10 @@ export default function Layout() {
         name="FavoriteDoctorScreen"
         options={{ headerShown: false }}
       />
+      <Stack.Screen
+        name="AllDoctorScreen"
+        options={{headerShown:false}}
+      />
     </Stack>
   );
 }

@@ -167,17 +167,8 @@ export default function Index() {
           </ImageBackground>
         </View>
         <View style={styles.TxtContainer}>
-          <Text
-            style={{
-              color: theme === "dark" ? "#FFFFFF" : "#000000",
-              fontFamily: "Urbanist-bold",
-              fontSize: 19,
-              marginLeft: "4%",
-            }}
-          >
-            Doctor Speciality
-          </Text>
-          <TouchableOpacity>
+          <Text style={{color: theme === "dark" ? "#FFFFFF" : "#000000",fontFamily: "Urbanist-bold", fontSize: 19,marginLeft: "4%",}}>Doctor Speciality</Text>
+          <TouchableOpacity onPress={()=> router.push("/ActionMenu/FavoriteDoctorScreen")}>
             <Text style={styles.seeTxt}>See All</Text>
           </TouchableOpacity>
         </View>
@@ -308,19 +299,8 @@ export default function Index() {
           </Text>
         </View>
         <View style={styles.TopDocs}>
-          <Text
-            style={{
-              color: theme === "dark" ? "#FFFFFF" : "#000000",
-              fontFamily: "Urbanist-bold",
-              fontSize: 19,
-              marginLeft: "4%",
-            }}
-          >
-            Top Doctors
-          </Text>
-          <TouchableOpacity
-            onPress={() => router.push("/ActionMenu/FavoriteDoctorScreen")}
-          >
+          <Text style={{color: theme === "dark" ? "#FFFFFF" : "#000000",fontFamily: "Urbanist-bold", fontSize: 19,marginLeft: "4%",}}>Top Doctors</Text>
+          <TouchableOpacity onPress={() => router.push("/ActionMenu/AllDoctorScreen")}>
             <Text style={styles.seeTxt}>See All</Text>
           </TouchableOpacity>
         </View>
