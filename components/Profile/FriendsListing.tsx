@@ -4,8 +4,10 @@ import { Colors } from "@/constants/Colors";
 import { Pressable } from "react-native";
 import Typography from "@/constants/Typography";
 import OutlineButton from "../UI/OutlineButton";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { ThemeContext } from "@/ctx/ThemeContext";
+import Chips from "../UI/ChipsComponent";
+import React from "react";
 
 interface Props {
   imageUrl: string;
@@ -15,6 +17,16 @@ interface Props {
 
 export default function FriendsListing({ imageUrl, name, phone }: Props) {
   const { theme } = useContext(ThemeContext);
+  const [pressed, setPressed] = useState(false);
+  
+  function onPress() {
+    throw new Error("Function not implemented.");
+  }
+    const [isInvited, setIsInvited] = useState(false);
+  
+    const handlePress = () => {
+      setIsInvited(true);
+    };
 
   return (
     <>
@@ -56,7 +68,11 @@ export default function FriendsListing({ imageUrl, name, phone }: Props) {
             {phone}
           </Text>
         </View>
-        <OutlineButton title="Invite" onPress={() => {}} />
+        {isInvited ? (
+        <Chips text="invited" type="border" size="small" style={{ marginLeft: 'auto'}} />
+      ) : (
+        <Chips text="invite" type="filled" size="small" style={{ marginLeft: 'auto' }} onPress={handlePress} />
+      )}
       </View>
     </>
   );

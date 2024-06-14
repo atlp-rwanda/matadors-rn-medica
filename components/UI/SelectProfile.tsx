@@ -40,7 +40,7 @@ export default function SelectProfile({ image, setImage }: Props) {
         {image ? (
           <Image
             source={{ uri: image }}
-            style={{ width: 200, height: 200, borderRadius: 100 }}
+            style={{ width: 170, height: 170, borderRadius: 100 }}
           />
         ) : (
           <SvgXml
@@ -53,8 +53,8 @@ export default function SelectProfile({ image, setImage }: Props) {
           onPress={pickImage}
           style={{
             position: "absolute",
-            bottom: 7,
-            right: 20,
+            bottom: 5,
+            right: 15,
           }}
         >
           <SvgXml xml={EditBlueIcon} />

@@ -8,6 +8,7 @@ import {
   MessageIconGray,
 } from "@/assets/icons/Profile/Icons";
 import Button from "@/components/UI/Button";
+import CustomDropdown from "@/components/UI/CustomDropdown";
 import Input from "@/components/UI/Input";
 import SelectProfile from "@/components/UI/SelectProfile";
 import { Colors } from "@/constants/Colors";
@@ -34,25 +35,23 @@ import Icon from "react-native-vector-icons/FontAwesome";
 const YourProfile = () => {
   const [isFocus, setIsFocus] = useState(false);
   const [image, setImage] = useState<null | string>(null);
-  const [value, setValue] = useState<string>("United States");
+  const [value, setValue] = useState<string>(" ");
   const { theme } = useContext(ThemeContext);
 
   return (
     <ScrollView
       style={{
-        height: "100%",
         backgroundColor:
           theme === "light" ? Colors.others.white : Colors.dark._1,
+        flex: 1,
       }}
       contentContainerStyle={{
         gap: 15,
         alignItems: "center",
-        // paddingTop: 20,
-        paddingHorizontal: 15,
-        // paddingBottom: 30,
-        height: "100%",
         paddingVertical: 20,
+        flexGrow: 1,
       }}
+      alwaysBounceVertical={false}
     >
       <View>
         <SelectProfile image={image} setImage={setImage} />
@@ -60,11 +59,13 @@ const YourProfile = () => {
 
       <View
         style={{
-          gap: 20,
           paddingHorizontal: 20,
+          gap: 20,
           paddingVertical: 20,
           width: "100%",
           height: "100%",
+          flexGrow: 1,
+          flex: 1,
         }}
       >
         <Input placeholder="First Name" />
@@ -89,76 +90,24 @@ const YourProfile = () => {
             );
           }}
         />
-        <Dropdown
-          style={{
-            backgroundColor:
-              theme === "light" ? Colors.grayScale._50 : Colors.dark._2,
-            paddingHorizontal: 20,
-            paddingVertical: 10,
-            borderRadius: 20,
-          }}
-          placeholderStyle={[
-            Typography.semiBold.medium,
-            {
-              color:
-                theme === "light" ? Colors.grayScale._500 : Colors.others.white,
-            },
-          ]}
-          selectedTextStyle={[
-            Typography.semiBold.medium,
-            {
-              color:
-                theme === "light" ? Colors.grayScale._900 : Colors.others.white,
-            },
-          ]}
-          containerStyle={{
-            borderRadius: 20,
-            backgroundColor:
-              theme === "light" ? Colors.others.white : Colors.dark._2,
-            borderWidth: 0,
-          }}
-          inputSearchStyle={{
-            height: 40,
-            fontSize: 16,
-            // borderColor: theme === "light" ? Colors.others.white : Colors.others.
-            borderRadius: 10,
-          }}
-          search
-          onFocus={() => setIsFocus(true)}
-          onBlur={() => setIsFocus(false)}
-          onChange={(item) => {
-            setValue(item.value);
-            setIsFocus(false);
-          }}
-          renderRightIcon={() => (
-            <SvgXml xml={theme === "light" ? DropDownIconGray : DropDownIconDark} />
-          )}
-          itemTextStyle={{
-            color:
-              theme === "light" ? Colors.grayScale._900 : Colors.others.white,
-          }}
-          data={[
+       
+       <CustomDropdown
+          placeholder="Gender"
+          items={[
             { label: "Male", value: "M" },
             { label: "Female", value: "F" },
           ]}
-          maxHeight={300}
-          labelField="label"
-          valueField="value"
-          placeholder={!isFocus ? "Gender" : "..."}
-          searchPlaceholder="Search..."
-          renderInputSearch={() => <></>}
-          value={value}
+          selectedValue={value}
+          onValueChange={setValue}
         />
       </View>
 
-      <View style={{ marginTop: "auto", width: "100%" }}>
+      <View style={{ marginTop: "auto", width: "100%", paddingHorizontal: 20 }}>
         <Button
-          title="Update"
+          title="Continue"
           onPress={() => {
-            router.push("/(auth)/SignIn&SignOut/Create-NewPin")
+            router.push("/(auth)/SignIn&SignOut/Create-NewPin");
           }}
-          shadowColor={Colors.main.primary._500}
-          backgroundColor={Colors.main.primary._500}
         />
       </View>
     </ScrollView>

@@ -51,9 +51,7 @@ const index = () => {
       contentContainerStyle={{
         gap: 15,
         alignItems: "center",
-        // paddingTop: 20,
         paddingHorizontal: 15,
-        // paddingBottom: 30,
       }}
     >
       <View style={{ justifyContent: "start", alignItems: "center", gap: 4 }}>
@@ -323,9 +321,6 @@ const index = () => {
           icon={() => {
             return <SvgXml xml={LogoutIcon} width={30} />;
           }}
-          // rightComponent={() => {
-          //   return <SvgXml xml={ChevronRight} />;
-          // }}
           textColor={Colors.status.error}
         />
       </View>

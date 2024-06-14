@@ -15,6 +15,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { LoadingIcon } from "@/components/UI/Icons";
 import { router } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 
 export default function SetYourFingerPrint() {
   const { theme, changeTheme } = useContext(ThemeContext);
@@ -32,23 +33,19 @@ export default function SetYourFingerPrint() {
 
   return (
     <>
+      <StatusBar style={theme === "light" ? "dark" : "light"} />
       <ScrollView
+        style={{ flex: 1 }}
         contentContainerStyle={{
+          flexGrow: 1,
           paddingHorizontal: 20,
-          height: "100%",
           backgroundColor:
             theme === "light" ? Colors.others.white : Colors.dark._1,
+          justifyContent: "space-between",
+          paddingVertical: 20,
         }}
       >
-        <View
-          style={{
-            height: "100%",
-            justifyContent: "space-between",
-            paddingVertical: 20,
-            backgroundColor:
-              theme === "light" ? Colors.others.white : Colors.dark._1,
-          }}
-        >
+        <View>
           <Text
             style={[
               Typography.heading._2,

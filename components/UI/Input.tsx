@@ -10,6 +10,7 @@ interface Props {
   value?: string;
   textInputConfig?: object;
   rightElement?: () => React.JSX.Element;
+  leftElement?: () => React.JSX.Element;
 }
 
 export default function Input({
@@ -17,6 +18,7 @@ export default function Input({
   value,
   textInputConfig,
   rightElement,
+  leftElement,
 }: Props) {
   const { theme } = useContext(ThemeContext);
   return (
@@ -30,6 +32,7 @@ export default function Input({
         paddingHorizontal: 20,
       }}
     >
+      {leftElement && leftElement()}
       <TextInput
         placeholder={placeholder}
         value={value}
@@ -39,7 +42,6 @@ export default function Input({
           {
             color:
               theme === "light" ? Colors.grayScale._900 : Colors.others.white,
-            // width: "100%",
             flexGrow: 1,
             paddingVertical: 15,
           },

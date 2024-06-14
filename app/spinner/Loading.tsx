@@ -1,6 +1,5 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
-// import { ActivityIndicator,MD2Colors } from 'react-native-paper';
 
 import {
   BallIndicator,

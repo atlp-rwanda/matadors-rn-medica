@@ -18,7 +18,12 @@ export default function BookingLayout() {
   return (
     <>
       <Stack>
-        <Stack.Screen name="reviewSummary" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="reviewSummary"
+          options={{
+            header: () => <Header title="Dr. Jenny Watson" options={{}} />,
+          }}
+        />
         <Stack.Screen
           name="BookingAppointment"
           options={{ header: () => <Header title="Book Appointment" /> }}
@@ -38,46 +43,12 @@ export default function BookingLayout() {
           name="Select-package"
           options={{ header: () => <Header title="Select Package" /> }}
         />
-        <Stack.Screen name="Patient-details" options={{ header: () => (
-            <Header
-              title="Patient Details"
-            />
-          ), }} />
-        <Stack.Screen name="EnterYourPin"  options={{ header: () => (
-            <Header
-              title="Enter Your PIN"
-            />
-          ), }}/>
         <Stack.Screen
-          name="AddNewCard"
-          options={{
-            header: () => (
-              <Header
-                title="Add New Card"
-                options={{
-                  rightComponent: () => {
-                    return (
-                      <View>
-                        <TouchableOpacity
-                          onPress={() =>
-                            router.push(
-                              "(app)/ActionMenu/Booking/QRCodeScanner"
-                            )
-                          }
-                        >
-                          <SvgXml
-                            xml={theme === "dark" ? WhiteScanner : GreyScanner}
-                          />
-                        </TouchableOpacity>
-                      </View>
-                    );
-                  },
-                }}
-              />
-            ),
-          }}
+          name="Patient-details"
+          options={{ header: () => <Header title="Patient Details" /> }}
         />
-
+        <Stack.Screen name="EnterYourPin" options={{ headerShown: false }} />
+        <Stack.Screen name="AddNewCard" options={{ headerShown: false }} />
         <Stack.Screen
           name="SelectPayment"
           options={{ header: () => <Header title="Payments" /> }}
