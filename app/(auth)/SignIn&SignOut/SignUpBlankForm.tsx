@@ -19,6 +19,7 @@ import Typography from "../../../constants/Typography";
 import { Colors } from "../../../constants/Colors";
 import { StatusBar } from "expo-status-bar";
 import { ThemeContext } from "@/ctx/ThemeContext";
+import Alerts from "@/components/UI/AlertComponent";
 import {
   BackArrow,
   blackArrow,
@@ -97,10 +98,8 @@ const Signup = () => {
   const [passwordFocused, setPasswordFocused] = useState(false);
   const { theme, changeTheme } = useContext(ThemeContext);
 
-  const url = Linking.useURL();
-  console.log({ url });
-  if (url) createSessionFromUrl(url);
 
+  const [alert, setAlert] = useState<{ text: string, status: "success" | "error" | "info" | "warning" } | null>(null);
   const handleEmailChange = (text: string) => {
     setEmail(text);
   };
@@ -137,12 +136,14 @@ const Signup = () => {
     });
 
     if (error) {
-      Alert.alert(error.message);
-      if (!session)
-        Alert.alert("Please check your inbox for email verification!");
+      setAlert({ text: "Failed to create account", status: "error" });
       setLoading(false);
+
     } else {
-      await router.push("/(auth)/SignIn&SignOut/YourProfile");
+      setAlert({ text: "Account created successful", status: "success" });
+      router.push('/(auth)/SignIn&SignOut/YourProfile');
+      setLoading(false);
+
     }
   }
 
@@ -153,6 +154,7 @@ const Signup = () => {
         { backgroundColor: theme === "dark" ? "#181A20" : "#FFFFFF" },
       ]}
     >
+      
       <StatusBar style={theme === "dark" ? "light" : "dark"} />
 
       <Image source={require("../../../assets/icons/HeartPlus.png")} />
@@ -167,6 +169,7 @@ const Signup = () => {
           >
             Create new account
           </Text>
+          {alert && <Alerts text={alert.text} status={alert.status} />}
         </View>
       </View>
 
