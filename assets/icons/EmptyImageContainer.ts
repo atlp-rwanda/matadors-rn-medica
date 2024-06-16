@@ -1,5 +1,5 @@
 export const EmptyImageContainer = `
-<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="170" height="170" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <circle cx="100" cy="100" r="100" fill="url(#pattern0_4809_8116)"/>
 <defs>
 <pattern id="pattern0_4809_8116" patternContentUnits="objectBoundingBox" width="1" height="1">
@@ -11,7 +11,7 @@ export const EmptyImageContainer = `
 `;
 
 export const EmptyImageContainerDark = `
-<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="170" height="170" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <circle cx="100" cy="100" r="100" fill="url(#pattern0_5420_18663)"/>
 <defs>
 <pattern id="pattern0_5420_18663" patternContentUnits="objectBoundingBox" width="1" height="1">

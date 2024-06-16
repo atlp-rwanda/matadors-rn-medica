@@ -23,6 +23,9 @@ import {
   WhiteApple,
 } from "@/components/Icons/Icons";
 import { SvgXml } from "react-native-svg";
+import Button from "@/components/UI/Button";
+import { appleBlackIcon, facebookBlueIcon, googleIcon } from "@/constants/icon";
+import { ScrollView } from "react-native";
 
 const LetsYouIn = () => {
   const [visible, setVisible] = React.useState(false);
@@ -30,11 +33,18 @@ const LetsYouIn = () => {
   const { theme, changeTheme } = useContext(ThemeContext);
 
   return (
-    <View
-      style={[
-        styles.container,
-        { backgroundColor: theme === "dark" ? "#181A20" : "#FFFFFF" },
-      ]}
+    <ScrollView
+      style={{
+        backgroundColor: theme === "dark" ? "#181A20" : "#FFFFFF",
+      }}
+      contentContainerStyle={{
+        paddingHorizontal: 20,
+        height: "100%",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        gap: 20,
+      }}
     >
       <StatusBar style={theme === "dark" ? "light" : "dark"} />
 
@@ -144,17 +154,13 @@ const LetsYouIn = () => {
           Sign up
         </Text>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
 export default LetsYouIn;
 
 const styles = StyleSheet.create({
-  //   signupText: {
-  //     color: "#246BFD",
-  //     fontWeight: "600",
-  //   },
   signText: {
     fontSize: 16,
     color: "#FFFFFF",

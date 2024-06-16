@@ -29,7 +29,6 @@ export default function PaymentChooseInputCard({
         justifyContent: "space-between",
         elevation: 0.5,
         shadowOpacity: 0.1,
-        // shadowColor: "black",
         paddingHorizontal: 20,
         paddingVertical: 20,
         borderRadius: 18,

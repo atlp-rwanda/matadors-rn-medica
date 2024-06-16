@@ -29,6 +29,8 @@ import {
 } from "@/components/Icons/Icons";
 import { StatusBar } from "expo-status-bar";
 import { supabase } from "@/lib/supabase";
+import { AuthContext } from "@/ctx/AuthContext";
+
 
 AppState.addEventListener('change', (state) => {
   if(state === 'active'){
@@ -39,6 +41,8 @@ AppState.addEventListener('change', (state) => {
 })
 
 const Login = () => {
+  // const {login, loading} = useContext(AuthContext)
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false)
@@ -47,7 +51,6 @@ const Login = () => {
   const [emailFocused, setEmailFocused] = useState(false);
   const [passwordFocused, setPasswordFocused] = useState(false);
   const { theme, changeTheme } = useContext(ThemeContext);
-
   const handleEmailChange = (text: string) => {
     setEmail(text);
   };
@@ -80,7 +83,7 @@ const Login = () => {
 
 async function signInWithEmail(){
   setLoading(true)
-  const{error} = await supabase.auth.signInWithPassword({
+  const{data, error} = await supabase.auth.signInWithPassword({
     email: email,
     password: password,
   }) 
@@ -88,9 +91,10 @@ async function signInWithEmail(){
     Alert.alert(error.message)
     setLoading(false)
   }else{
-    await router.push('/(app)/ActionMenu');
+    router.push('/(app)/ActionMenu');
     setLoading(false);
   }
+
 }
 
   return (

@@ -14,8 +14,7 @@ export default function Layout() {
         />
         <Stack.Screen
           name="SignIn&SignOut/LetsYouIn"
-          options={{ header: () => (<Header title="" />) }}
-
+          options={{ header: () => <Header title="" /> }}
         />
         <Stack.Screen
           name="SignIn&SignOut/SignInBlankForm"

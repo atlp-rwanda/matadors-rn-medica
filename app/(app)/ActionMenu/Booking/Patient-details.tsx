@@ -13,6 +13,12 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { ThemeContext } from "@/ctx/ThemeContext";
+import DropDown from "@/components/UI/DropDown";
+import Input from "@/components/UI/Input";
+import Typography from "@/constants/Typography";
+import TextArea from "@/components/UI/TextArea";
+import Button from "@/components/UI/Button";
+import { StatusBar } from "expo-status-bar";
 
 const PatientDetails = () => {
   const [text, setText] = useState("");
@@ -21,260 +27,110 @@ const PatientDetails = () => {
 
   return (
     <>
+      <StatusBar style={theme === "light" ? "dark" : "light"} />
       <ScrollView
         style={{
           backgroundColor: theme === "light" ? "#FFFFFF" : "#181A20",
           width: "100%",
-          height: 900,
           padding: 20,
+          flex: 1,
+        }}
+        contentContainerStyle={{
+          gap: 20,
+          flexGrow: 1,
         }}
       >
-        <Pressable
-          onPress={() => router.back()}
-          style={{
-            marginTop: 40,
-            flexDirection: "row",
-            alignItems: "center",
-            gap: 15,
-            width: "60%",
-            height: 60,
-          }}
-        >
-          <TouchableOpacity onPress={() => router.back()}>
-            <MaterialIcons
-              name="arrow-back"
-              size={23}
-              style={{ color: theme === "light" ? "#212121" : "#FFFFFF" }}
-            />
-          </TouchableOpacity>
+        <View style={{ flexDirection: "column", gap: 10 }}>
           <Text
-            style={{
-              fontSize: 24,
-              fontWeight: "600",
-              color: theme === "light" ? "#212121" : "#FFFFFF",
-            }}
-          >
-            Patient details
-          </Text>
-        </Pressable>
-        <View
-          style={{
-            marginTop: 10,
-          }}
-        >
-          <Text
-            style={{
-              fontSize: 16,
-              fontWeight: "500",
-              color: theme === "light" ? "#212121" : "#FFFFFF",
-            }}
+            style={[
+              Typography.bold.xLarge,
+              {
+                color:
+                  theme === "light"
+                    ? Colors.grayScale._900
+                    : Colors.others.white,
+              },
+            ]}
           >
             Full Name
           </Text>
-          <View
-            style={{
-              width: "95%",
-              flexDirection: "row",
-              backgroundColor: theme === "light" ? "#FAFAFA" : "#1F222A",
-              margin: 10,
-              marginTop: 20,
-              marginBottom: 10,
-              padding: 10,
-              borderRadius: 10,
-              paddingHorizontal: 10,
-            }}
-          >
-            <TextInput
-              style={{
-                fontSize: 15,
-                color: theme === "light" ? "#212121" : "#FAFAFA",
-                fontWeight: "400",
-              }}
-              placeholder="Andrew Ainsley"
-              keyboardType="default"
-              placeholderTextColor={theme === "light" ? "#212121" : "#FFFFFF"}
-            />
-          </View>
+          <Input placeholder="Full Names" value="Andrew Ainsley" />
         </View>
-        <View
-          style={{
-            marginTop: 10,
-          }}
-        >
+
+        <View style={{ flexDirection: "column", gap: 10 }}>
           <Text
-            style={{
-              fontSize: 16,
-              fontWeight: "500",
-              color: theme === "light" ? "#212121" : "#FFFFFF",
-            }}
+            style={[
+              Typography.bold.xLarge,
+              {
+                color:
+                  theme === "light"
+                    ? Colors.grayScale._900
+                    : Colors.others.white,
+              },
+            ]}
           >
             Gender
           </Text>
-          <View
-            style={{
-              width: "95%",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              backgroundColor: theme === "light" ? "#FAFAFA" : "#1F222A",
-              margin: 10,
-              marginTop: 20,
-              marginBottom: 10,
-              padding: 10,
-              borderRadius: 10,
-              paddingHorizontal: 10,
-            }}
-          >
-            <TextInput
-              style={{
-                fontSize: 15,
-                color: theme === "light" ? "#212121" : "#FAFAFA",
-                fontWeight: "400",
-              }}
-              placeholder="Male"
-              keyboardType="default"
-              placeholderTextColor={theme === "light" ? "#212121" : "#FFFFFF"}
-            />
-            <Icon
-              name="caret-down"
-              size={20}
-              style={{
-                alignSelf: "center",
-                color: theme === "light" ? "#212121" : "#FFFFFF",
-              }}
-            />
-          </View>
+          <DropDown
+            data={[
+              { value: "Male", label: "Male" },
+              { value: "Female", label: "Female" },
+            ]}
+          />
         </View>
-        <View
-          style={{
-            marginTop: 10,
-          }}
-        >
+
+        <View style={{ flexDirection: "column", gap: 10 }}>
           <Text
-            style={{
-              fontSize: 16,
-              fontWeight: "500",
-              color: theme === "light" ? "#212121" : "#FFFFFF",
-            }}
+            style={[
+              Typography.bold.xLarge,
+              {
+                color:
+                  theme === "light"
+                    ? Colors.grayScale._900
+                    : Colors.others.white,
+              },
+            ]}
           >
             Your Age
           </Text>
-          {/* <Text>Gender</Text> */}
-
-          <View
-            style={{
-              width: "95%",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              backgroundColor: theme === "light" ? "#FAFAFA" : "#1F222A",
-              margin: 10,
-              marginTop: 20,
-              marginBottom: 10,
-              padding: 10,
-              borderRadius: 10,
-              paddingHorizontal: 10,
-            }}
-          >
-            <TextInput
-              style={{
-                fontSize: 15,
-                color: theme === "light" ? "#212121" : "#FAFAFA",
-                fontWeight: "400",
-              }}
-              placeholder="27 years"
-              keyboardType="default"
-              placeholderTextColor={theme === "light" ? "#212121" : "#FFFFFF"}
-            />
-            <Icon
-              name="caret-down"
-              size={20}
-              style={{
-                alignSelf: "center",
-                color: theme === "light" ? "#212121" : "#FFFFFF",
-              }}
-            />
-          </View>
+          <DropDown
+            data={[
+              { value: "27 years", label: "27 years" },
+              { value: "28 years", label: "28 years" },
+            ]}
+          />
         </View>
-        <View
-          style={{
-            marginTop: 10,
-          }}
-        >
+
+        <View style={{ flexDirection: "column", gap: 10 }}>
           <Text
-            style={{
-              fontSize: 16,
-              fontWeight: "500",
-              color: theme === "light" ? "#212121" : "#FFFFFF",
-            }}
+            style={[
+              Typography.bold.xLarge,
+              {
+                color:
+                  theme === "light"
+                    ? Colors.grayScale._900
+                    : Colors.others.white,
+              },
+            ]}
           >
             Write Your Problem
           </Text>
-          {/* <Text>Gender</Text> */}
-
-          <View
-            style={{
-              width: "95%",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              backgroundColor: theme === "light" ? "#FAFAFA" : "#1F222A",
-              margin: 10,
-              marginTop: 20,
-              marginBottom: 10,
-              padding: 10,
-              borderRadius: 10,
-              paddingHorizontal: 10,
-            }}
-          >
-            <TextInput
-              value={text}
-              onChangeText={(text) => setText(text)}
-              style={{
-                fontSize: 15,
-                color: theme === "light" ? "#212121" : "#FAFAFA",
-                fontWeight: "400",
-              }}
-              placeholder="type in your info"
-              keyboardType="default"
-              textAlignVertical="top"
-              placeholderTextColor={theme === "light" ? "#212121" : "#FFFFFF"}
-              multiline={true}
-              numberOfLines={9}
-              onContentSizeChange={(event) => {
-                setHeight(event.nativeEvent.contentSize.height);
-              }}
-            />
-          </View>
+          {/* <Input placeholder="Describe how you are feeling here ..."  /> */}
+          <TextArea text="Hello Dr. Jenny, I have a problem with my immune system. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident." />
         </View>
+
         <View
           style={{
-            height: 150,
             justifyContent: "flex-end",
+            marginTop: "auto",
           }}
         >
-          <TouchableOpacity
-            onPress={() =>
-              router.push("(app)/ActionMenu/Booking/SelectPayment")
-            }
-            style={{
-              width: 350,
-              alignSelf: "center",
-              backgroundColor: Colors.main.primary._500,
-              paddingTop: 18,
-              paddingBottom: 18,
-              paddingLeft: 16,
-              paddingRight: 16,
-              borderRadius: 100,
+          <Button
+            title="Next"
+            onPress={() => {
+              router.push("/(app)/ActionMenu/Booking/EnterYourPin");
             }}
-          >
-            <Text
-              style={{
-                alignSelf: "center",
-                color: Colors.others.white,
-                fontWeight: "bold",
-              }}
-            >
-              Next
-            </Text>
-          </TouchableOpacity>
+          />
         </View>
       </ScrollView>
     </>
@@ -282,3 +138,5 @@ const PatientDetails = () => {
 };
 
 export default PatientDetails;
+
+const styles = StyleSheet.create({});

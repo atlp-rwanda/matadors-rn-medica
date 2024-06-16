@@ -6,7 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import DoctorComponent from '@/components/DoctorComponent';
 import { FontAwesome } from '@expo/vector-icons';
  import { SvgXml } from "react-native-svg"
-import { blueheart } from '@/assets/icons/blueHeart';
+import { WhiteHeart } from '@/components/UI/icons/WhiteHeart';
 import { star } from '@/assets/icons/star';
 import { search } from '@/assets/icons/search';
 import { more } from '@/assets/icons/more';
@@ -23,6 +23,7 @@ import NotFoundScreen from '@/app/+not-found';
 import { ThemeContext } from '@/ctx/ThemeContext';
 import { useContext } from 'react';
 import { supabase } from '@/lib/supabase';
+
 
 
 const tableName = 'doctors'
@@ -63,7 +64,7 @@ interface categoryProp{
 }
 
 export const iconMapping:iconMappingProp = {
-    heart: <SvgXml xml={blueheart} />,
+    heart: <SvgXml xml={WhiteHeart } />,
     star: <SvgXml xml={star} />,
 }
 
@@ -173,6 +174,7 @@ fetchData();
              style={[styles.scroll,scrollbackColor]}
               contentContainerStyle={{
             justifyContent: "center",
+            //  alignItems: 'center',
             paddingBottom: 150,
             paddingTop:20
           }}
@@ -186,7 +188,7 @@ fetchData();
 
                                             imageSource={{uri:doctor.image}}
                                             name={`${doctor.first_name} ${doctor.last_name}`}
-                                            iconComponent={<SvgXml xml={blueheart} />}
+                                            iconComponent={<SvgXml xml={WhiteHeart } />}
                                             professionalTitle={doctor.specialization}
                                             hospital={doctor.hospital}
                                             star={<SvgXml xml={star} />}

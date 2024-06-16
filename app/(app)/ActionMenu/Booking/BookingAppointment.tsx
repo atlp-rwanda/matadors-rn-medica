@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   SafeAreaView,
   Text,
@@ -10,29 +10,25 @@ import {
   ScrollView,
   Image,
 } from "react-native";
-import DatePicker, { getFormatedDate } from "react-native-modern-datepicker";
 import { Colors } from "@/constants/Colors";
 import { router } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import { ThemeContext } from "@/ctx/ThemeContext";
 import { StatusBar } from "expo-status-bar";
 import Typography from "@/constants/Typography";
-import { useModal } from "@/ctx/ModalContext";
-import { LeftArrow, LoadingIcon } from "@/components/UI/Icons";
+import DatePicker from "@/components/UI/DatePicker";
+import Tag from "@/components/UI/Tags/Tag";
+import { FlatList } from "react-native";
+import Button from "@/components/UI/Button";
+import Chips from "@/components/UI/ChipsComponent";
 
 export default function BookingAppointment() {
   const { theme, changeTheme } = useContext(ThemeContext);
-  const [selectedTime, setSelectedTime] = useState(null);
-  const [selectedDate, setSelectedDate] = useState("");
-  const modal = useModal();
+  const [timeSlots, setTimeSlots] = useState([""]);
+  const [selected, setSelected] = useState("");
 
-  const handleTimeSlotPress = ({ time }: { time: any }) => {
-    setSelectedTime(time === selectedTime ? null : time);
-    console.log(time);
-  };
-  console.log(selectedTime);
   const generateTimeSlots = () => {
-    const timeSlots = [];
+    let times = [];
     for (let hour = 9; hour <= 14; hour++) {
       for (let minute = 0; minute < 60; minute += 30) {
         const hourFormat = hour < 12 ? "AM" : "PM";
@@ -40,98 +36,106 @@ export default function BookingAppointment() {
         const time = `${formattedHour.toString().padStart(2, "0")}:${minute
           .toString()
           .padStart(2, "0")} ${hourFormat}`;
-        timeSlots.push(
-          <TouchableOpacity
-            key={time}
-            style={[
-              styles.button,
-              selectedTime === time && styles.buttonSelected,
-            ]}
-            onPress={() => handleTimeSlotPress({ time })} // Corrected line
-          >
-            <Text
-              style={[
-                styles.buttonText,
-                selectedTime === time && styles.buttonTextSelected,
-                Typography.bold.xLarge,
-              ]}
-            >
-              {time}
-            </Text>
-          </TouchableOpacity>
-        );
+        times.push(time);
       }
     }
-    return timeSlots;
+    return setTimeSlots(times);
   };
 
-
-  function handleDate(select: string) {
-    setSelectedDate(select);
-    console.log(select);
-  }
-
-  const ios = Platform.OS === "ios";
+  useEffect(() => {
+    generateTimeSlots();
+  }, []);
 
   return (
-    <View style={{ flex: 1, backgroundColor: theme === "light" ? Colors.others.white : Colors.dark._1, }}>
-      <SafeAreaView style={{ marginBottom: ios ? 10 : 5 }}>
-        <StatusBar style="dark" />
-      </SafeAreaView>
-      <View style={{ flex: 1, justifyContent: "space-around"}}>
+    <ScrollView
+      style={{
+        flex: 1,
+        backgroundColor:
+          theme === "light" ? Colors.others.white : Colors.dark._1,
+      }}
+      contentContainerStyle={{
+        flexGrow: 1,
+      }}
+    >
+      <View style={{}}>
         <View
           style={{
-            backgroundColor:
-              theme === "light" ? Colors.others.white : Colors.dark._1,
+            gap: 20,
+            padding: 20,
+            justifyContent: "space-between",
           }}
         >
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            style={{ marginBottom: 30 }}
-          >
-            <View
-              style={{
-                padding: 20,
-                justifyContent: "space-between",
-              }}
+          <View style={{ gap: 10 }}>
+            <Text
+              style={[
+                Typography.bold.xLarge,
+                {
+                  color:
+                    theme === "light"
+                      ? Colors.grayScale._900
+                      : Colors.others.white,
+                },
+              ]}
             >
-              <View style={{ gap: 10 }}>
-                <Text style={[Typography.bold.xLarge,{color:theme === 'light'? Colors.grayScale._900: Colors.others.white}]}>Select Date</Text>
-                <View style={{ borderRadius: 20 }}>
-                  <DatePicker
-                    onSelectedChange={(date) => handleDate(date)}
-                    mode="calendar"
-                    options={{
-                      backgroundColor: theme === 'light'? Colors.transparent.blue : Colors.dark._2 ,
-                      textHeaderColor:theme === 'light'? Colors.grayScale._900: Colors.others.white,
-                      textDefaultColor: theme === 'light'? Colors.grayScale._900: Colors.grayScale._300,
-                      selectedTextColor: Colors.others.white,
-                      mainColor: "#246BFD",
-                      textSecondaryColor: theme === 'light'? Colors.grayScale._900: Colors.others.white,
-                      borderColor: "rgba(122, 146, 165, 0.1)",
-                    }}
-                    current="2020-07-13"
-                    style={{
-                      borderRadius: 20,
-                    }}
-                  />
-                </View>
-                <View style={{ gap: 10 }}>
-                  <Text style={[Typography.bold.xLarge,{color: theme === 'light'? Colors.grayScale._900: Colors.others.white}]}>Select Hour</Text>
-                  <View style={styles.change}>{generateTimeSlots()}</View>
-                </View>
-              </View>
+              Select Date
+            </Text>
+            <DatePicker />
+          </View>
 
-              <TouchableOpacity 
-              onPress={()=> router.push("(app)/ActionMenu/Booking/Select-package")}
-              style={styles.btn}>
-                <Text style={styles.btnText}>Next</Text>
-              </TouchableOpacity>
-            </View>
-          </ScrollView>
+          <View style={{ gap: 10 }}>
+            <Text
+              style={[
+                Typography.bold.xLarge,
+                {
+                  color:
+                    theme === "light"
+                      ? Colors.grayScale._900
+                      : Colors.others.white,
+                },
+              ]}
+            >
+              Select Hour
+            </Text>
+            <FlatList
+              data={timeSlots}
+              renderItem={(item) => {
+                return (
+                  <>
+                   
+                  <Chips text={item.item} type= "border"size="large" style={{ paddingHorizontal:5, width:'32%',marginRight:5}} />
+                  </>
+                 
+                  
+                );
+              }}
+               numColumns={3}
+              contentContainerStyle={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent:'space-between',
+                
+                gap: 10,
+                flexWrap: "wrap",
+              }}
+            />
+          </View>
         </View>
       </View>
-    </View>
+      <View
+        style={{
+          paddingHorizontal: 20,
+          marginTop: "auto",
+          marginBottom: 20,
+        }}
+      >
+        <Button
+          title="Next"
+          onPress={() => {
+            router.push("(app)/ActionMenu/Booking/Select-package");
+          }}
+        />
+      </View>
+    </ScrollView>
   );
 }
 

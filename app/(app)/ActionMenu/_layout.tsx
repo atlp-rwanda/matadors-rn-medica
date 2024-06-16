@@ -1,5 +1,6 @@
 import Header from "@/components/UI/Header";
 import { Stack } from "expo-router";
+import React from "react";
 
 export default function Layout() {
   return (
@@ -13,6 +14,10 @@ export default function Layout() {
       <Stack.Screen
         name="FavoriteDoctorScreen"
         options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="AllDoctorScreen"
+        options={{headerShown:false}}
       />
     </Stack>
   );
