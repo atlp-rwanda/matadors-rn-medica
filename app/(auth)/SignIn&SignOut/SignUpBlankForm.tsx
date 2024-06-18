@@ -28,17 +28,66 @@ import {
 import { SvgXml } from "react-native-svg";
 import { appleBlackIcon, appleWhiteIcon } from "@/constants/icon";
 import { supabase } from "@/lib/supabase";
+import * as WebBrowser from "expo-web-browser";
+import * as Linking from "expo-linking";
+import { makeRedirectUri } from "expo-auth-session";
+import * as QueryParams from "expo-auth-session/build/QueryParams";
 
-AppState.addEventListener('change', (state) => {
-  if(state === 'active'){
-    supabase.auth.startAutoRefresh()
-  }else{
-    supabase.auth.stopAutoRefresh()
+WebBrowser.maybeCompleteAuthSession();
+const redirectTo = makeRedirectUri({
+  native: "com.medica://",
+});
+console.log({ redirectTo });
+
+const createSessionFromUrl = async (url: string) => {
+  const { params, errorCode } = QueryParams.getQueryParams(url);
+
+  if (errorCode) throw new Error(errorCode);
+  const { access_token, refresh_token } = params;
+
+  if (!access_token) return;
+
+  const { data, error } = await supabase.auth.setSession({
+    access_token,
+    refresh_token,
+  });
+  if (error) throw error;
+  console.log("session", data.session);
+  return data.session;
+};
+
+const signInWithFacebook = async () => {
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "facebook",
+    options: {
+      redirectTo,
+      skipBrowserRedirect: true,
+    },
+  });
+  if (error) throw error;
+
+  const res = await WebBrowser.openAuthSessionAsync(
+    data?.url ?? "",
+    redirectTo
+  );
+
+  if (res.type === "success") {
+    const { url } = res;
+    await createSessionFromUrl(url);
+
+    router.push("/(app)/ActionMenu");
   }
-})
+};
+
+AppState.addEventListener("change", (state) => {
+  if (state === "active") {
+    supabase.auth.startAutoRefresh();
+  } else {
+    supabase.auth.stopAutoRefresh();
+  }
+});
 
 const Signup = () => {
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -48,6 +97,9 @@ const Signup = () => {
   const [passwordFocused, setPasswordFocused] = useState(false);
   const { theme, changeTheme } = useContext(ThemeContext);
 
+  const url = Linking.useURL();
+  console.log({ url });
+  if (url) createSessionFromUrl(url);
 
   const handleEmailChange = (text: string) => {
     setEmail(text);
@@ -74,22 +126,23 @@ const Signup = () => {
     setPasswordFocused(false);
   };
 
-  async function signUpWithEmail(){
-    setLoading(true)
-    const{
-      data:{ session },
+  async function signUpWithEmail() {
+    setLoading(true);
+    const {
+      data: { session },
       error,
     } = await supabase.auth.signUp({
       email: email,
       password: password,
-    })
+    });
 
-    if(error){
-      Alert.alert(error.message)
-      if(!session) Alert.alert('Please check your inbox for email verification!')
-        setLoading(false)
-    }else{
-      await router.push('/(auth)/SignIn&SignOut/YourProfile')
+    if (error) {
+      Alert.alert(error.message);
+      if (!session)
+        Alert.alert("Please check your inbox for email verification!");
+      setLoading(false);
+    } else {
+      await router.push("/(auth)/SignIn&SignOut/YourProfile");
     }
   }
 
@@ -127,7 +180,10 @@ const Signup = () => {
               style={[
                 styles.inputOne,
                 isFocused && styles.inputOneFocused,
-                { backgroundColor: theme === "dark" ? "#1F222A" : Colors.grayScale._50 },
+                {
+                  backgroundColor:
+                    theme === "dark" ? "#1F222A" : Colors.grayScale._50,
+                },
               ]}
             >
               <Image
@@ -143,7 +199,7 @@ const Signup = () => {
                 onChangeText={(text) => setEmail(text)}
                 onFocus={handleEmailFocused}
                 onBlur={handleEmailBlur}
-                autoCapitalize={'none'}
+                autoCapitalize={"none"}
               />
             </View>
 
@@ -151,7 +207,10 @@ const Signup = () => {
               style={[
                 styles.inputOne,
                 passwordFocused && styles.inputOneFocused,
-                { backgroundColor: theme === "dark" ? "#1F222A" : Colors.grayScale._50 },
+                {
+                  backgroundColor:
+                    theme === "dark" ? "#1F222A" : Colors.grayScale._50,
+                },
               ]}
             >
               <Image
@@ -167,9 +226,7 @@ const Signup = () => {
                 onChangeText={(text) => setPassword(text)}
                 onFocus={handlePasswordFocused}
                 onBlur={handlePasswordBlur}
-                autoCapitalize={'none'}
-                
-                
+                autoCapitalize={"none"}
               />
               <View
                 style={[
@@ -220,11 +277,14 @@ const Signup = () => {
       <SvgXml xml={theme === "dark" ? DarkContinueLine : LightContinueLine} />
 
       <View style={styles.overCont}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={signInWithFacebook}>
           <View
             style={[
               styles.smallCont,
-              { backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF", borderColor: theme === 'dark' ? '#35383F' : '#EEEEEE' },
+              {
+                backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF",
+                borderColor: theme === "dark" ? "#35383F" : "#EEEEEE",
+              },
             ]}
           >
             <Image source={require("../../../assets/icons/facebook.png")} />
@@ -235,7 +295,10 @@ const Signup = () => {
           <View
             style={[
               styles.smallCont,
-              { backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF", borderColor: theme === 'dark' ? '#35383F' : '#EEEEEE'  },
+              {
+                backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF",
+                borderColor: theme === "dark" ? "#35383F" : "#EEEEEE",
+              },
             ]}
           >
             <Image source={require("../../../assets/icons/Google.png")} />
@@ -246,11 +309,13 @@ const Signup = () => {
           <View
             style={[
               styles.smallCont,
-              { backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF", borderColor: theme === 'dark' ? '#35383F' : '#EEEEEE'  },
+              {
+                backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF",
+                borderColor: theme === "dark" ? "#35383F" : "#EEEEEE",
+              },
             ]}
           >
-            <SvgXml xml={theme === 'dark' ? appleWhiteIcon : appleBlackIcon} />
-
+            <SvgXml xml={theme === "dark" ? appleWhiteIcon : appleBlackIcon} />
           </View>
         </TouchableOpacity>
       </View>
@@ -365,13 +430,10 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     alignItems: "center",
     gap: 10,
-  
   },
   email: {
     fontSize: 16,
     flex: 1,
-  
-   
   },
   signupText: {
     color: "#246BFD",

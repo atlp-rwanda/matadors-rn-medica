@@ -1,36 +1,82 @@
-import * as React from "react";
+import { useContext} from "react";
 import {
   StyleSheet,
   Text,
   View,
   Image,
   TouchableOpacity,
-  Pressable,
+  ScrollView,
 } from "react-native";
-import { useState, useContext } from "react";
-import { LeftArrow } from "@/components/UI/Icons";
+import { supabase } from "@/lib/supabase";
+import { ThemeContext } from "@/ctx/ThemeContext";
+import { SvgXml } from "react-native-svg";
+import { StatusBar } from "expo-status-bar";
 import { router } from "expo-router";
 import Typography from "../../../constants/Typography";
 import { Colors } from "../../../constants/Colors";
-import { ThemeContext } from "@/ctx/ThemeContext";
-import { StatusBar } from "expo-status-bar";
 import {
-  BackArrow,
-  blackArrow,
   OrLine,
   greyOrLine,
   BlackApple,
   WhiteApple,
 } from "@/components/Icons/Icons";
-import { SvgXml } from "react-native-svg";
-import Button from "@/components/UI/Button";
-import { appleBlackIcon, facebookBlueIcon, googleIcon } from "@/constants/icon";
-import { ScrollView } from "react-native";
+import * as WebBrowser from "expo-web-browser";
+import * as Linking from "expo-linking";
+import { makeRedirectUri } from "expo-auth-session";
+import * as QueryParams from "expo-auth-session/build/QueryParams";
+import React from "react";
 
+WebBrowser.maybeCompleteAuthSession();
+const redirectTo = makeRedirectUri({
+  native: "com.medica://",
+});
+console.log({ redirectTo });
+
+const createSessionFromUrl = async (url: string) => {
+  const { params, errorCode } = QueryParams.getQueryParams(url);
+
+  if (errorCode) throw new Error(errorCode);
+  const { access_token, refresh_token } = params;
+
+  if (!access_token) return;
+
+  const { data, error } = await supabase.auth.setSession({
+    access_token,
+    refresh_token,
+  });
+  if (error) throw error;
+  console.log("session", data.session);
+  return data.session;
+};
+
+const signInWithFacebook = async () => {
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "facebook",
+    options: {
+      redirectTo,
+      skipBrowserRedirect: true,
+    },
+  });
+  if (error) throw error;
+
+  const res = await WebBrowser.openAuthSessionAsync(
+    data?.url ?? "",
+    redirectTo
+  );
+
+  if (res.type === "success") {
+    const { url } = res;
+    await createSessionFromUrl(url);
+
+    router.push("/(app)/ActionMenu");
+  }
+};
 const LetsYouIn = () => {
-  const [visible, setVisible] = React.useState(false);
-  const hideDialog = () => setVisible(false);
-  const { theme, changeTheme } = useContext(ThemeContext);
+  const { theme } = useContext(ThemeContext);
+
+  const url = Linking.useURL();
+  console.log({ url });
+  if (url) createSessionFromUrl(url);
 
   return (
     <ScrollView
@@ -71,6 +117,7 @@ const LetsYouIn = () => {
                 borderColor: theme === "dark" ? "#35383F" : "#EEEEEE",
               },
             ]}
+            onPress={signInWithFacebook}
           >
             <Image source={require("../../../assets/icons/facebook.png")} />
             <Text
@@ -79,7 +126,7 @@ const LetsYouIn = () => {
                 { color: theme === "dark" ? "#FFFFFF" : Colors.grayScale._900 },
               ]}
             >
-              Continue with facebook
+              Continue with Facebook
             </Text>
           </TouchableOpacity>
 
