@@ -273,7 +273,7 @@ async function signInWithEmail(){
 
       <TouchableOpacity
         onPress={() =>
-          router.push("/(auth)/ForgotPassword&Reset/ForgotPassword")
+          router.push("/(auth)/ForgotPassword&Reset")
         }
       >
         <Text
