@@ -14,9 +14,10 @@ interface DoctorComponentProps{
     rate: string,
     review: string,
     remove: () => void,
-    backgroundStyle?:any
+    backgroundStyle?: any,
+    path?:()=>void
 }
-function DoctorComponent({ imageSource, name, iconComponent, professionalTitle, hospital, star, rate, review, remove,backgroundStyle }: DoctorComponentProps) {
+function DoctorComponent({ imageSource, name, iconComponent,path, professionalTitle, hospital, star, rate, review, remove,backgroundStyle }: DoctorComponentProps) {
     const { theme, changeTheme } = useContext(ThemeContext)
     const containerStyle = theme === "dark" ? styles.outerDark : styles.outerLight
     const nameColor = theme === "dark" ? styles.textDark : styles.textLight
@@ -25,7 +26,7 @@ function DoctorComponent({ imageSource, name, iconComponent, professionalTitle, 
   
 
     return (
-        <View style={[styles.outer,containerStyle,backgroundStyle]}>
+        <Pressable style={[styles.outer,containerStyle,backgroundStyle]} onPress={path}>
             <View style={styles.inner}>
                 <View style={styles.profileView}>
                     <Image source={imageSource } style={styles.image} />
@@ -84,7 +85,7 @@ function DoctorComponent({ imageSource, name, iconComponent, professionalTitle, 
 
                 </View>
            </View>
-        </View>
+        </Pressable>
     );
 }
 

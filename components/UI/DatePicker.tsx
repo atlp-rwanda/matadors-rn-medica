@@ -7,63 +7,38 @@ import { Pressable, Text } from "react-native";
 import { View } from "react-native";
 import { FlatList } from "react-native";
 import { SvgXml } from "react-native-svg";
+import DateElement from "./Date";
 
-function DateElement({ item, disabled }: { item: string; disabled?: boolean }) {
-  const [isPressed, setIsPressed] = useState(false);
-  const { theme, changeTheme } = useContext(ThemeContext);
-
-  return (
-    <Pressable
-      style={{
-        flex: 1 / 7,
-        borderRadius: 100,
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-      onPress={() => {
-        !disabled && setIsPressed((prevVal) => !prevVal);
-      }}
-    >
-      <View
-        style={{
-          backgroundColor: isPressed ? Colors.main.primary._500 : "transparent",
-          height: 30,
-          width: 30,
-          borderRadius: 100,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Text
-          key={item}
-          style={[
-            Typography.medium.medium,
-            {
-              color: isPressed
-                ? Colors.others.white
-                : !disabled
-                  ? theme === "light"
-                    ? Colors.grayScale._900
-                    : Colors.grayScale._300
-                  : Colors.grayScale._500,
-              textAlign: "center",
-            },
-          ]}
-        >
-          {item}
-        </Text>
-      </View>
-    </Pressable>
-  );
+interface Props {
+  onChange: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export default function DatePicker() {
+export default function DatePicker({ onChange }: Props) {
   let [dates, setDates] = useState<React.JSX.Element[]>([]);
   const [currentMonth, setCurrentMonth] = useState(6);
   const [currentYear, setCurrentYear] = useState(2024);
   const { theme, changeTheme } = useContext(ThemeContext);
 
   const days = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
+
+  const [selectedDate, setSelectedDate] = useState(0);
+  function dayOfWeek(firstDayIndex: number, date: number): number {
+    // Validate input indexes
+    if (firstDayIndex < 0 || firstDayIndex > 6) {
+      throw new Error("Invalid first day index. It should be between 0 and 6.");
+    }
+    if (date < 1) {
+      throw new Error(
+        "Invalid date. Date should be greater than or equal to 1."
+      );
+    }
+
+    // Calculate the index of the day for the given date
+    const dayIndex = (firstDayIndex + (date - 1)) % 7;
+
+    // Return the name of the day
+    return dayIndex;
+  }
 
   useEffect(() => {
     let datesArr = [];
@@ -83,7 +58,7 @@ export default function DatePicker() {
           j < prevMonthDays;
           j++
         ) {
-          datesArr.push(<DateElement item={`${j}`} disabled />);
+          datesArr.push(<DateElement key={j} item={`${j}`} disabled />);
         }
       }
       break;
@@ -92,20 +67,32 @@ export default function DatePicker() {
     for (let i = firstDayOfWeek; i < days.length; i++) {
       if (i === firstDayOfWeek) {
         for (let j = 1; j < daysInMonth; j++) {
-          datesArr.push(<DateElement item={`${j}`} />);
+          if (j === selectedDate) {
+            onChange(
+             `${currentYear}-${currentMonth
+                .toString()
+                .padStart(2, "0")}-${Number(dayOfWeek(i, j) + 1)
+                .toString()
+                .padStart(2, "0")}`
+            );
+          }
+          datesArr.push(
+            <DateElement
+              setSelectedDate={setSelectedDate}
+              selectedDate={selectedDate}
+              key={j}
+              item={`${j}`}
+            />
+          );
         }
         break;
       }
     }
 
-
-    console.log(daysInMonth, 42 - daysInMonth - firstDayOfWeek + 1)
-
     setDates(datesArr);
-  }, [currentMonth, currentYear]);
+  }, [currentMonth, currentYear, selectedDate]);
 
   function nextMonth() {
-    console.log("currentMonth", currentMonth);
     if (currentMonth + 1 >= 12) {
       setCurrentMonth(1);
       setCurrentYear((prevYear) => prevYear + 1);

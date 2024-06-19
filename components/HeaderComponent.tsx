@@ -14,8 +14,8 @@ import { useContext } from 'react';
 
 
 interface Headerprops{
-    onSearchPressed: () => void,
-    headerText:string
+    onSearchPressed?: () => void,
+    headerText: string
 }
 
 function HeaderComponent({ onSearchPressed, headerText }: Headerprops) {

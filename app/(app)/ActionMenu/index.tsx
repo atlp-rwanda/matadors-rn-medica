@@ -54,6 +54,8 @@ export default function Index() {
   const [doctors, setDoctors] = useState<Doctor[]>([]);
   const [greeting, setGreeting] = useState("");
   const { authType, imageUrl: otherAuthImageUrl } = useAuth();
+  const [showpopUp, setShowPopup] = useState(false);
+  const [selectedDoctor, setSelectedDoctor] = useState();
 
   const [fontsLoaded] = useFontsExpo({
     "Urbanist-regular": require("@/assets/fonts/Urbanist-Regular.ttf"),
@@ -123,6 +125,12 @@ export default function Index() {
   const isIconActive = (iconName: string) => {
     return activeIcon === iconName;
   };
+  const handleRemove = (doctor:any) => {
+        setSelectedDoctor(doctor)
+        
+        setShowPopup(true)
+    }
+
 
   if (!fontsLoaded) {
     return null;
@@ -563,7 +571,7 @@ export default function Index() {
             style={[styles.scroll, scrollbackColor]}
             contentContainerStyle={{
               justifyContent: "center",
-              paddingBottom: 150,
+              paddingBottom: 100,
               paddingTop: 20,
             }}
           >
@@ -583,11 +591,12 @@ export default function Index() {
                   }}
                 >
                   <DoctorComponent
+                    path={() => router.push({ pathname: "/ActionMenu/Booking/Doctor_details",params:{id:doctor.id} }) }
                     imageSource={{ uri: doctor.image }}
                     name={`${doctor.first_name} ${doctor.last_name}`}
                     iconComponent={<SvgXml xml={whiteHeart} />}
                     professionalTitle={doctor.specialization}
-                    hospital={doctor?.hospital}
+                    hospital={doctor?.hospital_name}
                     star={<SvgXml xml={star} />}
                     review={doctor.review}
                     rate={doctor.rate}
