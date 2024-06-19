@@ -9,7 +9,7 @@ import {
   TouchableWithoutFeedback,
   Pressable,
   AppState,
-  Alert
+  Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import CheckBox from "expo-checkbox";
@@ -29,28 +29,81 @@ import {
 } from "@/components/Icons/Icons";
 import { StatusBar } from "expo-status-bar";
 import { supabase } from "@/lib/supabase";
-import { AuthContext } from "@/ctx/AuthContext";
+import * as WebBrowser from "expo-web-browser";
+import * as Linking from "expo-linking";
+import { makeRedirectUri } from "expo-auth-session";
+import * as QueryParams from "expo-auth-session/build/QueryParams";
 
+WebBrowser.maybeCompleteAuthSession();
+const redirectTo = makeRedirectUri({
+  native: "com.medica://",
+});
+console.log({ redirectTo });
 
-AppState.addEventListener('change', (state) => {
-  if(state === 'active'){
-    supabase.auth.startAutoRefresh()
-  }else{
-    supabase.auth.stopAutoRefresh()
+const createSessionFromUrl = async (url: string) => {
+  const { params, errorCode } = QueryParams.getQueryParams(url);
+
+  if (errorCode) throw new Error(errorCode);
+  const { access_token, refresh_token } = params;
+
+  if (!access_token) return;
+
+  const { data, error } = await supabase.auth.setSession({
+    access_token,
+    refresh_token,
+  });
+  if (error) throw error;
+  console.log("session", data.session);
+  return data.session;
+};
+
+const signInWithFacebook = async () => {
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "facebook",
+    options: {
+      redirectTo,
+      skipBrowserRedirect: true,
+    },
+  });
+  if (error) throw error;
+
+  const res = await WebBrowser.openAuthSessionAsync(
+    data?.url ?? "",
+    redirectTo
+  );
+
+  if (res.type === "success") {
+    const { url } = res;
+    await createSessionFromUrl(url);
+
+    router.push("/(app)/ActionMenu");
   }
-})
+};
+
+AppState.addEventListener("change", (state) => {
+  if (state === "active") {
+    supabase.auth.startAutoRefresh();
+  } else {
+    supabase.auth.stopAutoRefresh();
+  }
+});
 
 const Login = () => {
   // const {login, loading} = useContext(AuthContext)
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const [isChecked, setIsChecked] = useState(false);
   const [emailFocused, setEmailFocused] = useState(false);
   const [passwordFocused, setPasswordFocused] = useState(false);
   const { theme, changeTheme } = useContext(ThemeContext);
+
+  const url = Linking.useURL();
+  console.log({ url });
+  if (url) createSessionFromUrl(url);
+
   const handleEmailChange = (text: string) => {
     setEmail(text);
   };
@@ -81,21 +134,20 @@ const Login = () => {
     setPasswordFocused(false);
   };
 
-async function signInWithEmail(){
-  setLoading(true)
-  const{data, error} = await supabase.auth.signInWithPassword({
-    email: email,
-    password: password,
-  }) 
-  if(error){
-    Alert.alert(error.message)
-    setLoading(false)
-  }else{
-    router.push('/(app)/ActionMenu');
-    setLoading(false);
+  async function signInWithEmail() {
+    setLoading(true);
+    const { error } = await supabase.auth.signInWithPassword({
+      email: email,
+      password: password,
+    });
+    if (error) {
+      Alert.alert(error.message);
+      setLoading(false);
+    } else {
+      await router.push("/(app)/ActionMenu");
+      setLoading(false);
+    }
   }
-
-}
 
   return (
     <View
@@ -209,7 +261,8 @@ async function signInWithEmail(){
       </View>
 
       <View>
-        <TouchableOpacity disabled={loading}
+        <TouchableOpacity
+          disabled={loading}
           onPress={() => signInWithEmail()}
           style={styles.signinBtn}
         >
@@ -237,11 +290,14 @@ async function signInWithEmail(){
       </View>
 
       <View style={styles.overCont}>
-      <TouchableOpacity>
+        <TouchableOpacity onPress={signInWithFacebook}>
           <View
             style={[
               styles.smallCont,
-              { backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF", borderColor: theme === 'dark' ? '#35383F' : '#EEEEEE' },
+              {
+                backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF",
+                borderColor: theme === "dark" ? "#35383F" : "#EEEEEE",
+              },
             ]}
           >
             <Image source={require("../../../assets/icons/facebook.png")} />
@@ -252,7 +308,10 @@ async function signInWithEmail(){
           <View
             style={[
               styles.smallCont,
-              { backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF", borderColor: theme === 'dark' ? '#35383F' : '#EEEEEE'  },
+              {
+                backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF",
+                borderColor: theme === "dark" ? "#35383F" : "#EEEEEE",
+              },
             ]}
           >
             <Image source={require("../../../assets/icons/Google.png")} />
@@ -263,11 +322,13 @@ async function signInWithEmail(){
           <View
             style={[
               styles.smallCont,
-              { backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF", borderColor: theme === 'dark' ? '#35383F' : '#EEEEEE'  },
+              {
+                backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF",
+                borderColor: theme === "dark" ? "#35383F" : "#EEEEEE",
+              },
             ]}
           >
-            <SvgXml xml={theme === 'dark' ? WhiteApple : BlackApple} />
-
+            <SvgXml xml={theme === "dark" ? WhiteApple : BlackApple} />
           </View>
         </TouchableOpacity>
       </View>
