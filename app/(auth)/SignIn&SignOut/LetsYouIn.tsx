@@ -1,4 +1,4 @@
-import { useContext} from "react";
+import { useContext } from "react";
 import {
   StyleSheet,
   Text,
@@ -14,12 +14,7 @@ import { StatusBar } from "expo-status-bar";
 import { router } from "expo-router";
 import Typography from "../../../constants/Typography";
 import { Colors } from "../../../constants/Colors";
-import {
-  OrLine,
-  greyOrLine,
-  BlackApple,
-  WhiteApple,
-} from "@/components/Icons/Icons";
+import { OrLine, greyOrLine, BlackApple, WhiteApple } from "@/components/Icons/Icons";
 import * as WebBrowser from "expo-web-browser";
 import * as Linking from "expo-linking";
 import { makeRedirectUri } from "expo-auth-session";
@@ -71,6 +66,30 @@ const signInWithFacebook = async () => {
     router.push("/(app)/ActionMenu");
   }
 };
+
+const signInWithGoogle = async () => {
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: {
+      redirectTo,
+      skipBrowserRedirect: true,
+    },
+  });
+  if (error) throw error;
+
+  const res = await WebBrowser.openAuthSessionAsync(
+    data?.url ?? "",
+    redirectTo
+  );
+
+  if (res.type === "success") {
+    const { url } = res;
+    await createSessionFromUrl(url);
+
+    router.push("/(app)/ActionMenu");
+  }
+};
+
 const LetsYouIn = () => {
   const { theme } = useContext(ThemeContext);
 
@@ -138,6 +157,7 @@ const LetsYouIn = () => {
                 borderColor: theme === "dark" ? "#35383F" : "#EEEEEE",
               },
             ]}
+            onPress={signInWithGoogle}
           >
             <Image source={require("../../../assets/icons/Google.png")} />
             <Text
