@@ -1,5 +1,6 @@
 {
   "name": "matadors-rn-medica",
+  "scheme": "com.supabase",
   "main": "expo-router/entry",
   "version": "1.5.6",
   "scripts": {
