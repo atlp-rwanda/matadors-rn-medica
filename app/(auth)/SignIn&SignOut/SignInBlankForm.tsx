@@ -33,6 +33,7 @@ import * as Linking from "expo-linking";
 import { makeRedirectUri } from "expo-auth-session";
 import * as QueryParams from "expo-auth-session/build/QueryParams";
 import { useAuth } from "@/ctx/AuthContext";
+import * as AppleAuthentication from 'expo-apple-authentication';
 
 WebBrowser.maybeCompleteAuthSession();
 const redirectTo = makeRedirectUri({
@@ -87,10 +88,11 @@ AppState.addEventListener("change", (state) => {
 });
 
 const Login = () => {
+  const { signInWithApple } = useAuth();
   const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  // const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const [isChecked, setIsChecked] = useState(false);
   const [emailFocused, setEmailFocused] = useState(false);
@@ -135,6 +137,22 @@ const Login = () => {
     }
   }
 
+  const supabaseAuth = supabase.schema('auth');
+
+  const handleSignInWithApple = async () => {
+    setLoading(true);
+    try {
+      await signInWithApple();
+      router.push("/(app)/ActionMenu");
+    } catch (error) {
+      console.error('Error signing in with Apple:', error);
+      // Handle error (show alert, reset loading state, etc.)
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  
   return (
     <ScrollView
       style={{
@@ -343,7 +361,7 @@ const Login = () => {
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity>
+        <TouchableOpacity onPress={signInWithApple}>
           <View
             style={[
               styles.smallCont,

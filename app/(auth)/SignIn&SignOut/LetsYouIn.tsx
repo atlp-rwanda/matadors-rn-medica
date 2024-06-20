@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ScrollView,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 import { supabase } from "@/lib/supabase";
 import { ThemeContext } from "@/ctx/ThemeContext";
@@ -27,6 +28,8 @@ import { makeRedirectUri } from "expo-auth-session";
 import * as QueryParams from "expo-auth-session/build/QueryParams";
 import React from "react";
 import { useAuth } from "@/ctx/AuthContext";
+import * as AppleAuthentication from 'expo-apple-authentication';
+
 
 WebBrowser.maybeCompleteAuthSession();
 const redirectTo = makeRedirectUri({
@@ -45,6 +48,7 @@ const LetsYouIn = () => {
     setImageUrl,
     setAuthType,
   } = useAuth();
+  const { signInWithApple } = useAuth();
   const [loading, setLoading] = useState(false);
   const createSessionFromUrl = async (url: string) => {
     const { params, errorCode } = QueryParams.getQueryParams(url);
@@ -126,7 +130,18 @@ const LetsYouIn = () => {
     }
   };
   const { theme } = useContext(ThemeContext);
-
+  const handleSignInWithApple = async () => {
+    setLoading(true);
+    try {
+      await signInWithApple();
+      router.push("/(app)/ActionMenu");
+    } catch (error) {
+      console.error('Error signing in with Apple:', error);
+      // Handle error (show alert, reset loading state, etc.)
+    } finally {
+      setLoading(false);
+    }
+  };
   const url = Linking.useURL();
   if (url) createSessionFromUrl(url);
 
@@ -212,7 +227,7 @@ const LetsYouIn = () => {
                 </Text>
               </TouchableOpacity>
 
-              <TouchableOpacity
+              <TouchableOpacity onPress={signInWithApple}
                 style={[
                   styles.middleButton,
                   {

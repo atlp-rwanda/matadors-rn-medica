@@ -20,7 +20,7 @@
       "infoPlist": {
         "NSFaceIDUsageDescription": "This app uses Face ID and Touch ID for some features"
       },
-      "bundleIdentifier": "com.supabase.medical"
+      "bundleIdentifier": "com.andela.matadors.medica"
     },
     "android": {
       "jsEngine": "hermes",

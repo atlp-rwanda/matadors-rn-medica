@@ -53,21 +53,24 @@ const YourProfile = () => {
     });
   }
 
+  console.log(formData.lastName);
+
   async function handleSubmit() {
     try {
       setIsLoading(true);
       await setUpUserInfo(
-        authType !== "email"
-          ? authType
+
+        authType !== "email" && authType !== "apple"
+          ? authType && authType !== "apple"
             ? {
-                ...formData,
-                firstName: String(name).split(" ")[0],
-                lastName: String(name).split(" ")[1],
-                imageUrl: { uri: imageUrl, mimeType: "image/jpeg" },
-              }
+              ...formData,
+              firstName: String(name).split(" ")[0],
+              lastName: String(name).split(" ")[1],
+              imageUrl: { uri: imageUrl, mimeType: "image/jpeg" },
+            }
             : formData
           : formData
-      );
+      )
     } catch (err) {
       setIsLoading(false);
       const error: Error = err as Error;
@@ -95,10 +98,8 @@ const YourProfile = () => {
       <View>
         <SelectProfile
           image={
-            authType
-              ? authType
-                ? { uri: imageUrl, mimeType: "image/jpeg" }
-                : formData
+            authType && authType !== "apple"
+              ? { uri: imageUrl, mimeType: "image/jpeg" }
               : formData.image
           }
           onChange={handleFormChange}
@@ -120,8 +121,8 @@ const YourProfile = () => {
           placeholder="First Name"
           name="firstName"
           value={
-            authType !== "email"
-              ? authType
+            authType !== "email" && authType !== "apple"
+              ? authType || authType !== "apple"
                 ? String(name).split(" ")[0]
                 : formData.firstName
               : formData.firstName
@@ -132,8 +133,8 @@ const YourProfile = () => {
           placeholder="Last Name"
           name="lastName"
           value={
-            authType !== "email"
-              ? authType
+            authType !== "email" && authType !== "apple"
+              ? authType || authType !== "apple"
                 ? String(name).split(" ")[1]
                 : formData.lastName
               : formData.lastName
@@ -227,7 +228,7 @@ const YourProfile = () => {
           searchPlaceholder="Search..."
           renderInputSearch={() => <></>}
           value={formData.gender}
-          onChangeText={(e) => {}}
+          onChangeText={(e) => { }}
         />
       </View>
 

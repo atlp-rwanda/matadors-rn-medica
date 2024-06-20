@@ -123,12 +123,11 @@ const index = () => {
                   <Image
                     style={{ width: "100%", height: "100%", borderRadius: 100 }}
                     source={{
-                      uri:
-                        authType !== "email"
-                          ? authType
-                            ? otherAuthImageUrl
-                            : `${CDNURL + userData?.id + "/" + profilePhoto}`
-                          : `${CDNURL + userData?.id + "/" + profilePhoto}`,
+                      uri:authType !== "email" && authType !== "apple"
+                      ? otherAuthImageUrl
+                      : `${CDNURL + userData?.id + "/" + profilePhoto}`,
+                                            
+
                     }}
                   />
                 </View>
