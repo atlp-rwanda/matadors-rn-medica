@@ -14,6 +14,7 @@ export default function SplashScreen() {
   const { theme, changeTheme } = useContext(ThemeContext);
   useEffect(() => {
     setTimeout(() => {
+      // router.push("(auth)/ForgotPassword&Reset");
       router.push("onBoarding");
     },1000);
   }, []);

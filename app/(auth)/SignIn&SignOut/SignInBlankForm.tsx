@@ -143,7 +143,7 @@ async function signInWithEmail(){
 
   } else {
     setAlert({ text: "login successfully", status: "success" });
-    router.push('/(auth)/SignIn&SignOut/YourProfile');
+    router.push('(app)/ActionMenu');
     setLoading(false);
 
   }}
@@ -273,7 +273,7 @@ async function signInWithEmail(){
 
       <TouchableOpacity
         onPress={() =>
-          router.push("/(auth)/ForgotPassword&Reset/ForgotPassword")
+          router.push("/(auth)/ForgotPassword&Reset")
         }
       >
         <Text
