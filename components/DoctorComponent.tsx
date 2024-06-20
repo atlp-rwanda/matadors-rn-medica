@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
         height: "100%",
         borderRadius: 10,
         borderWidth: 1,
-        zIndex:1000
+        zIndex:1000,
         
     },
     outerDark: {
@@ -239,6 +239,7 @@ const styles = StyleSheet.create({
     },
     image: {
         width: 110,
-        height:110
+        height:110,
+        borderRadius: 20
     }
 })

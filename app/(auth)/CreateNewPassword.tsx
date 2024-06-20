@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Image, StyleSheet, Text, TextInput, View, TouchableOpacity, ScrollView, Alert, Pressable } from 'react-native';
-import { FontAwesome, MaterialIcons } from '@expo/vector-icons'; // Import FontAwesome icons
+import { Image, StyleSheet, Text, TextInput, View, TouchableOpacity, ScrollView, Alert, Pressable, ActivityIndicator } from 'react-native';
+import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import {Colors} from '@/constants/Colors';
 import { router } from 'expo-router';
 import { LeftArrow } from '@/components/UI/Icons';
@@ -28,6 +28,7 @@ export default function CreateNewPassword() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+  const [isLoading , setIsLoading] = useState(false)
   const [alert, setAlert] = useState<{ text: string, status: "success" | "error" | "info" | "warning" } | null>(null);
 
   const modal = useModal();
@@ -119,6 +120,7 @@ export default function CreateNewPassword() {
 
   const handleCreatePassword = async() => {
     try {
+      setIsLoading(false);
       if(!newPassword || !confirmPassword){
         setAlert({ text: "Fill all the fields", status: "error" });
       }
@@ -130,11 +132,16 @@ export default function CreateNewPassword() {
     const {error}  = await supabase.auth.updateUser({password: newPassword})
     if(error){
       setAlert({ text: "Make sure the user is registered", status: "error" });
+      setIsLoading(false);
+
     }else{
+      setIsLoading(true);
       handleModal()
     }
     } catch (error) {
       setAlert({ text: "Error updating password", status: "error" });
+      setIsLoading(false);
+
     }
   };
 
@@ -205,13 +212,20 @@ export default function CreateNewPassword() {
           <TouchableOpacity onPress={()=> {
             handleCreatePassword()
           }} style={styles.createButton}>
+            
+            {isLoading ? (
+            <ActivityIndicator color="white" />
+          ) : (
             <Text style={styles.createButtonText}>Continue</Text>
+          )}
           </TouchableOpacity>
         </View>
       </View>
     </ScrollView>
   );
 }
+
+
 
 const styles = StyleSheet.create({
   scrollViewContent: {
