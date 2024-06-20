@@ -27,6 +27,7 @@ import {
   WhiteApple,
   blackArrow,
 } from "@/components/Icons/Icons";
+import Alerts from "@/components/UI/AlertComponent";
 import { StatusBar } from "expo-status-bar";
 import { supabase } from "@/lib/supabase";
 import * as WebBrowser from "expo-web-browser";
@@ -99,11 +100,7 @@ const Login = () => {
   const [emailFocused, setEmailFocused] = useState(false);
   const [passwordFocused, setPasswordFocused] = useState(false);
   const { theme, changeTheme } = useContext(ThemeContext);
-
-  const url = Linking.useURL();
-  console.log({ url });
-  if (url) createSessionFromUrl(url);
-
+  const [alert, setAlert] = useState<{ text: string, status: "success" | "error" | "info" | "warning" } | null>(null);
   const handleEmailChange = (text: string) => {
     setEmail(text);
   };
@@ -134,20 +131,22 @@ const Login = () => {
     setPasswordFocused(false);
   };
 
-  async function signInWithEmail() {
-    setLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({
-      email: email,
-      password: password,
-    });
-    if (error) {
-      Alert.alert(error.message);
-      setLoading(false);
-    } else {
-      await router.push("/(app)/ActionMenu");
-      setLoading(false);
-    }
-  }
+async function signInWithEmail(){
+  setLoading(true)
+  const{error} = await supabase.auth.signInWithPassword({
+    email: email,
+    password: password,
+  }) 
+  if (error) {
+    setAlert({ text: "invalid email or password", status: "error" });
+    setLoading(false);
+
+  } else {
+    setAlert({ text: "login successfully", status: "success" });
+    router.push('/(auth)/SignIn&SignOut/YourProfile');
+    setLoading(false);
+
+  }}
 
   return (
     <View
@@ -156,8 +155,9 @@ const Login = () => {
         { backgroundColor: theme === "dark" ? "#181A20" : "#FFFFFF" },
       ]}
     >
-      <StatusBar style={theme === "dark" ? "light" : "dark"} />
 
+      <StatusBar style={theme === "dark" ? "light" : "dark"} />
+     
       <View>
         <Image source={require("../../../assets/icons/HeartPlus.png")} />
       </View>
@@ -171,6 +171,7 @@ const Login = () => {
         >
           Login to Your Account
         </Text>
+        {alert && <Alerts text={alert.text} status={alert.status} />}
       </View>
 
       <View style={styles.Buttons}>
