@@ -79,6 +79,29 @@ const signInWithFacebook = async () => {
     router.push("/(app)/ActionMenu");
   }
 };
+const signInWithGoogle = async () => {
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: {
+      redirectTo,
+      skipBrowserRedirect: true,
+    },
+  });
+  if (error) throw error;
+
+  const res = await WebBrowser.openAuthSessionAsync(
+    data?.url ?? "",
+    redirectTo
+  );
+
+  if (res.type === "success") {
+    const { url } = res;
+    await createSessionFromUrl(url);
+
+    router.push("/(app)/ActionMenu");
+  }
+};
+
 
 AppState.addEventListener("change", (state) => {
   if (state === "active") {
@@ -304,7 +327,7 @@ const Login = () => {
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity>
+        <TouchableOpacity  onPress={() => signInWithGoogle()}>
           <View
             style={[
               styles.smallCont,
