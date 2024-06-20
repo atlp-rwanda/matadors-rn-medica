@@ -10,6 +10,8 @@ import {
   Pressable,
   AppState,
   Alert,
+  ActivityIndicator,
+  ScrollView,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import CheckBox from "expo-checkbox";
@@ -20,12 +22,10 @@ import { Colors } from "../../../constants/Colors";
 import { ThemeContext } from "@/ctx/ThemeContext";
 import { SvgXml } from "react-native-svg";
 import {
-  BackArrow,
   BlackApple,
   DarkContinueLine,
   LightContinueLine,
   WhiteApple,
-  blackArrow,
 } from "@/components/Icons/Icons";
 import Alerts from "@/components/UI/AlertComponent";
 import { StatusBar } from "expo-status-bar";
@@ -34,6 +34,7 @@ import * as WebBrowser from "expo-web-browser";
 import * as Linking from "expo-linking";
 import { makeRedirectUri } from "expo-auth-session";
 import * as QueryParams from "expo-auth-session/build/QueryParams";
+import { useAuth } from "@/ctx/AuthContext";
 
 WebBrowser.maybeCompleteAuthSession();
 const redirectTo = makeRedirectUri({
@@ -90,24 +91,21 @@ AppState.addEventListener("change", (state) => {
 });
 
 const Login = () => {
-  // const {login, loading} = useContext(AuthContext)
-
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false)
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const [isChecked, setIsChecked] = useState(false);
   const [emailFocused, setEmailFocused] = useState(false);
   const [passwordFocused, setPasswordFocused] = useState(false);
   const { theme, changeTheme } = useContext(ThemeContext);
-  const [alert, setAlert] = useState<{ text: string, status: "success" | "error" | "info" | "warning" } | null>(null);
-  const handleEmailChange = (text: string) => {
-    setEmail(text);
-  };
 
-  const handlePasswordChange = (text: string) => {
-    setPassword(text);
-  };
+  const url = Linking.useURL();
+  console.log({ url });
+  if (url) createSessionFromUrl(url);
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const togglePasswordVisibility = () => {
     setSecureTextEntry(!secureTextEntry);
@@ -131,33 +129,35 @@ const Login = () => {
     setPasswordFocused(false);
   };
 
-async function signInWithEmail(){
-  setLoading(true)
-  const{error} = await supabase.auth.signInWithPassword({
-    email: email,
-    password: password,
-  }) 
-  if (error) {
-    setAlert({ text: "invalid email or password", status: "error" });
-    setLoading(false);
-
-  } else {
-    setAlert({ text: "login successfully", status: "success" });
-    router.push('/(auth)/SignIn&SignOut/YourProfile');
-    setLoading(false);
-
-  }}
+  async function signInWithEmail() {
+    try {
+      setIsLoading(true);
+      await login(email, password);
+    } catch (error) {
+      Alert.alert("Error signing in");
+      setIsLoading(false);
+    }
+  }
 
   return (
-    <View
-      style={[
-        styles.container,
-        { backgroundColor: theme === "dark" ? "#181A20" : "#FFFFFF" },
-      ]}
+    <ScrollView
+      style={{
+        backgroundColor: theme === "dark" ? "#181A20" : "#FFFFFF",
+        flex: 1,
+      }}
+      contentContainerStyle={{
+        flexGrow: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        paddingTop: 24,
+        paddingLeft: 24,
+        paddingRight: 24,
+        paddingBottom: 48,
+        gap: 17,
+      }}
     >
-
       <StatusBar style={theme === "dark" ? "light" : "dark"} />
-     
+
       <View>
         <Image source={require("../../../assets/icons/HeartPlus.png")} />
       </View>
@@ -171,7 +171,6 @@ async function signInWithEmail(){
         >
           Login to Your Account
         </Text>
-        {alert && <Alerts text={alert.text} status={alert.status} />}
       </View>
 
       <View style={styles.Buttons}>
@@ -190,7 +189,14 @@ async function signInWithEmail(){
             style={[styles.icon, emailFocused && styles.iconFocused]}
           />
           <TextInput
-            style={[{fontSize: 16,flex: 1,color: theme === "dark"? Colors.grayScale._50 : "black"}, emailFocused && styles.emailFocused]}
+            style={[
+              {
+                fontSize: 16,
+                flex: 1,
+                color: theme === "dark" ? Colors.grayScale._50 : "black",
+              },
+              emailFocused && styles.emailFocused,
+            ]}
             placeholder="Email"
             keyboardType="email-address"
             placeholderTextColor="#9E9E9E"
@@ -217,7 +223,14 @@ async function signInWithEmail(){
           />
 
           <TextInput
-            style={[{fontSize: 16,flex: 1,color: theme === "dark"? Colors.grayScale._50 : "black"}, passwordFocused && styles.emailFocused]}
+            style={[
+              {
+                fontSize: 16,
+                flex: 1,
+                color: theme === "dark" ? Colors.grayScale._50 : "black",
+              },
+              passwordFocused && styles.emailFocused,
+            ]}
             placeholder="Password"
             placeholderTextColor="#9E9E9E"
             secureTextEntry={secureTextEntry}
@@ -262,18 +275,33 @@ async function signInWithEmail(){
       </View>
 
       <View>
-        <TouchableOpacity
-          disabled={loading}
+        <Pressable
+          disabled={isLoading}
           onPress={() => signInWithEmail()}
-          style={styles.signinBtn}
+          style={{
+            backgroundColor: isLoading
+              ? Colors.status.disabled_button
+              : Colors.main.primary._500,
+            width: 360,
+            height: 58,
+            borderRadius: 100,
+            justifyContent: "center",
+            alignItems: "center",
+            shadowColor: "#246BFD",
+            elevation: 10,
+          }}
         >
-          <Text style={styles.signText}>Sign in</Text>
-        </TouchableOpacity>
+          {isLoading ? (
+            <ActivityIndicator color="white" />
+          ) : (
+            <Text style={styles.signText}>Sign in</Text>
+          )}
+        </Pressable>
       </View>
 
       <TouchableOpacity
         onPress={() =>
-          router.push("/(auth)/ForgotPassword&Reset")
+          router.push("/(auth)/ForgotPassword&Reset/ForgotPassword")
         }
       >
         <Text
@@ -353,11 +381,9 @@ async function signInWithEmail(){
           Sign up
         </Text>
       </View>
-    </View>
+    </ScrollView>
   );
 };
-
-export default Login;
 
 const styles = StyleSheet.create({
   inputOneFocused: {
@@ -455,16 +481,6 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontWeight: "bold",
   },
-  signinBtn: {
-    backgroundColor: "#246BFD",
-    width: 360,
-    height: 58,
-    borderRadius: 100,
-    justifyContent: "center",
-    alignItems: "center",
-    shadowColor: "#246BFD",
-    elevation: 10,
-  },
   textBtn: {
     fontSize: 16,
     fontWeight: "bold",
@@ -510,17 +526,11 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: 17,
-    paddingTop: 24,
-    paddingLeft: 24,
-    paddingBottom: 48,
-    paddingRight: 24,
   },
   LoginText: {
     color: "#246BFD",
     fontWeight: "600",
   },
 });
+
+export default Login;
