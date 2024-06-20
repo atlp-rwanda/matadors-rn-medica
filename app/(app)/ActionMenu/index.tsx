@@ -60,6 +60,7 @@ export default function Index() {
   if (!fontsLoaded) {
     return null;
   }
+  console.log(patientData?.image)
 
 
  

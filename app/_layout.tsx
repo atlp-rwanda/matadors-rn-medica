@@ -1,6 +1,6 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useFonts } from "expo-font";
-import { Stack } from "expo-router";
+import { Redirect, Stack, router, useSegments } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import * as SecureStore from "expo-secure-store";
 import React from "react";
@@ -16,6 +16,7 @@ import ModalProvider from "@/ctx/ModalContext";
 import ModalContainer from "@/components/UI/Modal";
 import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
 import { StatusBar } from "expo-status-bar";
+import AuthProvider, { useAuth } from "@/ctx/AuthContext";
 
 export { ErrorBoundary } from "expo-router";
 
@@ -91,24 +92,50 @@ export default function RootLayout() {
   return (
     <ThemeProvider theme={favoredTheme}>
       <ModalProvider>
-        <AutocompleteDropdownContextProvider>
-          <RootLayoutNav />
-        </AutocompleteDropdownContextProvider>
+        <AuthProvider>
+          <AutocompleteDropdownContextProvider>
+            <RootLayoutNav />
+          </AutocompleteDropdownContextProvider>
+        </AuthProvider>
       </ModalProvider>
     </ThemeProvider>
   );
 }
 
 function RootLayoutNav() {
+  const { isLoggedIn, activated, email } = useAuth();
+  const segments = useSegments();
+
+  const inAuth = segments[0] === "(auth)";
+
+  useEffect(() => {
+    if (!isLoggedIn && !inAuth) {
+      console.log("Not logged in");
+      return router.replace("/(auth)/SignIn&SignOut/LetsYouIn");
+    }
+
+    if (isLoggedIn && !activated && email) {
+      console.log("Logged and not activated");
+      return router.replace("/(auth)/SignIn&SignOut/YourProfile/" + email);
+    }
+
+    if (isLoggedIn && activated && inAuth) {
+      console.log("Logged in, activated, and in auth");
+      return router.replace("/(app)/ActionMenu");
+    }
+  }, [isLoggedIn, activated, router, segments]);
+
   return (
     <>
-      <Stack
-        screenOptions={{ statusBarTranslucent: true, headerShown: false }}
-      >
-        <Stack.Screen name="index" options={{ headerShown: false }} />
+      <Stack screenOptions={{ statusBarTranslucent: true, headerShown: false }}>
         <Stack.Screen name="(app)" options={{ headerShown: false }} />
         <Stack.Screen name="modal" options={{ presentation: "modal" }} />
-        <Stack.Screen name="onBoarding" options={{ headerShown: false }} />
+        <Stack.Screen name="index" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="onBoarding"
+          options={{ headerShown: false }}
+          redirect={inAuth || !inAuth}
+        />
       </Stack>
       <ModalContainer />
     </>

@@ -35,7 +35,9 @@ export default function SetYourFingerPrint() {
     <>
       <StatusBar style={theme === "light" ? "dark" : "light"} />
       <ScrollView
-        style={{ flex: 1 }}
+        style={{
+          flex: 1,
+        }}
         contentContainerStyle={{
           flexGrow: 1,
           paddingHorizontal: 20,
