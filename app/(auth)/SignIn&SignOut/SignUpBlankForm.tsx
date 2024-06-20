@@ -11,6 +11,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   AppState,
+  Pressable,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import CheckBox from "expo-checkbox";
@@ -19,13 +20,7 @@ import Typography from "../../../constants/Typography";
 import { Colors } from "../../../constants/Colors";
 import { StatusBar } from "expo-status-bar";
 import { ThemeContext } from "@/ctx/ThemeContext";
-import Alerts from "@/components/UI/AlertComponent";
-import {
-  BackArrow,
-  blackArrow,
-  DarkContinueLine,
-  LightContinueLine,
-} from "@/components/Icons/Icons";
+import { DarkContinueLine, LightContinueLine } from "@/components/Icons/Icons";
 import { SvgXml } from "react-native-svg";
 import { appleBlackIcon, appleWhiteIcon } from "@/constants/icon";
 import { supabase } from "@/lib/supabase";
@@ -33,6 +28,8 @@ import * as WebBrowser from "expo-web-browser";
 import * as Linking from "expo-linking";
 import { makeRedirectUri } from "expo-auth-session";
 import * as QueryParams from "expo-auth-session/build/QueryParams";
+import { useAuth } from "@/ctx/AuthContext";
+import { ActivityIndicator } from "react-native";
 
 WebBrowser.maybeCompleteAuthSession();
 const redirectTo = makeRedirectUri({
@@ -88,25 +85,22 @@ AppState.addEventListener("change", (state) => {
   }
 });
 
-const Signup = () => {
+export default function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const [isChecked, setIsChecked] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const [passwordFocused, setPasswordFocused] = useState(false);
   const { theme, changeTheme } = useContext(ThemeContext);
+  const [isLoading, setIsLoading] = useState(false);
+  const { register } = useAuth();
 
+  const url = Linking.useURL();
+  console.log({ url });
+  if (url) createSessionFromUrl(url);
 
-  const [alert, setAlert] = useState<{ text: string, status: "success" | "error" | "info" | "warning" } | null>(null);
-  const handleEmailChange = (text: string) => {
-    setEmail(text);
-  };
-
-  const handlePasswordChange = (text: string) => {
-    setPassword(text);
-  };
+  if (url) createSessionFromUrl(url);
 
   const togglePasswordVisibility = () => {
     setSecureTextEntry(!secureTextEntry);
@@ -126,24 +120,13 @@ const Signup = () => {
   };
 
   async function signUpWithEmail() {
-    setLoading(true);
-    const {
-      data: { session },
-      error,
-    } = await supabase.auth.signUp({
-      email: email,
-      password: password,
-    });
-
-    if (error) {
-      setAlert({ text: "Failed to create account", status: "error" });
-      setLoading(false);
-
-    } else {
-      setAlert({ text: "Account created successful", status: "success" });
-      router.push('/(auth)/SignIn&SignOut/YourProfile');
-      setLoading(false);
-
+    try {
+      setIsLoading(true);
+      await register(email, password);
+    } catch (error) {
+      const err: Error = error as Error;
+      Alert.alert(err.message);
+      setIsLoading(false);
     }
   }
 
@@ -154,7 +137,6 @@ const Signup = () => {
         { backgroundColor: theme === "dark" ? "#181A20" : "#FFFFFF" },
       ]}
     >
-      
       <StatusBar style={theme === "dark" ? "light" : "dark"} />
 
       <Image source={require("../../../assets/icons/HeartPlus.png")} />
@@ -169,7 +151,7 @@ const Signup = () => {
           >
             Create new account
           </Text>
-          {alert && <Alerts text={alert.text} status={alert.status} />}
+          {/* {alert && <Alerts text={alert.text} status={alert.status} />} */}
         </View>
       </View>
 
@@ -187,6 +169,10 @@ const Signup = () => {
                   backgroundColor:
                     theme === "dark" ? "#1F222A" : Colors.grayScale._50,
                 },
+                {
+                  backgroundColor:
+                    theme === "dark" ? "#1F222A" : Colors.grayScale._50,
+                },
               ]}
             >
               <Image
@@ -194,7 +180,14 @@ const Signup = () => {
                 style={[styles.icon, isFocused && styles.iconFocused]}
               />
               <TextInput
-                style={[{fontSize: 16,flex: 1,color: theme === "dark"? Colors.grayScale._50 : "black"}, isFocused && styles.emailFocused]}
+                style={[
+                  {
+                    fontSize: 16,
+                    flex: 1,
+                    color: theme === "dark" ? Colors.grayScale._50 : "black",
+                  },
+                  isFocused && styles.emailFocused,
+                ]}
                 placeholder="Email"
                 keyboardType="email-address"
                 placeholderTextColor="#9E9E9E"
@@ -214,6 +207,10 @@ const Signup = () => {
                   backgroundColor:
                     theme === "dark" ? "#1F222A" : Colors.grayScale._50,
                 },
+                {
+                  backgroundColor:
+                    theme === "dark" ? "#1F222A" : Colors.grayScale._50,
+                },
               ]}
             >
               <Image
@@ -221,7 +218,11 @@ const Signup = () => {
                 style={[styles.icon, passwordFocused && styles.iconFocused]}
               />
               <TextInput
-                style={{fontSize: 16,flex: 1,color: theme === "dark"? Colors.grayScale._50 : "black"}}
+                style={{
+                  fontSize: 16,
+                  flex: 1,
+                  color: theme === "dark" ? Colors.grayScale._50 : "black",
+                }}
                 placeholder="Password"
                 placeholderTextColor="#9E9E9E"
                 secureTextEntry={secureTextEntry}
@@ -268,14 +269,31 @@ const Signup = () => {
         </Text>
       </View>
 
-      <TouchableOpacity
+      <Pressable
         onPress={() => signUpWithEmail()}
-        style={styles.signinBtn}
+        style={{
+          backgroundColor: isLoading
+            ? Colors.status.disabled_button
+            : Colors.main.primary._500,
+          width: 360,
+          height: 58,
+          borderRadius: 100,
+          justifyContent: "center",
+          alignItems: "center",
+          shadowColor: isLoading
+            ? Colors.status.disabled_button
+            : Colors.main.primary._500,
+          elevation: 10,
+        }}
       >
-        <Text style={[Typography.bold.large, { color: Colors.others.white }]}>
-          Sign up
-        </Text>
-      </TouchableOpacity>
+        {isLoading ? (
+          <ActivityIndicator color="white" />
+        ) : (
+          <Text style={[Typography.bold.large, { color: Colors.others.white }]}>
+            Sign up
+          </Text>
+        )}
+      </Pressable>
 
       <SvgXml xml={theme === "dark" ? DarkContinueLine : LightContinueLine} />
 
@@ -284,6 +302,10 @@ const Signup = () => {
           <View
             style={[
               styles.smallCont,
+              {
+                backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF",
+                borderColor: theme === "dark" ? "#35383F" : "#EEEEEE",
+              },
               {
                 backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF",
                 borderColor: theme === "dark" ? "#35383F" : "#EEEEEE",
@@ -302,6 +324,10 @@ const Signup = () => {
                 backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF",
                 borderColor: theme === "dark" ? "#35383F" : "#EEEEEE",
               },
+              {
+                backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF",
+                borderColor: theme === "dark" ? "#35383F" : "#EEEEEE",
+              },
             ]}
           >
             <Image source={require("../../../assets/icons/Google.png")} />
@@ -312,6 +338,10 @@ const Signup = () => {
           <View
             style={[
               styles.smallCont,
+              {
+                backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF",
+                borderColor: theme === "dark" ? "#35383F" : "#EEEEEE",
+              },
               {
                 backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF",
                 borderColor: theme === "dark" ? "#35383F" : "#EEEEEE",
@@ -346,9 +376,7 @@ const Signup = () => {
       </View>
     </View>
   );
-};
-
-export default Signup;
+}
 
 const styles = StyleSheet.create({
   inputOneFocused: {
@@ -441,16 +469,6 @@ const styles = StyleSheet.create({
   signupText: {
     color: "#246BFD",
     fontWeight: "600",
-  },
-  signinBtn: {
-    backgroundColor: "#246BFD",
-    width: 360,
-    height: 58,
-    borderRadius: 100,
-    justifyContent: "center",
-    alignItems: "center",
-    shadowColor: "#246BFD",
-    elevation: 10,
   },
   textBtn: {
     fontSize: 16,
