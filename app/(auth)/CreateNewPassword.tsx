@@ -1,19 +1,49 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, TextInput, View, TouchableOpacity, ScrollView, Alert, Pressable } from 'react-native';
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons'; // Import FontAwesome icons
 import {Colors} from '@/constants/Colors';
 import { router } from 'expo-router';
 import { LeftArrow } from '@/components/UI/Icons';
 import { ThemeContext } from '@/ctx/ThemeContext';
+import { supabase } from '@/lib/supabase';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withTiming,
+} from "react-native-reanimated";
+import { LoadingIcon } from "@/components/UI/Icons";
+import Typography from '@/constants/Typography';
+import { useModal } from '@/ctx/ModalContext';
+import { SvgXml } from 'react-native-svg';
+import { changePasswordModalImage } from '@/constants/icon';
+import Alerts from '@/components/UI/AlertComponent';
+
+
+
 
 export default function CreateNewPassword() {
-  const [password, setPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+  const [alert, setAlert] = useState<{ text: string, status: "success" | "error" | "info" | "warning" } | null>(null);
+
+  const modal = useModal();
 
   const {theme, changeTheme} = useContext(ThemeContext)
+
+  const rotationValue = useSharedValue(0);
+
+  useEffect(() => {
+    rotationValue.value = withRepeat(withTiming(1, { duration: 2000 }), -1);
+  }, []);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ rotate: `${rotationValue.value * 360}deg` }],
+  }));
+
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
@@ -22,19 +52,94 @@ export default function CreateNewPassword() {
     setShowConfirmPassword(!showConfirmPassword);
   };
 
-  const handleCreatePassword = () => {
-    router.push("/(auth)/SignIn&SignOut/SignInBlankForm")
+  async function handleModal() {
+    modal.show({
+      children: (
+        <View
+          style={{
+            padding: 40,
+            alignItems: "center",
+            gap: 20,
+            borderRadius: 48,
+            backgroundColor:
+              theme === "light"
+                ? Colors.others.white
+                : Colors.dark._1,
+          }}
+        >
+         <SvgXml xml={changePasswordModalImage}/>
+          <View
+            style={{
+              gap: 20,
+              backgroundColor:
+                theme === "light"
+                  ? Colors.others.white
+                  : Colors.dark._1,
+            }}
+          >
+            <Text
+              style={[
+                Typography.heading._4,
+                {
+                  color: Colors.main.primary._500,
+                  textAlign: "center",
+                },
+              ]}
+            >
+              Congratulations!
+            </Text>
+            <Text
+              style={[
+                Typography.regular.large,
+                {
+                  textAlign: "center",
+                  color:
+                    theme === "light"
+                      ? Colors.grayScale._900
+                      : Colors.others.white,
+                },
+              ]}
+            >
+              Your account is ready to use. You will be redirected to the Home page in a few seconds..
+            </Text>
+          </View>
+          <Animated.View style={[animatedStyle]}>
+            <LoadingIcon
+              fillColor={Colors.main.primary._500}
+            />
+          </Animated.View>
+        </View>
+      ),
+    });
+    setTimeout(() => {
+      modal.hide();
+      router.push("(auth)/SignIn&SignOut/SignInBlankForm");
+    }, 3000)
+  }
 
-    // Your password creation logic here
+  const handleCreatePassword = async() => {
+    try {
+      if(!newPassword || !confirmPassword){
+        setAlert({ text: "Fill all the fields", status: "error" });
+      }
+     if(newPassword !== confirmPassword){
+      setAlert({ text: "Password doesn't match", status: "error" });
+      return
+     }
 
-    if (rememberMe) {
-      // Save user's preference to remember password
+    const {error}  = await supabase.auth.updateUser({password: newPassword})
+    if(error){
+      setAlert({ text: "Make sure the user is registered", status: "error" });
+    }else{
+      handleModal()
+    }
+    } catch (error) {
+      setAlert({ text: "Error updating password", status: "error" });
     }
   };
 
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContent}>
-       {/* <View > */}
        <Pressable onPress={() => router.back()} style={{
           paddingTop: 100,
           flexDirection: "row",
@@ -48,7 +153,7 @@ export default function CreateNewPassword() {
           <Text style={{ 
             fontSize: 24,
             fontWeight: "600",}}
-            >Set Your Fingerprint</Text>
+            >Create new password</Text>
         </Pressable>
         {/* </View> */}
       <View style={styles.container}>
@@ -65,8 +170,8 @@ export default function CreateNewPassword() {
               style={styles.input}
               placeholder="Password"
               secureTextEntry={!showPassword}
-              value={password}
-              onChangeText={setPassword}
+              value={newPassword}
+              onChangeText={setNewPassword}
             />
             <TouchableOpacity onPress={toggleShowPassword} style={styles.toggleButton}>
               <FontAwesome name={showPassword ? 'eye-slash' : 'eye'} size={24} color="black" />
@@ -86,6 +191,8 @@ export default function CreateNewPassword() {
               <FontAwesome name={showConfirmPassword ? 'eye-slash' : 'eye'} size={24} color="black" />
             </TouchableOpacity>
           </View>
+          {alert && <Alerts text={alert.text} status={alert.status} />}
+
 
           <View style={styles.checkboxContainer}>
             <TouchableOpacity onPress={() => setRememberMe(!rememberMe)} style={styles.checkbox}>
@@ -95,7 +202,9 @@ export default function CreateNewPassword() {
             </TouchableOpacity>
           </View>
 
-          <TouchableOpacity onPress={handleCreatePassword} style={styles.createButton}>
+          <TouchableOpacity onPress={()=> {
+            handleCreatePassword()
+          }} style={styles.createButton}>
             <Text style={styles.createButtonText}>Continue</Text>
           </TouchableOpacity>
         </View>

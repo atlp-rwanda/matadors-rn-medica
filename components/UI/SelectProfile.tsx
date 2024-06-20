@@ -10,13 +10,14 @@ import { SvgXml } from "react-native-svg";
 import * as ImagePicker from "expo-image-picker";
 import React from "react";
 import { ThemeContext } from "@/ctx/ThemeContext";
+import { ImageType } from "@/constants/Types";
 
 interface Props {
-  image?: string | null;
-  setImage: React.Dispatch<React.SetStateAction<string | null>>;
+  image?: ImageType | null;
+  onChange: (name: string, value: ImageType | string) => void;
 }
 
-export default function SelectProfile({ image, setImage }: Props) {
+export default function SelectProfile({ image, onChange }: Props) {
   const { theme } = useContext(ThemeContext);
 
   async function pickImage() {
@@ -30,20 +31,27 @@ export default function SelectProfile({ image, setImage }: Props) {
     console.log(result);
 
     if (!result.canceled) {
-      setImage(result.assets[0].uri);
+      console.log({
+        uri: result.assets[0].uri,
+        name: result.assets[0].fileName!,
+        type: result.assets[0].mimeType!,
+      });
+      onChange("image", {
+        uri: result.assets[0].uri,
+        name: result.assets[0].fileName!,
+        mimeType: result.assets[0].mimeType!,
+      });
     }
   }
 
   return (
     <>
       <View style={{ position: "relative" }}>
-        {image ? (
-          <View style={{width: 200, height:200}}>
-             <Image
-            source={{ uri: image }}
-            style={{ width: 170, height: 170, borderRadius: 100 }}
+        {image?.uri !== "" ? (
+          <Image
+            source={{ uri: image?.uri }}
+            style={{ width: 160, height: 160, borderRadius: 100 }}
           />
-          </View>
         ) : (
           <SvgXml
             xml={

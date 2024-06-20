@@ -1,10 +1,16 @@
+import React, { useEffect } from "react";
 import { Text } from "@/components/Themed";
 import { LeftArrow, Chat, Message } from "@/components/UI/Icons";
-import { StyleSheet, Image, View, TouchableOpacity, Pressable } from "react-native";
+import { StyleSheet, Image, View, TouchableOpacity, Pressable, TextInput, ScrollView } from "react-native";
 import Typography from "@/constants/Typography";
 import { Colors } from "@/constants/Colors";
 import { useState } from "react";
-import { router } from "expo-router";
+import { Redirect, router } from "expo-router";
+import { supabase } from "@/lib/supabase";
+import { useLocalSearchParams } from "expo-router";
+import Alerts from "@/components/UI/AlertComponent";
+
+
 
 export default function ForgotPassword() {
   const image = require("@/assets/images/ForgotPasswordImages/forgotpassword.png");
@@ -12,6 +18,14 @@ export default function ForgotPassword() {
   const [isSelectedSMS, setIsSelectedSMS] = useState(true);
   const [isSelectedEmail, setIsSelectedEmail] = useState(false);
   const [isDark, setIsDark] = useState(false);
+  const [email, setEmail] = useState("")
+  const [alert, setAlert] = useState<{ text: string, status: "success" | "error" | "info" | "warning" } | null>(null);
+
+
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
 
   const handleSelectionSMS = () => {
     setIsSelectedSMS(true);
@@ -22,11 +36,38 @@ export default function ForgotPassword() {
     setIsSelectedSMS(false);
     setIsSelectedEmail(true);
   };
+
+  const resetByEmail= async()=> {
+    try {
+      if(!email ){
+        setAlert({ text: "Email can't be empty", status: "error" });
+      }else if (!validateEmail(email)){
+        setAlert({ text: "Enter a valid email", status: "error" });
+      }else {
+        const {error } = await supabase.auth.resetPasswordForEmail(email)
+      if (error){
+        console.log("unable to reach the target...................: ", error?.message)
+      }
+      setTimeout(()=>{
+      router.replace({
+        pathname: "(auth)/ForgotPassword&Reset/[OTPform]}",
+        params: {email}
+      })
+      },1000)
+      setAlert({ text: "Please check your email", status: "success" });
+      }
+    } catch (error) {
+      setAlert({ text: "An unexpected error occurred", status: "error" });
+    }
+  }
+
   const border= isDark ? Colors.dark._3:Colors.grayScale._200;
   
   return (
     <>
-      <View style={isDark ? styles.containerdark : styles.container}>
+      <ScrollView
+      contentContainerStyle={isDark ? styles.containerdark : styles.container}
+      >
         
         <View style={isDark ? styles.headerdark : styles.header}>
           <Pressable onPress={()=> router.back()}>
@@ -55,7 +96,9 @@ export default function ForgotPassword() {
           Select which contact details should we use to reset your password
         </Text>
         <TouchableOpacity
-          onPress={handleSelectionSMS}
+          onPress={()=> {
+            handleSelectionSMS();
+          }}
           style={{
             width: 380,
             height: 128,
@@ -110,7 +153,9 @@ export default function ForgotPassword() {
           </View>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={handleSelectionEmail}
+          onPress={()=> {
+            handleSelectionEmail()
+          }}
           style={{
             width: 380,
             height: 128,
@@ -153,18 +198,26 @@ export default function ForgotPassword() {
             >
               via Email:
             </Text>
-            <Text
+              <TextInput
               style={[
                 Typography.bold.large,
-                { color: isDark ? Colors.others.white : Colors.grayScale._900 },
-              ]}
-            >
-              and***ley@yourdomain.com
-            </Text>
+              
+                { color: isDark ? Colors.others.white : Colors.grayScale._900, borderRadius: 5, borderBottomWidth: 1,  borderColor: "#ccc",minWidth: "60%", paddingStart:10}]}
+              placeholder="email"
+              placeholderTextColor={isDark ? Colors.others.white : Colors.grayScale._500}
+
+              value={email}
+              onChangeText={(email)=> setEmail(email)}
+            />
           </View>
         </TouchableOpacity>
+
+        {alert && <Alerts text={alert.text} status={alert.status} />}
+
         <TouchableOpacity
-          onPress={()=> router.push("/(auth)/ForgotPassword&Reset/OTPform")}
+          onPress={()=> {
+              resetByEmail()
+          }}
           style={{
             width: 380,
             height: 58,
@@ -177,7 +230,7 @@ export default function ForgotPassword() {
            
           <Text style={[Typography.bold.large,{color:Colors.others.white}]}>Continue</Text>
         </TouchableOpacity>
-      </View>
+      </ScrollView>
     </>
   );
 }
