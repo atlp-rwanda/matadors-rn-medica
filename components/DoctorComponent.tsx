@@ -22,7 +22,6 @@ function DoctorComponent({ imageSource, name, iconComponent, professionalTitle, 
     const nameColor = theme === "dark" ? styles.textDark : styles.textLight
     const descriptionColor = theme === "dark" ? styles.descriptionDark : styles.descriptionLight
     const horizontalColor = theme === "dark" ? styles.horizontalDark : styles.horizontalLight
-    console.log("image url", imageSource.uri)
   
 
     return (

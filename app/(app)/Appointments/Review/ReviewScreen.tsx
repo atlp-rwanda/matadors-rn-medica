@@ -37,7 +37,7 @@ const [rating, setRating ] = useState(0);
       </View>
 
     <View>
-    <Image source={require('@/assets/images/Drake.png')} />
+    <Image source={require('@/assets/images/Drake.png')} style={{width: 200, height: 200, borderRadius: 100}}/>
     </View>
     <View style={{justifyContent:'center', alignItems: 'center'}}>
       <Text style={[Typography.heading._5, {color: theme === 'dark' ? '#FFFFFF' : '#212121', width: 260}]}>How was your experience

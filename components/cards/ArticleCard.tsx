@@ -1,73 +1,133 @@
-import { View, Text, StyleSheet } from "react-native";
-import React, { useContext } from "react";
+import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
+import React, { ReactNode, useContext, useEffect, useState } from "react";
 import { Image } from "react-native";
-import { TouchableOpacity } from "react-native";
-import { router, useNavigation } from "expo-router";
+import { useRouter } from "expo-router";
 import { ThemeContext } from "@/ctx/ThemeContext";
+import { createClient } from "@supabase/supabase-js";
+import Typography from "@/constants/Typography";
+import { SUPABASE_URL, SUPABASE_NON_KEY } from "@env";
 
-interface IArticleProps {
-  title?: string;
-  date?: string;
-  id?: number;
-  image?: any;
-  category?: string;
+interface Article {
+  created_at: ReactNode;
+  id: string;
+  title: string;
+  category: string;
+  image: string;
+  description: string;
 }
 
-export default function ArticleCard({ article }: { article: IArticleProps }) {
-  const { theme, changeTheme } = useContext(ThemeContext);
+type FetchError = string | null;
+type FetchArticle = Article[] | null;
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_NON_KEY);
+
+const tableName = "Articles";
+
+export default function ArticleCard() {
+  const { theme } = useContext(ThemeContext);
+  const [fetchError, setFetchError] = useState<FetchError>(null);
+  const [fetchArticle, setFetchArticle] = useState<FetchArticle>(null);
+  const [IsLoading, setIsLoading] = useState(true);
+  const router = useRouter();
+
+  useEffect(() => {
+    const fetchArticles = async () => {
+      const { data, error } = await supabase.from(tableName).select();
+
+      if (error) {
+        setFetchError("Could not fetch articles");
+        setFetchArticle(null);
+      }
+
+      if (data) {
+        setIsLoading(false);
+        setFetchArticle(data);
+        setFetchError(null);
+      }
+    };
+    fetchArticles();
+  }, []);
+
+  const handleArticlePress = (articleId: string) => {
+    router.push({
+      pathname: "(app)/Articles/[ArticleDetails]",
+      params: { id: articleId },
+    });
+  };
 
   return (
-    <TouchableOpacity
-    onPress={() => router.push("(app)/Articles/ArticleDetails")}
-      style={{
-        display: "flex",
-        flexDirection: "row",
-        padding: 10,
-        paddingLeft: 10,
-        gap: 10,
-        maxWidth: "100%",
-      }}
-    >
-      <View>
-        <Image
-          style={{ height: 120, width: 120, borderRadius: 20 }}
-          source={article.image}
+    <View>
+      {IsLoading ? (
+        <ActivityIndicator
+          color="#246BFD"
+          size="large"
+          style={{ marginLeft: "5%", marginTop: "80%" }}
         />
-      </View>
-      <View
-        style={{
-          paddingRight: 15,
-          display: "flex",
-          justifyContent: "space-between",
-        }}
-      >
-        <View>
-          <Text style={{ color: theme === 'light' ? "#424242" : '#FFFFFF', fontSize: 10 }}>{article.date}</Text>
+      ) : (
+        <View style={{ padding: 10, gap: 16 }}>
+          {fetchError && <Text>{fetchError}</Text>}
+
+          {fetchArticle &&
+            fetchArticle.map((article) => (
+              <TouchableOpacity
+                key={article.id}
+                onPress={() => handleArticlePress(article.id)}
+                style={{ flexDirection: "row", gap: 16, marginBottom: 10 }}
+              >
+                <Image
+                  style={{ height: 120, width: 120, borderRadius: 20 }}
+                  source={{ uri: article.image }}
+                />
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: "space-between",
+                    paddingRight: 15,
+                  }}
+                >
+                  <Text
+                    style={[
+                      Typography.medium.xSmall,
+                      {
+                        color: theme === "light" ? "#424242" : "#FFFFFF",
+                        fontSize: 10,
+                      },
+                    ]}
+                  >
+                    {article.created_at}
+                  </Text>
+                  <Text
+                    style={[
+                      Typography.bold.large,
+                      {
+                        fontSize: 16,
+                        color: theme === "light" ? "#212121" : "#FFFFFF",
+                      },
+                    ]}
+                    numberOfLines={3}
+                  >
+                    {article.title}
+                  </Text>
+                  <Text
+                    style={{
+                      color: theme === "light" ? "#246BFD" : "#246BFD",
+                      fontSize: 10,
+                      backgroundColor: "rgba(36, 107, 253, 0.08)",
+                      borderRadius: 6,
+                      height: 24,
+                      width: 59,
+                      textAlign: "center",
+                      padding: 5,
+                      marginTop: 10,
+                    }}
+                  >
+                    {article.category}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            ))}
         </View>
-        <View style={{ flexWrap: "wrap", maxWidth: "82%", width: "95%" }}>
-          <View>
-            <Text style={{ fontSize: 16, color: theme === 'light' ? "#212121" : '#FFFFFF'}} numberOfLines={3}>
-              {article.title}
-            </Text>
-          </View>
-        </View>
-        <Text
-          style={{
-            color: theme === 'light' ? "#246BFD" : '#246BFD',
-            fontSize: 10,
-            backgroundColor: theme === 'light' ? "rgba(36, 107, 253, 0.08)" : "rgba(36, 107, 253, 0.08)",
-            borderRadius: 6,
-            height: 24,
-            width: 59,
-            textAlign: "center",
-            padding: 5,
-            marginTop: 10,
-          }}
-        >
-          Covid-19
-        </Text>
-      </View>
-      </TouchableOpacity>
+      )}
+    </View>
   );
 }
-

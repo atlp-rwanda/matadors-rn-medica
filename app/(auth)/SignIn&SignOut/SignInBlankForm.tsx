@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   TextInput,
   TouchableWithoutFeedback,
-  Pressable,
   AppState,
   Alert,
   ActivityIndicator,
@@ -15,7 +14,6 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import CheckBox from "expo-checkbox";
-import { LeftArrow } from "@/components/UI/Icons";
 import { router } from "expo-router";
 import Typography from "../../../constants/Typography";
 import { Colors } from "../../../constants/Colors";
@@ -40,7 +38,6 @@ WebBrowser.maybeCompleteAuthSession();
 const redirectTo = makeRedirectUri({
   native: "com.medica://",
 });
-console.log({ redirectTo });
 
 const createSessionFromUrl = async (url: string) => {
   const { params, errorCode } = QueryParams.getQueryParams(url);
@@ -55,7 +52,6 @@ const createSessionFromUrl = async (url: string) => {
     refresh_token,
   });
   if (error) throw error;
-  console.log("session", data.session);
   return data.session;
 };
 
@@ -102,7 +98,6 @@ const Login = () => {
   const { theme, changeTheme } = useContext(ThemeContext);
 
   const url = Linking.useURL();
-  console.log({ url });
   if (url) createSessionFromUrl(url);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -276,7 +271,7 @@ const Login = () => {
       </View>
 
       <View>
-        <Pressable
+        <TouchableOpacity
           disabled={isLoading}
           onPress={() => signInWithEmail()}
           style={{
@@ -297,7 +292,7 @@ const Login = () => {
           ) : (
             <Text style={styles.signText}>Sign in</Text>
           )}
-        </Pressable>
+        </TouchableOpacity>
       </View>
 
       <TouchableOpacity

@@ -16,7 +16,7 @@ export default function SplashScreen() {
     setTimeout(() => {
       // router.push("(auth)/ForgotPassword&Reset");
       router.push("onBoarding");
-    },1000);
+    },3000);
   }, []);
   
   return (

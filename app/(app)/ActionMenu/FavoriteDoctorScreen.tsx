@@ -91,7 +91,6 @@ function DoctorScreen() {
             }
             setDoctors(data)
            
-  console.log('Fetched data:', data);
 }
 
 fetchData();

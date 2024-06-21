@@ -1,4 +1,4 @@
-import { useContext} from "react";
+import { useContext } from "react";
 import {
   StyleSheet,
   Text,
@@ -30,7 +30,6 @@ WebBrowser.maybeCompleteAuthSession();
 const redirectTo = makeRedirectUri({
   native: "com.medica://",
 });
-console.log({ redirectTo });
 
 const createSessionFromUrl = async (url: string) => {
   const { params, errorCode } = QueryParams.getQueryParams(url);
@@ -45,7 +44,6 @@ const createSessionFromUrl = async (url: string) => {
     refresh_token,
   });
   if (error) throw error;
-  console.log("session", data.session);
   return data.session;
 };
 
@@ -75,7 +73,6 @@ const LetsYouIn = () => {
   const { theme } = useContext(ThemeContext);
 
   const url = Linking.useURL();
-  console.log({ url });
   if (url) createSessionFromUrl(url);
 
   return (

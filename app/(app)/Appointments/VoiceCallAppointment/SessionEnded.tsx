@@ -66,7 +66,7 @@ const SessionEnded = () => {
       </View>
 
       <View style={styles.detail}>
-        <Image source={require("@/assets/images/Jenny.png")} />
+        <Image source={require("@/assets/images/Jenny.png")} style={{width: 200, height: 200, borderRadius: 100}}/>
         {doctorDetails &&
           doctorDetails.map((data: doctor) => (
             <View style={styles.detail}>

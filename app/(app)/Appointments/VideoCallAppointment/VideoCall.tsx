@@ -18,7 +18,7 @@ import {
         <ImageBackground
           style={styles.Background}
           resizeMode="cover"
-          source={require("@/assets/images/MariaBackblur.png")}
+          source={require("@/assets/images/Dr maria.png")}
         >
           <View style={styles.backArrow}>
             <TouchableOpacity onPress={()=> router.back()}>
@@ -29,7 +29,7 @@ import {
   
           <View style={styles.middlePart}>
             <View style={styles.patient}>
-                   <Image source={require('@/assets/images/SinglePatient.png')} />
+                   <Image source={require('@/assets/images/SinglePatient.png')} style={{width: 120, height: 180, borderRadius: 20}}/>
 
                    <TouchableOpacity style={{position:'relative', marginTop: '-27%',marginLeft: '72%'}}>
                    <SvgXml xml={CameraIcon} />
