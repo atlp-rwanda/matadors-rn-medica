@@ -7,6 +7,7 @@ node_modules/
 dist/
 web-build/
 .env
+.env.example
 
 # Native
 *.orig.*

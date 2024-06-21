@@ -28,7 +28,7 @@ const VoiceCallRinging = () => {
         </View>
 
         <View style={styles.middlePart}>
-          <Image source={require("@/assets/images/Jenny.png")} />
+          <Image source={require("@/assets/images/Jenny.png")} style={{width: 200, height: 200, borderRadius: 100}}/>
 
           <View style={styles.middleText}>
             <Text style={[Typography.heading._3, { color: "#FFFFFF" }]}>
