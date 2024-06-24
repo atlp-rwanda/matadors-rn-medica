@@ -28,14 +28,7 @@ export default function SelectProfile({ image, onChange }: Props) {
       quality: 1,
     });
 
-    console.log(result);
-
     if (!result.canceled) {
-      console.log({
-        uri: result.assets[0].uri,
-        name: result.assets[0].fileName!,
-        type: result.assets[0].mimeType!,
-      });
       onChange("image", {
         uri: result.assets[0].uri,
         name: result.assets[0].fileName!,

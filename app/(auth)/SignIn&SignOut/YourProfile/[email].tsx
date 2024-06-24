@@ -78,7 +78,6 @@ const YourProfile = () => {
         // paddingHorizontal: 20,
         alignItems: "center",
         paddingVertical: 20,
-        flexGrow: 1,
       }}
       alwaysBounceVertical={false}
     >
@@ -110,7 +109,7 @@ const YourProfile = () => {
           onChange={handleFormChange}
         />
         <Input
-          placeholder="Birth Date"
+          placeholder="yyyy-MM-DD"
           name="birthDate"
           value={formData.birthDate}
           onChange={handleFormChange}
