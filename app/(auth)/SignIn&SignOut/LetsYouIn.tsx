@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -6,8 +6,9 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from "react-native";
-import { supabase } from "@/lib/supabase";
+
 import { ThemeContext } from "@/ctx/ThemeContext";
 import { SvgXml } from "react-native-svg";
 import { StatusBar } from "expo-status-bar";
@@ -20,61 +21,22 @@ import {
   BlackApple,
   WhiteApple,
 } from "@/components/Icons/Icons";
-import * as WebBrowser from "expo-web-browser";
-import * as Linking from "expo-linking";
-import { makeRedirectUri } from "expo-auth-session";
-import * as QueryParams from "expo-auth-session/build/QueryParams";
 import React from "react";
+import { useAuth } from "@/ctx/AuthContext";
 
-WebBrowser.maybeCompleteAuthSession();
-const redirectTo = makeRedirectUri({
-  native: "com.medica://",
-});
 
-const createSessionFromUrl = async (url: string) => {
-  const { params, errorCode } = QueryParams.getQueryParams(url);
-
-  if (errorCode) throw new Error(errorCode);
-  const { access_token, refresh_token } = params;
-
-  if (!access_token) return;
-
-  const { data, error } = await supabase.auth.setSession({
-    access_token,
-    refresh_token,
-  });
-  if (error) throw error;
-  return data.session;
-};
-
-const signInWithFacebook = async () => {
-  const { data, error } = await supabase.auth.signInWithOAuth({
-    provider: "facebook",
-    options: {
-      redirectTo,
-      skipBrowserRedirect: true,
-    },
-  });
-  if (error) throw error;
-
-  const res = await WebBrowser.openAuthSessionAsync(
-    data?.url ?? "",
-    redirectTo
-  );
-
-  if (res.type === "success") {
-    const { url } = res;
-    await createSessionFromUrl(url);
-
-    router.push("/(app)/ActionMenu");
-  }
-};
 const LetsYouIn = () => {
+ const {signInWithFacebook} = useAuth();
   const { theme } = useContext(ThemeContext);
 
-  const url = Linking.useURL();
-  if (url) createSessionFromUrl(url);
-
+  async function signUpWithFacebook (){
+    try{
+     await signInWithFacebook();
+    }catch(error){
+      const err: Error = error as Error;
+      Alert.alert(err.message);
+    }
+  }
   return (
     <ScrollView
       style={{
@@ -114,7 +76,7 @@ const LetsYouIn = () => {
                 borderColor: theme === "dark" ? "#35383F" : "#EEEEEE",
               },
             ]}
-            onPress={signInWithFacebook}
+            onPress={signUpWithFacebook}
           >
             <Image source={require("../../../assets/icons/facebook.png")} />
             <Text

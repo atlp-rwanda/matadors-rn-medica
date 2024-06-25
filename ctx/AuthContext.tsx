@@ -5,6 +5,10 @@ import { supabase } from "@/lib/supabase";
 import { router } from "expo-router";
 import { Alert } from "react-native";
 import uuid from "react-native-uuid";
+import * as WebBrowser from "expo-web-browser";
+import * as Linking from "expo-linking";
+import { makeRedirectUri } from "expo-auth-session";
+import * as QueryParams from "expo-auth-session/build/QueryParams";
 
 export const AuthContext = createContext<AuthType>({
   email: "",
@@ -17,6 +21,7 @@ export const AuthContext = createContext<AuthType>({
   refreshSession: async () => {},
   login: async (email: string, password: string) => {},
   register: async (email: string, password: string) => {},
+  signInWithFacebook: async () => {},
   logout: async () => {},
 });
 
@@ -80,6 +85,64 @@ export default function AuthProvider({ children }: Props) {
     }
   }
 
+  const signInWithFacebook = async () => {
+    WebBrowser.maybeCompleteAuthSession();
+    const redirectTo = makeRedirectUri({
+      native: "com.medica://",
+    });
+
+    const createSessionFromUrl = async (url: string) => {
+      const { params, errorCode } = QueryParams.getQueryParams(url);
+
+      if (errorCode) throw new Error(errorCode);
+      const { access_token, refresh_token } = params;
+
+      if (!access_token) return;
+
+      const { data, error } = await supabase.auth.setSession({
+        access_token,
+        refresh_token,
+      });
+      if (error) throw error;
+
+      if (data.session) {
+        setActivated(false);
+        setIsLoggedIn(true);
+        setRefreshToken(data.session.refresh_token);
+        setUserId(data.session.user.id);
+        setToken(data.session.access_token);
+        setEmail(data.session.user.email);
+      }
+
+      return data.session;
+    };
+
+    // const signInWithFacebook = async () => {
+      
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: "facebook",
+        options: {
+          redirectTo,
+          skipBrowserRedirect: true,
+        },
+      });
+      if (error) throw error;
+
+      const res = await WebBrowser.openAuthSessionAsync(
+        data?.url ?? "",
+        redirectTo
+      );
+
+      if (res.type === "success") {
+        const { url } = res;
+        await createSessionFromUrl(url);
+      }
+    // };
+
+    const url = Linking.useURL();
+    if (url) createSessionFromUrl(url);
+  }
+
   async function setUpUserInfo(user: UserInfo) {
     const res = await fetch(user.image.uri);
     const arrayBuffer = await res.arrayBuffer();
@@ -130,6 +193,13 @@ export default function AuthProvider({ children }: Props) {
     logout,
     register,
     email,
+    setEmail,
+    setActivated,
+    setIsLoggedIn,
+    setRefreshToken,
+    setToken,
+    setUserId,
+    signInWithFacebook
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
