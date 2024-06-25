@@ -21,7 +21,7 @@ const DoctorCard = () => {
     >
       <Image
         source={require("@/assets/images/BookingImages/doctor.png")}
-        style={{ width: 110, height: 110 }}
+        style={{width: 110, height: 110, borderRadius: 16}}
       />
       <View
         style={{

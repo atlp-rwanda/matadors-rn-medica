@@ -43,28 +43,52 @@ import { ThemeContext } from "@/ctx/ThemeContext";
 import { router } from "expo-router";
 import Switch from "@/components/UI/Switch";
 import SelectProfile from "@/components/UI/SelectProfile";
-import { Session } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabase";
-import { fetchPatientData, getPatientData } from "@/helper/LoggedInUser";
+import { getUserImageUrl, fetchPatientData, getPatientData } from "@/utils/LoggedInUser";
 
 const index = () => {
-  const [session, setSession] = useState<Session | null>(null);
   const { theme, changeTheme } = useContext(ThemeContext);
-  const [image, setImage] = useState<null | string>(null);
-
   const [userData, setUserData] = useState<any[]>([]);
   const [patientData, setPatientData] = useState(null);
+  const [imageUrl, setImageUrl] = useState([])
+  const [profilePhoto, setProfilePhoto] =  useState("");
+  const CDNURL = "https://vbwbfflzxuhktdvpbspd.supabase.co/storage/v1/object/public/patients/"
+
 
   useEffect(() => {
     getPatientData(supabase, setUserData);
   }, []);
 
   useEffect(() => {
-    const id: string = userData?.id;
-    if (id) {
-      fetchPatientData(id, setPatientData);
+    if (userData?.id) {
+      fetchPatientData(userData?.id, setPatientData);
+      getUserImageUrl('patients', userData, setImageUrl);
     }
   }, [userData]);
+
+  useEffect(() => {
+    if (imageUrl.length > 0) {
+      setProfilePhoto(imageUrl[0]?.name);
+    }
+  }, [imageUrl]);
+  const [formData, setFormData] = useState({
+    image: {
+      name: "",
+      mimeType: "",
+      uri: "",
+    },
+  });
+
+  const image  = `${CDNURL + userData?.id + '/' + profilePhoto}`;
+
+  function handleImagePicker(name: string, value: string) {
+    setFormData((prevVal) => {
+      return {
+        ...prevVal,
+        [name]: value,
+      };
+    });
+  }
 
   return (
     <View>
@@ -86,7 +110,12 @@ const index = () => {
                   gap:10,
                 }}
               >
-                <SelectProfile image={item?.image} setImage={setImage} />
+                <View style={{borderRadius:100, width: 200, height: 200}}>
+                  <Image 
+                  style={{width: "100%", height: "100%", borderRadius:100}}
+                  source={{ uri: `${CDNURL + userData?.id + '/' + profilePhoto}` }}/>
+                </View>
+                {/* <SelectProfile image={item?.image} onChange={handleImagePicker}/> */}
                 <Text
                   style={[
                     Typography.bold.xxLarge,
@@ -111,7 +140,7 @@ const index = () => {
                     },
                   ]}
                 >
-                  +1 111 467 378 399
+                  {!item?.phone ? "add your phone number": item?.phone}
                 </Text>
               </View>
               <View

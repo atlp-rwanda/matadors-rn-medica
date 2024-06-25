@@ -29,3 +29,14 @@ export interface AuthType {
 export interface Countries extends TCountries {
   [key: string]: any;
 }
+
+export interface Doctor{
+  id: number,
+  first_name: string,
+  last_name: string,
+  hospital: string,
+  rate: string,
+  review: string,
+  specialization: string,
+  about:string
+}

@@ -22,7 +22,6 @@ function DoctorComponent({ imageSource, name, iconComponent, professionalTitle, 
     const nameColor = theme === "dark" ? styles.textDark : styles.textLight
     const descriptionColor = theme === "dark" ? styles.descriptionDark : styles.descriptionLight
     const horizontalColor = theme === "dark" ? styles.horizontalDark : styles.horizontalLight
-    console.log("image url", imageSource.uri)
   
 
     return (
@@ -96,7 +95,7 @@ const styles = StyleSheet.create({
         height: "100%",
         borderRadius: 10,
         borderWidth: 1,
-        zIndex:1000
+        zIndex:1000,
         
     },
     outerDark: {
@@ -240,6 +239,7 @@ const styles = StyleSheet.create({
     },
     image: {
         width: 110,
-        height:110
+        height:110,
+        borderRadius: 20
     }
 })
