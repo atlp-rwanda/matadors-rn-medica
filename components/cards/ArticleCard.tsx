@@ -5,7 +5,7 @@ import { useRouter } from "expo-router";
 import { ThemeContext } from "@/ctx/ThemeContext";
 import { createClient } from "@supabase/supabase-js";
 import Typography from "@/constants/Typography";
-import { SUPABASE_URL, SUPABASE_NON_KEY } from "@env";
+import { supabase } from "@/lib/supabase";
 
 interface Article {
   created_at: ReactNode;
@@ -19,7 +19,6 @@ interface Article {
 type FetchError = string | null;
 type FetchArticle = Article[] | null;
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_NON_KEY);
 
 const tableName = "Articles";
 
