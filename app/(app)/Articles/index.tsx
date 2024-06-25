@@ -16,7 +16,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { createClient } from "@supabase/supabase-js";
 import React from "react";
 import Typography from "@/constants/Typography";
-import { SUPABASE_URL, SUPABASE_NON_KEY } from "@env";
+import { supabase } from "@/lib/supabase";
 interface Article {
   id: string;
   title: string;
@@ -28,7 +28,6 @@ interface Article {
 type FetchError = string | null;
 type FetchArticle = Article[] | null;
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_NON_KEY);
 
 const tableName = "Articles";
 
@@ -51,7 +50,6 @@ export default function Article() {
         setIsLoading(false);
         setFetchArticle(data);
         setFetchError(null);
-        // console.log(data);
       }
     };
     fetchArticles();

@@ -6,6 +6,7 @@ import {
 import { router, useLocalSearchParams } from "expo-router";
 import React, { ReactNode, useContext, useEffect, useState } from "react";
 import { ThemeContext } from "@/ctx/ThemeContext";
+import { supabase } from "@/lib/supabase";
 import {
   View,
   Text,
@@ -18,9 +19,7 @@ import {
   Alert,
   ToastAndroid,
 } from "react-native";
-import { createClient } from "@supabase/supabase-js";
 import Typography from "@/constants/Typography";
-import { SUPABASE_URL, SUPABASE_NON_KEY } from "@env";
 import Article from ".";
 
 interface Article {
@@ -34,7 +33,6 @@ interface Article {
 type FetchArticle = Article[] | null;
 type FetchError = string | null;
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_NON_KEY);
 
 const tableName = "Articles";
 
@@ -74,7 +72,6 @@ export default function ArticlesDetails() {
         if (result.activityType) {
           // shared with activity type of result.activityType
         } else {
-          // shared
         }
       } else if (result.action === Share.dismissedAction) {
         // dississed
