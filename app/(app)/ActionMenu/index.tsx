@@ -553,6 +553,7 @@ export default function Index() {
               justifyContent: "center",
               paddingBottom: 150,
               paddingTop: 20,
+              marginBottom: 100
             }}
           >
             {filteredDoctors.length > 0 ? (

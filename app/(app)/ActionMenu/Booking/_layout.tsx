@@ -18,6 +18,7 @@ export default function BookingLayout() {
   return (
     <>
       <Stack>
+        <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen
           name="reviewSummary"
           options={{
@@ -38,7 +39,6 @@ export default function BookingLayout() {
           name="DoctorRatingAndReview"
           options={{ headerShown: false }}
         />
-        <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen
           name="Select-package"
           options={{ header: () => <Header title="Select Package" /> }}

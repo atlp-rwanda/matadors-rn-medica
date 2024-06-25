@@ -1,31 +1,21 @@
 import React, { useContext, useEffect, useState } from "react";
-import {
-  SafeAreaView,
-  Text,
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  Pressable,
-  Platform,
-  ScrollView,
-  Image,
-} from "react-native";
+import { Text, View, StyleSheet, ScrollView } from "react-native";
 import { Colors } from "@/constants/Colors";
 import { router } from "expo-router";
-import { MaterialIcons } from "@expo/vector-icons";
 import { ThemeContext } from "@/ctx/ThemeContext";
-import { StatusBar } from "expo-status-bar";
 import Typography from "@/constants/Typography";
 import DatePicker from "@/components/UI/DatePicker";
 import Tag from "@/components/UI/Tags/Tag";
 import { FlatList } from "react-native";
 import Button from "@/components/UI/Button";
 import Chips from "@/components/UI/ChipsComponent";
+import SelectHour from "@/components/SelectHour";
 
 export default function BookingAppointment() {
   const { theme, changeTheme } = useContext(ThemeContext);
   const [timeSlots, setTimeSlots] = useState([""]);
-  const [selected, setSelected] = useState("");
+  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedHour, setSelectedHour] = useState("");
 
   const generateTimeSlots = () => {
     let times = [];
@@ -45,6 +35,8 @@ export default function BookingAppointment() {
   useEffect(() => {
     generateTimeSlots();
   }, []);
+
+  console.log(selectedHour)
 
   return (
     <ScrollView
@@ -79,7 +71,7 @@ export default function BookingAppointment() {
             >
               Select Date
             </Text>
-            <DatePicker />
+            <DatePicker onChange={setSelectedDate} />
           </View>
 
           <View style={{ gap: 10 }}>
@@ -96,28 +88,7 @@ export default function BookingAppointment() {
             >
               Select Hour
             </Text>
-            <FlatList
-              data={timeSlots}
-              renderItem={(item) => {
-                return (
-                  <>
-                   
-                  <Chips text={item.item} type= "border"size="large" style={{ paddingHorizontal:5, width:'32%',marginRight:5}} />
-                  </>
-                 
-                  
-                );
-              }}
-               numColumns={3}
-              contentContainerStyle={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent:'space-between',
-                
-                gap: 10,
-                flexWrap: "wrap",
-              }}
-            />
+            <SelectHour timeSlots={timeSlots} onChange={setSelectedHour} />
           </View>
         </View>
       </View>
@@ -138,59 +109,3 @@ export default function BookingAppointment() {
     </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  hour: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 20,
-    paddingBottom: 20,
-  },
-  change: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    marginHorizontal: 10,
-    flexWrap: "wrap",
-  },
-  button: {
-    flexBasis: "30%",
-    borderColor: Colors.main.primary._500,
-    borderWidth: 2,
-    backgroundColor: "transparent",
-    borderRadius: 100,
-    marginVertical: 10,
-    marginHorizontal: "1%",
-    width:118,
-    height:45
-  },
-  buttonSelected: {
-    backgroundColor: Colors.main.primary._500,
-    borderWidth: 0,
-    color: "white",
-  },
-  buttonText: {
-    color: Colors.main.primary._500,
-    padding: 3,
-    alignSelf: "center",
-  },
-
-  buttonTextSelected: {
-    color: "white",
-  },
-  btn: {
-    backgroundColor: Colors.main.primary._500,
-    textAlign: "center",
-    alignItems: "center",
-    padding: 18,
-    borderRadius: 100,
-    marginTop: 10,
-    shadowColor: "#246BFD",
-    elevation: 7,
-  },
-  btnText: {
-    textAlign: "center",
-    color: "white",
-  },
-});

@@ -108,22 +108,27 @@ function RootLayoutNav() {
 
   const inAuth = segments[0] === "(auth)";
 
+  // useEffect(() => {
+  //   if (!isLoggedIn && !inAuth) {
+  //     console.log("Not logged in");
+  //     return router.replace("/(auth)/SignIn&SignOut/LetsYouIn");
+  //   }
+
+  //   if (isLoggedIn && !activated && email) {
+  //     console.log("Logged and not activated");
+  //     return router.replace("/(auth)/SignIn&SignOut/YourProfile/" + email);
+  //   }
+
+  //   if (isLoggedIn && activated && inAuth) {
+  //     console.log("Logged in, activated, and in auth");
+  //     return router.replace("/(app)/ActionMenu");
+  //   }
+  // }, [isLoggedIn, activated, router, segments]);
+
   useEffect(() => {
-    if (!isLoggedIn && !inAuth) {
-      console.log("Not logged in");
-      return router.replace("/(auth)/SignIn&SignOut/LetsYouIn");
-    }
-
-    if (isLoggedIn && !activated && email) {
-      console.log("Logged and not activated");
-      return router.replace("/(auth)/SignIn&SignOut/YourProfile/" + email);
-    }
-
-    if (isLoggedIn && activated && inAuth) {
-      console.log("Logged in, activated, and in auth");
-      return router.replace("/(app)/ActionMenu");
-    }
-  }, [isLoggedIn, activated, router, segments]);
+    console.log(segments);
+    router.replace("/(app)/ActionMenu/Booking/BookingAppointment");
+  }, []);
 
   return (
     <>
