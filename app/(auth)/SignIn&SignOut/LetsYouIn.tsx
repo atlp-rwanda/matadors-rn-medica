@@ -69,6 +69,28 @@ const signInWithFacebook = async () => {
     router.push("/(app)/ActionMenu");
   }
 };
+const signInWithGoogle = async () => {
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: {
+      redirectTo,
+      skipBrowserRedirect: true,
+    },
+  });
+  if (error) throw error;
+
+  const res = await WebBrowser.openAuthSessionAsync(
+    data?.url ?? "",
+    redirectTo
+  );
+
+  if (res.type === "success") {
+    const { url } = res;
+    await createSessionFromUrl(url);
+
+    router.push("/(app)/ActionMenu");
+  }
+};
 const LetsYouIn = () => {
   const { theme } = useContext(ThemeContext);
 
@@ -135,6 +157,7 @@ const LetsYouIn = () => {
                 borderColor: theme === "dark" ? "#35383F" : "#EEEEEE",
               },
             ]}
+            onPress={signInWithGoogle}
           >
             <Image source={require("../../../assets/icons/Google.png")} />
             <Text
