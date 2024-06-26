@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "matadors-rn-medica",
-    "slug": "matadors-rn-medica",
+    "slug": "medica-158",
     "scheme": "com.medica",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -63,6 +63,14 @@
         {
           "photosPermission": "The app accesses your photos to let you share them with your friends."
         }
+      ],
+      [
+        "@sentry/react-native/expo",
+        {
+          "organization": "matadors",
+          "project": "medica",
+          "url":"https://u.expo.dev/e682bd39-ab6e-4861-9be2-39cbe02bb93e"
+        }
       ]
     ],
     "experiments": {
@@ -73,15 +81,15 @@
         "origin": false
       },
       "eas": {
-        "projectId": "3a6a34bd-fe90-43f9-9508-8c6cf7700ef6"
+        "projectId": "e682bd39-ab6e-4861-9be2-39cbe02bb93e"
       }
     },
     "runtimeVersion": {
       "policy": "appVersion"
     },
     "updates": {
-      "url": "https://u.expo.dev/3a17d659-91e3-4105-837b-5f88bdee8d37"
+      "url": "https://u.expo.dev/e682bd39-ab6e-4861-9be2-39cbe02bb93e"
     },
-    "owner": "apiimperfect"
+    "owner": "actrox"
   }
 }
