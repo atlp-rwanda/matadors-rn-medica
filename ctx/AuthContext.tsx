@@ -87,7 +87,7 @@ export default function AuthProvider({ children }: Props) {
   }
 
   async function setUpUserInfo(user: UserInfo) {
-    if (authType === "email") {
+    if (!authType) {
       const res = await fetch(user.image.uri);
       const arrayBuffer = await res.arrayBuffer();
 
