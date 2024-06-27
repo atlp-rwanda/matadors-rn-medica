@@ -7,9 +7,10 @@ import { ThemeContext } from "@/ctx/ThemeContext";
 
 interface Props {
   text: string;
+  onChangeText:(text:string)=>void
 }
 
-export default function TextArea({ text }: Props) {
+export default function TextArea({ text,onChangeText }: Props) {
   const { theme } = useContext(ThemeContext);
   return (
     <View
@@ -32,6 +33,7 @@ export default function TextArea({ text }: Props) {
         ]}
         multiline
         value={text}
+        onChangeText={onChangeText}
       />
     </View>
   );

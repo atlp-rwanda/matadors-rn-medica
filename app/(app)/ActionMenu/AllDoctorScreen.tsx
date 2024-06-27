@@ -1,28 +1,31 @@
-import React, { ReactElement, useEffect, useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  SafeAreaView,
-  ScrollView,
-  Pressable,
-} from "react-native";
-import DoctorComponent from "@/components/DoctorComponent";
-import { SvgXml } from "react-native-svg";
-import { WhiteHeart } from "@/components/UI/icons/WhiteHeart";
-import { star } from "@/assets/icons/star";
-import data from "../../doctors.json";
-import HeaderComponent from "@/components/HeaderComponent";
-import SearchComponent from "@/components/SearchComponent";
-import FoundDoctorCount from "@/components/FoundDoctorCount";
-import NofoundComponent from "@/components/NofoundComponent";
-import RemovefavoritePopup from "@/components/RemovefavoritePopup";
-import FilterPopup from "@/components/FilterSearchComponent";
-import { StatusBar } from "expo-status-bar";
-import { ThemeContext } from "@/ctx/ThemeContext";
-import { useContext } from "react";
-import { supabase } from "@/lib/supabase";
-import { Doctor } from "@/constants/Types";
+import React,{ReactElement, useEffect, useState} from 'react';
+import { StyleSheet, Text, Image, View, TouchableHighlight, SafeAreaView, Button, Alert, Platform, Dimensions,TextInput, ScrollView, Pressable} from 'react-native'
+import { Feather } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
+import DoctorComponent from '@/components/DoctorComponent';
+import { FontAwesome } from '@expo/vector-icons';
+ import { SvgXml } from "react-native-svg"
+import { WhiteHeart } from '@/components/UI/icons/WhiteHeart';
+import { star } from '@/assets/icons/star';
+import { search } from '@/assets/icons/search';
+import { more } from '@/assets/icons/more';
+import { leftArrow } from '@/assets/icons/left';
+import data from "../../doctors.json"
+import HeaderComponent from '@/components/HeaderComponent';
+import SearchComponent from '@/components/SearchComponent';
+import FoundDoctorCount from '@/components/FoundDoctorCount';
+import NofoundComponent from '@/components/NofoundComponent';
+import RemovefavoritePopup from '@/components/RemovefavoritePopup';
+import FilterPopup from '@/components/FilterSearchComponent';
+import { StatusBar } from 'expo-status-bar';
+import NotFoundScreen from '@/app/+not-found';
+import { ThemeContext } from '@/ctx/ThemeContext';
+import { useContext } from 'react';
+import { supabase } from '@/lib/supabase';
+import { router } from 'expo-router';
+
+
 
 const tableName = "doctors";
 
@@ -33,7 +36,16 @@ interface imageMapProp {
 interface iconMappingProp {
   [key: string]: ReactElement;
 }
-
+interface Doctor{
+    id: number,
+    first_name: string,
+    last_name: string,
+    hospital: string,
+    rate: string,
+    review: string,
+    specialization: string,
+    about:string
+}
 interface categoryProp {
   name: string;
   Doctors: Doctor[];
@@ -74,127 +86,143 @@ function DoctorScreen() {
     fetchData();
   }, []);
 
-  const handleSearchPressed = () => {
-    setShowSearch(true);
-  };
-  const handleSearchSubmit = (text: string) => {
-    setSearchTerm(text.toLowerCase());
-  };
+    const handleSearchPressed = () => {
+        setShowSearch(true)
+    }
+    const handleSearchSubmit = (text: string) => {
+        setSearchTerm(text.toLowerCase())
+    }
+    
+    const handleFilter = () => {
+        setShowfilter(true)
+    }
+    const handleRemove = (doctor:any) => {
+        setSelectedDoctor(doctor)
+        
+        setShowPopup(true)
+    }
 
-  const handleFilter = () => {
-    setShowfilter(true);
-  };
-  const handleRemove = (doctor: any) => {
-    setSelectedDoctor(doctor);
-
-    setShowPopup(true);
-  };
-
-  const filteredDoctors =
-    searchTerm.length > 0
-      ? doctors.filter((doctor) =>
-          doctor.last_name.toLowerCase().includes(searchTerm)
-        )
-      : doctors;
-  return (
-    <SafeAreaView style={[styles.container, containerStyle]}>
-      <StatusBar style={theme === "dark" ? "light" : "dark"} />
-      <View>
-        <View style={[styles.upper, containerStyle]}>
-          {!showSearch ? (
-            <HeaderComponent
-              onSearchPressed={handleSearchPressed}
-              headerText="Top Doctor"
-            />
-          ) : (
-            <SearchComponent
-              onSearchSubmit={handleSearchSubmit}
-              filterAction={handleFilter}
-            />
-          )}
-        </View>
-        <View style={[styles.categoryBtnView, containerStyle]}>
-          <ScrollView
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            style={styles.categoryScroll}
-            contentContainerStyle={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            {data.categories.map((category, index) => (
-              <Pressable
-                key={index}
-                style={[
-                  styles.categoryBtn,
-                  selectedCategory === category ? styles.firstCategoryBtn : {},
-                ]}
-              >
-                <Text
-                  style={[
-                    styles.categoryBtnText,
-                    selectedCategory === category
-                      ? styles.firstCategoryBtnText
-                      : {},
-                  ]}
-                >
-                  {category.name}
-                </Text>
-              </Pressable>
-            ))}
-          </ScrollView>
-        </View>
-        <View style={styles.foundDoctorView}>
-          {showSearch && <FoundDoctorCount count={filteredDoctors.length} />}
-        </View>
-        <View>
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            style={[styles.scroll, scrollbackColor]}
-            contentContainerStyle={{
-              justifyContent: "center",
-              //  alignItems: 'center',
-              paddingBottom: 150,
-              paddingTop: 20,
-            }}
-          >
-            {filteredDoctors.length > 0 ? (
-              filteredDoctors.map((doctor: any, index: any) => (
-                <View key={index} style={styles.componentView}>
-                  <DoctorComponent
-                    imageSource={{ uri: doctor.image }}
-                    name={`${doctor.first_name} ${doctor.last_name}`}
-                    iconComponent={<SvgXml xml={WhiteHeart} />}
-                    professionalTitle={doctor.specialization}
-                    hospital={doctor.hospital}
-                    star={<SvgXml xml={star} />}
-                    review={doctor.review}
-                    rate={doctor.rate}
-                    remove={() => handleRemove(doctor)}
-                  />
+    const filteredDoctors=searchTerm.length>0 ? doctors.filter(doctor=>doctor.last_name.toLowerCase().includes(searchTerm)):doctors
+    return (
+        <SafeAreaView style={[styles.container, containerStyle]}>
+           <StatusBar style={theme === "dark" ? "light" : "dark"} />
+            <View>
+                
+                <View style={[styles.upper,containerStyle]}>
+                    {
+                        !showSearch ? (
+                            <HeaderComponent
+                                onSearchPressed={handleSearchPressed}
+                                headerText="Top Doctor"
+                            
+                            />
+                        ) : (
+                               
+                            <SearchComponent
+                                    onSearchSubmit={handleSearchSubmit}
+                                    filterAction={handleFilter}
+                                
+                                
+                            />
+                        )
+                    }
                 </View>
-              ))
-            ) : (
-              <NofoundComponent />
-            )}
-          </ScrollView>
-        </View>
-      </View>
-      <RemovefavoritePopup
-        cancel={() => setShowPopup(false)}
-        visible={showpopUp}
-        onClose={() => setShowPopup(false)}
-        doctor={selectedDoctor}
-      />
-      <FilterPopup
-        cancel={() => setShowfilter(false)}
-        visible={showFilter}
-        onClose={() => setShowfilter(false)}
-      />
-    </SafeAreaView>
-  );
+                <View style={[styles.categoryBtnView,containerStyle]}>
+                <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.categoryScroll}
+                    contentContainerStyle={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        alignItems:'center'
+
+                    }}>
+                    
+                    {data.categories.map((category, index) =>
+                        <Pressable key={index} style={[styles.categoryBtn,
+                            selectedCategory === category ? styles.firstCategoryBtn : {},
+                            ]}>
+                            
+                            <Text style={[
+                                styles.categoryBtnText,
+                                selectedCategory === category ? styles.firstCategoryBtnText : {},
+                                ]}>{category.name}</Text>  
+                            
+                    </Pressable>
+                        )}
+                    </ScrollView>
+                    
+                </View>
+                <View style={styles.foundDoctorView}>
+                    {showSearch && (
+                        <FoundDoctorCount count={filteredDoctors.length } />
+                    )}
+                </View>
+                <View>
+                <ScrollView
+                showsVerticalScrollIndicator={false}
+             style={[styles.scroll,scrollbackColor]}
+              contentContainerStyle={{
+            justifyContent: "center",
+         
+            paddingBottom: 150,
+            paddingTop:20
+          }}
+                    >
+                        {filteredDoctors.length > 0 ? (
+                            
+                                filteredDoctors.map((doctor: any, index: any) =>
+                        
+                                    <View key={index} style={styles.componentView}>
+                                        <DoctorComponent
+                                            path={() => router.push({ pathname: "/ActionMenu/Booking/Doctor_details",params:{id:doctor.id} }) }
+                                            imageSource={{uri:doctor.image}}
+                                            name={`${doctor.first_name} ${doctor.last_name}`}
+                                            iconComponent={<SvgXml xml={WhiteHeart } />}
+                                            professionalTitle={doctor.specialization}
+                                            hospital={doctor.hospital_name}
+                                            star={<SvgXml xml={star} />}
+                                            review={doctor.review}
+                                            rate={doctor.rate}
+                                            remove={()=>handleRemove(doctor)}
+
+                                        />
+                                    </View>
+                        
+                                )
+                            
+                        ) : (
+                             <NofoundComponent/>   
+                    )}
+                         
+
+                    </ScrollView>
+                     
+                </View>
+               
+                   
+            
+            </View>
+            <RemovefavoritePopup
+                cancel={()=>setShowPopup(false)}
+                visible={showpopUp}
+                onClose={() => setShowPopup(false)}
+                doctor={selectedDoctor}
+            
+            
+            />
+            <FilterPopup
+                cancel={()=>setShowfilter(false)}
+                visible={showFilter}
+                onClose={() => setShowfilter(false)}
+            
+            
+            
+            />
+            
+
+             
+        </SafeAreaView>
+        
+    );
 }
 
 export default DoctorScreen;

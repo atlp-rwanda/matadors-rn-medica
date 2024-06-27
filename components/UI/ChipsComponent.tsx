@@ -6,7 +6,7 @@ import {
   StyleSheetProperties,
   TextStyle,
   ViewStyle,
-  View
+  View,
 } from "react-native";
 import { Text } from "../Themed";
 import Typography from "@/constants/Typography";
@@ -21,6 +21,7 @@ interface Props {
   onPress?: () => void;
   icon?: () => React.JSX.Element;
   style?: StyleProp<ViewStyle>;
+  selected?: boolean;
 }
 
 export default function Chips({
@@ -31,6 +32,7 @@ export default function Chips({
   rightIcon,
   onPress,
   icon,
+  selected,
   style,
 }: Props) {
   const { theme } = useContext(ThemeContext);
@@ -39,76 +41,76 @@ export default function Chips({
     textColor: string;
     borderRadius: number;
     borderColor: string;
-    
+
     height: number;
   } = {
     backgroundColor: Colors.main.primary._500,
     textColor: Colors.others.white,
     borderRadius: 100,
     borderColor: Colors.main.primary._200,
-    
-    height:45
-  };
 
+    height: 45,
+  };
 
   if (type === "filled") {
     variableStyles.backgroundColor = Colors.main.primary._500;
     variableStyles.textColor = Colors.others.white;
   } else if (type === "border") {
-    variableStyles.backgroundColor ="transparent";
+    variableStyles.backgroundColor = "transparent";
     variableStyles.borderColor = Colors.main.primary._500;
     variableStyles.textColor = Colors.main.primary._500;
-  } 
-  
+  }
 
   if (size === "large") {
     variableStyles.height = 45;
-  }
-  else  if (size === "medium") {
+  } else if (size === "medium") {
     variableStyles.height = 38;
-  }
-  else  if (size === "small") {
+  } else if (size === "small") {
     variableStyles.height = 32;
-  };
+  }
 
   return (
     <Pressable
       style={[
         {
-          backgroundColor: variableStyles.backgroundColor,
-          height:variableStyles.height,
+          backgroundColor: selected
+            ? Colors.main.primary._500
+            : variableStyles.backgroundColor,
+          height: variableStyles.height,
           borderRadius: variableStyles.borderRadius,
           borderWidth: type === "border" ? 2 : 0,
           borderColor: type === "border" ? variableStyles.borderColor : "none",
           flexDirection: "row",
           justifyContent: "center",
           alignItems: "center",
-          paddingHorizontal:20,
+          paddingHorizontal: 20,
           gap: 10,
         },
         style,
       ]}
       onPress={onPress}
-      
     >
       {leftIcon && leftIcon()}
       {icon ? (
         icon()
       ) : (
         <Text
-        style={[
-          size === "large" ? Typography.bold.xLarge :
-          size === "medium" ? Typography.semiBold.large :
-          size === "small" ? Typography.semiBold.medium : {},
-          {
-            textAlign: "center",
-            color: variableStyles.textColor,
-          }
-        ]}
-      >
-        {text}
-      </Text>
-      
+          style={[
+            size === "large"
+              ? Typography.bold.xLarge
+              : size === "medium"
+              ? Typography.semiBold.large
+              : size === "small"
+              ? Typography.semiBold.medium
+              : {},
+            {
+              textAlign: "center",
+              color: selected ? Colors.others.white:variableStyles.textColor,
+            },
+          ]}
+        >
+          {text}
+        </Text>
       )}
       {rightIcon && rightIcon()}
     </Pressable>
