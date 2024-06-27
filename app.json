@@ -1,8 +1,8 @@
 {
   "expo": {
     "name": "matadors-rn-medica",
-    "slug": "matadors-rn-medica",
-    "scheme": "com.medica",
+    "slug": "com-medica",
+    "scheme": "com-medica",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",

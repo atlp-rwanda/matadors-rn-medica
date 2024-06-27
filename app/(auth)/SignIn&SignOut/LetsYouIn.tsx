@@ -1,4 +1,5 @@
-import { useContext} from "react";
+
+import { useContext, useEffect, useState} from "react";
 import {
   StyleSheet,
   Text,
@@ -6,6 +7,7 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from "react-native";
 import { supabase } from "@/lib/supabase";
 import { ThemeContext } from "@/ctx/ThemeContext";
@@ -25,8 +27,16 @@ import * as Linking from "expo-linking";
 import { makeRedirectUri } from "expo-auth-session";
 import * as QueryParams from "expo-auth-session/build/QueryParams";
 import React from "react";
+import { useRouteInfo } from "expo-router/build/hooks";
+import { User } from "@supabase/supabase-js";
+import * as Google from "expo-auth-session/providers/google";
 
 WebBrowser.maybeCompleteAuthSession();
+
+
+
+
+
 const redirectTo = makeRedirectUri({
   native: "com.medica://",
 });
@@ -71,30 +81,70 @@ const signInWithFacebook = async () => {
     router.push("/(app)/ActionMenu");
   }
 };
-const signInWithGoogle = async () => {
-  const { data, error } = await supabase.auth.signInWithOAuth({
-    provider: "google",
-    options: {
-      redirectTo,
-      skipBrowserRedirect: true,
-    },
-  });
-  if (error) throw error;
 
-  const res = await WebBrowser.openAuthSessionAsync(
-    data?.url ?? "",
-    redirectTo
-  );
-
-  if (res.type === "success") {
-    const { url } = res;
-    await createSessionFromUrl(url);
-
-    router.push("/(app)/ActionMenu");
-  }
-};
 const LetsYouIn = () => {
+
   const { theme } = useContext(ThemeContext);
+  const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+  const route = useRouteInfo();
+
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    androidClientId: "816666560728-jme3n8em7sctff82bvg4mot1o429d3nc.apps.googleusercontent.com",
+    redirectUri: "com.medica.oauthdeeplink:/(auth)" + route.pathname,
+  });
+
+  console.log("com.medica.oauthdeeplink:/(auth)" + route.pathname)
+  useEffect(() => {
+    signInWithGoogleAsync();
+  }, [response]);
+
+  async function signInWithGoogleAsync() {
+    console.log(response)
+    if (response?.type === "success") {
+      setLoading(true);
+      const { authentication } = response;
+      console.log(authentication);
+      
+      if (authentication?.idToken) {
+        const sbRequest = await supabase.auth.signInWithIdToken({
+          provider: "google",
+          token: authentication.idToken,
+          access_token: authentication.accessToken,
+        });
+        if (sbRequest.error) {
+          Alert.alert("Error", sbRequest.error.message);
+        } else {
+          const { data } = await supabase.auth.getUser();
+          console.log(data);
+          if (data) {
+            setUser(data.user);
+          } else {
+            Alert.alert("Error", "User not found");
+          }
+        }
+      }
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    if (user) redirectUser(user);
+  }, [user]);
+
+  async function redirectUser(user: User) {
+    const { data: userData } = await supabase
+      .from("patients")
+      .select("*")
+      .eq("id", user?.id)
+      .single();
+
+    if (userData) {
+      router.push("/(app)/ActionMenu");
+    } else {
+      router.push("/(auth)/SignIn&SignOut/YourProfile/[email]");
+    }
+  }
 
   const url = Linking.useURL();
   console.log({ url });
@@ -160,7 +210,7 @@ const LetsYouIn = () => {
                 borderColor: theme === "dark" ? "#35383F" : "#EEEEEE",
               },
             ]}
-            onPress={signInWithGoogle}
+            onPress={() => promptAsync()}
           >
             <Image source={require("../../../assets/icons/Google.png")} />
             <Text
