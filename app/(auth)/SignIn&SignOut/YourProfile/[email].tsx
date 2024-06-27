@@ -57,13 +57,15 @@ const YourProfile = () => {
     try {
       setIsLoading(true);
       await setUpUserInfo(
-        authType
-          ? {
-              ...formData,
-              firstName: String(name).split(" ")[0],
-              lastName: String(name).split(" ")[1],
-              imageUrl: { uri: imageUrl, mimeType: "image/jpeg" },
-            }
+        authType !== "email"
+          ? authType
+            ? {
+                ...formData,
+                firstName: String(name).split(" ")[0],
+                lastName: String(name).split(" ")[1],
+                imageUrl: { uri: imageUrl, mimeType: "image/jpeg" },
+              }
+            : formData
           : formData
       );
     } catch (err) {

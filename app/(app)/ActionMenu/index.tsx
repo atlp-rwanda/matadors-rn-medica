@@ -134,12 +134,6 @@ export default function Index() {
         )
       : doctors;
 
-        console.log(authType !== "email"
-          ? authType
-            ? otherAuthImageUrl
-            : `${CDNURL + userData?.id + "/" + profilePhoto}`
-          : `${CDNURL + userData?.id + "/" + profilePhoto}`)
-
   return (
     <View
       style={{
@@ -761,5 +755,4 @@ const styles = StyleSheet.create({
     marginLeft: "5%",
     marginTop: "6%",
   },
-  
 });
