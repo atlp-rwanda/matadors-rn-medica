@@ -168,7 +168,7 @@ export default function Index() {
                 <Image
                   style={{ width: "100%", height: "100%", borderRadius: 100 }}
                   source={{
-                    uri:authType !== "email" && authType !== "apple"
+                    uri:authType && authType !== "apple"
                         ? otherAuthImageUrl
                         : `${CDNURL + userData?.id + "/" + profilePhoto}`,
                   }}

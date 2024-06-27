@@ -3,9 +3,9 @@ import React, { ReactNode, useContext, useEffect, useState } from "react";
 import { Image } from "react-native";
 import { useRouter } from "expo-router";
 import { ThemeContext } from "@/ctx/ThemeContext";
-import { createClient } from "@supabase/supabase-js";
 import Typography from "@/constants/Typography";
 import { supabase } from "@/lib/supabase";
+import FieldComponent from "../FieldComponent";
 
 interface Article {
   created_at: ReactNode;
@@ -27,25 +27,36 @@ export default function ArticleCard() {
   const [fetchError, setFetchError] = useState<FetchError>(null);
   const [fetchArticle, setFetchArticle] = useState<FetchArticle>(null);
   const [IsLoading, setIsLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  const categories = ['All', 'Health', 'Covid-19', 'Lifestyle', 'Medical']; 
   const router = useRouter();
 
   useEffect(() => {
     const fetchArticles = async () => {
-      const { data, error } = await supabase.from(tableName).select();
+      try {
+        let data;
+        if (selectedCategory === 'All') {
+          const response = await supabase.from(tableName).select();
+          data = response.data;
+        } else {
+          const response = await supabase
+            .from(tableName)
+            .select()
+            .eq('category', selectedCategory);
+          data = response.data;
+        }
 
-      if (error) {
-        setFetchError("Could not fetch articles");
-        setFetchArticle(null);
-      }
-
-      if (data) {
         setIsLoading(false);
         setFetchArticle(data);
         setFetchError(null);
+      } catch (error) {
+        setFetchError(error.message);
+        setFetchArticle(null);
       }
     };
+
     fetchArticles();
-  }, []);
+  }, [selectedCategory]);
 
   const handleArticlePress = (articleId: string) => {
     router.push({
@@ -56,6 +67,13 @@ export default function ArticleCard() {
 
   return (
     <View>
+        <View style={{ padding: 5 }}>
+          <FieldComponent
+          categories={categories}
+          selectedCategory={selectedCategory}
+          onSelectCategory={setSelectedCategory}
+          />
+        </View>
       {IsLoading ? (
         <ActivityIndicator
           color="#246BFD"

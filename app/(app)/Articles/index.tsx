@@ -12,7 +12,7 @@ import FieldComponent from "@/components/FieldComponent";
 import ArticleCard from "@/components/cards/ArticleCard";
 import { router } from "expo-router";
 import { ThemeContext } from "@/ctx/ThemeContext";
-import { Ionicons } from "@expo/vector-icons";
+import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { createClient } from "@supabase/supabase-js";
 import React from "react";
 import Typography from "@/constants/Typography";
@@ -108,13 +108,16 @@ export default function Article() {
                 style={{ color: theme === "light" ? "#212121" : "#FFFFFF" }}
               />
             </TouchableOpacity>
-            <TouchableOpacity>
-              <Ionicons
-                name="bookmark-outline"
+            <TouchableOpacity
+              onPress={()=>router.push("(app)/Articles/BookMarkedArticles")}>
+              <FontAwesome
+                name="bookmark"
                 size={22}
-                style={{ color: theme === "light" ? "#212121" : "#FFFFFF" }}
+                style={{
+                  color: theme === "light" ? "#212121" : "#FFFFFF",
+                }}
               />
-            </TouchableOpacity>
+              </TouchableOpacity>
           </View>
         </View>
 
@@ -225,11 +228,6 @@ export default function Article() {
             </Text>
           </TouchableOpacity>
         </View>
-
-        <View style={{ padding: 5 }}>
-          <FieldComponent />
-        </View>
-
         <ScrollView>
           <ArticleCard />
         </ScrollView>
