@@ -13,6 +13,9 @@ export const AuthContext = createContext<AuthType>({
   userId: "",
   token: "",
   refreshToken: "",
+  name: "",
+  imageUrl: "",
+  authType: "",
   setUpUserInfo: async (user: UserInfo) => {},
   refreshSession: async () => {},
   login: async (email: string, password: string) => {},
@@ -31,6 +34,9 @@ export default function AuthProvider({ children }: Props) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [token, setToken] = useState("");
   const [refreshToken, setRefreshToken] = useState("");
+  const [name, setName] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+  const [authType, setAuthType] = useState("");
 
   async function refreshSession() {}
 
@@ -81,16 +87,18 @@ export default function AuthProvider({ children }: Props) {
   }
 
   async function setUpUserInfo(user: UserInfo) {
-    const res = await fetch(user.image.uri);
-    const arrayBuffer = await res.arrayBuffer();
+    if (authType === "email") {
+      const res = await fetch(user.image.uri);
+      const arrayBuffer = await res.arrayBuffer();
 
-    await supabase.storage
-      .from("patients")
-      .upload(userId + "/" + uuid.v4(), arrayBuffer, {
-        contentType: user.image.mimeType ?? "image/jpeg",
-      });
+      await supabase.storage
+        .from("patients")
+        .upload(userId + "/" + uuid.v4(), arrayBuffer, {
+          contentType: user.image.mimeType ?? "image/jpeg",
+        });
+    }
 
-    const { error } = await supabase
+    const res = await supabase
       .from("patients")
       .update({
         first_name: user.firstName,
@@ -98,23 +106,26 @@ export default function AuthProvider({ children }: Props) {
         gender: user.gender,
         date_of_birth: user.birthDate,
         activated: true,
-        image: userId + "/" + uuid.v4(),
+        image: authType !== "email" ? imageUrl : userId + "/" + uuid.v4(),
       })
       .eq("auth_id", userId);
+
     setActivated(true);
     setIsLoggedIn(true);
   }
 
   useEffect(() => {
     (async () => {
-      const { data } = await supabase
-        .from("patients")
-        .select(`*`)
-        .eq("auth_id", userId)
-        .single();
+      if (userId) {
+        const { data } = await supabase
+          .from("patients")
+          .select(`*`)
+          .eq("auth_id", userId)
+          .single();
 
-      setActivated(data?.activated);
-      setIsLoggedIn(true);
+        setActivated(data?.activated);
+        setIsLoggedIn(true);
+      }
     })();
   }, [userId]);
 
@@ -124,12 +135,23 @@ export default function AuthProvider({ children }: Props) {
     refreshToken,
     activated,
     userId,
+    email,
+    name,
+    authType,
+    imageUrl,
+    setName,
     setUpUserInfo,
     refreshSession,
     login,
     logout,
     register,
-    email,
+    setIsLoggedIn,
+    setEmail,
+    setToken,
+    setRefreshToken,
+    setUserId,
+    setImageUrl,
+    setAuthType,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

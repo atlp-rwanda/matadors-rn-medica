@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -6,10 +6,11 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  ActivityIndicator,
 } from "react-native";
 import { supabase } from "@/lib/supabase";
 import { ThemeContext } from "@/ctx/ThemeContext";
-import { SvgXml } from "react-native-svg";
+import { SvgXml, err } from "react-native-svg";
 import { StatusBar } from "expo-status-bar";
 import { router } from "expo-router";
 import Typography from "../../../constants/Typography";
@@ -25,180 +26,253 @@ import * as Linking from "expo-linking";
 import { makeRedirectUri } from "expo-auth-session";
 import * as QueryParams from "expo-auth-session/build/QueryParams";
 import React from "react";
+import { useAuth } from "@/ctx/AuthContext";
 
 WebBrowser.maybeCompleteAuthSession();
 const redirectTo = makeRedirectUri({
   native: "com.medica://",
 });
 
-const createSessionFromUrl = async (url: string) => {
-  const { params, errorCode } = QueryParams.getQueryParams(url);
-
-  if (errorCode) throw new Error(errorCode);
-  const { access_token, refresh_token } = params;
-
-  if (!access_token) return;
-
-  const { data, error } = await supabase.auth.setSession({
-    access_token,
-    refresh_token,
-  });
-  if (error) throw error;
-  return data.session;
-};
-
-const signInWithFacebook = async () => {
-  const { data, error } = await supabase.auth.signInWithOAuth({
-    provider: "facebook",
-    options: {
-      redirectTo,
-      skipBrowserRedirect: true,
-    },
-  });
-  if (error) throw error;
-
-  const res = await WebBrowser.openAuthSessionAsync(
-    data?.url ?? "",
-    redirectTo
-  );
-
-  if (res.type === "success") {
-    const { url } = res;
-    await createSessionFromUrl(url);
-
-    router.push("/(app)/ActionMenu");
-  }
-};
 const LetsYouIn = () => {
+  const {
+    setIsLoggedIn,
+    setEmail,
+    setToken,
+    setRefreshToken,
+    setUserId,
+    name,
+    setName,
+    setImageUrl,
+    setAuthType,
+  } = useAuth();
+  const [loading, setLoading] = useState(false);
+  const createSessionFromUrl = async (url: string) => {
+    const { params, errorCode } = QueryParams.getQueryParams(url);
+
+    if (errorCode) throw new Error(errorCode);
+    const { access_token, refresh_token } = params;
+
+    if (!access_token) return;
+
+    const { data, error } = await supabase.auth.setSession({
+      access_token,
+      refresh_token,
+    });
+    if (error) throw error;
+    return data.session;
+  };
+
+  const signInWithFacebook = async () => {
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: "facebook",
+        options: {
+          redirectTo,
+          skipBrowserRedirect: true,
+        },
+      });
+      if (error) throw error;
+
+      const res = await WebBrowser.openAuthSessionAsync(
+        data?.url ?? "",
+        redirectTo
+      );
+
+      if (res.type === "success") {
+        const { url } = res;
+        const session = await createSessionFromUrl(url);
+
+        if (session) {
+          setLoading(true);
+        }
+
+        const { data, error } = await supabase
+          .from("patients")
+          .select(`*`)
+          .eq("auth_id", session?.user.id)
+          .single();
+
+        if (error) {
+          if (!data) {
+            const { error: insertError } = await supabase
+              .from("patients")
+              .insert({
+                auth_id: session?.user.id,
+                activated: false,
+              });
+
+            if (insertError) {
+              console.log(insertError);
+            }
+          }
+        }
+
+        const setFunctions = [
+          // setIsLoggedIn(true),
+          setName(session?.user.identities[0].identity_data.full_name),
+          setAuthType(session?.user.identities[0].provider),
+          setEmail(session?.user.email),
+          setToken(session?.access_token),
+          setRefreshToken(session?.refresh_token),
+          setImageUrl(session?.user.identities[0].identity_data.picture),
+        ];
+
+        await Promise.all(setFunctions);
+
+        setUserId(session?.user.id);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
   const { theme } = useContext(ThemeContext);
 
   const url = Linking.useURL();
   if (url) createSessionFromUrl(url);
 
   return (
-    <ScrollView
-      style={{
-        backgroundColor: theme === "dark" ? "#181A20" : "#FFFFFF",
-      }}
-      contentContainerStyle={{
-        paddingHorizontal: 20,
-        height: "100%",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        gap: 20,
-      }}
-    >
-      <StatusBar style={theme === "dark" ? "light" : "dark"} />
-
-      <Image source={require("../../../assets/icons/FrameOne.png")} />
-
-      <View style={styles.midPartOne}>
-        <Text
-          style={[
-            Typography.heading._1,
-            { color: theme === "dark" ? "#FFFFFF" : Colors.grayScale._900 },
-          ]}
+    <>
+      {loading ? (
+        <ActivityIndicator />
+      ) : (
+        <ScrollView
+          style={{
+            backgroundColor: theme === "dark" ? "#181A20" : "#FFFFFF",
+          }}
+          contentContainerStyle={{
+            paddingHorizontal: 20,
+            height: "100%",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: 20,
+          }}
         >
-          Let's you in
-        </Text>
-      </View>
+          <StatusBar style={theme === "dark" ? "light" : "dark"} />
 
-      <View style={styles.middlePart}>
-        <View style={styles.Buttons}>
-          <TouchableOpacity
-            style={[
-              styles.middleButton,
-              {
-                backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF",
-                borderColor: theme === "dark" ? "#35383F" : "#EEEEEE",
-              },
-            ]}
-            onPress={signInWithFacebook}
-          >
-            <Image source={require("../../../assets/icons/facebook.png")} />
+          <Image source={require("../../../assets/icons/FrameOne.png")} />
+
+          <View style={styles.midPartOne}>
             <Text
               style={[
-                Typography.semiBold.large,
+                Typography.heading._1,
                 { color: theme === "dark" ? "#FFFFFF" : Colors.grayScale._900 },
               ]}
             >
-              Continue with Facebook
+              Let's you in
             </Text>
-          </TouchableOpacity>
+          </View>
+
+          <View style={styles.middlePart}>
+            <View style={styles.Buttons}>
+              <TouchableOpacity
+                style={[
+                  styles.middleButton,
+                  {
+                    backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF",
+                    borderColor: theme === "dark" ? "#35383F" : "#EEEEEE",
+                  },
+                ]}
+                onPress={signInWithFacebook}
+              >
+                <Image source={require("../../../assets/icons/facebook.png")} />
+                <Text
+                  style={[
+                    Typography.semiBold.large,
+                    {
+                      color:
+                        theme === "dark" ? "#FFFFFF" : Colors.grayScale._900,
+                    },
+                  ]}
+                >
+                  Continue with Facebook
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[
+                  styles.middleButton,
+                  {
+                    backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF",
+                    borderColor: theme === "dark" ? "#35383F" : "#EEEEEE",
+                  },
+                ]}
+              >
+                <Image source={require("../../../assets/icons/Google.png")} />
+                <Text
+                  style={[
+                    Typography.semiBold.large,
+                    {
+                      color:
+                        theme === "dark" ? "#FFFFFF" : Colors.grayScale._900,
+                    },
+                  ]}
+                >
+                  Continue with Google
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[
+                  styles.middleButton,
+                  {
+                    backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF",
+                    borderColor: theme === "dark" ? "#35383F" : "#EEEEEE",
+                  },
+                ]}
+              >
+                <SvgXml xml={theme === "dark" ? WhiteApple : BlackApple} />
+                <Text
+                  style={[
+                    Typography.semiBold.large,
+                    {
+                      color:
+                        theme === "dark" ? "#FFFFFF" : Colors.grayScale._900,
+                    },
+                  ]}
+                >
+                  Continue with Apple
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          <SvgXml xml={theme === "dark" ? OrLine : greyOrLine} />
 
           <TouchableOpacity
-            style={[
-              styles.middleButton,
-              {
-                backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF",
-                borderColor: theme === "dark" ? "#35383F" : "#EEEEEE",
-              },
-            ]}
+            onPress={() =>
+              router.push("/(auth)/SignIn&SignOut/SignInBlankForm")
+            }
+            style={styles.signinBtn}
           >
-            <Image source={require("../../../assets/icons/Google.png")} />
             <Text
-              style={[
-                Typography.semiBold.large,
-                { color: theme === "dark" ? "#FFFFFF" : Colors.grayScale._900 },
-              ]}
+              style={[Typography.bold.large, { color: Colors.others.white }]}
             >
-              Continue with Google
+              Sign in with password
             </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
-            style={[
-              styles.middleButton,
-              {
-                backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF",
-                borderColor: theme === "dark" ? "#35383F" : "#EEEEEE",
-              },
-            ]}
-          >
-            <SvgXml xml={theme === "dark" ? WhiteApple : BlackApple} />
+          <View style={{ flexDirection: "row", gap: 5 }}>
             <Text
               style={[
-                Typography.semiBold.large,
-                { color: theme === "dark" ? "#FFFFFF" : Colors.grayScale._900 },
+                Typography.regular.medium,
+                { color: theme === "dark" ? "#FFFFFF" : Colors.grayScale._500 },
               ]}
             >
-              Continue with Apple
+              Don't have an account?
             </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      <SvgXml xml={theme === "dark" ? OrLine : greyOrLine} />
-
-      <TouchableOpacity
-        onPress={() => router.push("/(auth)/SignIn&SignOut/SignInBlankForm")}
-        style={styles.signinBtn}
-      >
-        <Text style={[Typography.bold.large, { color: Colors.others.white }]}>
-          Sign in with password
-        </Text>
-      </TouchableOpacity>
-
-      <View style={{ flexDirection: "row", gap: 5 }}>
-        <Text
-          style={[
-            Typography.regular.medium,
-            { color: theme === "dark" ? "#FFFFFF" : Colors.grayScale._500 },
-          ]}
-        >
-          Don't have an account?
-        </Text>
-        <Text
-          style={[Typography.semiBold.medium, { color: "#246DFB" }]}
-          onPress={() =>
-            router.replace("/(auth)/SignIn&SignOut/SignUpBlankForm")
-          }
-        >
-          Sign up
-        </Text>
-      </View>
-    </ScrollView>
+            <Text
+              style={[Typography.semiBold.medium, { color: "#246DFB" }]}
+              onPress={() =>
+                router.replace("/(auth)/SignIn&SignOut/SignUpBlankForm")
+              }
+            >
+              Sign up
+            </Text>
+          </View>
+        </ScrollView>
+      )}
+    </>
   );
 };
 

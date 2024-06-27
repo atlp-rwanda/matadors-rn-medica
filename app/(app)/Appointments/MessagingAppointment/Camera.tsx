@@ -48,10 +48,10 @@ function CameraComponent() {
     if (cameraRef.current) {
       try {
         const photo = await cameraRef.current.takePictureAsync();
-        console.log(photo.uri);
+        // console.log(photo.uri);
         const asset = await MediaLibrary.createAssetAsync(photo.uri);
         await MediaLibrary.saveToLibraryAsync(asset);
-        console.log("Picture saved to gallery!");
+        // console.log("Picture saved to gallery!");
       } catch (error) {
         console.error("Error taking picture:", error);
       }

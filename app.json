@@ -15,6 +15,7 @@
       "**/*"
     ],
     "ios": {
+      "jsEngine": "hermes",
       "supportsTablet": true,
       "infoPlist": {
         "NSFaceIDUsageDescription": "This app uses Face ID and Touch ID for some features"
@@ -22,6 +23,7 @@
       "bundleIdentifier": "com.supabase.medical"
     },
     "android": {
+      "jsEngine": "hermes",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#000000"

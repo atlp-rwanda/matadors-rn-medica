@@ -19,9 +19,6 @@ import { SvgXml } from 'react-native-svg';
 import { changePasswordModalImage } from '@/constants/icon';
 import Alerts from '@/components/UI/AlertComponent';
 
-
-
-
 export default function CreateNewPassword() {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
