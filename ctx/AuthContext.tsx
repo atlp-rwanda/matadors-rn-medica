@@ -109,7 +109,7 @@ export default function AuthProvider({ children }: Props) {
         gender: user.gender,
         date_of_birth: user.birthDate,
         activated: true,
-        image:authType !== "email" && authType !== "apple"
+        image:authType  && authType !== "apple"
         ? imageUrl
         : userId + "/" + uuid.v4(),
       })

@@ -7,6 +7,7 @@ export default function Layout() {
       <Stack.Screen name="index" options={{headerShown:false}} />
       <Stack.Screen name="ArticleSeeAll" options={{headerShown:false}} />
       <Stack.Screen name="[ArticleDetails]" options={{headerShown:false}} />
+      <Stack.Screen name="BookMarkedArticles" options={{headerShown:false}} />
     </Stack>
   );
 }

@@ -1,7 +1,7 @@
 import {
   Ionicons,
-  MaterialCommunityIcons,
   MaterialIcons,
+  FontAwesome
 } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
 import React, { ReactNode, useContext, useEffect, useState } from "react";
@@ -21,6 +21,8 @@ import {
 } from "react-native";
 import Typography from "@/constants/Typography";
 import Article from ".";
+import { AuthContext } from "@/ctx/AuthContext";
+import { fetchPatientData } from "@/utils/LoggedInUser";
 
 interface Article {
   title: string;
@@ -42,6 +44,16 @@ export default function ArticlesDetails() {
   const [fetchError, setFetchError] = useState<FetchError>(null);
   const { id } = useLocalSearchParams();
   const [bookmarkedArticle, setBookmarkedArticle] = useState<string[]>([]);
+  const [isBookMarked, setIsBookMarked] = useState<Boolean>(false)
+  const [patientData, setPatientData] = useState([])
+
+const { userId, email } = useContext(AuthContext);
+
+useEffect(() => {
+  if (userId) {
+    fetchPatientData(userId, setPatientData);
+  }
+}, [userId]);
 
   useEffect(() => {
     const fetchArticles = async () => {
@@ -70,28 +82,77 @@ export default function ArticlesDetails() {
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
-          // shared with activity type of result.activityType
         } else {
         }
       } else if (result.action === Share.dismissedAction) {
-        // dississed
       }
     } catch (error: any) {
       Alert.alert(error.message);
     }
   };
-
-  const toggleBookmark = (articleId: string) => {
-    setBookmarkedArticle((prevState) =>
-      prevState.includes(articleId)
-        ? prevState.filter((id) => id !== articleId)
-        : [...prevState, articleId]
-    );
+  
+  const bookMarkArticle = async () => {
+    try {
+      const { data: existingBookmarks, error: bookmarkError } = await supabase
+        .from('marked_articles')
+        .select('*')
+        .eq('user_id', patientData[0]?.id)
+        .eq('article_id', id);
+  
+      if (existingBookmarks && existingBookmarks.length >= 1) {
+        ToastAndroid.show("You have already bookmarked this article.", ToastAndroid.SHORT);
+        return;
+      }
+  
+      const { data, error } = await supabase
+        .from('marked_articles')
+        .insert({ user_id: patientData[0]?.id, article_id: id });
+  
+      if (error) {
+        ToastAndroid.show("Unable to bookmark the article.", ToastAndroid.SHORT);
+        return;
+      }
+  
+      ToastAndroid.show("Article Bookmarked!", ToastAndroid.SHORT);
+      setIsBookMarked(true);
+    } catch (error) {
+      setIsBookMarked(false);
+      ToastAndroid.show("Can't bookmark the article.", ToastAndroid.SHORT);
+    }
   };
+  
 
-  const showToast = () => {
-    ToastAndroid.show("Article Bookmarked!", ToastAndroid.SHORT);
+  const unBookMarkArticle = async () => {
+    try {
+      const { data: existingBookmarks, error: bookmarkError } = await supabase
+        .from('marked_articles')
+        .select('*')
+        .eq('user_id', patientData[0]?.id)
+        .eq('article_id', id);
+  
+      if (existingBookmarks && existingBookmarks.length > 0) {
+        const { data, error } = await supabase
+          .from('marked_articles')
+          .delete()
+          .eq('user_id', patientData[0]?.id)
+          .eq('article_id', id);
+  
+        if (error) {
+          ToastAndroid.show("Unable to unbookmark the article.", ToastAndroid.SHORT);
+          return;
+        }
+  
+        ToastAndroid.show("Article Unbookmarked!", ToastAndroid.SHORT);
+        setIsBookMarked(false);
+      } else {
+        ToastAndroid.show("This article is not bookmarked.", ToastAndroid.SHORT);
+      }
+    } catch (error) {
+      ToastAndroid.show("Can't unbookmark the article.", ToastAndroid.SHORT);
+    }
   };
+  
+
 
   return (
     <SafeAreaView
@@ -135,18 +196,36 @@ export default function ArticlesDetails() {
             padding: 15,
           }}
         >
-          <TouchableOpacity
-            onPress={() => {
-              toggleBookmark(id as string);
-              showToast();
-            }}
-          >
-            <MaterialIcons
-              name="bookmark-outline"
-              size={24}
-              style={{ color: theme === "light" ? "#212121" : "#FFFFFF" }}
-            />
-          </TouchableOpacity>
+           <View>
+            {isBookMarked 
+              ? (<TouchableOpacity
+              onPress={()=> unBookMarkArticle()}
+
+              >
+                   <FontAwesome
+                name="bookmark"
+                size={22}
+                style={{
+                  color: theme === "light" ? "#212121" : "#FFFFFF",
+                }}
+              />
+              </TouchableOpacity>
+             
+            ) : (
+            
+              <TouchableOpacity
+              onPress={()=> bookMarkArticle()}
+              >
+                <FontAwesome
+                name="bookmark-o"
+                size={22}
+                style={{
+                  color: theme === "light" ? "#212121" : "#FFFFFF",
+                }}/>
+              </TouchableOpacity>
+              )
+            }
+           </View>
 
           <TouchableOpacity onPress={onShare}>
             <Ionicons

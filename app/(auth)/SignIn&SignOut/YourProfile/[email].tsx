@@ -60,7 +60,7 @@ const YourProfile = () => {
       setIsLoading(true);
       await setUpUserInfo(
 
-        authType !== "email" && authType !== "apple"
+        authType  && authType !== "apple"
           ? authType && authType !== "apple"
             ? {
               ...formData,
@@ -121,7 +121,7 @@ const YourProfile = () => {
           placeholder="First Name"
           name="firstName"
           value={
-            authType !== "email" && authType !== "apple"
+            authType && authType !== "apple"
               ? authType || authType !== "apple"
                 ? String(name).split(" ")[0]
                 : formData.firstName
@@ -133,7 +133,7 @@ const YourProfile = () => {
           placeholder="Last Name"
           name="lastName"
           value={
-            authType !== "email" && authType !== "apple"
+            authType  && authType !== "apple"
               ? authType || authType !== "apple"
                 ? String(name).split(" ")[1]
                 : formData.lastName

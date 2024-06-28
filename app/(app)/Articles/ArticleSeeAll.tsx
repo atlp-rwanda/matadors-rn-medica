@@ -19,6 +19,8 @@ import { ThemeContext } from "@/ctx/ThemeContext";
 
 export default function SeeAllArticles() {
   const { theme, changeTheme } = useContext(ThemeContext);
+  const [selectedCategory, setSelectedCategory] = useState("Newest");
+  const categories = ["all", "Health", "Covid", "Lifestyle", "News"]; // Example categories
 
   return (
     <SafeAreaView
@@ -93,10 +95,6 @@ export default function SeeAllArticles() {
             </TouchableOpacity>
           </View>
         </View>
-        <View style={{ padding: 5 }}>
-          <FieldComponent />
-        </View>
-
         <ScrollView
           style={{ marginTop: 10 }}
           showsVerticalScrollIndicator={false}

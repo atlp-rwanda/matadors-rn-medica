@@ -1,50 +1,56 @@
+import React from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native'
-import React, { useState } from 'react';
-
-const fields = {
-  Newest: "Newest",
-  Health: "Health",
-  Covid: "Covid-19",
-  Lifestyle: "Lifestyle",
-  News: "News"
-}; 
-
-export default function FieldComponent() {
-  const [selectedField, setSelectedField] = useState("Newest");
-
+const FieldComponent = ({ categories, selectedCategory, onSelectCategory }) => {
   return (
-    <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-      {Object.keys(fields).map((field, index) => (
-        <TouchableOpacity 
-          key={index} 
+    <FlatList
+      horizontal
+      showsHorizontalScrollIndicator={false}
+      data={categories}
+      keyExtractor={(item, index) => index.toString()}
+      renderItem={({ item }) => (
+        <TouchableOpacity
           style={[
-            {
-              borderWidth: 2,
-              borderColor: '#246BFD',
-              borderRadius: 50,
-              paddingVertical: 8,
-              paddingHorizontal: 20,
-              marginLeft: 10,
-            },
-            selectedField === field ? {
-              backgroundColor: '#246BFD',
-            } : null,
+            styles.categoryButton,
+            selectedCategory === item ? styles.selectedCategory : null,
           ]}
-          onPress={() => setSelectedField(field)}
+          onPress={() => onSelectCategory(item)}
+          accessibilityLabel={`Select ${item}`}
         >
-          <Text style={[
-            {
-              fontSize: 16,
-              textAlign: "center",
-              color: '#246BFD',
-            }, 
-            selectedField === field ? {color: "#FFFFFF"} : null
-          ]}>
-            {fields[field as keyof typeof fields]}
+          <Text
+            style={[
+              styles.categoryText,
+              selectedCategory === item ? styles.selectedText : null,
+            ]}
+          >
+            {item}
           </Text>
         </TouchableOpacity>
-      ))}
-    </ScrollView>
-  )
-}
+      )}
+    />
+  );
+};
+
+const styles = StyleSheet.create({
+  categoryButton: {
+    borderWidth: 2,
+    borderColor: '#246BFD',
+    borderRadius: 50,
+    paddingVertical: 8,
+    paddingHorizontal: 20,
+    marginLeft: 10,
+  },
+  selectedCategory: {
+    backgroundColor: '#246BFD',
+  },
+  categoryText: {
+    fontSize: 16,
+    textAlign: 'center',
+    color: '#246BFD',
+  },
+  selectedText: {
+    color: '#FFFFFF',
+  },
+});
+
+export default FieldComponent;
