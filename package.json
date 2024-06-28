@@ -37,6 +37,7 @@
     "dotenv": "^16.4.5",
     "eas-cli": "^8.0.0",
     "expo": "~51.0.14",
+    "expo-apple-authentication": "^6.4.1",
     "expo-auth-session": "~5.5.2",
     "expo-av": "^14.0.5",
     "expo-barcode-scanner": "~13.0.1",
@@ -92,6 +93,7 @@
     "run": "^1.5.0",
     "sdk": "^0.5.0",
     "start": "^5.1.0",
+    "uuid": "^10.0.0",
     "vector-icons": "^0.1.0"
   },
   "devDependencies": {
@@ -102,6 +104,7 @@
     "@types/react-native-indicators": "^0.16.6",
     "@types/react-native-modern-datepicker": "^1.0.5",
     "@types/react-phone-number-input": "^3.1.37",
+    "@types/uuid": "^9.0.8",
     "eslint": "^8.57.0",
     "eslint-plugin-react": "^7.34.1",
     "globals": "^15.1.0",

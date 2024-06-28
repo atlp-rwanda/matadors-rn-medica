@@ -24,6 +24,7 @@ export interface AuthType {
   refreshSession: () => void;
   logout: () => void;
   login: ( email: string, password: string) => Promise<void>;
+  signInWithApple: () => Promise<void>; 
 }
 
 export interface Countries extends TCountries {

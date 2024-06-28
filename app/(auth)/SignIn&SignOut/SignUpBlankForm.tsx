@@ -26,10 +26,12 @@ import { appleBlackIcon, appleWhiteIcon } from "@/constants/icon";
 import { supabase } from "@/lib/supabase";
 import * as WebBrowser from "expo-web-browser";
 import * as Linking from "expo-linking";
-import { makeRedirectUri } from "expo-auth-session";
+import { makeRedirectUri , useAuthRequest} from "expo-auth-session";
 import * as QueryParams from "expo-auth-session/build/QueryParams";
 import { useAuth } from "@/ctx/AuthContext";
 import { ActivityIndicator } from "react-native";
+import { Auth } from "@/components/AppleAuth";
+
 
 WebBrowser.maybeCompleteAuthSession();
 const redirectTo = makeRedirectUri({
@@ -331,23 +333,7 @@ export default function Signup() {
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity>
-          <View
-            style={[
-              styles.smallCont,
-              {
-                backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF",
-                borderColor: theme === "dark" ? "#35383F" : "#EEEEEE",
-              },
-              {
-                backgroundColor: theme === "dark" ? "#1F222A" : "#FFFFFF",
-                borderColor: theme === "dark" ? "#35383F" : "#EEEEEE",
-              },
-            ]}
-          >
-            <SvgXml xml={theme === "dark" ? appleWhiteIcon : appleBlackIcon} />
-          </View>
-        </TouchableOpacity>
+        <Auth /> 
       </View>
 
       <View style={{ gap: 3, flexDirection: "row" }}>
