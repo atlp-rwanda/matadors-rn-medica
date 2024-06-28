@@ -7,6 +7,7 @@ import {
   ImageBackground,
   ScrollView,
   FlatList,
+  Pressable
 } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { useFonts as useFontsExpo } from "expo-font";
@@ -56,6 +57,8 @@ export default function Index() {
   const { authType, imageUrl: otherAuthImageUrl } = useAuth();
   const [showpopUp, setShowPopup] = useState(false);
   const [selectedDoctor, setSelectedDoctor] = useState();
+  const [selectedSpecilization, setSelectedSpecilization] = useState<string>("All")
+  const [specialization,setSpecialization]=useState<string[]>([])
 
   const [fontsLoaded] = useFontsExpo({
     "Urbanist-regular": require("@/assets/fonts/Urbanist-Regular.ttf"),
@@ -95,7 +98,10 @@ export default function Index() {
       }
       setIsLoading(true);
       setDoctors(data);
+      const uniqueSpecialization = Array.from(new Set(data.map((doctor: Doctor) => doctor.specialization)))
+      setSpecialization(["All",...uniqueSpecialization])
     }
+
     fetchData();
   }, [doctors]);
 
@@ -131,17 +137,21 @@ export default function Index() {
         setShowPopup(true)
     }
 
+ const handleSpecializationChange = (specialization: string) => {
+    setSelectedSpecilization(specialization)
+    setSearchTerm('')
+    
+  }
+  const filteredDoctors = doctors.filter(doctor => {
+    const matchSearchTerm = searchTerm.length > 0 ? doctor.last_name.toLowerCase().includes(searchTerm.toLowerCase())||doctor.first_name.toLowerCase().includes(searchTerm.toLowerCase()) : true
+    const matchSpecialization = selectedSpecilization === 'All' || doctor.specialization === selectedSpecilization
+    return matchSearchTerm&&matchSpecialization
 
+    })
   if (!fontsLoaded) {
     return null;
   }
-  const filteredDoctors =
-    searchTerm.length > 0
-      ? doctors.filter((doctor) =>
-          doctor.last_name.toLowerCase().includes(searchTerm)
-        )
-      : doctors;
-
+  
   return (
     <View
       style={{
@@ -461,98 +471,18 @@ export default function Index() {
           }}
         >
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <View
-              style={{
-                backgroundColor: "#246BFD",
-                padding: 5,
-                paddingHorizontal: 10,
-                borderRadius: 20,
-                justifyContent: "center",
-                width: 65,
-                height: 34,
-                alignItems: "center",
-              }}
-            >
-              <Text style={{ fontFamily: "Urbanist-regular", color: "white" }}>
-                All
-              </Text>
-            </View>
-            <View
-              style={{
-                backgroundColor: theme === "dark" ? "#181A20" : "#ffffff",
-                marginLeft: 10,
-                padding: 5,
-                paddingHorizontal: 10,
-                borderColor: "#246BFD",
-                borderWidth: 2,
-                borderRadius: 20,
-                height: 34,
-                alignItems: "center",
-              }}
-            >
-              <Text
-                style={{ fontFamily: "Urbanist-regular", color: "#246BFD" }}
-              >
-                General
-              </Text>
-            </View>
-            <View
-              style={{
-                backgroundColor: theme === "dark" ? "#181A20" : "#ffffff",
-                marginLeft: 10,
-                padding: 5,
-                paddingHorizontal: 10,
-                borderColor: "#246BFD",
-                borderWidth: 2,
-                borderRadius: 20,
-                height: 34,
-                alignItems: "center",
-              }}
-            >
-              <Text
-                style={{ fontFamily: "Urbanist-regular", color: "#246BFD" }}
-              >
-                Dentist
-              </Text>
-            </View>
-            <View
-              style={{
-                backgroundColor: theme === "dark" ? "#181A20" : "#ffffff",
-                marginLeft: 10,
-                padding: 5,
-                paddingHorizontal: 10,
-                borderColor: "#246BFD",
-                borderWidth: 2,
-                borderRadius: 20,
-                height: 34,
-                alignItems: "center",
-              }}
-            >
-              <Text
-                style={{ fontFamily: "Urbanist-regular", color: "#246BFD" }}
-              >
-                Nutritionist
-              </Text>
-            </View>
-            <View
-              style={{
-                backgroundColor: theme === "dark" ? "#181A20" : "#ffffff",
-                marginLeft: 10,
-                padding: 5,
-                paddingHorizontal: 10,
-                borderColor: "#246BFD",
-                borderWidth: 2,
-                borderRadius: 20,
-                height: 34,
-                alignItems: "center",
-              }}
-            >
-              <Text
-                style={{ fontFamily: "Urbanist-regular", color: "#246BFD" }}
-              >
-                Neurologist
-              </Text>
-            </View>
+            {specialization.map((specialization, index) =>
+                        <Pressable key={index} onPress={()=>handleSpecializationChange(specialization)} style={[styles.categoryBtn,
+                            selectedSpecilization === specialization ? styles.firstCategoryBtn : {},
+                            ]}>
+                            
+                            <Text style={[
+                                styles.categoryBtnText,
+                                selectedSpecilization === specialization ? styles.firstCategoryBtnText : {},
+                                ]}>{specialization}</Text>  
+                            
+                    </Pressable>
+                        )}
           </ScrollView>
         </View>
 
@@ -760,5 +690,36 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginLeft: "5%",
     marginTop: "6%",
+  },
+  categoryBtnView: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: "5%",
+    backgroundColor: "white",
+  },
+  categoryBtn: {
+    borderWidth: 2,
+    borderColor: "#246BFD",
+    height: 40,
+    paddingHorizontal: 20,
+    paddingVertical: 7,
+    borderRadius: 20,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 8,
+    marginLeft: 10,
+  },
+  firstCategoryBtn: {
+    backgroundColor: "#246BFD",
+  },
+  firstCategoryBtnText: {
+    color: "white",
+  },
+  categoryBtnText: {
+    color: "#246BFD",
+    fontSize: 16,
   },
 });

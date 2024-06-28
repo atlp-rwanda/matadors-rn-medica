@@ -78,6 +78,8 @@ function DoctorScreen() {
     const [showFilter, setShowfilter] = useState(false)
     const [doctors,setDoctors]=useState<Doctor[]>([])
     const { theme, changeTheme } = useContext(ThemeContext)
+    const [selectedSpecilization, setSelectedSpecilization] = useState<string>("All")
+  const [specialization,setSpecialization]=useState<string[]>([])
     const containerStyle = theme === "dark" ? styles.outerDark : styles.outerLight
     const scrollbackColor = theme === "dark" ? styles.scrollDark : styles.scrollLight
     
@@ -90,6 +92,8 @@ function DoctorScreen() {
     return;
             }
             setDoctors(data)
+             const uniqueSpecialization = Array.from(new Set(data.map((doctor: Doctor) => doctor.specialization)))
+           setSpecialization(["All",...uniqueSpecialization])
            
 }
 
@@ -111,8 +115,19 @@ fetchData();
         
         setShowPopup(true)
     }
+     const handleSpecializationChange = (specialization: string) => {
+    setSelectedSpecilization(specialization)
+    setSearchTerm('')
+    
+  }
+  const filteredDoctors = doctors.filter(doctor => {
+    const matchSearchTerm = searchTerm.length > 0 ? doctor.last_name.toLowerCase().includes(searchTerm.toLowerCase())||doctor.first_name.toLowerCase().includes(searchTerm.toLowerCase()) : true
+    const matchSpecialization = selectedSpecilization === 'All' || doctor.specialization === selectedSpecilization
+    return matchSearchTerm&&matchSpecialization
 
-    const filteredDoctors=searchTerm.length>0 ? doctors.filter(doctor=>doctor.last_name.toLowerCase().includes(searchTerm)):doctors
+    })
+
+   
     return (
         <SafeAreaView style={[styles.container, containerStyle]}>
            <StatusBar style={theme === "dark" ? "light" : "dark"} />
@@ -146,15 +161,15 @@ fetchData();
 
                     }}>
                     
-                    {data.categories.map((category, index) =>
-                        <Pressable key={index} style={[styles.categoryBtn,
-                            selectedCategory === category ? styles.firstCategoryBtn : {},
+                    {specialization.map((specialization, index) =>
+                        <Pressable key={index} onPress={()=>handleSpecializationChange(specialization)} style={[styles.categoryBtn,
+                            selectedSpecilization === specialization ? styles.firstCategoryBtn : {},
                             ]}>
                             
                             <Text style={[
                                 styles.categoryBtnText,
-                                selectedCategory === category ? styles.firstCategoryBtnText : {},
-                                ]}>{category.name}</Text>  
+                                selectedSpecilization === specialization ? styles.firstCategoryBtnText : {},
+                                ]}>{specialization}</Text>  
                             
                     </Pressable>
                         )}
