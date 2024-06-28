@@ -1,5 +1,16 @@
+
+
+
+
+
+
+
+
+
+
+
 import React, { useContext, useState, useEffect } from "react";
-import { Pressable, StyleSheet, View, ScrollView, Text, FlatList } from "react-native";
+import { Pressable, StyleSheet, View, ScrollView, Text, FlatList, Platform } from "react-native";
 import { SvgXml } from "react-native-svg";
 import { Dropdown } from "react-native-element-dropdown";
 import Input from "@/components/UI/Input";
@@ -18,15 +29,35 @@ import { typedCountries } from "@/constants/Languages";
 import { ThemeContext } from "@/ctx/ThemeContext";
 import { supabase } from "@/lib/supabase";
 import { fetchPatientData, getPatientData } from "@/utils/LoggedInUser";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import DateInputPicker from "@/components/UI/DateInputPicker";
 
-interface Props {}
+interface PatientData {
+  id?: string;
+  first_name?: string;
+  last_name?: string;
+  date_of_birth?: string;
+  email?: string;
+  country?: string;
+  phone?: string;
+  gender?: string;
+}
 
 function EditProfile() {
   const [value, setValue] = useState<string>("____United States");
   const [isFocus, setIsFocus] = useState(false);
   const { theme } = useContext(ThemeContext);
   const [userData, setUserData] = useState<any[]>([]);
-  const [patientData, setPatientData] = useState(null);
+  const [patientData, setPatientData] = useState<PatientData | null>(null);
+  const [date, setDate] = useState<Date>(new Date());
+  const [show, setShow] = useState<boolean>(false);
+  const [first_name, setFirst_name] = useState<string>("");
+  const [last_name, setLast_name] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [phone, setPhone] = useState<string>("");
+  const [gender, setGender] = useState<string>("");
+  const [country, setCountry] = useState<string>("");
+
 
   useEffect(() => {
     getPatientData(supabase, setUserData);
@@ -39,11 +70,65 @@ function EditProfile() {
     }
   }, [userData]);
 
+  useEffect(() => {
+    if (patientData?.date_of_birth) {
+      setDate(new Date(patientData.date_of_birth));
+    }
+  }, [patientData]);
+
+  const handleInputChange = (name: string, value: string) => {
+    setPatientData((prevPatientData) => ({
+      ...prevPatientData,
+      [name]: value,
+    }));
+  };
+  const handleFirst_nameChange = (name: string, value: string) => {
+    setPatientData((prevFirst_name) => ({
+      ...prevFirst_name,
+      [name]: value,
+    }));
+  };
+
+  const handlelast_nameChange = (name: string, value: string) => {
+    setPatientData((prevlast_name) => ({
+      ...prevlast_name,
+      [name]: value,
+    }));
+  };
+
+  const updatePatientData = async () => {
+    if (!patientData || !userData) return;
+
+    const { id } = userData;
+    const { data, error } = await supabase
+      .from("patients")
+      .update({
+        first_name: patientData.first_name || "",
+        last_name: patientData.last_name || "",
+        date_of_birth: new Date(patientData.date_of_birth || ""),
+        country: patientData.country || "United States",
+        phone: patientData.phone || "",
+        gender: patientData.gender || "",
+      })
+      .eq("id", id);
+
+    if (error) {
+      console.error("Error updating patient data:", error);
+    } else {
+      console.log("Patient data updated:", data);
+    }
+  };
+
+  console.log(patientData);
   const countryNames: { label: string; value: string }[] = Object.keys(
     typedCountries
   ).map((key: string) => {
     return { label: typedCountries[key].name, value: typedCountries[key].name };
   });
+
+  if (!patientData) {
+    return <Text>Loading...</Text>;
+  }
 
   return (
     <>
@@ -66,26 +151,48 @@ function EditProfile() {
                   height: "100%",
                 }}
               >
-                <Input placeholder="First Name" value={item?.first_name} />
-                <Input placeholder="Last Name" value={item?.last_name} />
                 <Input
-                  placeholder="Birth Date"
-                  value={item?.date_of_birth}
-                  rightElement={() => {
-                    return (
-                      <Pressable>
-                        <SvgXml
-                          xml={
-                            theme === "light" ? CalenderIcon : CalenderIconDark
-                          }
-                        />
-                      </Pressable>
-                    );
-                  }}
+                  placeholder="First Name"
+                  value={item?.first_name}
+                  name="first_name"
+                  onChange={handleFirst_nameChange}
+                /><Input
+                  placeholder="Last Name"
+                  value={item?.last_name}
+                  name="last_name"
+                  onChange={handlelast_nameChange}
                 />
+                <DateInputPicker />
+                {/* <View>
+                  <Pressable onPress={showDatepicker}>
+                    <Input
+                      placeholder="Birth Date"
+                      name="date_of_birth"
+                      value={formatDate(date)}
+                      onChange={(item) => {
+                        handleInputChange("date_of_bibrth", item?.date_of_birth)
+                        setIsFocus(false);
+                      }}
+                      editable={false}
+                      rightElement={() => (
+                        <SvgXml xml={theme === "light" ? CalenderIcon : CalenderIconDark} />
+                      )}
+                    />
+                  </Pressable>
+                  {show && (
+                    <DateTimePicker
+                      value={date}
+                      mode="date"
+                      display="default"
+                      onChange={onChange}
+                    />
+                  )}
+                </View> */}
                 <Input
                   placeholder="Email"
                   value={userData?.email}
+                  name="email"
+                  onChange={handleInputChange}
                   rightElement={() => {
                     return (
                       <Pressable>
@@ -98,7 +205,6 @@ function EditProfile() {
                     );
                   }}
                 />
-                {/* <Input placeholder="Country" value="United States" /> */}
                 <Dropdown
                   style={{
                     backgroundColor:
@@ -139,7 +245,7 @@ function EditProfile() {
                   onFocus={() => setIsFocus(true)}
                   onBlur={() => setIsFocus(false)}
                   onChange={(item) => {
-                    setValue(item.value);
+                    handleInputChange("country", item.value)
                     setIsFocus(false);
                   }}
                   renderRightIcon={() => (
@@ -154,12 +260,22 @@ function EditProfile() {
                         : Colors.others.white,
                   }}
                 />
-                <Input placeholder="+250" value={item?.phone} />
-                <Input placeholder="Gender" value={item?.gender} />
+                <Input
+                  placeholder="+250"
+                  value={item?.phone}
+                  name="phone"
+                  onChange={handleInputChange}
+                />
+                <Input
+                  placeholder="Gender"
+                  value={item?.gender}
+                  name="gender"
+                  onChange={handleInputChange}
+                />
                 <View style={{ marginTop: "auto" }}>
                   <Button
                     title="Update"
-                    onPress={() => {}}
+                    onPress={updatePatientData}
                     shadowColor={Colors.main.primary._500}
                     backgroundColor={Colors.main.primary._500}
                   />
