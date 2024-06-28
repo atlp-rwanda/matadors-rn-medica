@@ -43,14 +43,13 @@ export default function AuthProvider({ children }: Props) {
 
   async function refreshSession() {}
 
-  async function logout() {}
-
   async function login(email: string, password: string) {
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
-
+    console.log("Data:" ,data);
+    
     if (!error) {
       setIsLoggedIn(true);
       setEmail(data.session.user.email!);
