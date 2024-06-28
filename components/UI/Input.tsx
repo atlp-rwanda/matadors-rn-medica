@@ -14,6 +14,7 @@ interface Props {
   name: string;
   onChange: (name: string, value: string) => void;
   disabled?: boolean;
+  editable?: boolean;
 }
 
 export default function Input({
@@ -25,6 +26,7 @@ export default function Input({
   rightElement,
   leftElement,
   disabled,
+  editable
 }: Props) {
   const { theme } = useContext(ThemeContext);
   return (
@@ -42,6 +44,7 @@ export default function Input({
       <TextInput
         placeholder={placeholder}
         value={value}
+        editable={!disabled}
         {...textInputConfig}
         style={[
           Typography.semiBold.medium,
@@ -56,7 +59,6 @@ export default function Input({
         onChangeText={(val) => {
           onChange(name, val);
         }}
-        editable={!disabled}
       />
 
       {rightElement && rightElement()}
