@@ -17,27 +17,29 @@ export interface PaymentOption {
   iconSvgStringDark?: string;
 }
 export interface AuthType {
+  email: string;
+  activated: boolean;
   isLoggedIn: boolean;
   token: string;
   refreshToken: string;
   loading: boolean;
   refreshSession: () => void;
   logout: () => void;
-  login: ( email: string, password: string) => Promise<void>;
-  signInWithApple: () => Promise<void>; 
+  login: (email: string, password: string) => Promise<void>;
+  signInWithApple: () => Promise<void>;
 }
 
 export interface Countries extends TCountries {
   [key: string]: any;
 }
 
-export interface Doctor{
-  id: number,
-  first_name: string,
-  last_name: string,
-  hospital: string,
-  rate: string,
-  review: string,
-  specialization: string,
-  about:string
+export interface Doctor {
+  id: number;
+  first_name: string;
+  last_name: string;
+  hospital: string;
+  rate: string;
+  review: string;
+  specialization: string;
+  about: string;
 }

@@ -1,21 +1,18 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useFonts } from "expo-font";
-import { Redirect, Stack, router, useSegments } from "expo-router";
+import { Stack, router, useSegments } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import * as SecureStore from "expo-secure-store";
 import React from "react";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import * as NavigationBar from "expo-navigation-bar";
-import { ZoomOutUp } from "react-native-reanimated";
-import ThemeProvider, { ThemeContext } from "@/ctx/ThemeContext";
-import { Pressable, View, useColorScheme } from "react-native";
+import ThemeProvider from "@/ctx/ThemeContext";
+import { useColorScheme } from "react-native";
 import { ThemeType } from "@/constants/Types";
-import { Text } from "@/components/Themed";
 import ModalProvider from "@/ctx/ModalContext";
 import ModalContainer from "@/components/UI/Modal";
 import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
-import { StatusBar } from "expo-status-bar";
 import AuthProvider, { useAuth } from "@/ctx/AuthContext";
 
 export { ErrorBoundary } from "expo-router";
@@ -114,11 +111,6 @@ function RootLayoutNav() {
       return router.replace("/(auth)/SignIn&SignOut/LetsYouIn");
     }
     
-    // if (isLoggedIn && !activated && !email) {
-    //   console.log("Logged in, not activated, without email");
-    //   return router.replace("/(auth)/SignIn&SignOut/LetsYouIn");
-    // }
-
     if (isLoggedIn && !activated && email) {
       console.log("Logged, not activated, and with email");
       return router.replace("/(auth)/SignIn&SignOut/YourProfile/" + email);
@@ -133,9 +125,9 @@ function RootLayoutNav() {
   return (
     <>
       <Stack screenOptions={{ statusBarTranslucent: true, headerShown: false }}>
+        <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="(app)" options={{ headerShown: false }} />
         <Stack.Screen name="modal" options={{ presentation: "modal" }} />
-        <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen
           name="onBoarding"
           options={{ headerShown: false }}

@@ -4,6 +4,8 @@
     "slug": "matadors-rn-medica",
     "scheme": "com.medica",
     "version": "1.0.0",
+    "facebookAppId": "996973958124128",
+    "facebookDisplayName": "Medica",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "splash": {
@@ -11,11 +13,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#000000"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
-      "jsEngine": "hermes",
+      "jsEngine": "jsc",
       "supportsTablet": true,
       "infoPlist": {
         "NSFaceIDUsageDescription": "This app uses Face ID and Touch ID for some features"
@@ -23,7 +23,7 @@
       "bundleIdentifier": "com.andela.matadors.medica"
     },
     "android": {
-      "jsEngine": "hermes",
+      "jsEngine": "jsc",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#000000"
@@ -65,7 +65,9 @@
         {
           "photosPermission": "The app accesses your photos to let you share them with your friends."
         }
-      ]
+      ],
+      "expo-facebook",
+      "react-native-fbsdk-next"
     ],
     "experiments": {
       "typedRoutes": true

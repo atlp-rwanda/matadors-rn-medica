@@ -11,7 +11,6 @@ import { star } from '@/assets/icons/star';
 import { search } from '@/assets/icons/search';
 import { more } from '@/assets/icons/more';
 import { leftArrow } from '@/assets/icons/left';
-import data from "../../doctors.json"
 import HeaderComponent from '@/components/HeaderComponent';
 import SearchComponent from '@/components/SearchComponent';
 import FoundDoctorCount from '@/components/FoundDoctorCount';
@@ -46,10 +45,6 @@ interface Doctor{
     specialization: string,
     about:string
 }
-interface categoryProp {
-  name: string;
-  Doctors: Doctor[];
-}
 
 export const iconMapping: iconMappingProp = {
   heart: <SvgXml xml={WhiteHeart} />,
@@ -59,12 +54,13 @@ export const iconMapping: iconMappingProp = {
 function DoctorScreen() {
   const [showSearch, setShowSearch] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [selectedCategory, setSelectedCategory] = useState(data.categories[0]);
   const [showpopUp, setShowPopup] = useState(false);
   const [selectedDoctor, setSelectedDoctor] = useState();
   const [showFilter, setShowfilter] = useState(false);
   const [doctors, setDoctors] = useState<Doctor[]>([]);
   const { theme, changeTheme } = useContext(ThemeContext);
+  const [selectedSpecilization, setSelectedSpecilization] = useState<string>("All")
+  const [specialization,setSpecialization]=useState<string[]>([])
   const containerStyle =
     theme === "dark" ? styles.outerDark : styles.outerLight;
   const scrollbackColor =
@@ -80,12 +76,14 @@ function DoctorScreen() {
       }
       setDoctors(data);
 
-      // console.log("Fetched data:", data);
+   
+      const uniqueSpecialization = Array.from(new Set(data.map((doctor: Doctor) => doctor.specialization)))
+      setSpecialization(["All",...uniqueSpecialization])
     }
 
     fetchData();
   }, []);
-
+ console.log("this is retrived specilization:",specialization)
     const handleSearchPressed = () => {
         setShowSearch(true)
     }
@@ -100,9 +98,20 @@ function DoctorScreen() {
         setSelectedDoctor(doctor)
         
         setShowPopup(true)
-    }
+  }
+  const handleSpecializationChange = (specialization: string) => {
+    setSelectedSpecilization(specialization)
+    setSearchTerm('')
+    
+  }
+  const filteredDoctors = doctors.filter(doctor => {
+    const matchSearchTerm = searchTerm.length > 0 ? doctor.last_name.toLowerCase().includes(searchTerm.toLowerCase())||doctor.first_name.toLowerCase().includes(searchTerm.toLowerCase()) : true
+    const matchSpecialization = selectedSpecilization === 'All' || doctor.specialization === selectedSpecilization
+    return matchSearchTerm&&matchSpecialization
 
-    const filteredDoctors=searchTerm.length>0 ? doctors.filter(doctor=>doctor.last_name.toLowerCase().includes(searchTerm)):doctors
+    })
+
+
     return (
         <SafeAreaView style={[styles.container, containerStyle]}>
            <StatusBar style={theme === "dark" ? "light" : "dark"} />
@@ -136,15 +145,15 @@ function DoctorScreen() {
 
                     }}>
                     
-                    {data.categories.map((category, index) =>
-                        <Pressable key={index} style={[styles.categoryBtn,
-                            selectedCategory === category ? styles.firstCategoryBtn : {},
+                    {specialization.map((specialization, index) =>
+                        <Pressable key={index} onPress={()=>handleSpecializationChange(specialization)} style={[styles.categoryBtn,
+                            selectedSpecilization === specialization ? styles.firstCategoryBtn : {},
                             ]}>
                             
                             <Text style={[
                                 styles.categoryBtnText,
-                                selectedCategory === category ? styles.firstCategoryBtnText : {},
-                                ]}>{category.name}</Text>  
+                                selectedSpecilization === specialization ? styles.firstCategoryBtnText : {},
+                                ]}>{specialization}</Text>  
                             
                     </Pressable>
                         )}
