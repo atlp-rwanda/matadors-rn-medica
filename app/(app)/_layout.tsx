@@ -5,18 +5,16 @@ import { HistoryIcon } from "@/assets/icons/HistorySvg";
 import { HomeIcon } from "@/assets/icons/HomeSvg";
 import { ProfileIcon } from "@/assets/icons/ProfileSvg";
 import CustomTabBarIcon from "@/components/UI/CustomTabBarIcon";
-import Header from "@/components/UI/Header";
-import Modal from "@/components/UI/Modal";
 import { Colors } from "@/constants/Colors";
 import Typography from "@/constants/Typography";
 import { ThemeContext } from "@/ctx/ThemeContext";
-import { Stack, Tabs, useSegments } from "expo-router";
-import { useContext, useEffect, useState } from "react";
-import { Pressable, Text, TouchableOpacity, View } from "react-native";
+import { Tabs, useSegments } from "expo-router";
+import { useContext, useState } from "react";
+import { Text, TouchableOpacity, View } from "react-native";
 import { SvgXml } from "react-native-svg";
 
 export default function Layout() {
-  const { theme, changeTheme } = useContext(ThemeContext);
+  const { theme } = useContext(ThemeContext);
 
   const [tabVisible, setTabVisible] = useState(false);
   const segments = useSegments();
@@ -38,10 +36,10 @@ export default function Layout() {
                   display: tabVisible ? "flex" : "none",
                   flexDirection: "row",
                   justifyContent: "space-between",
-                  backgroundColor: theme === "dark"? Colors.dark._1 : Colors.others.white,
+                  backgroundColor:
+                    theme === "dark" ? Colors.dark._1 : Colors.others.white,
                   paddingHorizontal: 30,
                   paddingVertical: 25,
-                
                 }}
               >
                 {state.routes.map((route) => {
@@ -76,7 +74,7 @@ export default function Layout() {
                   };
 
                   return (
-                    <>
+                    <View key={route.key}>
                       {route.name !== "index" && (
                         <TouchableOpacity
                           id={route.key}
@@ -110,11 +108,11 @@ export default function Layout() {
                               },
                             ]}
                           >
-                            {label.slice(0, 8)}
+                            {String(label).slice(0, 8)}
                           </Text>
                         </TouchableOpacity>
                       )}
-                    </>
+                    </View>
                   );
                 })}
               </View>
