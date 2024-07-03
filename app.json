@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "matadors-rn-medica",
-    "slug": "matadors-rn-medica",
+    "slug": "medica-158",
     "scheme": "com.medica",
     "version": "1.0.0",
     "facebookAppId": "996973958124128",
@@ -13,12 +13,23 @@
       "resizeMode": "contain",
       "backgroundColor": "#000000"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "jsEngine": "jsc",
       "supportsTablet": true,
       "infoPlist": {
-        "NSFaceIDUsageDescription": "This app uses Face ID and Touch ID for some features"
+        "NSFaceIDUsageDescription": "This app uses Face ID and Touch ID for some features",
+        "NSUserTrackingUsageDescription": "This identifier will be used to deliver personalized ads to you.",
+        "SKAdNetworkItems": [
+          {
+            "SKAdNetworkIdentifier": "v9wttpbfk9.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "n38lu8286q.skadnetwork"
+          }
+        ]
       },
       "bundleIdentifier": "com.andela.matadors.medica"
     },
@@ -33,7 +44,8 @@
         "android.permission.USE_BIOMETRIC",
         "android.permission.USE_FINGERPRINT",
         "android.permission.CAMERA",
-        "android.permission.RECORD_AUDIO"
+        "android.permission.RECORD_AUDIO",
+        "android.permission.INTERNET"
       ],
       "package": "com.medica.oauthdeeplink"
     },
@@ -77,7 +89,7 @@
         "origin": false
       },
       "eas": {
-        "projectId": "3a6a34bd-fe90-43f9-9508-8c6cf7700ef6"
+        "projectId": "e682bd39-ab6e-4861-9be2-39cbe02bb93e"
       }
     },
     "runtimeVersion": {
@@ -86,6 +98,6 @@
     "updates": {
       "url": "https://u.expo.dev/3a17d659-91e3-4105-837b-5f88bdee8d37"
     },
-    "owner": "apiimperfect"
+    "owner": "actrox"
   }
 }
