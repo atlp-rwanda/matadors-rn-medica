@@ -8,21 +8,16 @@ import CustomTabBarIcon from "@/components/UI/CustomTabBarIcon";
 import { Colors } from "@/constants/Colors";
 import Typography from "@/constants/Typography";
 import { ThemeContext } from "@/ctx/ThemeContext";
-import { Tabs, useRouter, useSegments } from "expo-router";
+import { Tabs, useSegments } from "expo-router";
 import { useContext, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { SvgXml } from "react-native-svg";
-import { useRoute } from "@react-navigation/native";
 
 export default function Layout() {
   const { theme } = useContext(ThemeContext);
 
   const [tabVisible, setTabVisible] = useState(false);
   const segments = useSegments();
-
-  const route = useRoute();
-
-  console.log(route)
 
   return (
     <>
@@ -79,41 +74,45 @@ export default function Layout() {
                   };
 
                   return (
-                    <TouchableOpacity
-                      key={route.key}
-                      id={route.key}
-                      accessibilityRole="button"
-                      accessibilityState={isFocused ? { selected: true } : {}}
-                      accessibilityLabel={options.tabBarAccessibilityLabel}
-                      testID={options.tabBarTestID}
-                      onPress={onPress}
-                      onLongPress={onLongPress}
-                      style={{
-                        justifyContent: "center",
-                        alignItems: "center",
-                        gap: 2,
-                        display: route.name === "index" ? "none" : "none",
-                      }}
-                    >
-                      <CustomTabBarIcon
-                        name={route.name}
-                        isFocused={isFocused}
-                      />
-                      <Text
-                        style={[
-                          isFocused
-                            ? Typography.bold.xSmall
-                            : Typography.medium.xSmall,
-                          {
-                            color: isFocused
-                              ? Colors.main.primary._500
-                              : Colors.grayScale._500,
-                          },
-                        ]}
-                      >
-                        {String(label).slice(0, 8)}
-                      </Text>
-                    </TouchableOpacity>
+                    <>
+                      {route.name !== "index" && (
+                        <TouchableOpacity
+                          id={route.key}
+                          accessibilityRole="button"
+                          accessibilityState={
+                            isFocused ? { selected: true } : {}
+                          }
+                          accessibilityLabel={options.tabBarAccessibilityLabel}
+                          testID={options.tabBarTestID}
+                          onPress={onPress}
+                          onLongPress={onLongPress}
+                          style={{
+                            justifyContent: "center",
+                            alignItems: "center",
+                            gap: 2,
+                          }}
+                        >
+                          <CustomTabBarIcon
+                            name={route.name}
+                            isFocused={isFocused}
+                          />
+                          <Text
+                            style={[
+                              isFocused
+                                ? Typography.bold.xSmall
+                                : Typography.medium.xSmall,
+                              {
+                                color: isFocused
+                                  ? Colors.main.primary._500
+                                  : Colors.grayScale._500,
+                              },
+                            ]}
+                          >
+                            {String(label).slice(0, 8)}
+                          </Text>
+                        </TouchableOpacity>
+                      )}
+                    </>
                   );
                 })}
               </View>

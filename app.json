@@ -4,10 +4,6 @@
     "slug": "medica-158",
     "scheme": "com.medica",
     "version": "1.0.0",
-    "facebookAppId": "996973958124128",
-    "facebookDisplayName": "Medica",
-    "facebookAutoInitEnabled": true,
-    "clientToken": "752a8319030c9d5c0e4e32de98044daf",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "splash": {
@@ -56,14 +52,14 @@
     },
     "plugins": [
       "expo-router",
+      "expo-font",
+      "expo-secure-store",
       [
         "expo-local-authentication",
         {
           "faceIDPermission": "Allow $(PRODUCT_NAME) to use Face ID."
         }
       ],
-      "expo-font",
-      "expo-secure-store",
       [
         "expo-camera",
         {
@@ -77,8 +73,7 @@
         {
           "photosPermission": "The app accesses your photos to let you share them with your friends."
         }
-      ],
-      "react-native-fbsdk-next"
+      ]
     ],
     "experiments": {
       "typedRoutes": true
