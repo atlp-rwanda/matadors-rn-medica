@@ -6,7 +6,8 @@
     "version": "1.0.0",
     "facebookAppId": "996973958124128",
     "facebookDisplayName": "Medica",
-    "clientToken": "752a8319030c9d5c0e4e32de98044dafZ",
+    "facebookAutoInitEnabled": true,
+    "clientToken": "752a8319030c9d5c0e4e32de98044daf",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "splash": {
@@ -14,9 +15,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#000000"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "jsEngine": "jsc",
       "supportsTablet": true,
