@@ -20,46 +20,38 @@ import Typography from "@/constants/Typography";
 import { StatusBar } from "expo-status-bar";
 import { router } from "expo-router";
 import Cancelappointment from "@/components/cancelappointmentmodal";
-import appointmentsData from "../../Appointments.json";
 import DoctorCard from "@/components/AppointmentDoctorsCards";
 import SearchComponent from "@/components/SearchComponent";
-import NofoundComponent from "@/components/NofoundComponent";
+import Appointmentnotfound from "@/components/Appointmentnotfound";
+import HeaderComponent from "@/components/HeaderComponent";
+import FilterPopup from "@/components/FilterSearchComponent";
+import Chips from "@/components/UI/ChipsComponent";
 import { blueMessageIcon } from "@/components/UI/icons/blueMessage";
 import { BlueVideoCall } from "@/components/UI/icons/videoCallIcon";
 import { BlueVoiceCall } from "@/components/UI/icons/callIcon";
 import { ThemeContext } from "@/ctx/ThemeContext";
-import {Colors} from "@/constants/Colors";
-import { filterWhiteIcon } from "@/components/UI/icons/filterIcon";
-import { moreWhiteIcon } from "@/components/UI/icons/circleWithDots";
+import { Colors } from "@/constants/Colors";
+import { fetchPatientData, getPatientData, getUserImageUrl } from "@/utils/LoggedInUser";
+import { supabase } from "@/lib/supabase";
 
-interface imageMapProp {
-  [key: string]: ReturnType<typeof require>;
-}
-
-const imageMap: imageMapProp = {
-  "doctor1.png": require("@/assets/images/Doctors/doctor1.png"),
-  "doctor2.png": require("@/assets/images/Doctors/doctor2.png"),
-  "doctor3.png": require("@/assets/images/Doctors/doctor3.png"),
-  "doctor4.png": require("@/assets/images/Doctors/doctor4.png"),
-  "doctor5.png": require("@/assets/images/Doctors/doctor5.png"),
-};
-
-interface Doctor {
+interface Appointment {
+  id: string;
   name: string;
+  created_at: string;
+  doctor_id: string;
   date: string;
   time: string;
-  image: any;
+  package: string;
+  price: string;
+  illness: string;
   status: string;
-  statusColor: string;
-  type: string;
-  icon: any;
-  
-}
-
-interface DoctorsData {
-  Upcoming: Doctor[];
-  Completed: Doctor[];
-  Cancelled: Doctor[];
+  user_id: string;
+  doctor: {
+    id: string;
+    first_name: string;
+    last_name: string;
+    image: string;
+  };
 }
 
 type TabKey = "Upcoming" | "Completed" | "Cancelled";
@@ -67,14 +59,51 @@ type TabKey = "Upcoming" | "Completed" | "Cancelled";
 const AppointmentScreen: React.FC = () => {
   const { theme, changeTheme } = useContext(ThemeContext);
 
+  const [headerWidth, setHeaderWidth] = useState<number>(0);
+  const [showpopUp, setShowPopup] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [loggedUser, setLoggedUser] = useState<string | undefined>();
+  const [profile, setProfile] = useState<any>(null);
+  const [patientId, setPatientId] = useState<string | undefined>();
+  const [selectedStatus, setSelectedStatus] = useState<TabKey>("Upcoming");
+  const [status, setStatus] = useState<string[]>([]);
+  const [showSearch, setShowSearch] = useState<boolean>(false);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [showFilter, setShowFilter] = useState<boolean>(false);
 
-  const [activeTab, setActiveTab] = useState<TabKey>("Upcoming");
-  const [headerWidth, setHeaderWidth] = useState(0);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filteredData, setFilteredData] =
-    useState<DoctorsData>(appointmentsData);
-  const navigation = useNavigation();
-  const [showpopUp, setShowPopup] = useState(false);
+  useEffect(() => {
+    const fetchUser = async () => {
+      const { data: { user }, error } = await supabase.auth.getUser();
+      if (error) {
+        console.error("Error fetching user:", error);
+      } else {
+        setLoggedUser(user?.id);
+      }
+    };
+    fetchUser();
+  }, []);
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      if (loggedUser) {
+        const { data, error } = await supabase
+          .from("patients")
+          .select("*")
+          .eq('auth_id', loggedUser)
+          .single();
+        if (error) {
+          console.error("Error retrieving profile:", error);
+        } else {
+          setProfile(data);
+          setPatientId(data.id);
+          console.log(data);
+        }
+      }
+    };
+    fetchUserProfile();
+  }, [loggedUser]);
+
   useEffect(() => {
     const updateHeaderWidth = () => {
       const screenWidth = Dimensions.get("window").width;
@@ -86,161 +115,157 @@ const AppointmentScreen: React.FC = () => {
     updateHeaderWidth();
   }, []);
 
-  const handleTabPress = (screen: TabKey) => {
-    setActiveTab(screen);
-    setSearchTerm("");
-    setFilteredData(appointmentsData);
-  };
-
-  function handleIconOnPress(doctor: Doctor){
-    doctor.type === "Messaging" ? (
-      router.push("(app)/Appointments/MessagingAppointment")
-    ) : doctor.type === "Video Call" ? (
-      router.push("(app)/Appointments/VideoCallAppointment")
-    ) : (
-      router.push("(app)/Appointments/VoiceCallAppointment")
-    )
+  function handleIconOnPress(appointment: Appointment) {
+    const route = appointment.package === "Messaging" 
+      ? "(app)/Appointments/MessagingAppointment" 
+      : appointment.package === "Video Call" 
+        ? "(app)/Appointments/VideoCallAppointment" 
+        : "(app)/Appointments/VoiceCallAppointment";
+    router.push({ pathname: route, params: { id: appointment.id } });
   }
 
-  const handleSearch = (text: string) => {
-    setSearchTerm(text);
-    const updatedData: DoctorsData = {
-      Upcoming: [],
-      Completed: [],
-      Cancelled: [],
-    };
+  useEffect(() => {
+    async function fetchData() {
+      if (!patientId) return;
 
-    (Object.keys(appointmentsData) as TabKey[]).forEach((key) => {
-      updatedData[key] = appointmentsData[key].filter((doctor: Doctor) =>
-        doctor.name.toLowerCase().includes(text.toLowerCase())
-      );
-    });
+      setIsLoading(true);
 
-    setFilteredData(updatedData);
+      const { data: appointmentsData, error: appointmentsError } = await supabase
+        .from("appointment")
+        .select("*")
+        .eq("user_id", patientId);
+
+      if (appointmentsError) {
+        setIsLoading(false);
+        console.error("Error fetching appointments:", appointmentsError);
+        return;
+      }
+
+      const doctorIds = appointmentsData.map(appointment => appointment.doctor_id);
+
+      const { data: doctorsData, error: doctorsError } = await supabase
+        .from("doctors")
+        .select("*")
+        .in("id", doctorIds);
+
+      if (doctorsError) {
+        setIsLoading(false);
+        console.error("Error fetching doctors:", doctorsError);
+        return;
+      }
+
+      const mergedData = appointmentsData.map(appointment => {
+        const doctor = doctorsData.find(doc => doc.id === appointment.doctor_id);
+        return { ...appointment, doctor };
+      });
+
+      setIsLoading(false);
+      setAppointments(mergedData);
+
+      const statuses = ['Upcoming', 'Completed', 'Cancelled'];
+      setStatus(statuses);
+    }
+    fetchData();
+  }, [patientId]);
+
+  const handleStatusChange = (status: string) => {
+    setSelectedStatus(status as TabKey);
+    setSearchTerm('');
   };
 
-  const renderTab = (screen: TabKey, label: string) => {
-    const isActive = activeTab === screen;
-    return (
-      <TouchableOpacity
-        key={screen}
-        style={[
-          styles.tab,
-          isActive && styles.activeTab,
-          { borderBottomColor: isActive ? "#246BFD" : "#D3D3D3" },
-        ]}
-        onPress={() => handleTabPress(screen)}
-      >
-        <Text style={[styles.tabText, isActive && styles.activeTabText]}>
-          {label}
-        </Text>
-      </TouchableOpacity>
-    );
+  const handleSearchPressed = () => {
+    setShowSearch(true);
+  };
+  
+  const handleSearchSubmit = (text: string) => {
+    setSearchTerm(text.toLowerCase());
+  };
+  
+  const handleFilter = () => {
+    setShowFilter(true);
   };
 
   const Handlecancel = () => {
     setShowPopup(true);
   };
 
-  const activeTabLinePosition = {
-    width: headerWidth / 3,
-    left:
-      activeTab === "Upcoming"
-        ? 0
-        : activeTab === "Completed"
-        ? headerWidth / 3
-        : (headerWidth * 2) / 3,
-  };
+  const filteredAppointments = appointments.filter(appointment => {
+    const matchSearchTerm = searchTerm.length > 0 
+      ? appointment.doctor.last_name.toLowerCase().includes(searchTerm) || appointment.doctor.first_name.toLowerCase().includes(searchTerm)
+      : true;
+    const matchStatus = selectedStatus === 'Upcoming' 
+      ? appointment.status === 'Upcoming' 
+      : appointment.status === selectedStatus;
+    return matchSearchTerm && matchStatus;
+  });
 
-  const getButtons = (tab: TabKey) => {
-    if (tab === "Upcoming") {
-      return [
-        {
-          label: "Cancel Appointment",
-          action: () => Handlecancel(),
-          styleType: "cancel" as const,
-        },
-        {
-          label: "Reschedule",
-          action: () =>
-            router.push("Appointments/ReschedualAppointment/Selectreason"),
-          styleType: "primary" as const,
-        },
-      ];
-    } else if (tab === "Completed") {
-      return [
-        {
-          label: "Book Again",
-          action: () => console.log("Book Again"),
-          styleType: "cancel" as const,
-        },
-        {
-          label: "Leave a Review",
-          action: () => console.log("Leave a Review"),
-          styleType: "primary" as const,
-        },
-      ];
-    }
-    return [];
-  };
   return (
-    <View style={[styles.container,{backgroundColor: theme === "dark" ? Colors.dark._1: Colors.others.white}]}>
-      <ImageBackground style={[styles.header, {backgroundColor: theme === "dark" ? Colors.dark._1: Colors.others.white}]}>
+    <View style={[styles.container, { backgroundColor: theme === "dark" ? Colors.dark._1 : Colors.others.white }]}>
+      <ImageBackground style={[styles.header, { backgroundColor: theme === "dark" ? Colors.dark._1 : Colors.others.white }]}>
         <View style={styles.heading}>
-        <View style={{flexDirection: "row", gap: 20}}>
-          <Image
-            style={styles.headerLogo}
-            source={require("@/assets/images/DefaultLogo.png")}
-          ></Image>
-          <Text style={[Typography.heading._4, {color: theme === "dark" ? Colors.others.white: Colors.others.black,}]}>My Appointment</Text>
-          </View>
-        <View style={{flexDirection: "row", gap: 20}}>
-            <TouchableOpacity>
-              <SvgXml xml={ theme === "dark"? filterWhiteIcon: SearchIcon} />
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <SvgXml xml={theme === "dark" ? moreWhiteIcon : MoreIcon} />
-            </TouchableOpacity>
-          </View>
-        
+          {
+            !showSearch ? (
+              <HeaderComponent
+                onSearchPressed={handleSearchPressed}
+                headerText="My Appointments"
+              />
+            ) : (
+              <SearchComponent
+                onSearchSubmit={handleSearchSubmit}
+                filterAction={handleFilter}
+              />
+            )
+          }
         </View>
         <View style={styles.headerNav}>
-          {renderTab("Upcoming", "Upcoming")}
-          {renderTab("Completed", "Completed")}
-          {renderTab("Cancelled", "Cancelled")}
-          <View style={[styles.activeTabLine, activeTabLinePosition]} />
+          {status.map((status, index) =>
+            <Pressable key={index} onPress={() => handleStatusChange(status)} style={[styles.tab, selectedStatus === status ? styles.activeTab : {}]}>
+              <Text style={[Typography.semiBold.xLarge, styles.tabText, selectedStatus === status ? styles.activeTabText : {}]}>{status}</Text>
+            </Pressable>
+          )}
         </View>
       </ImageBackground>
 
       <ScrollView style={styles.cardContainer}>
-        {filteredData[activeTab].map((doctor: Doctor, index: number) => (
-          <DoctorCard
-            key={index}
-            name={doctor.name}
-            date={doctor.date}
-            time={doctor.time}
-            image={imageMap[doctor.image]}
-            status={doctor.status}
-            statusColor={doctor.statusColor}
-            type={doctor.type}
-            icon={
-              doctor.type === "Messaging" ? (
-                <SvgXml xml={blueMessageIcon} />
-              ) : doctor.type === "Video Call" ? (
-                <SvgXml xml={BlueVideoCall} />
-              ) : (
-                <SvgXml xml={BlueVoiceCall} />
-              )
-            }
-            iconOnPress={()=>handleIconOnPress(doctor)}
-            buttons={activeTab !== "Cancelled" ? getButtons(activeTab) : []}
-          />
-        ))}
+        {filteredAppointments.length > 0 ? (
+          filteredAppointments.map((appointment, index) => (
+            <DoctorCard
+              key={index}
+              name={`${appointment.doctor.last_name} ${appointment.doctor.first_name}`}
+              date={appointment.date}
+              time={appointment.time}
+              image={{ uri: appointment.doctor.image }}
+              status={appointment.status}
+              statusColor={appointment.status === "Upcoming" 
+                ? Colors.main.primary._500 
+                : appointment.status === "Completed" 
+                  ? Colors.others.green 
+                  : Colors.others.pink
+              }
+              type={appointment.package}
+              icon={
+                appointment.package === "Messaging" 
+                  ? <SvgXml xml={blueMessageIcon} /> 
+                  : appointment.package === "Video Call" 
+                    ? <SvgXml xml={BlueVideoCall} /> 
+                    : <SvgXml xml={BlueVoiceCall} />
+              }
+              iconOnPress={() => handleIconOnPress(appointment)}
+              buttons={
+                appointment.status === "Upcoming" ? (
+                  <><Chips text="Cancel Appointment" size="small" type="border" onPress={Handlecancel} /><Chips text="Reschedule" size="small" style={{paddingLeft:40,paddingRight:40}} type="filled" onPress={() => router.push("Appointments/ReschedualAppointment/Selectreason")} /></>
+                ) : appointment.status === "Completed" ? (
+                  <><Chips text="Book Again" size="small" type="border" style={{paddingLeft:50,paddingRight:50}} onPress={Handlecancel} /><Chips text="Leave a Review" size="small"  type="filled"style={{paddingLeft:30,paddingRight:30}} onPress={() => router.push("Appointments/ReschedualAppointment/Selectreason")} /></>
+                ) : (
+                 <></> 
+                )
+              }
+            />
+          ))
+        ) : (
+          <Appointmentnotfound />
+        )}
       </ScrollView>
-      <Cancelappointment
-        cancel={() => setShowPopup(false)}
-        visible={showpopUp}
-      />
     </View>
   );
 };
@@ -248,102 +273,43 @@ const AppointmentScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F5F5F5",
   },
   header: {
-    backgroundColor: "#FFFFFF",
-    paddingVertical: 20,
+    paddingTop: 50,
+    paddingBottom: 20,
     paddingHorizontal: 20,
-    height: "20%",
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
   },
   heading: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginTop: 30,
-  },
-  headerLogo: {
-    width: 40,
-    height: 40,
-  },
-
-  searchIcon: {
-    color: "#FFFFFF",
-    width: 20,
-    height: 20,
-  },
-  moreIcon: {
-    color: "#FFFFFF",
-    width: 20,
-    height: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   headerNav: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-around',
     marginTop: 20,
+    borderBottomColor:Colors.grayScale._500,
+    borderBottomWidth:1
   },
   tab: {
-    paddingBottom: 10,
-    borderBottomWidth: 2,
-  },
-  activeTab: {
-    borderBottomColor: "#246BFD",
-  },
-  tabText: {
-    fontSize: 16,
-    color: "#D3D3D3",
-  },
-  activeTabText: {
-    color: "#246BFD",
-  },
-  activeTabLine: {
-    position: "absolute",
-    bottom: 0,
-    height: 2,
-    backgroundColor: "#246BFD",
-  },
-  cardContainer: {
-    flex: 1,
-    paddingHorizontal: 10,
-    paddingTop: 10,
-    paddingBottom: 20,
-  },
-  footer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
     paddingVertical: 10,
     paddingHorizontal: 20,
-    backgroundColor: "#FFFFFF",
-    borderTopWidth: 1,
-    borderTopColor: "#D3D3D3",
+    
   },
-  footerButton: {
-    alignItems: "center",
+  activeTab: {
+    color: Colors.main.primary._500,
+    borderBottomColor:Colors.main.primary._500,
+    borderBottomWidth:4
   },
-  footerIcon: {
-    width: 24,
-    height: 24,
+  tabText: {
+    color: Colors.grayScale._900,
   },
-  footerButtonText: {
-    fontFamily: "Urbanist-regular",
-    fontSize: 12,
-    color: "#D3D3D3",
+  activeTabText: {
+    color: Colors.main.primary._500,
   },
-  activeFooterButtonText: {
-    color: "#246BFD",
-  },
-  searchContainer: {
-    marginTop: 10,
+  cardContainer: {
     paddingHorizontal: 20,
-  },
-  searchInput: {
-    height: 40,
-    backgroundColor: "#F0F0F0",
-    borderRadius: 20,
-    paddingHorizontal: 20,
+    marginTop: 20,
   },
 });
 

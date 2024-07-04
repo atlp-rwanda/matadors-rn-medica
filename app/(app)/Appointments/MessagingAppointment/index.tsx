@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   SafeAreaView,
   Text,
@@ -11,7 +11,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Colors } from "@/constants/Colors";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import { ThemeContext } from "@/ctx/ThemeContext";
 import { StatusBar } from "expo-status-bar";
@@ -26,39 +26,139 @@ import { backArrowWhite } from "@/components/UI/icons/backArrow";
 import { WhiteMenuCircle } from "@/components/UI/icons/WhiteMenuCircle";
 import { MoreIcon } from "@/assets/icons/MoreCircleSvg";
 import { backArrowBlackIcon } from '@/constants/icon'
+import { fetchPatientData, getPatientData } from "@/utils/LoggedInUser";
+import { supabase } from "@/lib/supabase";
 
-interface PatientType {
-  id: string;
+
+interface AppointmentType {
+  [x: string]: any;
   name: string;
-  gender: "male" | "female";
-  age: string;
-  problem: string;
-  appointmentMethod: "Messaging" | "voice call" | "video call";
-  appointmentDate: string;
+  specialization: string;
+  hospital_name: string;
   time: string;
+  package: string;
+  date: string;
   price: string;
   paid: boolean;
+  gender:string;
+  patient_name:string;
+  patient_age:string;
+  problem:string;
+  
 }
+
 
 function AppointmentMessaging() {
   const { theme, changeTheme } = useContext(ThemeContext);
   const ios = Platform.OS === "ios";
+  const [patientData, setPatientData] = useState(null);
+  const [userData, setUserData] = useState<[]>([]);
+  const { id } = useLocalSearchParams()
+  const [isLoading, setIsLoading] = useState(false);
+  const [appointment, setAppointment] = useState<AppointmentType[]>([]);
+  const [loggeduser, setLoggedUser] = useState<string>()
+  const [patient_id,setPatient_id]=useState<string>()
+  const [profile, setProfile] = useState<any>(null)
+  
+ 
 
-  const PatientDetails: PatientType[] = [
-    {
-      id: "23",
-      name: "Rhys manners",
-      gender: "male",
-      age: "23",
-      problem:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
-      appointmentMethod: "Messaging",
-      appointmentDate: "Today December 22,, 2022",
-      time: "16:30 - 1:30 minutes",
-      price: "20",
-      paid: true,
-    },
-  ];
+
+  useEffect(() => {
+    async function fetchData() {
+      setIsLoading(true)
+      const { data: appointmentsData, error: appointmentsError } = await supabase
+        .from("appointment")
+        .select("*")
+        .eq("id", id);
+
+      if (appointmentsError) {
+        setIsLoading(false);
+        console.error("Error fetching data:", appointmentsError);
+        return;
+      }
+
+      const doctorIds = appointmentsData.map(appointment => appointment.doctor_id);
+const userIds = appointmentsData.map(appointment => appointment.user_id);
+
+try {
+  // Fetch doctor data
+  const { data: doctorData, error: doctorsError } = await supabase
+    .from("doctors")
+    .select("*")
+    .in("id", doctorIds);
+
+  if (doctorsError) {
+    setIsLoading(false);
+    console.error("Error fetching doctors:", doctorsError);
+    return;
+  }
+
+  // Fetch user data
+  const { data: userData, error: usersError } = await supabase
+    .from("patients")
+    .select("*")
+    .in("id", userIds);
+
+  if (usersError) {
+    setIsLoading(false);
+    console.error("Error fetching users:", usersError);
+    return;
+  }
+
+  const mergedData = appointmentsData.map(appointment => {
+    const doctor = doctorData.find(doc => doc.id === appointment.doctor_id);
+    const user = userData.find(usr => usr.id === appointment.user_id);
+    return { ...appointment, doctor, user };
+  });
+  setIsLoading(true);
+      setAppointment(mergedData);
+} catch (error) {
+  setIsLoading(false);
+  console.error("Error fetching data:", error);
+}
+
+      
+      
+    }
+    fetchData();
+  }, [appointment]);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      
+      const { data: { user },error } = await supabase.auth.getUser()
+      if (error) {
+        console.error("error fetching user")
+      } else {
+        setLoggedUser(user?.id)
+      }
+    }
+    fetchUser()
+   
+  }, [loggeduser])
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      if (loggeduser) {
+        const { data, error } = await supabase
+          .from("patients")
+          .select("*")
+          .eq('auth_id', loggeduser)
+          .single()
+        if (error) {
+          console.error("error while retrieving profile",error)
+        } else {
+          setProfile(data)
+          setPatient_id(data.id)
+          
+        }
+              }
+    }
+    fetchUserProfile()
+  }, [loggeduser])
+
+
+  
 
   return (
     <View
@@ -111,10 +211,10 @@ function AppointmentMessaging() {
           </View>
         </View>
         <View style={{ flex: 1, paddingBottom: 30 }}>
-          {PatientDetails &&
-            PatientDetails.map((data: PatientType) => (
+          {appointment &&
+            appointment.map((appointment, index) => (
               <View
-                key={data?.id}
+                key={index}
                 style={{
                   flex: 1,
                   justifyContent: "space-around",
@@ -122,13 +222,8 @@ function AppointmentMessaging() {
                     theme === "light" ? Colors.others.white : Colors.dark._1,
                 }}
               >
-                <View
-                  style={{
-                    paddingHorizontal: 20,
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <DoctorCard />
+                <View>
+                  <DoctorCard name= {appointment.doctor.first_name} specialization={appointment.doctor.specialization} hospital={appointment.doctor.hospital_name} image={{ uri: appointment.doctor.image }}/>
                 </View>
                 <View style={{ gap: 10 }}>
                   <Text
@@ -153,7 +248,7 @@ function AppointmentMessaging() {
                           : Colors?.grayScale?._900,
                     }]}
                   >
-                    {data.appointmentDate}
+                    {appointment.date}
                   </Text>
                   <Text
                     style={[
@@ -164,7 +259,7 @@ function AppointmentMessaging() {
                           : Colors?.grayScale?._900,
                     }]}
                   >
-                    {data.time}
+                    {appointment.time}
                   </Text>
                 </View>
                 <View style={{ gap: 16 }}>
@@ -187,33 +282,33 @@ function AppointmentMessaging() {
                         Typography.regular.large,
                         {
                           gap: 8,
-                          color: theme === "dark" ? "#E0E0E0" : "#212121",
+                          color: theme === "dark" ? Colors.grayScale._300 : Colors.grayScale._900,
                         },
                       ]}
                     >
-                      Full Name: <Text>{data?.name}</Text>
+                      Full Name: <Text>{appointment.user.first_name}</Text>
                     </Text>
                     <Text
                       style={[
                         Typography.regular.large,
-                        { color: theme === "dark" ? "#E0E0E0" : "#212121" },
+                        { color: theme === "dark" ? Colors.grayScale._300 : Colors.grayScale._900 },
                       ]}
                     >
-                      Gender: <Text>{data?.gender}</Text>
+                      Gender: <Text>{appointment.user.gender}</Text>
                     </Text>
                     <Text
                       style={[
                         Typography.regular.large,
-                        { color: theme === "dark" ? "#E0E0E0" : "#212121" },
+                        { color: theme === "dark" ?Colors.grayScale._300 : Colors.grayScale._900 },
                       ]}
                     >
-                      Age: <Text>{data?.age}</Text>
+                      Age: <Text>{appointment.user.age}</Text>
                     </Text>
                     <Text
                       style={[
                         Typography.regular.large,
                         {
-                          color: theme === "dark" ? "#E0E0E0" : "#212121",
+                          color: theme === "dark" ? Colors.grayScale._300 : Colors.grayScale._900,
                           flexDirection: "row",
                           gap: 10,
                         },
@@ -221,12 +316,12 @@ function AppointmentMessaging() {
                     >
                       Problem:{" "}
                       <Text>
-                        {data?.problem}{" "}
+                        {appointment.illness_descr}
                         <TouchableOpacity>
                           <Text
                             style={[
                               Typography.regular.large,
-                                {color: "#246BFD"}
+                                {color: Colors.main.primary._500}
                             ]}
                           >
                             view more
@@ -243,7 +338,7 @@ function AppointmentMessaging() {
                       {
                         color:
                           theme === "dark"
-                            ? Colors.others.white
+                            ?Colors.grayScale._300
                             : Colors.grayScale._900,
                       },
                     ]}
@@ -255,7 +350,6 @@ function AppointmentMessaging() {
                       flexDirection: "row",
                       justifyContent: "space-between",
                       alignItems: "center",
-                      padding: 20,
                       borderRadius: 20,
                     }}
                   >
@@ -282,40 +376,40 @@ function AppointmentMessaging() {
                             {
                               color:
                                 theme === "dark"
-                                  ? Colors.others.white
+                                  ? Colors.grayScale._300
                                   : Colors.grayScale._900,
                             },
                           ]}
                         >
-                          {data.appointmentMethod}
+                          {appointment.package}
                         </Text>
                         <Text style={[
                         Typography.regular.large,
                         {
-                          color: theme === "dark" ? "#E0E0E0" : "#212121",
+                          color: theme === "dark" ?Colors.grayScale._300 : Colors.grayScale._900,
                           flexDirection: "row",
                           gap: 10,
                         },
                       ]}>Chat message with doctor</Text>
                       </View>
                     </View>
-                    <View style={{ gap: 5 }}>
+                    <View style={{ gap: 6 }}>
                       <Text
                         style={[
                           Typography.bold.xLarge,
                           { color: Colors.main.primary._500 },
                         ]}
                       >
-                        ${data.price}
+                        {appointment.price}
                       </Text>
                       <Text style={[
                         Typography.regular.large,
                         {
-                          color: theme === "dark" ? "#E0E0E0" : "#212121",
+                          color: theme === "dark" ? Colors.grayScale._300 : Colors.grayScale._900,
                           flexDirection: "row",
                           gap: 10,
                         },
-                      ]}>{data.paid ? "Paid" : "not paid"}</Text>
+                      ]}>{appointment.paid ? "(Paid)" : "(not paid)"}</Text>
                     </View>
                   </View>
                 </View>
@@ -347,8 +441,8 @@ function AppointmentMessaging() {
                         { color: Colors.others.white },
                       ]}
                     >
-                      {data?.appointmentMethod}(
-                      <Text>Start at {data?.time}</Text>)
+                      {appointment.package}(
+                      <Text>Start at {appointment.time}</Text>)
                     </Text>
                   </View>
                 </Pressable>

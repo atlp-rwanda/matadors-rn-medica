@@ -88,8 +88,8 @@ const SelectPackage = () => {
           </Text>
           <DropDown
             data={[
-              { label: "a half", value: "30" },
-              { label: "an hour", value: "30" },
+              { label: "1 hour", value: "30" },
+              { label: "30 minutes", value: "30 minutes" },
             ]}
             leftIcon={() => (
               <SvgXml xml={theme === "light" ? clockIcon : lightClockIcon} />
