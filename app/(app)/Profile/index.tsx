@@ -1,21 +1,12 @@
-import { EditBlueIcon } from "@/assets/icons/EditBlueIcon";
-import {
-  EmptyImageContainer,
-  EmptyImageContainerDark,
-} from "@/assets/icons/EmptyImageContainer";
 import Typography from "@/constants/Typography";
 import React, { useContext, useEffect, useState } from "react";
 import {
   Text,
   View,
-  ScrollView,
-  Pressable,
   Image,
   FlatList,
 } from "react-native";
-import { Svg, SvgXml } from "react-native-svg";
-import * as ImagePicker from "expo-image-picker";
-import { LightDivider } from "@/assets/icons/LightDivider";
+import { SvgXml } from "react-native-svg";
 import OptionListing from "@/components/Profile/OptionListing";
 import { Colors } from "@/constants/Colors";
 import {
@@ -42,41 +33,36 @@ import {
 import { ThemeContext } from "@/ctx/ThemeContext";
 import { router } from "expo-router";
 import Switch from "@/components/UI/Switch";
-import SelectProfile from "@/components/UI/SelectProfile";
-import { supabase } from "@/lib/supabase";
 import {
   getUserImageUrl,
   fetchPatientData,
-  getPatientData,
 } from "@/utils/LoggedInUser";
-import { useAuth } from "@/ctx/AuthContext";
+import { AuthContext, useAuth } from "@/ctx/AuthContext";
 
 const index = () => {
   const { theme, changeTheme } = useContext(ThemeContext);
-  const [userData, setUserData] = useState<any[]>([]);
   const [patientData, setPatientData] = useState(null);
   const [imageUrl, setImageUrl] = useState([]);
   const [profilePhoto, setProfilePhoto] = useState("");
+  const { userId } = useContext(AuthContext);
+
   const CDNURL =
     "https://vbwbfflzxuhktdvpbspd.supabase.co/storage/v1/object/public/patients/";
   const { authType, imageUrl: otherAuthImageUrl, logout } = useAuth();
 
   useEffect(() => {
-    getPatientData(supabase, setUserData);
-  }, []);
-
-  useEffect(() => {
-    if (userData?.id) {
-      fetchPatientData(userData?.id, setPatientData);
-      getUserImageUrl("patients", userData, setImageUrl);
+    if (userId ) {
+      fetchPatientData(userId , setPatientData);
+      getUserImageUrl("patients", userId , setImageUrl);
     }
-  }, [userData]);
+  }, [userId]);
 
   useEffect(() => {
     if (imageUrl.length > 0) {
       setProfilePhoto(imageUrl[0]?.name);
     }
   }, [imageUrl]);
+
   const [formData, setFormData] = useState({
     image: {
       name: "",
@@ -88,7 +74,7 @@ const index = () => {
   const image =
     authType !== "email"
       ? otherAuthImageUrl
-      : `${CDNURL + userData?.id + "/" + profilePhoto}`;
+      : `${CDNURL + userId  + "/" + profilePhoto}`;
 
   function handleImagePicker(name: string, value: string) {
     setFormData((prevVal) => {
@@ -101,7 +87,7 @@ const index = () => {
 
   return (
     <View>
-      {patientData && userData && (
+      {patientData && (
         <FlatList
           data={patientData}
           renderItem={({ item }) => (
@@ -125,9 +111,8 @@ const index = () => {
                     source={{
                       uri:authType && authType !== "apple"
                       ? otherAuthImageUrl
-                      : `${CDNURL + userData?.id + "/" + profilePhoto}`,
+                      : `${CDNURL + userId + "/" + profilePhoto}`,
                                             
-
                     }}
                   />
                 </View>

@@ -1,0 +1,52 @@
+import React, { useContext, useEffect, useState } from 'react'
+import { fetchPatientData } from '@/utils/LoggedInUser';
+import { AuthContext } from '@/ctx/AuthContext';
+import {
+    ChannelList
+  } from 'stream-chat-expo'
+import { useAppContext } from '@/ctx/ChatContext';
+import { PatientTypes } from '@/constants/Types';
+import { router, Stack, useRouter } from 'expo-router';
+
+const ChannelLists = (props: any) => {
+    const { channel, setChannel } = useAppContext();
+    const [patientData, setPatientData] = useState<PatientTypes[] | null>(null);
+    const { userId, email, isLoggedIn } = useContext(AuthContext);
+    const router = useRouter();
+
+    useEffect(() => {
+        if (userId) {
+          fetchPatientData(userId, setPatientData);
+        }
+    }, [userId]);
+    let filters = {}
+    if (patientData && patientData[0]) {
+      filters = {
+        members: {
+          '$in': [`${patientData[0]?.id}`],
+        },
+      };
+    }
+
+    const sort = {last_message_at: -1,};
+
+    const handleNavigateToChannel = (channel: any) => {
+      setChannel(channel);
+      router.push({
+        pathname: "(app)/Appointments/MessagingAppointment/ChannelScreen",
+        params: { id: channel?.id },
+      });
+    };
+
+  return (
+    <ChannelList
+    onSelect={(channel) => handleNavigateToChannel(channel)}
+    filters={filters}
+    sort={sort}
+  />
+  )
+}
+
+
+export default ChannelLists
+

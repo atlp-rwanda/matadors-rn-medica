@@ -12,7 +12,6 @@ import {
 import React, { useContext, useEffect, useState } from "react";
 import { useFonts as useFontsExpo } from "expo-font";
 import { useNavigation } from "@react-navigation/native";
-import Line from "@/components/Line";
 import { router } from "expo-router";
 import { SvgXml } from "react-native-svg";
 import {
@@ -21,11 +20,6 @@ import {
 } from "@/assets/icons/Profile/Icons";
 import { ThemeContext } from "@/ctx/ThemeContext";
 import { blackHeart } from "@/components/UI/icons/blackHeart";
-import Chips from "@/components/UI/ChipsComponent";
-import {
-  fullSmallBlueStar,
-  fullSmallWhiteStar,
-} from "@/components/UI/icons/star";
 import { Session } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabase";
 import {
@@ -34,17 +28,15 @@ import {
   getPatientData,
 } from "@/utils/LoggedInUser";
 import { Doctor } from "@/constants/Types";
-import DoctorDetails from "./Booking/Doctor_details";
 import DoctorComponent from "@/components/DoctorComponent";
 import { star } from "@/assets/icons/star";
 import { whiteHeart } from "@/assets/icons/whiteHeart";
 import { blueheart } from '@/assets/icons/blueHeart';
 import NofoundComponent from "@/components/NofoundComponent";
-import { useAuth } from "@/ctx/AuthContext";
+import { AuthContext, useAuth } from "@/ctx/AuthContext";
 import RemovefavoritePopup from "@/components/RemovefavoriteIndexPopup";
 
 export default function Index() {
-  const [session, setSession] = useState<Session | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [userData, setUserData] = useState<[]>([]);
   const [patientData, setPatientData] = useState(null);
@@ -54,7 +46,6 @@ export default function Index() {
   const { theme, changeTheme } = useContext(ThemeContext);
   const navigation = useNavigation();
   const [text, setText] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
   const [doctors, setDoctors] = useState<Doctor[]>([]);
   const [greeting, setGreeting] = useState("");
   const { authType, imageUrl: otherAuthImageUrl } = useAuth();
@@ -66,6 +57,7 @@ export default function Index() {
   const [favoriteDoctors, setFavoriteDoctors] = useState<number[]>([])
   const [loggeduser, setLoggedUser] = useState<string>()
   const [profile, setProfile] = useState<any>(null)
+  const { userId } = useContext(AuthContext);
 
   const [fontsLoaded] = useFontsExpo({
     "Urbanist-regular": require("@/assets/fonts/Urbanist-Regular.ttf"),
@@ -86,11 +78,11 @@ export default function Index() {
   }, []);
 
   useEffect(() => {
-    if (userData?.id) {
-      fetchPatientData(userData?.id, setPatientData);
-      getUserImageUrl("patients", userData, setImageUrl);
+    if (userId ) {
+      fetchPatientData(userId , setPatientData);
+      getUserImageUrl("patients", userId , setImageUrl);
     }
-  }, [userData]);
+  }, [userId]);
 
   useEffect(() => {
     if (imageUrl.length > 0) {
@@ -271,8 +263,8 @@ export default function Index() {
                   source={{
                     uri:authType && authType !== "apple"
                         ? otherAuthImageUrl
-                        : `${CDNURL + userData?.id + "/" + profilePhoto}`,
-                  }}
+                        : `${CDNURL + userId + "/" + profilePhoto}`,
+                      }}
                 />
               </View>
               <View

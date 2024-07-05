@@ -49,6 +49,7 @@ export async function getPatientData(supabase: any, userInfo: any): Promise<any>
           return;
         }
         patentInfo(data);
+        console.log(data)
       } catch (error) {
         console.error("Error while fetching data:", error);
         return;
@@ -59,7 +60,7 @@ export async function getPatientData(supabase: any, userInfo: any): Promise<any>
       const { data, error } = await supabase
       .storage
       .from(storageName)
-      .list(userId?.id + '/', {
+      .list(userId + '/', {
         limit: 100,
         offset: 0,
         sortBy: { column: 'name', order: 'asc' },

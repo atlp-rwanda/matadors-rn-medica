@@ -417,7 +417,10 @@ try {
                 <Pressable
                   onPress={() =>
                     router.push(
-                      "(app)/Appointments/MessagingAppointment/ChatMessaging"
+                    {
+                    pathname: "(app)/Appointments/MessagingAppointment/Home",
+                    params: {id: "1f4c9b93-5d95-427b-93fc-4936e4046454"}
+                    }
                     )
                   }
                   style={{
