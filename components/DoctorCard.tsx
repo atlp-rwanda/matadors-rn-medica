@@ -3,8 +3,14 @@ import Typography from "@/constants/Typography";
 import { ThemeContext } from "@/ctx/ThemeContext";
 import React, { useContext } from "react";
 import { Image, Text, View } from "react-native";
+interface DoctorProps{
+  name:string;
+  specialization:string;
+  hospital:string;
+  image: {uri:string}
+}
 
-const DoctorCard = () => {
+ function DoctorCard ({ name, specialization, hospital, image }: DoctorProps) {
     const { theme, changeTheme } = useContext(ThemeContext);
 
   return (
@@ -20,7 +26,7 @@ const DoctorCard = () => {
       }}
     >
       <Image
-        source={require("@/assets/images/BookingImages/doctor.png")}
+        source={image}
         style={{width: 110, height: 110, borderRadius: 16}}
       />
       <View
@@ -38,7 +44,7 @@ const DoctorCard = () => {
             },
           ]}
         >
-          Dr Jenny Watson
+          {name}
         </Text>
         <View
           style={{
@@ -57,7 +63,7 @@ const DoctorCard = () => {
             },
           ]}
         >
-          Immunologist
+          {specialization}
         </Text>
         <Text
           style={[
@@ -68,7 +74,7 @@ const DoctorCard = () => {
             },
           ]}
         >
-          Christ hospital London,uk
+          {hospital}
         </Text>
       </View>
     </View>

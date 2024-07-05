@@ -41,3 +41,16 @@ export interface Doctor{
   specialization: string,
   about:string
 }
+
+export interface Appointment{
+  id: number,
+  created_at: string,
+ doctor_id: string,
+  date: string,
+  time: string,
+  package: string,
+  price: string,
+  illness_descr:string,
+  status:string,
+  user_id:string
+}

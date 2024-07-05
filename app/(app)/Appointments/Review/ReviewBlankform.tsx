@@ -28,6 +28,7 @@ import {
     const [value, setValue] = useState("first");
     const [showPopup, setShowPopup] = useState(false);
     const ColorScheme = Appearance.getColorScheme(); 
+    console.log(rating)
     const submitHandler = () => {
       setShowPopup(true);
     };
