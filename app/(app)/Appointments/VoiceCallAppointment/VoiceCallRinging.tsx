@@ -1,112 +1,233 @@
+import React, { useState } from "react";
 import {
-  StyleSheet,
-  Text,
-  View,
-  ImageBackground,
-  Image,
-  Pressable,
+  SafeAreaView,
   TouchableOpacity,
+  Text,
+  TextInput,
+  View,
+  FlatList,
 } from "react-native";
-import React from "react";
-import { BackArrow, Speaker, Record, hungup } from "@/components/Icons/Icons";
-import { SvgXml } from "react-native-svg";
-import  Typography  from "@/constants/Typography";
-import { router } from "expo-router";
-const VoiceCallRinging = () => {
+import {
+  MeetingProvider,
+  useMeeting,
+  useParticipant,
+  MediaStream,
+  RTCView,
+} from "@videosdk.live/react-native-sdk";
+import { createMeeting, token } from "@/api";
+
+interface JoinScreenProps {
+  getMeetingId: (id?: string) => void;
+}
+
+const JoinScreen: React.FC<JoinScreenProps> = ({ getMeetingId }) => {
+  const [meetingVal, setMeetingVal] = useState("");
+
   return (
-    <>
-      <ImageBackground
-        style={styles.Background}
-        resizeMode="cover"
-        source={require("@/assets/images/Background.png")}
+    <SafeAreaView
+      style={{
+        flex: 1,
+        backgroundColor: "#F6F6FF",
+        justifyContent: "center",
+        paddingHorizontal: 6 * 10,
+      }}
+    >
+      <TouchableOpacity
+        onPress={() => {
+          getMeetingId();
+        }}
+        style={{ backgroundColor: "#1178F8", padding: 12, borderRadius: 6 }}
       >
-        <View style={styles.backArrow}>
-          <TouchableOpacity onPress={()=> router.back()}>
-             <SvgXml xml={BackArrow} />
-          </TouchableOpacity>
-         
-        </View>
+        <Text style={{ color: "white", alignSelf: "center", fontSize: 18 }}>
+          Create Meeting
+        </Text>
+      </TouchableOpacity>
 
-        <View style={styles.middlePart}>
-          <Image source={require("@/assets/images/Jenny.png")} style={{width: 200, height: 200, borderRadius: 100}}/>
+    </SafeAreaView>
+  );
+};
 
-          <View style={styles.middleText}>
-            <Text style={[Typography.heading._3, { color: "#FFFFFF" }]}>
-              Dr. Jenny Watson
-            </Text>
-            <Text style={[Typography.medium.xLarge, { color: "#FFFFFF" }]}>
-              Ringing...
-            </Text>
-          </View>
-        </View>
+interface ButtonProps {
+  onPress: () => void;
+  buttonText: string;
+  backgroundColor: string;
+}
 
-        <View style={styles.Bottom}>
-          <TouchableOpacity style={styles.speaker}>
-            <SvgXml xml={Speaker} />
-          </TouchableOpacity>
+const Button: React.FC<ButtonProps> = ({
+  onPress,
+  buttonText,
+  backgroundColor,
+}) => {
+  return (
+    <TouchableOpacity
+      onPress={onPress}
+      style={{
+        backgroundColor: backgroundColor,
+        justifyContent: "center",
+        alignItems: "center",
+        padding: 12,
+        borderRadius: 4,
+      }}
+    >
+      <Text style={{ color: "white", fontSize: 12 }}>{buttonText}</Text>
+    </TouchableOpacity>
+  );
+};
 
-          <TouchableOpacity style={styles.Record}>
-            <SvgXml xml={Record} />
-          </TouchableOpacity>
+interface ControlsContainerProps {
+  join: () => void;
+  leave: () => void;
+  toggleWebcam: () => void;
+  toggleMic: () => void;
+}
 
-          <TouchableOpacity style={styles.hangup} onPress={()=> router.push('(app)/Appointments/VoiceCallAppointment/SessionEnded')}>
-            <SvgXml xml={hungup} />
-          </TouchableOpacity>
-        </View>
-      </ImageBackground>
-    </>
+const ControlsContainer: React.FC<ControlsContainerProps> = ({
+  join,
+  leave,
+  toggleWebcam,
+  toggleMic,
+}) => {
+  return (
+    <View
+      style={{
+        padding: 24,
+        flexDirection: "row",
+        justifyContent: "space-between",
+      }}
+    >
+      <Button
+        onPress={() => {
+          join();
+        }}
+        buttonText={"Join"}
+        backgroundColor={"#1178F8"}
+      />
+      <Button
+        onPress={() => {
+          toggleWebcam();
+        }}
+        buttonText={"Toggle Webcam"}
+        backgroundColor={"#1178F8"}
+      />
+      <Button
+        onPress={() => {
+          toggleMic();
+        }}
+        buttonText={"Toggle Mic"}
+        backgroundColor={"#1178F8"}
+      />
+      <Button
+        onPress={() => {
+          leave();
+        }}
+        buttonText={"Leave"}
+        backgroundColor={"#FF0000"}
+      />
+    </View>
+  );
+};
+
+interface ParticipantViewProps {
+  participantId: string;
+}
+
+const ParticipantView: React.FC<ParticipantViewProps> = ({ participantId }) => {
+  const { webcamStream, webcamOn } = useParticipant(participantId);
+
+  return webcamOn && webcamStream ? (
+    <RTCView
+      streamURL={new MediaStream([webcamStream.track]).toURL()}
+      objectFit={"cover"}
+      style={{
+        height: 300,
+        marginVertical: 8,
+        marginHorizontal: 8,
+      }}
+    />
+  ) : (
+    <View
+      style={{
+        backgroundColor: "grey",
+        height: 300,
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <Text style={{ fontSize: 16 }}>NO MEDIA</Text>
+    </View>
+  );
+};
+
+interface ParticipantListProps {
+  participants: string[];
+}
+
+const ParticipantList: React.FC<ParticipantListProps> = ({ participants }) => {
+  return participants.length > 0 ? (
+    <FlatList
+      data={participants}
+      renderItem={({ item }) => {
+        return <ParticipantView participantId={item} />;
+      }}
+    />
+  ) : (
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: "#F6F6FF",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <Text style={{ fontSize: 20 }}>Press Join button to enter meeting.</Text>
+    </View>
+  );
+};
+
+const MeetingView: React.FC = () => {
+  // Get participants from useMeeting Hook
+  const { join, leave, toggleWebcam, toggleMic, participants } = useMeeting({});
+  const participantsArrId = [...participants.keys()];
+
+  return (
+    <View style={{ flex: 1 }}>
+      <ParticipantList participants={participantsArrId} />
+      <ControlsContainer
+        join={join}
+        leave={leave}
+        toggleWebcam={toggleWebcam}
+        toggleMic={toggleMic}
+      />
+    </View>
+  );
+};
+
+const VoiceCallRinging: React.FC = () => {
+  const [meetingId, setMeetingId] = useState<string | null>(null);
+
+  const getMeetingId = async (id?: string) => {
+    const newMeetingId = id == null ? await createMeeting({ token }) : id;
+    setMeetingId(newMeetingId);
+  };
+
+  return meetingId ? (
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#F6F6FF" }}>
+      <MeetingProvider
+        config={{
+          meetingId,
+          micEnabled: false,
+          webcamEnabled: true,
+          name: "Test User",
+        }}
+        token={token}
+      >
+        <MeetingView />
+      </MeetingProvider>
+    </SafeAreaView>
+  ) : (
+    <JoinScreen getMeetingId={getMeetingId} />
   );
 };
 
 export default VoiceCallRinging;
 
-const styles = StyleSheet.create({
-  speaker:{
-    backgroundColor: '#F0F0F0',
-    borderRadius: 100,
-    padding: 20,
-    opacity: 0.6
-  },
-  Record:{
-    backgroundColor: '#F0F0F0',
-    borderRadius: 100,
-    padding: 23,
-    opacity: 0.6
-  },
-  hangup:{
-    backgroundColor: '#F75555',
-    borderRadius: 100,
-    padding: 20,
-
-  },
-  Bottom: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: 20,
-  },
-  middlePart: {
-    justifyContent: "center",
-    alignItems: "center",
-    gap: 24,
-  },
-  middleText: {
-    justifyContent: "center",
-    alignItems: "center",
-    gap: 24,
-  },
-  backArrow: {
-    alignSelf: "flex-start",
-    marginTop: "5%"
-  },
-  Background: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    paddingTop: 24,
-    paddingBottom: 48,
-    paddingLeft: 24,
-    paddingRight: 24,
-    gap: 140,
-  },
-});
