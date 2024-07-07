@@ -178,14 +178,14 @@ const styles = StyleSheet.create({
   overlay: {
     position: "absolute",
     width: "100%",
-    height: "100%",
+    height: "95%",
     backgroundColor: "rgba(80, 85, 94, 0.8)",
     justifyContent: "flex-end",
     zIndex: 1000,
   },
   outer: {
     width: "100%",
-    height: "40%",
+    height: "45%",
     zIndex: 1000,
     backgroundColor: "#FAFAFA",
     borderTopLeftRadius: 20,

@@ -13,17 +13,24 @@ interface DoctorComponentProps{
     star: ReactElement,
     rate: string,
     review: string,
-    remove: () => void,
+    remove?: () => void,
     backgroundStyle?: any,
-    path?:()=>void
+    path?: () => void,
+    addRemoveFavorite?:()=>void
 }
-function DoctorComponent({ imageSource, name, iconComponent,path, professionalTitle, hospital, star, rate, review, remove,backgroundStyle }: DoctorComponentProps) {
+function DoctorComponent({ imageSource, name, iconComponent,path,addRemoveFavorite, professionalTitle, hospital, star, rate, review, remove,backgroundStyle }: DoctorComponentProps) {
     const { theme, changeTheme } = useContext(ThemeContext)
     const containerStyle = theme === "dark" ? styles.outerDark : styles.outerLight
     const nameColor = theme === "dark" ? styles.textDark : styles.textLight
     const descriptionColor = theme === "dark" ? styles.descriptionDark : styles.descriptionLight
     const horizontalColor = theme === "dark" ? styles.horizontalDark : styles.horizontalLight
-  
+    const handlePress = () => {
+        if (remove) {
+           remove()
+        }else if(addRemoveFavorite){
+           addRemoveFavorite() 
+       }
+   }
 
     return (
         <Pressable style={[styles.outer,containerStyle,backgroundStyle]} onPress={path}>
@@ -38,7 +45,7 @@ function DoctorComponent({ imageSource, name, iconComponent,path, professionalTi
                             <Text  style={[Typography.bold.xLarge,nameColor]}   >{ name}</Text>
 
                         </View>
-                        <Pressable style={styles.heartIconView} onPress={remove}>
+                        <Pressable style={styles.heartIconView} onPress={handlePress}>
                             { iconComponent}
 
 
