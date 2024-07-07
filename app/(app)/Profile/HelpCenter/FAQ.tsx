@@ -23,26 +23,31 @@ export default function FAQ() {
 
   const [faqs, setFaqs] = useState([
     {
+      id: "1",
       title: "What is Medica?",
       description:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     },
     {
+      id: "2",
       title: "How to use Medica?",
       description:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     },
     {
+      id: "3",
       title: "How do I cancel an appointment?",
       description:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     },
     {
+      id: "4",
       title: "How do I save the recording?",
       description:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     },
     {
+      id: "5",
       title: "How do I exit the app?",
       description:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
@@ -55,7 +60,8 @@ export default function FAQ() {
     <>
       <ScrollView
         style={{
-          backgroundColor: theme === "light" ? Colors.others.white : Colors.dark._1,
+          backgroundColor:
+            theme === "light" ? Colors.others.white : Colors.dark._1,
           height: "100%",
         }}
         contentContainerStyle={{
@@ -71,7 +77,6 @@ export default function FAQ() {
           contentContainerStyle={{ gap: 20, paddingHorizontal: 20 }}
         >
           <TagsContainer data={tags} />
-          
         </ScrollView>
 
         <View
@@ -87,7 +92,11 @@ export default function FAQ() {
         <View style={{ paddingHorizontal: 20, gap: 24 }}>
           {faqs.map((faq) => {
             return (
-              <Accordion title={faq.title} description={faq.description} />
+              <Accordion
+                key={faq.id}
+                title={faq.title}
+                description={faq.description}
+              />
             );
           })}
         </View>
