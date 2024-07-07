@@ -4,7 +4,7 @@ interface Session {
   user: User | null;
 }
 
-interface User {
+export interface User {
   id: string;
   email: string;
   phone?: string;

@@ -43,14 +43,30 @@ export default function AuthProvider({ children }: Props) {
 
   async function refreshSession() {}
 
-  async function logout() {}
-
+  async function logout() {
+    const { error } = await supabase.auth.signOut();
+    if (!error) {
+      setUserId("");
+      setEmail("");
+      setActivated(false);
+      setIsLoggedIn(false);
+      setToken("");
+      setRefreshToken("");
+      setName("");
+      setImageUrl("");
+      setAuthType("");
+      console.log("Logout success");
+    } else {
+      console.error("Error logging out:", error.message);
+    }
+  }
+  
   async function login(email: string, password: string) {
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
-
+    
     if (!error) {
       setIsLoggedIn(true);
       setEmail(data.session.user.email!);
@@ -143,7 +159,6 @@ export default function AuthProvider({ children }: Props) {
           const userId = response.data.user.id;
           const email = response.data.user.email;
   
-          // Checking if user already exists in patients 
           const { data: existingUser, error: checkError } = await supabase
             .from('patients')
             .select('auth_id')
@@ -165,15 +180,12 @@ export default function AuthProvider({ children }: Props) {
               throw new Error(error.message);
             }
           }
-  
           setToken(response.data.session?.access_token || '');
           setRefreshToken(response.data.session?.refresh_token || '');
           setEmail(email);
           setUserId(userId);
           setIsLoggedIn(true);
           setAuthType('apple'); 
-          
-         // router.push("/(app)/ActionMenu");
         }
       } else {
         throw new Error('No identityToken.');
