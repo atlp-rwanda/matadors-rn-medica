@@ -14,7 +14,7 @@ interface RemovebtnProps{
 
 function Removebtn({text,action,backColor,textColor}:RemovebtnProps) {
     return (
-        <Pressable onPress={action} style={[styles.outer, { backgroundColor:backColor }]}>
+        <Pressable onPress={ action} style={[styles.outer, { backgroundColor:backColor }]}>
             <Text style={[styles.textSize, { color: textColor }]}>{text }</Text>
 
         </Pressable>

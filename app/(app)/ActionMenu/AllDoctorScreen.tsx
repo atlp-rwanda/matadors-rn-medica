@@ -5,8 +5,9 @@ import { AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import DoctorComponent from '@/components/DoctorComponent';
 import { FontAwesome } from '@expo/vector-icons';
- import { SvgXml } from "react-native-svg"
-import { WhiteHeart } from '@/components/UI/icons/WhiteHeart';
+import { SvgXml } from "react-native-svg"
+import { whiteHeart } from '@/assets/icons/whiteHeart';
+import { blueheart } from '@/assets/icons/blueHeart';
 import { star } from '@/assets/icons/star';
 import { search } from '@/assets/icons/search';
 import { more } from '@/assets/icons/more';
@@ -27,6 +28,7 @@ import { router } from 'expo-router';
 
 
 const tableName = "doctors";
+const favoriteTable="favorite_doctors"
 
 interface imageMapProp {
   [key: string]: ReturnType<typeof require>;
@@ -47,7 +49,7 @@ interface Doctor{
 }
 
 export const iconMapping: iconMappingProp = {
-  heart: <SvgXml xml={WhiteHeart} />,
+  heart: <SvgXml xml={whiteHeart} />,
   star: <SvgXml xml={star} />,
 };
 
@@ -55,17 +57,57 @@ function DoctorScreen() {
   const [showSearch, setShowSearch] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [showpopUp, setShowPopup] = useState(false);
-  const [selectedDoctor, setSelectedDoctor] = useState();
+  const [selectedDoctor, setSelectedDoctor] = useState<Doctor>();
   const [showFilter, setShowfilter] = useState(false);
   const [doctors, setDoctors] = useState<Doctor[]>([]);
   const { theme, changeTheme } = useContext(ThemeContext);
   const [selectedSpecilization, setSelectedSpecilization] = useState<string>("All")
-  const [specialization,setSpecialization]=useState<string[]>([])
+  const [specialization, setSpecialization] = useState<string[]>([])
+    const [favoriteDoctors,setFavoriteDoctors]=useState<number[]>([])
   const containerStyle =
     theme === "dark" ? styles.outerDark : styles.outerLight;
   const scrollbackColor =
     theme === "dark" ? styles.scrollDark : styles.scrollLight;
+  const [loggeduser, setLoggedUser] = useState<string>()
+  const [profile, setProfile] = useState<any>(null)
+  const [patient_id,setPatient_id]=useState<string>()
 
+  useEffect(() => {
+    const fetchUser = async () => {
+      
+      const { data: { user },error } = await supabase.auth.getUser()
+      if (error) {
+        console.error("error fetching user")
+      } else {
+        setLoggedUser(user?.id)
+      }
+    }
+    fetchUser()
+   
+  }, [loggeduser])
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      if (loggeduser) {
+        const { data, error } = await supabase
+          .from("patients")
+          .select("*")
+          .eq('auth_id', loggeduser)
+          .single()
+        if (error) {
+          console.error("error while retrieving profile",error)
+        } else {
+          setProfile(data)
+          setPatient_id(data.id)
+          console.log(data)
+         
+        }
+        
+        
+      }
+    }
+    fetchUserProfile()
+  }, [loggeduser])
+  
   useEffect(() => {
     async function fetchData() {
       const { data, error } = await supabase.from(tableName).select("*");
@@ -83,7 +125,25 @@ function DoctorScreen() {
 
     fetchData();
   }, []);
- console.log("this is retrived specilization:",specialization)
+  console.log("this is retrived specilization:", specialization)
+   useEffect(() => {
+        const fetchFavoritesDoctor = async () => {
+            if (patient_id) {
+                const { data, error } = await supabase
+                    .from(favoriteTable)
+                    .select("*")
+                    .eq("patient", patient_id)
+                if (error) {
+                    console.error("error while fetching ",error)
+                }
+                
+                setFavoriteDoctors(data?.map((item:any)=>item.favorite_doctor)||[])
+            }
+            
+        }
+        fetchFavoritesDoctor()
+     
+ },[patient_id])
     const handleSearchPressed = () => {
         setShowSearch(true)
     }
@@ -94,16 +154,43 @@ function DoctorScreen() {
     const handleFilter = () => {
         setShowfilter(true)
     }
-    const handleRemove = (doctor:any) => {
-        setSelectedDoctor(doctor)
-        
-        setShowPopup(true)
-  }
+  
   const handleSpecializationChange = (specialization: string) => {
     setSelectedSpecilization(specialization)
     setSearchTerm('')
     
   }
+  const handleAddfovorite = async (doctorId: number) => {
+    const patientId = patient_id
+    const { error } = await supabase.from(favoriteTable).insert({ patient: patientId, favorite_doctor: doctorId })
+    if (error) {
+      console.error("error while adding doctor to favorite", error)
+      return;
+    }
+    setFavoriteDoctors(prev=>[...prev,doctorId])
+    
+  }
+  const updateFavoriteDoctors = async () => {
+    const { data, error } = await supabase
+      .from("favorite_doctors")
+      .select("favorite_doctor")
+      .eq("patient", patient_id);
+    if (error) {
+      console.error("Error fetching favorite doctors:", error);
+    } else {
+      setFavoriteDoctors(data.map((item: { favorite_doctor: number }) => item.favorite_doctor));
+    }
+  };
+  const handleIconClick = (doctor: Doctor,doctorId:number) => {
+    if (favoriteDoctors.includes(doctor.id)) {
+      setSelectedDoctor(doctor);
+      setShowPopup(true);
+    } else {
+      handleAddfovorite(doctorId);
+    }
+  };
+  
+
   const filteredDoctors = doctors.filter(doctor => {
     const matchSearchTerm = searchTerm.length > 0 ? doctor.last_name.toLowerCase().includes(searchTerm.toLowerCase())||doctor.first_name.toLowerCase().includes(searchTerm.toLowerCase()) : true
     const matchSpecialization = selectedSpecilization === 'All' || doctor.specialization === selectedSpecilization
@@ -176,27 +263,34 @@ function DoctorScreen() {
             paddingTop:20
           }}
                     >
-                        {filteredDoctors.length > 0 ? (
+              {filteredDoctors.length > 0 ? (
                             
-                                filteredDoctors.map((doctor: any, index: any) =>
-                        
+                filteredDoctors.map((doctor: any, index: number) => { 
+                 
+                                  
+                        return(
                                     <View key={index} style={styles.componentView}>
-                                        <DoctorComponent
-                                            path={() => router.push({ pathname: "/ActionMenu/Booking/Doctor_details",params:{id:doctor.id} }) }
-                                            imageSource={{uri:doctor.image}}
-                                            name={`${doctor.first_name} ${doctor.last_name}`}
-                                            iconComponent={<SvgXml xml={WhiteHeart } />}
-                                            professionalTitle={doctor.specialization}
-                                            hospital={doctor.hospital_name}
-                                            star={<SvgXml xml={star} />}
-                                            review={doctor.review}
-                                            rate={doctor.rate}
-                                            remove={()=>handleRemove(doctor)}
+                    <DoctorComponent
+                      path={() => router.push({ pathname: "/ActionMenu/Booking/Doctor_details", params: { id: doctor.id } })}
+                      imageSource={{ uri: doctor.image }}
+                      name={`${doctor.first_name} ${doctor.last_name}`}
+                      iconComponent={favoriteDoctors.includes(doctor.id) ? (
+                  <SvgXml xml={blueheart} />
+                ) : (
+                  <SvgXml xml={whiteHeart} />
+                )}
+                      professionalTitle={doctor.specialization}
+                      hospital={doctor.hospital_name}
+                      star={<SvgXml xml={star} />}
+                      review={doctor.review}
+                      rate={doctor.rate}
+                      addRemoveFavorite={() => handleIconClick(doctor,doctor.id) }
+                    
 
-                                        />
-                                    </View>
+                    />
+                  </View>
                         
-                                )
+                )})
                             
                         ) : (
                              <NofoundComponent/>   
@@ -210,11 +304,13 @@ function DoctorScreen() {
                    
             
             </View>
-            <RemovefavoritePopup
+        <RemovefavoritePopup
+                userId={patient_id}
                 cancel={()=>setShowPopup(false)}
                 visible={showpopUp}
                 onClose={() => setShowPopup(false)}
-                doctor={selectedDoctor}
+          doctor={selectedDoctor}
+          updateFavoriteDoctors={updateFavoriteDoctors}
             
             
             />
