@@ -59,7 +59,7 @@ const index = () => {
   const [profilePhoto, setProfilePhoto] = useState("");
   const CDNURL =
     "https://vbwbfflzxuhktdvpbspd.supabase.co/storage/v1/object/public/patients/";
-  const { authType, imageUrl: otherAuthImageUrl } = useAuth();
+  const { authType, imageUrl: otherAuthImageUrl, logout } = useAuth();
 
   useEffect(() => {
     getPatientData(supabase, setUserData);
@@ -444,10 +444,11 @@ const index = () => {
                 <OptionListing
                   title="Logout"
                   textColor={Colors.others.red}
+                  onPress={logout}
                   icon={() => {
                     return <SvgXml xml={LogoutIcon} width={30} />;
                   }}
-                  textColor={Colors.status.error}
+                  // textColor={Colors.status.error}
                 />
               </View>
             </View>
