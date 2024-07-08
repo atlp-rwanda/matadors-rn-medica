@@ -54,3 +54,20 @@ export interface Appointment{
   status:string,
   user_id:string
 }
+
+export interface PatientTypes {
+  activated: boolean;
+  age: number | null;
+  auth_id: string;
+  country: string | null;
+  created_at: string;
+  date_of_birth: string;
+  email: string | null;
+  first_name: string;
+  gender: 'M' | 'F';
+  id: string;
+  image: string;
+  last_name: string;
+  phone: string | null;
+  updated_at: string | null;
+};

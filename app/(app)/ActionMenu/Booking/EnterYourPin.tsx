@@ -35,6 +35,11 @@ export default function EnterYourPin() {
     }
   }
   console.log("this is from lastpage",doctor_id,hour,packageTitle,packagePrice,problem)
+
+  function successBooking() {
+    router.push("(app)/Appointments/index");
+    modal.hide();
+  }
   async function handlePIN() {
     
     await bookAppointment()
@@ -95,13 +100,15 @@ export default function EnterYourPin() {
             <Button
               title="View Appointment"
               onPress={() => {
-                router.push("Appointments");
+                router.push("(app)/Appointments");
+                modal.hide();
+
               }}
             />
             <TouchableOpacity
               onPress={() => {
-                modal.hide();
                 router.push("ActionMenu");
+                modal.hide();
               }}
               style={{
                 backgroundColor:
