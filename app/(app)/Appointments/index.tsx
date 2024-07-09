@@ -33,6 +33,8 @@ import { ThemeContext } from "@/ctx/ThemeContext";
 import { Colors } from "@/constants/Colors";
 import { fetchPatientData, getPatientData, getUserImageUrl } from "@/utils/LoggedInUser";
 import { supabase } from "@/lib/supabase";
+import { Logo } from "@/assets/icons/Logo";
+import Historyheader from "@/components/Historyheader";
 
 interface Appointment {
   id: string;
@@ -205,9 +207,9 @@ const AppointmentScreen: React.FC = () => {
         <View style={styles.heading}>
           {
             !showSearch ? (
-              <HeaderComponent
-                onSearchPressed={handleSearchPressed}
-                headerText="My Appointments"
+              <Historyheader 
+              onSearchPressed={handleSearchPressed}
+              headerText="My appointments"
               />
             ) : (
               <SearchComponent

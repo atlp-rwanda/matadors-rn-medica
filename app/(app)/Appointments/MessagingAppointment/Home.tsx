@@ -7,7 +7,7 @@ import  {PatientTypes} from "@/constants/Types";
 import { useAppContext } from "@/ctx/ChatContext";
 import ChannelLists from "./ChannelList";
 import uuid from "react-native-uuid";
-import { useGlobalSearchParams } from "expo-router";
+import {useGlobalSearchParams } from "expo-router";
 
 const API_KEY = process.env.EXPO_PUBLIC_STREAM_API_KEY;
 const SECRETE_KEY = process.env.EXPO_PUBLIC_STREAM_API_SECRET;
@@ -17,6 +17,8 @@ export function Home() {
     const [patientData, setPatientData] = useState<PatientTypes[] | null>(null);
     const [client, setClient] = useState<StreamChat | null>(null);
     const { channel, setChannel } = useAppContext();
+
+
     const { userId } = useContext(AuthContext);
 
     const {id}  = useGlobalSearchParams()
@@ -54,7 +56,6 @@ export function Home() {
             });
                     await channel.watch();
                     setChannel(channel);
-
             } else {
                 console.log("No patient data found");
             }
