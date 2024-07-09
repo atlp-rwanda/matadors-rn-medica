@@ -17,6 +17,8 @@ import { createClient } from "@supabase/supabase-js";
 import React from "react";
 import Typography from "@/constants/Typography";
 import { supabase } from "@/lib/supabase";
+import { SvgXml } from "react-native-svg";
+import { Logo } from "@/assets/icons/Logo";
 interface Article {
   id: string;
   title: string;
@@ -77,13 +79,7 @@ export default function Article() {
               gap: 15,
             }}
           >
-            <Image
-              source={require("../../../assets/images/icon.png")}
-              style={{
-                width: 25,
-                height: 25,
-              }}
-            />
+            <SvgXml xml={Logo} />
             <Text
               style={{
                 fontSize: 24,

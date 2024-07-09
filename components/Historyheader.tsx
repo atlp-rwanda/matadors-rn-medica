@@ -7,12 +7,14 @@ import { SvgXml } from "react-native-svg";
 import { filterWhiteIcon } from "./UI/icons/filterIcon";
 import { ThemeContext } from "@/ctx/ThemeContext";
 import { moreGrayIcon, moreWhiteIcon } from "./UI/icons/circleWithDots";
+import { Logo } from "@/assets/icons/Logo";
 
 interface header {
   onSearchPressed: () => void;
+  headerText: string
 }
 
-function Historyheader({ onSearchPressed }: header) {
+function Historyheader({ onSearchPressed, headerText }: header) {
   const { theme, changeTheme } = useContext(ThemeContext);
   return (
     <View style={{ paddingTop: 20, gap: 30, width: "100%" }}>
@@ -25,14 +27,11 @@ function Historyheader({ onSearchPressed }: header) {
         }}
       >
         <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
-          <Image
-            style={{ backgroundColor: "transparent" }}
-            source={require("@/assets/images/DefaultLogo.png")}
-          />
+        <SvgXml xml={Logo} />
           <Text
             style={[Typography.bold.large, { fontSize: 22, marginLeft: "3%", color: theme==="dark"? "white": "black" }]}
           >
-            History
+            {headerText}
           </Text>
         </View>
         <View style={{ flexDirection: "row", alignItems: "center", gap: 20 }}>

@@ -6,12 +6,12 @@ import {
   } from 'stream-chat-expo'
 import { useAppContext } from '@/ctx/ChatContext';
 import { PatientTypes } from '@/constants/Types';
-import { router, Stack, useRouter } from 'expo-router';
+import {useRouter } from 'expo-router';
 
 const ChannelLists = (props: any) => {
     const { channel, setChannel } = useAppContext();
     const [patientData, setPatientData] = useState<PatientTypes[] | null>(null);
-    const { userId, email, isLoggedIn } = useContext(AuthContext);
+    const { userId, } = useContext(AuthContext);
     const router = useRouter();
 
     useEffect(() => {
@@ -39,11 +39,13 @@ const ChannelLists = (props: any) => {
     };
 
   return (
+
     <ChannelList
-    onSelect={(channel) => handleNavigateToChannel(channel)}
-    filters={filters}
-    sort={sort}
-  />
+      onSelect={(channel) => handleNavigateToChannel(channel)}
+      filters={filters}
+      sort={sort} 
+    />
+  
   )
 }
 

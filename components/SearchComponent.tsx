@@ -9,6 +9,7 @@ import { router } from 'expo-router';
 import { ThemeContext } from '@/ctx/ThemeContext';
 import { useContext } from 'react';
 import { LeftArrowWhite } from '@/assets/icons/LeftArrowWhite';
+import { Logo } from '@/assets/icons/Logo';
 
 
 interface searchComponentProps{
@@ -30,7 +31,7 @@ function SearchComponent({ onSearchSubmit, filterAction }: searchComponentProps)
     }
     return (
         <View style={styles.upperInner}>
-            <Pressable style={styles.leftArrowVIew} onPress={()=>router.back()}>
+             <Pressable style={styles.leftArrowVIew} onPress={()=>router.push("(app)/ActionMenu")}>
                     <SvgXml xml={leftArrowIcon} />
                 </Pressable>
         <View style={[styles.outer,outerStyle]}>
@@ -43,16 +44,11 @@ function SearchComponent({ onSearchSubmit, filterAction }: searchComponentProps)
                     onChangeText={handleTextChange}
                     value={value}
                     style={[styles.input,inputStyle]}
-                
                 />
-                
             </View>
             <Pressable style={styles.filterView} onPress={filterAction}>
                 <SvgXml xml={filter} />
-
             </Pressable>
-
-
             </View>
             </View>
     )

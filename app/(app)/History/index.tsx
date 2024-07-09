@@ -83,6 +83,7 @@ const index = () => {
             !showSearch ? (
               <Historyheader
                 onSearchPressed={handleSearchPressed}
+                headerText="History"
               
               />
             )

@@ -28,7 +28,7 @@ function HeaderComponent({ onSearchPressed, headerText }: Headerprops) {
     return (
         <View style={styles.upperInner}>
             <View style={styles.upperLeft}>
-                <Pressable onPress={()=>router.back()} style={styles.leftArrowVIew}>
+                <Pressable onPress={()=>router.push("(app)/ActionMenu")} style={styles.leftArrowVIew}>
                     <SvgXml xml={leftArrowIcon} />
                 </Pressable>
                 <View style={styles.NotificationView}>
