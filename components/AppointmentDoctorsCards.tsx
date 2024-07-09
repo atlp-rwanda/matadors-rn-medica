@@ -19,7 +19,7 @@ interface DoctorCardProps {
   buttons?: any;
 }
 
-const DoctorCard: React.FC<DoctorCardProps> = ({ name, date, time, image, status, statusColor, type, icon, buttons, iconOnPress }) => {
+const DoctorCard: React.FC<DoctorCardProps> = ({ name, date, time, image, status, statusColor, type, icon, buttons, iconOnPress}) => {
     const { theme, changeTheme } = useContext(ThemeContext);
 
   return (
@@ -36,8 +36,8 @@ const DoctorCard: React.FC<DoctorCardProps> = ({ name, date, time, image, status
               <Text style={[Typography.medium.small,{ color: statusColor}]}>{status}</Text>
             </View>
             <TouchableOpacity 
-            onPress={iconOnPress}
-            style={{padding: 20, backgroundColor: Colors.transparent.blue, borderRadius: 100, marginLeft: 10}}
+            onPress={icon === null ? ()=> {} : iconOnPress}
+            style={{padding: 20, backgroundColor: icon === null? "#f5f5f5" :Colors.transparent.blue, borderRadius: 100, marginLeft: 10}}
             >
             {icon}
             </TouchableOpacity>

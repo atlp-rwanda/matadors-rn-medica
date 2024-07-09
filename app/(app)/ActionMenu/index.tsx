@@ -38,7 +38,6 @@ import RemovefavoritePopup from "@/components/RemovefavoriteIndexPopup";
 
 export default function Index() {
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [userData, setUserData] = useState<[]>([]);
   const [patientData, setPatientData] = useState(null);
   const [imageUrl, setImageUrl] = useState([]);
   const [activeIcon, setActiveIcon] = useState("Home");
@@ -72,10 +71,6 @@ export default function Index() {
     "https://vbwbfflzxuhktdvpbspd.supabase.co/storage/v1/object/public/patients/";
   const scrollbackColor =
     theme === "dark" ? styles.scrollDark : styles.scrollLight;
-
-  useEffect(() => {
-    getPatientData(supabase, setUserData);
-  }, []);
 
   useEffect(() => {
     if (userId ) {

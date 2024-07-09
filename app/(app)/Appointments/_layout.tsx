@@ -18,7 +18,6 @@ export default function Layout() {
       <Stack.Screen name="ReschedualAppointment/rescheduleDate" options={{ headerShown: false }}  />
       <Stack.Screen name="ReschedualAppointment/Selectreason" options={{ headerShown: false }}  />
       <Stack.Screen name="Review" options={{ headerShown: false }}  />
-      <Stack.Screen name="CancelAppointment/cancelreason" options={{ headerShown: false }}  />
     </Stack>
   );
 }
