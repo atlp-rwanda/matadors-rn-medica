@@ -11,96 +11,34 @@ import { Colors } from "@/constants/Colors";
 import Chips from "./UI/ChipsComponent";
 import { ThemeContext } from "@/ctx/ThemeContext";
 
-interface ReviewType {
-  id: string;
-  name: string;
-  image: any;
-  reviewMsg: string;
-  likes: number;
-  stars: string;
+interface ReviewProps  {
+  id:string,
+  image: {uri:string}
+  names:string,
+  review:string,
+  recommend:string,
+  stars:string,
+  likes:number,
+  onlike:() => void;
+  daysAgo:string;
+  likeicon?: () => React.JSX.Element;
 }
 
 const unLike = <SvgXml xml={blueHeart} />;
 
-const ReviewerCardComponent = () => {
+function ReviewerCardComponent ({image,names,review,recommend,likes,stars,onlike,daysAgo,likeicon}:ReviewProps){
   const { theme, changeTheme } = useContext(ThemeContext);
 
   const [isLike, setIsLike] = useState(false);
   function handleLike() {
-    setIsLike(!isLike);
+    setIsLike(true);
   }
-
-  const reviewData: ReviewType[] = [
-    {
-      id: "1",
-      name: "Charlot Hanlin",
-      image: require("../assets/images/jenny_watson.png"),
-      reviewMsg:
-        "    Dr. Jenny is very professional in her work and responsive. I haveconsulted and my problem is solved. 😍😍",
-      likes: 5,
-      stars: "4",
-    },
-    {
-      id: "2",
-      name: "Charlot Hanlin",
-      image: require("../assets/images/jenny_watson.png"),
-      reviewMsg:
-        "Dr. Jenny is very professional in her work and responsive. I haveconsulted and my problem is solved. 😍😍",
-      likes: 5,
-      stars: "4",
-    },
-    {
-      id: "3",
-      name: "Charlot Hanlin",
-      image: require("../assets/images/jenny_watson.png"),
-      reviewMsg:
-        "Dr. Jenny is very professional in her work and responsive. I haveconsulted and my problem is solved. 😍😍",
-      likes: 5,
-      stars: "4",
-    },
-    {
-      id: "4",
-      name: "Charlot Hanlin",
-      image: require("../assets/images/jenny_watson.png"),
-      reviewMsg:
-        "Dr. Jenny is very professional in her work and responsive. I haveconsulted and my problem is solved. 😍😍",
-      likes: 5,
-      stars: "3",
-    },
-    {
-      id: "5",
-      name: "Charlot Hanlin",
-      image: require("../assets/images/jenny_watson.png"),
-      reviewMsg:
-        "Dr. Jenny is very professional in her work and responsive. I haveconsulted and my problem is solved. 😍😍",
-      likes: 5,
-      stars: "4",
-    },
-    {
-      id: "6",
-      name: "Charlot Hanlin",
-      image: require("../assets/images/jenny_watson.png"),
-      reviewMsg:
-        "Dr. Jenny is very professional in her work and responsive. I haveconsulted and my problem is solved. 😍😍",
-      likes: 5,
-      stars: "4",
-    },
-    {
-      id: "7",
-      name: "Charlot Hanlin",
-      image: require("../assets/images/jenny_watson.png"),
-      reviewMsg:
-        "Dr. Jenny is very professional in her work and responsive. I haveconsulted and my problem is solved. 😍😍",
-      likes: 5,
-      stars: "4",
-    },
-  ];
+  
   return (
-    <>
-      {reviewData &&
-        reviewData.map((item, index) => {
-          return (
-            <View key={index} style={{ gap: 10, marginBottom: 20 }}>
+    
+      
+          
+            <View style={{ gap: 10, marginBottom: 20 }}>
               <View
                 style={{
                   flexDirection: "row",
@@ -122,7 +60,7 @@ const ReviewerCardComponent = () => {
                         height: "100%",
                         borderRadius: 100,
                       }}
-                      source={item?.image}
+                      source={image}
                     />
                   </View>
                   <Text
@@ -131,15 +69,7 @@ const ReviewerCardComponent = () => {
                       { color: theme === "dark" ? "white" : "black" },
                     ]}
                   >
-                    {item?.name}
-                  </Text>
-                  <Text
-                    style={[
-                      Typography.bold.large,
-                      { color: theme === "dark" ? "white" : "black" },
-                    ]}
-                  >
-                    {item?.name}
+                    {names}
                   </Text>
                 </View>
                 <View
@@ -151,7 +81,7 @@ const ReviewerCardComponent = () => {
                   }}
                 >
                   <Chips
-                    text={item?.stars}
+                    text={stars}
                     type="border"
                     size="medium"
                     leftIcon={() => <SvgXml xml={fullSmallBlueStar} />}
@@ -164,10 +94,7 @@ const ReviewerCardComponent = () => {
               </View>
               <View style={{ gap: 10 }}>
                 <Text style={{ color: theme === "dark" ? "white" : "black" }}>
-                  {item?.reviewMsg}
-                </Text>
-                <Text style={{ color: theme === "dark" ? "white" : "black" }}>
-                  {item?.reviewMsg}
+                  {review}
                 </Text>
                 <View
                   style={{
@@ -183,10 +110,9 @@ const ReviewerCardComponent = () => {
                       alignItems: "center",
                     }}
                   >
-                    <Pressable onPress={handleLike}>
-                      <SvgXml
-                        xml={isLike ? blueHeart : fullyColoredBlueHeart}
-                      />
+                    <Pressable onPress={onlike}>
+                    {likeicon && likeicon()}
+                      
                     </Pressable>
                     <Text
                       style={[
@@ -194,30 +120,19 @@ const ReviewerCardComponent = () => {
                         { color: theme === "dark" ? "white" : "black" },
                       ]}
                     >
-                      {item?.likes}
-                    </Text>
-                    <Text
-                      style={[
-                        Typography.medium.small,
-                        { color: theme === "dark" ? "white" : "black" },
-                      ]}
-                    >
-                      {item?.likes}
+                      {likes}
                     </Text>
                   </View>
                   <Text style={{ color: theme === "dark" ? "white" : "black" }}>
-                    6 days ago
-                  </Text>
-                  <Text style={{ color: theme === "dark" ? "white" : "black" }}>
-                    6 days ago
+                    
+                    {daysAgo} 
                   </Text>
                 </View>
               </View>
             </View>
           );
-        })}
-    </>
-  );
+        
+    
 };
 
 const styles = StyleSheet.create({

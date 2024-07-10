@@ -12,7 +12,7 @@ interface DoctorComponentProps{
     hospital: string,
     star: ReactElement,
     rate: string,
-    review: string,
+    review: number,
     remove?: () => void,
     backgroundStyle?: any,
     path?: () => void,
@@ -42,7 +42,7 @@ function DoctorComponent({ imageSource, name, iconComponent,path,addRemoveFavori
                     <View style={styles.rightViewInner}>
                     <View style={styles.upperRightView}>
                         <View style={styles.nameView}>
-                            <Text  style={[Typography.bold.xLarge,nameColor]}   >{ name}</Text>
+                            <Text  style={[Typography.heading._5,nameColor]}   >{ name}</Text>
 
                         </View>
                         <Pressable style={styles.heartIconView} onPress={handlePress}>
@@ -55,7 +55,7 @@ function DoctorComponent({ imageSource, name, iconComponent,path,addRemoveFavori
                     <View style={styles.lowerView}>
                         <View style={styles.professionalView}>
                             <View style={styles.proNameView}>
-                                <Text style={[styles.professionalTitle,descriptionColor]}>{ professionalTitle}</Text>
+                                <Text style={[Typography.medium.small, styles.professionalTitle,descriptionColor]}>{ professionalTitle}</Text>
 
 
                             </View>
@@ -63,7 +63,7 @@ function DoctorComponent({ imageSource, name, iconComponent,path,addRemoveFavori
 
                             </View>
                             <View style={styles.hospitalView}>
-                                <Text style={[styles.hospitalText,descriptionColor]}>{ hospital}</Text>
+                                <Text style={[Typography.medium.small, styles.hospitalText,descriptionColor]}>{ hospital}</Text>
 
                             </View>
                
@@ -74,12 +74,12 @@ function DoctorComponent({ imageSource, name, iconComponent,path,addRemoveFavori
 
                             </View>
                             <View style={styles.rateView}>
-                                <Text style={[styles.rateText,descriptionColor]} >{rate}</Text>
+                                <Text style={[Typography.medium.small, styles.rateText,descriptionColor]} >{rate}</Text>
                                 
 
                             </View>
                             <View style={styles.allReviewView}>
-                                <Text style={[styles.allReviewText,descriptionColor]} >{review}</Text>
+                                <Text style={[Typography.medium.small, styles.allReviewText,descriptionColor]} >({review} reviews)</Text>
                                 
 
                             </View>
