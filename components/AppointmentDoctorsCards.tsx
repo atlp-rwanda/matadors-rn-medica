@@ -16,14 +16,14 @@ interface DoctorCardProps {
   type: string;
   icon: any;
   iconOnPress: ()=> void
-  buttons?: { label: string, action: () => void, styleType: 'cancel' | 'primary' }[];
+  buttons?: any;
 }
 
-const DoctorCard: React.FC<DoctorCardProps> = ({ name, date, time, image, status, statusColor, type, icon, buttons, iconOnPress }) => {
+const DoctorCard: React.FC<DoctorCardProps> = ({ name, date, time, image, status, statusColor, type, icon, buttons, iconOnPress}) => {
     const { theme, changeTheme } = useContext(ThemeContext);
 
   return (
-    <ImageBackground style={[styles.card,{backgroundColor: theme === "dark" ? Colors.dark._3 : "#f5f5f5"}]}>
+    <ImageBackground style={[styles.card,{backgroundColor: theme === "dark" ? Colors.dark._2 : "#f5f5f5"}]}>
       <View style={styles.upperSection}>
         <Image style={styles.cardImage} source={image}/>
         <ImageBackground>
@@ -31,13 +31,13 @@ const DoctorCard: React.FC<DoctorCardProps> = ({ name, date, time, image, status
             <Text style={[styles.docName, {color: theme==="dark"?  Colors.others.white: Colors.others.black}]}>{name}</Text>
           </View>
           <View style={styles.docStatus}>
-            <Text style={[Typography.medium.small,{ color: theme === "dark"? "#D3D3D3" : '#424242'}]}>{type} - </Text>
-            <View style={[styles.statusContainer, { borderColor: statusColor,backgroundColor: theme==="dark"? Colors.dark._3 : "white" }]}>
+            <Text style={[Typography.medium.small,{ color: theme === "dark"? Colors.grayScale._200 : Colors.grayScale._800 }]}>{type} - </Text>
+            <View style={[styles.statusContainer, { borderColor: statusColor,backgroundColor: "transparent" }]}>
               <Text style={[Typography.medium.small,{ color: statusColor}]}>{status}</Text>
             </View>
             <TouchableOpacity 
-            onPress={iconOnPress}
-            style={{padding: 20, backgroundColor: Colors.transparent.blue, borderRadius: 100, marginLeft: 10}}
+            onPress={icon === null ? ()=> {} : iconOnPress}
+            style={{padding: 20, backgroundColor: icon === null? "#f5f5f5" :Colors.transparent.blue, borderRadius: 100, marginLeft: 10}}
             >
             {icon}
             </TouchableOpacity>
@@ -45,20 +45,12 @@ const DoctorCard: React.FC<DoctorCardProps> = ({ name, date, time, image, status
           <Text style={[Typography.medium.small,{ color: theme === "dark"? "#D3D3D3" : '#424242', marginLeft: 10}]}>{date} | {time}</Text>
         </ImageBackground>
       </View>
-      {buttons && (
+      
       
         <View style={styles.CardButtons}>
-          {buttons.map((button, index) => (
-            <TouchableOpacity
-              key={index}
-              style={button.styleType === 'cancel' ? ([styles.cancelButton, {backgroundColor: theme==="dark"? Colors.dark._3 : "white"}]) : (styles.primaryButton)}
-              onPress={button.action}
-            >
-              <Text style={button.styleType === 'cancel' ? styles.cancelButtonText : styles.primaryButtonText}>{button.label}</Text>
-            </TouchableOpacity>
-          ))}
+          {buttons}
         </View>
-      )}
+      
     </ImageBackground>
   );
 };

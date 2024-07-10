@@ -1,74 +1,113 @@
 import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
-import React, { useContext } from "react";
-import { BackArrow, blackArrow, Timer, line, lineTwo } from "@/components/Icons/Icons";
+import React, { useContext, useEffect, useState } from "react";
+import {
+  BackArrow,
+  blackArrow,
+  Timer,
+  line,
+  lineTwo,
+} from "@/components/Icons/Icons";
 import { SvgXml } from "react-native-svg";
-import { router } from "expo-router";
-import Typography  from "@/constants/Typography";
+import { router, useGlobalSearchParams } from "expo-router";
+import Typography from "@/constants/Typography";
 import { ThemeContext } from "@/ctx/ThemeContext";
 import { StatusBar } from "expo-status-bar";
+import { supabase } from "@/lib/supabase";
 
-interface doctor {
+interface Doctors {
+  hospital_name: string;
+  specialization: string;
+  first_name: string;
+  last_name: string;
+  created_at: string;
+  image: string;
   id: string;
-  name: string;
-  title: string;
-  location: string;
 }
+
+type FetchDoctor = Doctors | null;
+type FetchError = string | null;
+
+const tableName = "doctors";
 
 const SessionEnded = () => {
   const { theme, changeTheme } = useContext(ThemeContext);
-  const doctorDetails: doctor[] = [
-    {
-      id: "22",
-      name: "Dr. Maria Foose",
-      title: "Dermatologists",
-      location: "The Venus Hospital in Paris, France",
-    },
-  ];
+  const [FetchDoctor, setFetchDoctor] = useState<FetchDoctor>(null);
+  const [FetchError, setFetchError] = useState<FetchError>(null);
+  const { id } = useGlobalSearchParams();
+
+  useEffect(() => {
+    const FetchDoctors = async () => {
+      try {
+        const { data, error } = await supabase
+          .from(tableName)
+          .select("*")
+          .eq("id", `${id}`)
+          .single();
+
+        if (data) {
+          setFetchDoctor(data);
+          setFetchError(null);
+        }
+
+        if (error) {
+          setFetchDoctor(null);
+          setFetchError("could not fetch description articles in database");
+          return null;
+        }
+      } catch (error) {
+        console.error(error);
+        setFetchError("An unexpected error occurred");
+        return null;
+      }
+    };
+    FetchDoctors();
+  }, []);
 
   return (
-    <View
-      style={[
-        styles.container,
-        { backgroundColor: theme === "dark" ? "#181A20" : "white" },
-      ]}
-    >
-         <StatusBar style={theme === "light" ? "dark" : "light"}/>
-      <View style={styles.backArrow}>
-        <TouchableOpacity onPress={() => router.back()}>
-          <SvgXml xml={theme === "dark" ? BackArrow : blackArrow} />
-        </TouchableOpacity>
-      </View>
+    <>
+      {FetchError && <Text>{FetchError}</Text>}
+      {FetchDoctor && (
+        <View
+          style={[
+            styles.container,
+            { backgroundColor: theme === "dark" ? "#181A20" : "white" },
+          ]}
+        >
+          <StatusBar style={theme === "light" ? "dark" : "light"} />
+          
 
-      <View style={styles.middlePart}>
-        <SvgXml xml={Timer} />
-        <View style={styles.middleText}>
-          <Text
-            style={[
-              Typography.heading._5,
-              { color: theme === "dark" ? "#FFFFFF" : "#212121" },
-            ]}
-          >
-            The consultation session has ended.
-          </Text>
-          <Text
-            style={[
-              Typography.regular.large,
-              { color: theme === "dark" ? "#FFFFFF" : "#212121" },
-            ]}
-          >
-            Recordings have been saved in activity.
-          </Text>
-        </View>
+          <View style={styles.middlePart}>
+            <SvgXml xml={Timer} />
+            <View style={styles.middleText}>
+              <Text
+                style={[
+                  Typography.heading._5,
+                  { color: theme === "dark" ? "#FFFFFF" : "#212121" },
+                ]}
+              >
+                The consultation session has ended.
+              </Text>
+              <Text
+                style={[
+                  Typography.regular.large,
+                  { color: theme === "dark" ? "#FFFFFF" : "#212121" },
+                ]}
+              >
+                Recordings have been saved in activity.
+              </Text>
+            </View>
 
-        <View>
-          <SvgXml xml={lineTwo} />
-        </View>
-      </View>
+            <View>
+              <SvgXml xml={lineTwo} />
+            </View>
+          </View>
 
-      <View style={styles.detail}>
-        <Image source={require("@/assets/images/Dr maria.png")} style={{width: 200, height: 200, borderRadius: 100}}/>
-        {doctorDetails &&
-          doctorDetails.map((data: doctor) => (
+          <View style={styles.detail}>
+            <Image
+              source={{ uri: FetchDoctor.image }}
+              style={{ width: 200, height: 200, borderRadius: 100 }}
+            />
+
             <View style={styles.detail}>
               <Text
                 style={[
@@ -76,7 +115,7 @@ const SessionEnded = () => {
                   { color: theme === "dark" ? "#FFFFFF" : "#212121" },
                 ]}
               >
-                {data.name}
+                {FetchDoctor.first_name} {FetchDoctor.last_name}
               </Text>
               <Text
                 style={[
@@ -84,7 +123,7 @@ const SessionEnded = () => {
                   { color: theme === "dark" ? "#FFFFFF" : "#212121" },
                 ]}
               >
-                {data.title}
+                {FetchDoctor.specialization}
               </Text>
               <Text
                 style={[
@@ -92,39 +131,49 @@ const SessionEnded = () => {
                   { color: theme === "dark" ? "#FFFFFF" : "#212121" },
                 ]}
               >
-                {data.location}
+                {FetchDoctor.hospital_name}
               </Text>
             </View>
-          ))}
-        <View>
-          <SvgXml xml={line} />
+            <View>
+              <SvgXml xml={line} />
+            </View>
+          </View>
+
+          <View style={styles.Button}>
+            <TouchableOpacity
+              onPress={() => router.push("Appointments")}
+              style={[
+                styles.backButton,
+                { backgroundColor: theme === "dark" ? "#35383F" : "#E9F0FF" },
+              ]}
+            >
+              <Text
+                style={[
+                  Typography.bold.large,
+                  { color: theme === "dark" ? "#FFFFFF" : "#246BFD" },
+                ]}
+              >
+                Back to Home
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.LeaveButton}
+              onPress={() =>
+                router.push({
+                  pathname:"(app)/Appointments/Review/ReviewBlankform",
+                 params: {id: id}
+                })
+              }
+            >
+              <Text style={[Typography.bold.large, { color: "#FFFFFF" }]}>
+                Leave a Review
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
-
-      <View style={styles.Button}>
-        <TouchableOpacity
-          style={[
-            styles.backButton,
-            { backgroundColor: theme === "dark" ? "#35383F" : "#E9F0FF" },
-          ]}
-        >
-          <Text
-            style={[
-              Typography.bold.large,
-              { color: theme === "dark" ? "#FFFFFF" : "#246BFD" },
-            ]}
-          >
-            Back to Home
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.LeaveButton} onPress={()=> router.push('(app)/Appointments/Review/ReviewBlankform')}>
-          <Text style={[Typography.bold.large, { color: "#FFFFFF" }]}>
-            Leave a Review
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+      )}
+    </>
   );
 };
 
