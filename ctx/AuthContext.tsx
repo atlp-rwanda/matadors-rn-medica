@@ -6,7 +6,7 @@ import { router } from "expo-router";
 import { Alert } from "react-native";
 import uuid from "react-native-uuid";
 import * as AppleAuthentication from 'expo-apple-authentication';
-
+import { createMeeting, token as videoSdkToken } from '@/lib/api'; // Adjust the path accordingly
 
 export const AuthContext = createContext<AuthType>({
   email: "",
@@ -24,6 +24,7 @@ export const AuthContext = createContext<AuthType>({
   register: async (email: string, password: string) => {},
   logout: async () => {},
   signInWithApple: async () => {},
+  createMeeting: async () => {},
 });
 
 interface Props {
@@ -43,14 +44,30 @@ export default function AuthProvider({ children }: Props) {
 
   async function refreshSession() {}
 
-  async function logout() {}
-
+  async function logout() {
+    const { error } = await supabase.auth.signOut();
+    if (!error) {
+      setUserId("");
+      setEmail("");
+      setActivated(false);
+      setIsLoggedIn(false);
+      setToken("");
+      setRefreshToken("");
+      setName("");
+      setImageUrl("");
+      setAuthType("");
+      console.log("Logout success");
+    } else {
+      console.error("Error logging out:", error.message);
+    }
+  }
+  
   async function login(email: string, password: string) {
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
-
+    
     if (!error) {
       setIsLoggedIn(true);
       setEmail(data.session.user.email!);
@@ -63,11 +80,10 @@ export default function AuthProvider({ children }: Props) {
   }
 
   async function register(email: string, password: string) {
-    const { data: registerData, error: registerError } =
-      await supabase.auth.signUp({
-        email: email,
-        password: password,
-      });
+    const { data: registerData, error: registerError } = await supabase.auth.signUp({
+      email: email,
+      password: password,
+    });
 
     if (!registerError) {
       const { error } = await supabase
@@ -79,6 +95,14 @@ export default function AuthProvider({ children }: Props) {
         setRefreshToken(registerData.session?.refresh_token || "");
         setEmail(email);
         setUserId(registerData.session?.user.id || "");
+
+        // Create a meeting after successful registration
+        try {
+          const meetingId = await createMeeting({ token: videoSdkToken });
+          console.log("Created meeting with ID:", meetingId);
+        } catch (error) {
+          console.error("Error creating meeting:", error);
+        }
       } else {
         console.log("Error creating patient entry: ", error);
         throw new Error(error.message);
@@ -91,15 +115,15 @@ export default function AuthProvider({ children }: Props) {
 
   async function setUpUserInfo(user: UserInfo) {
     if (!authType || authType === "apple") {
-        const res = await fetch(user.image.uri);
-        const arrayBuffer = await res.arrayBuffer();
-  
-        await supabase.storage
-          .from("patients")
-          .upload(userId + "/" + uuid.v4(), arrayBuffer, {
-            contentType: user.image.mimeType ?? "image/jpeg",
-          });
-      }
+      const res = await fetch(user.image.uri);
+      const arrayBuffer = await res.arrayBuffer();
+
+      await supabase.storage
+        .from("patients")
+        .upload(userId + "/" + uuid.v4(), arrayBuffer, {
+          contentType: user.image.mimeType ?? "image/jpeg",
+        });
+    }
 
     const res = await supabase
       .from("patients")
@@ -109,9 +133,9 @@ export default function AuthProvider({ children }: Props) {
         gender: user.gender,
         date_of_birth: user.birthDate,
         activated: true,
-        image:authType  && authType !== "apple"
-        ? imageUrl
-        : userId + "/" + uuid.v4(),
+        image: authType && authType !== "apple"
+          ? imageUrl
+          : userId + "/" + uuid.v4(),
       })
       .eq("auth_id", userId);
 
@@ -127,53 +151,49 @@ export default function AuthProvider({ children }: Props) {
           AppleAuthentication.AppleAuthenticationScope.EMAIL,
         ],
       });
-  
+
       if (credential.identityToken) {
         const response = await supabase.auth.signInWithIdToken({
           provider: 'apple',
           token: credential.identityToken,
         });
-  
+
         if (response.error) {
           console.error('Error signing in with Apple:', response.error);
           throw new Error('Error signing in with Apple');
         } else {
           console.log('User signed in:', response.data.user);
-          
+
           const userId = response.data.user.id;
           const email = response.data.user.email;
-  
-          // Checking if user already exists in patients 
+
           const { data: existingUser, error: checkError } = await supabase
             .from('patients')
             .select('auth_id')
             .eq('auth_id', userId)
             .single();
-  
+
           if (checkError && checkError.code !== 'PGRST116') {
             console.log('Error checking existing user: ', checkError);
             throw new Error(checkError.message);
           }
-  
+
           if (!existingUser) {
             const { error } = await supabase
               .from('patients')
               .insert({ auth_id: userId, activated: false });
-  
+
             if (error) {
               console.log('Error creating patient entry: ', error);
               throw new Error(error.message);
             }
           }
-  
           setToken(response.data.session?.access_token || '');
           setRefreshToken(response.data.session?.refresh_token || '');
           setEmail(email);
           setUserId(userId);
           setIsLoggedIn(true);
           setAuthType('apple'); 
-          
-         // router.push("/(app)/ActionMenu");
         }
       } else {
         throw new Error('No identityToken.');
@@ -183,7 +203,7 @@ export default function AuthProvider({ children }: Props) {
       throw e;
     }
   }
-  
+
   useEffect(() => {
     (async () => {
       if (userId) {
@@ -223,6 +243,7 @@ export default function AuthProvider({ children }: Props) {
     setImageUrl,
     setAuthType,
     signInWithApple,
+    createMeeting,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

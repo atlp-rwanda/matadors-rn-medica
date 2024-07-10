@@ -1,122 +1,251 @@
+import React, { useState } from "react";
 import {
-    StyleSheet,
-    Text,
-    View,
-    ImageBackground,
-    Image,
-    Pressable,
-    TouchableOpacity,
-  } from "react-native";
-  import React from "react";
-  import { BackArrow, Speaker, Record, hungup,BigVideoIcon } from "@/components/Icons/Icons";
-  import { SvgXml } from "react-native-svg";
-  import  Typography  from "@/constants/Typography";
-  import { router } from "expo-router";
-  const VoiceCallRinging = () => {
-    return (
-      <>
-        <ImageBackground
-          style={styles.Background}
-          resizeMode="cover"
-          source={require("@/assets/images/MariaBackground.png")}
-        >
-          <View style={styles.backArrow}>
-            <TouchableOpacity onPress={()=> router.back()}>
-               <SvgXml xml={BackArrow} />
-            </TouchableOpacity>
-           
-          </View>
-  
-          <View style={styles.middlePart}>
-            <Image source={require("@/assets/images/Dr jenny.png")} style={{width: 200, height: 200, borderRadius: 100}}/>
-  
-            <View style={styles.middleText}>
-              <Text style={[Typography.heading._3, { color: "#FFFFFF" }]}>
-                Dr. Maria Foose
-              </Text>
-              <Text style={[Typography.medium.xLarge, { color: "#FFFFFF" }]}>
-                Ringing...
-              </Text>
-            </View>
-          </View>
-  
-          <View style={styles.Bottom}>
-            <TouchableOpacity style={styles.speaker}>
-              <SvgXml xml={Speaker} />
-            </TouchableOpacity>
+  SafeAreaView,
+  TouchableOpacity,
+  Text,
+  TextInput,
+  View,
+  FlatList,
+} from "react-native";
+import {
+  MeetingProvider,
+  useMeeting,
+  useParticipant,
+  MediaStream,
+  RTCView,
+  register,
+} from "@videosdk.live/react-native-sdk";
+import { createMeeting, token } from "@/lib/api";
 
-            <TouchableOpacity style={styles.Video} onPress={()=> router.push('(app)/Appointments/VideoCallAppointment/VideoCall')}>
-              <SvgXml xml={BigVideoIcon} />
-            </TouchableOpacity>
-  
-            <TouchableOpacity style={styles.Record}>
-              <SvgXml xml={Record} />
-            </TouchableOpacity>
-  
-            <TouchableOpacity style={styles.hangup} onPress={()=> router.push('(app)/Appointments/Review/ReviewBlankform')}>
-              <SvgXml xml={hungup} />
-            </TouchableOpacity>
-          </View>
-        </ImageBackground>
-      </>
-    );
+register();
+
+interface JoinScreenProps {
+  getMeetingId: (id?: string) => void;
+}
+
+const JoinScreen: React.FC<JoinScreenProps> = ({ getMeetingId }) => {
+  const [meetingVal, setMeetingVal] = useState("");
+
+  return (
+    <SafeAreaView
+      style={{
+        flex: 1,
+        backgroundColor: "#F6F6FF",
+        justifyContent: "center",
+        paddingHorizontal: 6 * 10,
+      }}
+    >
+      <TouchableOpacity
+        onPress={() => {
+          getMeetingId();
+        }}
+        style={{ backgroundColor: "#1178F8", padding: 12, borderRadius: 6 }}
+      >
+        <Text style={{ color: "white", alignSelf: "center", fontSize: 18 }}>
+          Create Meeting
+        </Text>
+      </TouchableOpacity>
+
+      <Text
+        style={{
+          alignSelf: "center",
+          fontSize: 22,
+          marginVertical: 16,
+          fontStyle: "italic",
+          color: "grey",
+        }}
+      >
+        ---------- OR ----------
+      </Text>
+      <TextInput
+        value={meetingVal}
+        onChangeText={setMeetingVal}
+        placeholder={"XXXX-XXXX-XXXX"}
+        style={{
+          padding: 12,
+          borderWidth: 1,
+          borderRadius: 6,
+          fontStyle: "italic",
+        }}
+      />
+      <TouchableOpacity
+        style={{
+          backgroundColor: "#1178F8",
+          padding: 12,
+          marginTop: 14,
+          borderRadius: 6,
+        }}
+        onPress={() => {
+          getMeetingId(meetingVal);
+        }}
+      >
+        <Text style={{ color: "white", alignSelf: "center", fontSize: 18 }}>
+          Join Meeting
+        </Text>
+      </TouchableOpacity>
+    </SafeAreaView>
+  );
+};
+
+interface ButtonProps {
+  onPress: () => void;
+  buttonText: string;
+  backgroundColor: string;
+}
+
+const Button: React.FC<ButtonProps> = ({ onPress, buttonText, backgroundColor }) => (
+  <TouchableOpacity
+    onPress={onPress}
+    style={{
+      backgroundColor,
+      justifyContent: "center",
+      alignItems: "center",
+      padding: 12,
+      borderRadius: 4,
+    }}
+  >
+    <Text style={{ color: "white", fontSize: 12 }}>{buttonText}</Text>
+  </TouchableOpacity>
+);
+
+interface ParticipantViewProps {
+  participantId: string;
+}
+
+const ParticipantView: React.FC<ParticipantViewProps> = ({ participantId }) => {
+  const { webcamStream, webcamOn } = useParticipant(participantId);
+
+  return webcamOn && webcamStream ? (
+    <RTCView
+      streamURL={new MediaStream([webcamStream.track]).toURL()}
+      objectFit={"cover"}
+      style={{
+        height: 300,
+        marginVertical: 8,
+        marginHorizontal: 8,
+      }}
+    />
+  ) : (
+    <View
+      style={{
+        backgroundColor: "grey",
+        height: 300,
+        justifyContent: "center",
+        alignItems: "center",
+        marginVertical: 8,
+        marginHorizontal: 8,
+      }}
+    >
+      <Text style={{ fontSize: 16 }}>NO MEDIA</Text>
+    </View>
+  );
+};
+
+interface ParticipantListProps {
+  participants: string[];
+}
+
+const ParticipantList: React.FC<ParticipantListProps> = ({ participants }) => (
+  participants.length > 0 ? (
+    <FlatList
+      data={participants}
+      renderItem={({ item }) => <ParticipantView participantId={item} />}
+      keyExtractor={(item) => item}
+    />
+  ) : (
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: "#F6F6FF",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <Text style={{ fontSize: 20 }}>Press Join button to enter meeting.</Text>
+    </View>
+  )
+);
+
+const ControlsContainer: React.FC = () => {
+  const { join, leave, toggleWebcam, toggleMic } = useMeeting({});
+
+  return (
+    <View
+      style={{
+        padding: 24,
+        flexDirection: "row",
+        justifyContent: "space-between",
+      }}
+    >
+      <Button
+        onPress={() => join()}
+        buttonText={"Join"}
+        backgroundColor={"#1178F8"}
+      />
+      <Button
+        onPress={() => toggleWebcam()}
+        buttonText={"Toggle Webcam"}
+        backgroundColor={"#1178F8"}
+      />
+      <Button
+        onPress={() => toggleMic()}
+        buttonText={"Toggle Mic"}
+        backgroundColor={"#1178F8"}
+      />
+      <Button
+        onPress={() => leave()}
+        buttonText={"Leave"}
+        backgroundColor={"#FF0000"}
+      />
+    </View>
+  );
+};
+
+const MeetingView: React.FC = () => {
+  const { participants, meetingId } = useMeeting({});
+  const participantsArrId = Array.from(participants.keys());
+
+  return (
+    <View style={{ flex: 1 }}>
+      {meetingId && (
+        <Text style={{ fontSize: 18, padding: 12 }}>
+          Meeting Id : {meetingId}
+        </Text>
+      )}
+      <ParticipantList participants={participantsArrId} />
+      <ControlsContainer />
+    </View>
+  );
+};
+
+const App: React.FC = () => {
+  const [meetingId, setMeetingId] = useState<string | null>(null);
+
+  const getMeetingId = async (id?: string) => {
+    if (!token) {
+      console.log("PLEASE PROVIDE TOKEN IN api.js FROM app.videosdk.live");
+    }
+    const newMeetingId = id == null ? await createMeeting({ token }) : id;
+    setMeetingId(newMeetingId);
   };
-  
-  export default VoiceCallRinging;
-  
-  const styles = StyleSheet.create({
-    speaker:{
-      backgroundColor: '#F0F0F0',
-      borderRadius: 100,
-      padding: 20,
-      opacity: 0.6
-    },
-    Video:{
-        backgroundColor: '#F0F0F0',
-        borderRadius: 100,
-        padding: 20,
-        opacity: 0.6
-      },
-    Record:{
-      backgroundColor: '#F0F0F0',
-      borderRadius: 100,
-      padding: 23,
-      opacity: 0.6
-    },
-    hangup:{
-      backgroundColor: '#F75555',
-      borderRadius: 100,
-      padding: 20,
-  
-    },
-    Bottom: {
-      flexDirection: "row",
-      justifyContent: "center",
-      alignItems: "center",
-      gap: 20,
-    },
-    middlePart: {
-      justifyContent: "center",
-      alignItems: "center",
-      gap: 24,
-    },
-    middleText: {
-      justifyContent: "center",
-      alignItems: "center",
-      gap: 24,
-    },
-    backArrow: {
-      alignSelf: "flex-start",
-      marginTop: "5%"
-    },
-    Background: {
-      flex: 1,
-      justifyContent: "center",
-      alignItems: "center",
-      paddingTop: 24,
-      paddingBottom: 48,
-      paddingLeft: 24,
-      paddingRight: 24,
-      gap: 140,
-    },
-  });
+
+  return meetingId ? (
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#F6F6FF" }}>
+      <MeetingProvider
+        config={{
+          meetingId,
+          micEnabled: true,
+          webcamEnabled: true,
+          name: "Expo User",
+        }}
+        token={token}
+      >
+        <MeetingView />
+      </MeetingProvider>
+    </SafeAreaView>
+  ) : (
+    <JoinScreen getMeetingId={getMeetingId} />
+  );
+};
+
+export default App;
