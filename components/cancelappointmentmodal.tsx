@@ -1,5 +1,4 @@
 import React, {
-    useState,
     useRef,
     useEffect,
     useContext,
@@ -19,19 +18,13 @@ import React, {
   import { ThemeContext } from "@/ctx/ThemeContext";
   interface CancelProps {
     visible: boolean;
-  
     cancel: () => void;
+    appointmentId: string | undefined;
   }
   
-  function Cancelappointment({ visible, cancel }: CancelProps) {
+  function CancelAppointment({ visible, cancel , appointmentId}: CancelProps) {
     const { theme, changeTheme } = useContext(ThemeContext);
-    const [showpopUp, setShowPopup] = useState(false);
-    const [selectedDoctor, setSelectedDoctor] = useState();
-    const handleRemove = (doctor: any) => {
-      setSelectedDoctor(doctor);
-  
-      setShowPopup(true);
-    };
+
     const translateY = useRef(new Animated.Value(0)).current;
     useEffect(() => {
       if (visible) {
@@ -110,9 +103,10 @@ import React, {
               />
               <Removebtn
                 action={() =>
-                  router.push(
-                    "/(app)/Appointments/CancelAppointment/cancelreason"
-                  )
+                  router.push({
+                    pathname: "(app)/Appointments/CancelAppointment",
+                    params: { appointmentId: appointmentId}
+                  })
                 }
                 backColor="#246BFD"
                 text="Yes,Cancel"
@@ -125,7 +119,7 @@ import React, {
     );
   }
   
-  export default Cancelappointment;
+  export default CancelAppointment;
   
   const styles = StyleSheet.create({
     overlay: {
@@ -154,7 +148,7 @@ import React, {
     intro: {
       width: "100%",
       height: 40,
-      marginBottom: "5%",
+      marginBottom: "1%",
       marginTop: "5%",
       display: "flex",
       flexDirection: "row",
@@ -177,9 +171,8 @@ import React, {
       alignItems: "center",
     },
     componentView: {
-      marginBottom: "5%",
       width: "100%",
-      height: 150,
+      height: 120,
       borderRadius: 20,
       display: "flex",
       textAlign: "center",
