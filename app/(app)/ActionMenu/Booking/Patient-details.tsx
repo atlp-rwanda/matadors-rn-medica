@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   Pressable,
   ScrollView,
+  Alert
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { ThemeContext } from "@/ctx/ThemeContext";
@@ -28,10 +29,12 @@ const PatientDetails = () => {
   const [text, setText] = useState("");
   const [height, setHeight] = useState(40);
   const { theme, changeTheme } = useContext(ThemeContext);
-  const {Doctor_id,hour,date,packageTitle,packagePrice} = useLocalSearchParams()
+  const {Doctor_id,hour,date,packageTitle,packagePrice,duration} = useLocalSearchParams()
   const [loggeduser, setLoggedUser] = useState<string>()
   const [profile, setProfile] = useState<any>(null)
-  const [patient_id,setPatient_id]=useState<string>()
+  const [patient_id, setPatient_id] = useState<string>()
+  const [selectedGender, setSelectedGender] = useState<string>()
+  const [selectedAge,setSelectedAge]=useState<string>()
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -59,7 +62,14 @@ const PatientDetails = () => {
         } else {
           setProfile(data)
           setPatient_id(data.id)
-          console.log(data)
+          if (!data.age && data.date_of_birth) {
+            setProfile((prevProfile:Date) => ({
+              ...prevProfile,
+              age:calculateAge(data.date_of_birth)
+            }))
+          }
+          console.log("this is date of birth:",data.date_of_birth)
+         
          
         }
         
@@ -70,9 +80,33 @@ const PatientDetails = () => {
   }, [loggeduser])
   console.log("this is profile:",profile)
   console.log("this is logged user:", loggeduser)
-  console.log("this is patient_id:",patient_id)
+  console.log("this is patient_id:", patient_id)
+  
+  const calculateAge = (dob: string) => {
+    const birthDate = new Date(dob);
+    const today = new Date();
+    const age = today.getFullYear() - birthDate.getFullYear();
+    const monthDifference = today.getMonth() - birthDate.getMonth();
+    if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+      return age - 1;
+    }
+    return age;
+  };
   const handleInputChange = (name: string, value: string) => {
     setProfile({ ...profile, [name]: value });
+  }
+  console.log("this is default value:",profile?.gender,profile?.age)
+   const handleNextPress = () => {
+    if (!text|| !selectedGender || !selectedAge) {
+      Alert.alert("Please select all required data")
+      
+      return;
+    }
+    
+    router.push({
+      pathname: "/(app)/ActionMenu/Booking/SelectPayment",
+      params:{doctor_id:Doctor_id,hour:hour,date:date,packageTitle:packageTitle,packagePrice:packagePrice,problem:text,user_id:loggeduser,patient_id:patient_id,duration:duration},
+    });
   }
 
   return (
@@ -124,10 +158,9 @@ const PatientDetails = () => {
           <DropDown
             data={[
                { value: `${profile?.gender}`, label:`${profile?.gender} ` },
-              { value: "Male", label: "Male" },
-              { value: "Female", label: "Female" },
             ]}
-            defaultvalue={profile?.Gender}
+            defaultValue={selectedGender}
+            onSelect={(value)=>setSelectedGender(value)}
           />
         </View>
 
@@ -148,11 +181,11 @@ const PatientDetails = () => {
           <DropDown
             data={[
               { value: `${profile?.age} Years`, label:`${profile?.age} Years` },
-              { value: "27 years", label: "27 years" },
-              { value: "28 years", label: "28 years" },
+             
              
             ]}
-            defaultvalue={profile?.age}
+            defaultValue={selectedAge}
+             onSelect={(value)=>setSelectedAge(value)}
           />
         </View>
 
@@ -170,7 +203,7 @@ const PatientDetails = () => {
           >
             Write Your Problem
           </Text>
-          {/* <Input placeholder="Describe how you are feeling here ..."  /> */}
+         
           <TextArea text={text} onChangeText={setText} />
         </View>
 
@@ -182,9 +215,10 @@ const PatientDetails = () => {
         >
           <Button
             title="Next"
-            onPress={() => {
-              router.push({ pathname: "/(app)/ActionMenu/Booking/SelectPayment",params:{doctor_id:Doctor_id,hour:hour,date:date,packageTitle:packageTitle,packagePrice:packagePrice,problem:text,user_id:loggeduser,patient_id:patient_id} });
-            }}
+            onPress={handleNextPress}
+            // onPress={() => {
+            //   router.push({ pathname: "/(app)/ActionMenu/Booking/SelectPayment",params:{doctor_id:Doctor_id,hour:hour,date:date,packageTitle:packageTitle,packagePrice:packagePrice,problem:text,user_id:loggeduser,patient_id:patient_id,duration:duration} });
+            // }}
           />
         </View>
       </ScrollView>

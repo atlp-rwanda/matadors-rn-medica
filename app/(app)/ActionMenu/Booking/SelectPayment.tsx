@@ -15,7 +15,7 @@ import { useLocalSearchParams } from "expo-router";
 export default function SelectPayment() {
   const { theme, changeTheme } = useContext(ThemeContext);
   const [selected, setSelected] = useState(false);
-const {doctor_id,hour,date,packageTitle,packagePrice,problem,user_id,patient_id}=useLocalSearchParams()
+const {doctor_id,hour,date,packageTitle,packagePrice,problem,user_id,patient_id,duration}=useLocalSearchParams()
 
   return (
     <>
@@ -53,7 +53,7 @@ const {doctor_id,hour,date,packageTitle,packagePrice,problem,user_id,patient_id}
         <Button
           title="Next"
           onPress={() => {
-            router.push({ pathname: "(app)/ActionMenu/Booking/reviewSummary",params: {doctor_id:doctor_id,hour:hour,date:date,packageTitle:packageTitle,packagePrice:packagePrice,problem:problem,user_id:user_id,patient_id:patient_id}});
+            router.push({ pathname: "(app)/ActionMenu/Booking/reviewSummary",params: {doctor_id:doctor_id,hour:hour,date:date,packageTitle:packageTitle,packagePrice:packagePrice,problem:problem,user_id:user_id,patient_id:patient_id,duration:duration}});
           }}
           style={{ marginTop: "auto" }}
         />

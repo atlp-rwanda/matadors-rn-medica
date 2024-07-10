@@ -31,7 +31,7 @@ import HeaderComponent from "@/components/HeaderComponent";
 
 export default function Reviewsummary() {
   const { theme, changeTheme } = useContext(ThemeContext);
-  const { doctor_id, hour, date, packageTitle, packagePrice, problem, user_id,patient_id } = useLocalSearchParams()
+  const { doctor_id, hour, date, packageTitle, packagePrice, problem, user_id,patient_id,duration } = useLocalSearchParams()
   const [doctor,setDoctor]=useState<any>(null)
   
   useEffect(() => {
@@ -48,8 +48,22 @@ export default function Reviewsummary() {
       }
     }
     fetchDoctordata()
-  },[doctor_id])
-
+  }, [doctor_id])
+  let num:number=1;
+  if (duration === "30 minutes") {
+    num=1
+  } else {
+    num=2
+  }
+  let price: number = 0;
+  if (packagePrice === "$20") {
+    price=20
+  } else if (packagePrice === "$40") {
+    price=40
+  } else if (packagePrice === "$60") {
+    price =60
+  }
+const total:number=price*num
   if (!doctor) {
   return (<Text>Loading Doctor's data .........</Text>)
 }
@@ -251,7 +265,7 @@ export default function Reviewsummary() {
                   },
                 ]}
               >
-                30 minutes
+                {duration}
               </Text>
             </View>
           </View>
@@ -319,7 +333,7 @@ export default function Reviewsummary() {
                   },
                 ]}
               >
-                Duration (30 mins)
+                Duration ({duration})
               </Text>
               <Text
                 style={[
@@ -332,7 +346,7 @@ export default function Reviewsummary() {
                   },
                 ]}
               >
-                1 x {packagePrice}
+                {num} x {packagePrice}
               </Text>
             </View>
 
@@ -371,7 +385,7 @@ export default function Reviewsummary() {
                   },
                 ]}
               >
-                {packagePrice}
+                {total}
               </Text>
             </View>
           </View>
@@ -392,7 +406,7 @@ export default function Reviewsummary() {
           <Button
             title="Next"
             onPress={() =>
-              router.push({ pathname:"(app)/ActionMenu/Booking/EnterYourPin",params:{doctor_id:doctor_id,hour:hour,date:date,packageTitle:packageTitle,packagePrice:packagePrice,problem:problem,user_id:user_id,patient_id:patient_id}})
+              router.push({ pathname:"(app)/ActionMenu/Booking/EnterYourPin",params:{doctor_id:doctor_id,hour:hour,date:date,packageTitle:packageTitle,packagePrice:packagePrice,problem:problem,user_id:user_id,patient_id:patient_id,duration:duration}})
             }
             style={{}}
           />

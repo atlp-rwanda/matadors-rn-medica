@@ -11,6 +11,7 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  Alert
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { ThemeContext } from "@/ctx/ThemeContext";
@@ -33,8 +34,20 @@ import { StatusBar } from "expo-status-bar";
 const SelectPackage = () => {
   const { theme, changeTheme } = useContext(ThemeContext);
   const { Doctor_id, hour, date,patient_id } = useLocalSearchParams()
-  const [selectedPackageTitle, setSelectedPackageTitle] = useState<{ title: string, price: string }>({title:"",price:""})
-  console.log("this is new:",Doctor_id,hour,date)
+  const [selectedPackageTitle, setSelectedPackageTitle] = useState<{ title: string, price: string }>({ title: "Messaging", price: "$20" })
+  const [selectedDuration, setSelectedDuration] = useState<string>("1 hour")
+  console.log("this is new:", Doctor_id, hour, date)
+  const handleNextPress = () => {
+    if (!selectedPackageTitle||!selectedDuration) {
+      Alert.alert("Please select both Duration and package")
+      return;
+    }
+    
+    router.push({
+      pathname: "ActionMenu/Booking/Patient-details",
+      params:{ Doctor_id:Doctor_id,hour:hour,date:date,packageTitle:selectedPackageTitle.title,packagePrice:selectedPackageTitle.price,patient_id:patient_id,duration: selectedDuration,},
+    });
+  }
 
   const packages = [
     {
@@ -59,7 +72,8 @@ const SelectPackage = () => {
       icon: () => <SvgXml xml={videoIcon} />,
     },
   ];
-
+  console.log("this is selected duration:", selectedDuration)
+ 
   return (
     <>
       <StatusBar style={theme === "light" ? "dark" : "light"} />
@@ -88,12 +102,13 @@ const SelectPackage = () => {
           </Text>
           <DropDown
             data={[
-              { label: "1 hour", value: "30" },
+              { label: "1 hour", value: "1 hour" },
               { label: "30 minutes", value: "30 minutes" },
             ]}
             leftIcon={() => (
               <SvgXml xml={theme === "light" ? clockIcon : lightClockIcon} />
             )}
+           onSelect={(value) => setSelectedDuration(value)}
           />
         </View>
 
@@ -129,8 +144,7 @@ const SelectPackage = () => {
           }}
         >
           <Button
-            title="Next"
-            onPress={() => router.push({ pathname:"ActionMenu/Booking/Patient-details",params:{ Doctor_id:Doctor_id,hour:hour,date:date,packageTitle:selectedPackageTitle.title,packagePrice:selectedPackageTitle.price,patient_id:patient_id}})}
+          onPress={handleNextPress}
           />
         </View>
       </ScrollView>

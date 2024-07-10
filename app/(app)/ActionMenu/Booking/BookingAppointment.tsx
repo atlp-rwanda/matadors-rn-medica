@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Text, View, StyleSheet, ScrollView } from "react-native";
+import { Text, View, StyleSheet, ScrollView,Alert } from "react-native";
 import { Colors } from "@/constants/Colors";
 import { router } from "expo-router";
 import { ThemeContext } from "@/ctx/ThemeContext";
@@ -17,6 +17,7 @@ export default function BookingAppointment() {
   const [timeSlots, setTimeSlots] = useState([""]);
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedHour, setSelectedHour] = useState("");
+  const [errorMessage,setErrorMessage]=useState<string>("")
   const { id } = useLocalSearchParams()
  
   console.log("this is id from BookAppointment:", id)
@@ -41,7 +42,18 @@ export default function BookingAppointment() {
   }, []);
 
   console.log("this is slected hour:", selectedHour)
-  console.log("this is selected date:",selectedDate)
+  console.log("this is selected date:", selectedDate)
+  const handleNextPress = () => {
+    if (!selectedHour || !selectedDate) {
+      Alert.alert("Please select both date and an hour")
+      return;
+    }
+    setErrorMessage("")
+    router.push({
+      pathname: "(app)/ActionMenu/Booking/Select-package",
+      params: { Doctor_id: id, hour: selectedHour, date: selectedDate },
+    });
+  }
 
   return (
     <ScrollView
@@ -106,9 +118,7 @@ export default function BookingAppointment() {
       >
         <Button
           title="Next"
-          onPress={() => {
-            router.push({ pathname:"(app)/ActionMenu/Booking/Select-package",params:{Doctor_id:id,hour:selectedHour,date:selectedDate}});
-          }}
+          onPress={handleNextPress}
         />
       </View>
     </ScrollView>
