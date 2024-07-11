@@ -13,7 +13,7 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "jsEngine": "hermes",
+      "jsEngine": "jsc",
       "supportsTablet": true,
       "infoPlist": {
         "NSFaceIDUsageDescription": "This app uses Face ID and Touch ID for some features",
@@ -30,7 +30,7 @@
       "bundleIdentifier": "com.andela.matadors.medica"
     },
     "android": {
-      "jsEngine": "hermes",
+      "jsEngine": "jsc",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#000000"
