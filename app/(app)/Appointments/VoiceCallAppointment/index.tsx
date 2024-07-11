@@ -3,30 +3,21 @@ import {
   SafeAreaView,
   Text,
   View,
-  StyleSheet,
   Pressable,
   Platform,
-  TouchableWithoutFeedback,
-  Image,
   TouchableOpacity,
 } from "react-native";
 import { Colors } from "@/constants/Colors";
 import { router, useLocalSearchParams } from "expo-router";
-import { MaterialIcons } from "@expo/vector-icons";
 import { ThemeContext } from "@/ctx/ThemeContext";
 import { StatusBar } from "expo-status-bar";
 import Typography from "@/constants/Typography";
 import { SvgXml } from "react-native-svg";
 import DoctorCard from "@/components/DoctorCard";
-import {
-  WhiteMessageIcon,
-  blueMessageIcon,
-} from "@/components/UI/icons/blueMessage";
 import { backArrowWhite } from "@/components/UI/icons/backArrow";
 import { WhiteMenuCircle } from "@/components/UI/icons/WhiteMenuCircle";
 import { MoreIcon } from "@/assets/icons/MoreCircleSvg";
 import { backArrowBlackIcon } from '@/constants/icon'
-import { fetchPatientData, getPatientData } from "@/utils/LoggedInUser";
 import { supabase } from "@/lib/supabase";
 import { CallWhiteIcon } from "@/components/Icons/Icons";
 import { BlueVoiceCall } from "@/components/UI/icons/callIcon";
@@ -55,13 +46,13 @@ function AppointmentVoiceCall() {
   const ios = Platform.OS === "ios";
   const [patientData, setPatientData] = useState(null);
   const [userData, setUserData] = useState<[]>([]);
-  const { id } = useLocalSearchParams()
+  const { id } = useLocalSearchParams();
   const [isLoading, setIsLoading] = useState(false);
   const [appointment, setAppointment] = useState<AppointmentType[]>([]);
   const [loggeduser, setLoggedUser] = useState<string>()
   const [patient_id,setPatient_id]=useState<string>()
   const [profile, setProfile] = useState<any>(null)
-  
+  const [doctorID, setDoctorsID] = useState<string>();
  
 
 
@@ -72,7 +63,6 @@ function AppointmentVoiceCall() {
         .from("appointment")
         .select("*")
         .eq("id", id);
-
       if (appointmentsError) {
         setIsLoading(false);
         console.error("Error fetching data:", appointmentsError);
@@ -80,6 +70,7 @@ function AppointmentVoiceCall() {
       }
 
       const doctorIds = appointmentsData.map(appointment => appointment.doctor_id);
+      setDoctorsID(doctorIds[0]);
 const userIds = appointmentsData.map(appointment => appointment.user_id);
 
 try {
@@ -124,6 +115,8 @@ try {
     }
     fetchData();
   }, [appointment]);
+
+  
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -418,8 +411,11 @@ try {
 
                 <Pressable
                   onPress={() =>
-                    router.push(
-                      "(app)/Appointments/VoiceCallAppointment/VoiceCallRinging"
+                    router.push({
+                       pathname:"(app)/Appointments/VoiceCallAppointment/VoiceCall",
+                       params:{id:doctorID, AppointmentID:id}
+                    }
+                     
                     )
                   }
                   style={{
