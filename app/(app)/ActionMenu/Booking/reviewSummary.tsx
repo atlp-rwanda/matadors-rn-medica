@@ -27,12 +27,14 @@ import SelectPaymentCardListing from "@/components/Profile/SelectedPaymentCardLi
 import { useLocalSearchParams } from "expo-router";
 import { SvgXml } from "react-native-svg";
 import { supabase } from "@/lib/supabase";
-import HeaderComponent from "@/components/HeaderComponent";
+import { LightleftArrow } from '@/assets/icons/left';
+import { LeftArrowWhite } from '@/assets/icons/LeftArrowWhite';
 
 export default function Reviewsummary() {
   const { theme, changeTheme } = useContext(ThemeContext);
   const { doctor_id, hour, date, packageTitle, packagePrice, problem, user_id,patient_id,duration } = useLocalSearchParams()
-  const [doctor,setDoctor]=useState<any>(null)
+  const [doctor, setDoctor] = useState<any>(null)
+    const leftArrowIcon = theme === "dark" ? LeftArrowWhite : LightleftArrow
   
   useEffect(() => {
     const fetchDoctordata = async () => {
@@ -85,7 +87,12 @@ const total:number=price*num
           paddingBottom: 20,
         }}
       >
-        <View style={{marginTop:50,display:"flex",flexDirection:"row",width:"100%",justifyContent:"center"}}><Text style={{fontSize:20}}>{doctor?.first_name??"Doctor"}</Text></View>
+        <View style={{ marginTop: 50, display: "flex", flexDirection: "row", width: "100%", justifyContent: "space-between" }}>
+          <Pressable  onPress={()=>router.push("(app)/ActionMenu/Booking/SelectPayment")} style={{ height:"100%",width:"12%",display:"flex",flexDirection:"row",justifyContent:"center",alignItems:'center' }}>
+                    <SvgXml xml={leftArrowIcon} />
+                </Pressable>
+          <View style={{width:"80%",display:'flex',flexDirection:'row',justifyContent:"flex-start",alignItems:"center"}}><Text style={{ fontSize: 20,color:theme==="dark"?"white":"#212121" }}>{doctor?.first_name ?? "Doctor"}</Text></View>
+        </View>
         
        
         <View style={{ paddingHorizontal: 20, gap: 20 }}>
@@ -104,7 +111,7 @@ const total:number=price*num
             <Image
               source={{ uri: doctor.image }}
                style={{ width: 100, height: 100, borderRadius: 50 }}
-              // source={require("@/assets/images/BookingImages/doctor.png")}
+             
             />
 
             <View style={{ gap: 10, paddingVertical: 4 }}>

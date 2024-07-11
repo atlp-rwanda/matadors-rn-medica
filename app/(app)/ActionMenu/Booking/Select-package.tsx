@@ -72,7 +72,7 @@ const SelectPackage = () => {
       icon: () => <SvgXml xml={videoIcon} />,
     },
   ];
-  console.log("this is selected duration:", selectedDuration)
+  
  
   return (
     <>
@@ -144,6 +144,7 @@ const SelectPackage = () => {
           }}
         >
           <Button
+           title="Next" 
           onPress={handleNextPress}
           />
         </View>

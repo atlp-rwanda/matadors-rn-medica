@@ -34,7 +34,7 @@ const PatientDetails = () => {
   const [profile, setProfile] = useState<any>(null)
   const [patient_id, setPatient_id] = useState<string>()
   const [selectedGender, setSelectedGender] = useState<string>()
-  const [selectedAge,setSelectedAge]=useState<string>()
+  const [selectedAge,setSelectedAge]=useState<string>("")
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -63,12 +63,13 @@ const PatientDetails = () => {
           setProfile(data)
           setPatient_id(data.id)
           if (!data.age && data.date_of_birth) {
+            const age = calculateAge(data.date_of_birth)
             setProfile((prevProfile:Date) => ({
               ...prevProfile,
-              age:calculateAge(data.date_of_birth)
+              age:age
             }))
-          }
-          console.log("this is date of birth:",data.date_of_birth)
+            setSelectedAge(age.toString() || '')
+          } 
          
          
         }
@@ -78,9 +79,7 @@ const PatientDetails = () => {
     }
     fetchUserProfile()
   }, [loggeduser])
-  console.log("this is profile:",profile)
-  console.log("this is logged user:", loggeduser)
-  console.log("this is patient_id:", patient_id)
+  
   
   const calculateAge = (dob: string) => {
     const birthDate = new Date(dob);
@@ -92,12 +91,14 @@ const PatientDetails = () => {
     }
     return age;
   };
+  
   const handleInputChange = (name: string, value: string) => {
     setProfile({ ...profile, [name]: value });
-  }
-  console.log("this is default value:",profile?.gender,profile?.age)
+  };
+  
+
    const handleNextPress = () => {
-    if (!text|| !selectedGender || !selectedAge) {
+    if (!text) {
       Alert.alert("Please select all required data")
       
       return;
@@ -155,13 +156,8 @@ const PatientDetails = () => {
           >
             Gender
           </Text>
-          <DropDown
-            data={[
-               { value: `${profile?.gender}`, label:`${profile?.gender} ` },
-            ]}
-            defaultValue={selectedGender}
-            onSelect={(value)=>setSelectedGender(value)}
-          />
+          <Input onChange={handleInputChange} placeholder="Gender" value={`${profile?.gender}`}  />
+          
         </View>
 
         <View style={{ flexDirection: "column", gap: 10 }}>
@@ -178,15 +174,8 @@ const PatientDetails = () => {
           >
             Your Age
           </Text>
-          <DropDown
-            data={[
-              { value: `${profile?.age} Years`, label:`${profile?.age} Years` },
-             
-             
-            ]}
-            defaultValue={selectedAge}
-             onSelect={(value)=>setSelectedAge(value)}
-          />
+          <Input onChange={value => handleInputChange('age', value)} placeholder="Age" value={selectedAge}  />
+         
         </View>
 
         <View style={{ flexDirection: "column", gap: 10 }}>

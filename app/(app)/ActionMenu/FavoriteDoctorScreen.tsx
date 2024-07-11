@@ -10,7 +10,7 @@ import { blueheart } from '@/assets/icons/blueHeart';
 import { star } from '@/assets/icons/star';
 import { search } from '@/assets/icons/search';
 import { more } from '@/assets/icons/more';
-import { leftArrow } from '@/assets/icons/left';
+import { LightleftArrow } from '@/assets/icons/left';
 import data from "../../doctors.json"
 import HeaderComponent from '@/components/HeaderComponent';
 import SearchComponent from '@/components/SearchComponent';

@@ -20,7 +20,7 @@ export default function BookingAppointment() {
   const [errorMessage,setErrorMessage]=useState<string>("")
   const { id } = useLocalSearchParams()
  
-  console.log("this is id from BookAppointment:", id)
+  
 
   const generateTimeSlots = () => {
     let times = [];
@@ -41,8 +41,7 @@ export default function BookingAppointment() {
     generateTimeSlots();
   }, []);
 
-  console.log("this is slected hour:", selectedHour)
-  console.log("this is selected date:", selectedDate)
+  
   const handleNextPress = () => {
     if (!selectedHour || !selectedDate) {
       Alert.alert("Please select both date and an hour")

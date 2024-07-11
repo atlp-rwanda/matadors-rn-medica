@@ -37,7 +37,7 @@ export default function EnterYourPin() {
   console.log("this is from lastpage",doctor_id,hour,packageTitle,packagePrice,problem)
 
   function successBooking() {
-    router.push("(app)/Appointments/index");
+    router.push("ActionMenu");;
     modal.hide();
   }
   async function handlePIN() {
@@ -99,11 +99,7 @@ export default function EnterYourPin() {
             ></View>
             <Button
               title="View Appointment"
-              onPress={() => {
-                router.push("(app)/Appointments");
-                modal.hide();
-
-              }}
+              onPress={successBooking}
             />
             <TouchableOpacity
               onPress={() => {

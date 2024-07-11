@@ -11,14 +11,14 @@ interface Props {
   textInputConfig?: object;
   rightElement?: () => React.JSX.Element;
   leftElement?: () => React.JSX.Element;
-  name: string;
+  name?: string;
   onChange: (name: string, value: string) => void;
   disabled?: boolean;
   editable?: boolean;
 }
 
 export default function Input({
-  name,
+  name="Your name is empty",
   onChange,
   placeholder,
   value,
