@@ -1,11 +1,6 @@
 import Typography from "@/constants/Typography";
 import React, { useContext, useEffect, useState } from "react";
-import {
-  Text,
-  View,
-  Image,
-  FlatList,
-} from "react-native";
+import { Text, View, Image, FlatList } from "react-native";
 import { SvgXml } from "react-native-svg";
 import OptionListing from "@/components/Profile/OptionListing";
 import { Colors } from "@/constants/Colors";
@@ -33,16 +28,16 @@ import {
 import { ThemeContext } from "@/ctx/ThemeContext";
 import { router } from "expo-router";
 import Switch from "@/components/UI/Switch";
-import {
-  getUserImageUrl,
-  fetchPatientData,
-} from "@/utils/LoggedInUser";
+import { getUserImageUrl, fetchPatientData } from "@/utils/LoggedInUser";
 import { AuthContext, useAuth } from "@/ctx/AuthContext";
+import SelectProfile from "@/components/UI/SelectProfile";
+import { supabase } from "@/lib/supabase";
+import uuid from "react-native-uuid";
 
 const index = () => {
   const { theme, changeTheme } = useContext(ThemeContext);
   const [patientData, setPatientData] = useState(null);
-  const [imageUrl, setImageUrl] = useState([]);
+  const [imageUrl, setImageUrl] = useState("");
   const [profilePhoto, setProfilePhoto] = useState("");
   const { userId } = useContext(AuthContext);
 
@@ -51,17 +46,21 @@ const index = () => {
   const { authType, imageUrl: otherAuthImageUrl, logout } = useAuth();
 
   useEffect(() => {
-    if (userId ) {
-      fetchPatientData(userId , setPatientData);
-      getUserImageUrl("patients", userId , setImageUrl);
+    if (userId) {
+      fetchPatientData(userId, setPatientData);
+      getUserImageUrl("patients", userId, setImageUrl);
     }
   }, [userId]);
 
   useEffect(() => {
-    if (imageUrl.length > 0) {
-      setProfilePhoto(imageUrl[0]?.name);
+    if (patientData) {
+      setImageUrl(
+        authType && authType !== "apple"
+          ? otherAuthImageUrl
+          : `${CDNURL + patientData[0]?.image}`
+      );
     }
-  }, [imageUrl]);
+  }, [patientData]);
 
   const [formData, setFormData] = useState({
     image: {
@@ -74,9 +73,31 @@ const index = () => {
   const image =
     authType !== "email"
       ? otherAuthImageUrl
-      : `${CDNURL + userId  + "/" + profilePhoto}`;
+      : `${CDNURL + userId + "/" + profilePhoto}`;
 
-  function handleImagePicker(name: string, value: string) {
+  async function handleImagePicker(name: string, value: object) {
+    try {
+      const res = await fetch(value?.uri);
+      const arrayBuffer = await res.arrayBuffer();
+
+      const imageName = userId + "/" + uuid.v4();
+
+      await supabase.storage.from("patients").upload(imageName, arrayBuffer, {
+        contentType: value?.mimeType ?? "image/jpeg",
+      });
+
+      const res1 = await supabase
+        .from("patients")
+        .update({
+          image: imageName,
+        })
+        .eq("auth_id", userId);
+
+      setImageUrl(CDNURL + imageName);
+    } catch (err) {
+      console.log(err);
+    }
+
     setFormData((prevVal) => {
       return {
         ...prevVal,
@@ -84,6 +105,8 @@ const index = () => {
       };
     });
   }
+
+  console.log(imageUrl);
 
   return (
     <View>
@@ -105,18 +128,14 @@ const index = () => {
                   gap: 10,
                 }}
               >
-                <View style={{ borderRadius: 100, width: 200, height: 200 }}>
-                  <Image
-                    style={{ width: "100%", height: "100%", borderRadius: 100 }}
-                    source={{
-                      uri:authType && authType !== "apple"
-                      ? otherAuthImageUrl
-                      : `${CDNURL + userId + "/" + profilePhoto}`,
-                                            
-                    }}
-                  />
-                </View>
-                {/* <SelectProfile image={item?.image} onChange={handleImagePicker}/> */}
+                <SelectProfile
+                  image={{
+                    uri: imageUrl,
+                    name: "",
+                    mimeType: "",
+                  }}
+                  onChange={handleImagePicker}
+                />
                 <Text
                   style={[
                     Typography.bold.xxLarge,

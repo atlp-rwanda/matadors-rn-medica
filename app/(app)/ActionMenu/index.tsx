@@ -86,7 +86,7 @@ export default function Index() {
 
   useEffect(() => {
     if (imageUrl.length > 0) {
-      setProfilePhoto(imageUrl[0]?.name);
+      setProfilePhoto(imageUrl?.name);
     }
   }, [imageUrl]);
 

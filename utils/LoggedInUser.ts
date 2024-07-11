@@ -69,6 +69,6 @@ export async function getPatientData(supabase: any, userInfo: any): Promise<any>
       if (error) {
         return
       } else {
-        imageUrlState(data);
+        imageUrlState(data[0]);
       }
     }
