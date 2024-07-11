@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "matadors-rn-medica",
-    "slug": "matadors-rn-medica",
+    "slug": "medica-158",
     "scheme": "com.medica",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -70,6 +70,14 @@
         {
           "microphonePermission": "$(PRODUCT_NAME) would like to use your microphone for voice recording."
         }
+      ],
+      "@videosdk.live/expo-config-plugin",
+      [
+        "@config-plugins/react-native-webrtc",
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera",
+          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone"
+        }
       ]
     ],
     "experiments": {
@@ -80,7 +88,7 @@
         "origin": false
       },
       "eas": {
-        "projectId": "3a6a34bd-fe90-43f9-9508-8c6cf7700ef6"
+        "projectId": "e682bd39-ab6e-4861-9be2-39cbe02bb93e"
       }
     },
     "runtimeVersion": {
@@ -89,6 +97,6 @@
     "updates": {
       "url": "https://u.expo.dev/3a17d659-91e3-4105-837b-5f88bdee8d37"
     },
-    "owner": "apiimperfect"
+    "owner": "actrox"
   }
 }

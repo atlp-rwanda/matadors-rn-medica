@@ -116,9 +116,13 @@ const AppointmentScreen: React.FC = () => {
         ? "(app)/Appointments/MessagingAppointment"
         : appointment.package === "Video Call"
         ? "(app)/Appointments/VideoCallAppointment"
-        : "(app)/Appointments/VoiceCallAppointment";
+        : appointment.package === "Voice Call" 
+        ? "(app)/Appointments/VoiceCallAppointment"
+        : " "
     router.push({ pathname: route, params: { id: appointment.id } });
   }
+
+  
 
   useEffect(() => {
     async function fetchData() {
