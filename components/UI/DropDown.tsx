@@ -2,7 +2,7 @@ import { DropDownIcon, DropDownIconDark } from "@/assets/icons/Profile/Icons";
 import { Colors } from "@/constants/Colors";
 import Typography from "@/constants/Typography";
 import { ThemeContext } from "@/ctx/ThemeContext";
-import React, { useContext, useState } from "react";
+import React, { useContext, useState,useEffect } from "react";
 import { View } from "react-native";
 import { Dropdown as DropDownInput } from "react-native-element-dropdown";
 import { SvgXml } from "react-native-svg";
@@ -12,13 +12,19 @@ interface Props {
   leftIcon?: () => React.JSX.Element;
   rightIcon?: () => React.JSX.Element;
   search?: boolean;
-  defaultvalue?:string
+  defaultValue?: string;
+  onSelect?:(value:string)=>void
 }
 
-export default function DropDown({ data, leftIcon, rightIcon, search,defaultvalue }: Props) {
+export default function DropDown({ data, leftIcon, rightIcon, search,defaultValue,onSelect }: Props) {
   const { theme } = useContext(ThemeContext);
-  const [value, setValue] = useState<string>(defaultvalue||data[0].label);
+  const [value, setValue] = useState<string>(defaultValue||data[0].value||"");
   const [isFocus, setIsFocus] = useState(false);
+  useEffect(() => {
+    if (defaultValue) {
+      setValue(defaultValue);
+    }
+  }, [defaultValue])
 
   return (
     <>
@@ -65,7 +71,11 @@ export default function DropDown({ data, leftIcon, rightIcon, search,defaultvalu
         onChange={(item) => {
           setValue(item.value);
           setIsFocus(false);
+          if (onSelect) {
+            onSelect(item.value)
+          }
         }}
+        
         renderLeftIcon={() => (
           <>
             {leftIcon && <View style={{ marginRight: 8 }}>{leftIcon()}</View>}

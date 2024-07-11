@@ -23,13 +23,13 @@ import { supabase } from "@/lib/supabase";
 export default function EnterYourPin() {
   const [isDark, setIsDark] = useState(false);
   const modal = useModal();
-  const {doctor_id,hour,date,packageTitle,packagePrice,problem,user_id,patient_id} = useLocalSearchParams()
+  const {doctor_id,hour,date,packageTitle,packagePrice,problem,user_id,patient_id,duration} = useLocalSearchParams()
 
   const { theme, changeTheme } = useContext(ThemeContext);
   async function bookAppointment() {
     const { error } = await supabase
       .from('appointment')
-      .insert({ doctor_id: doctor_id, time:hour,date:date, package: packageTitle, price: packagePrice, illness_descr: problem,user_id:patient_id});
+      .insert({ doctor_id: doctor_id, time:hour,date:date, package: packageTitle, price: packagePrice, illness_descr: problem,user_id:patient_id,duration:duration});
     if (error) {
       console.error("Error booking appointment:", error);
     }
@@ -37,7 +37,7 @@ export default function EnterYourPin() {
   console.log("this is from lastpage",doctor_id,hour,packageTitle,packagePrice,problem)
 
   function successBooking() {
-    router.push("(app)/Appointments/index");
+    router.push("ActionMenu");;
     modal.hide();
   }
   async function handlePIN() {
@@ -99,11 +99,7 @@ export default function EnterYourPin() {
             ></View>
             <Button
               title="View Appointment"
-              onPress={() => {
-                router.push("(app)/Appointments");
-                modal.hide();
-
-              }}
+              onPress={successBooking}
             />
             <TouchableOpacity
               onPress={() => {

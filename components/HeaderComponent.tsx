@@ -4,7 +4,7 @@ import Typography from '@/constants/Typography';
 import { SvgXml } from "react-native-svg"
 import { search } from '@/assets/icons/search';
 import { more } from '@/assets/icons/more';
-import { leftArrow } from '@/assets/icons/left';
+import { LightleftArrow } from '@/assets/icons/left';
 import { router } from 'expo-router';
 import { searchWhiteIcon } from '@/assets/icons/SearchWhiteIcon';
 import { LeftArrowWhite } from '@/assets/icons/LeftArrowWhite';
@@ -20,7 +20,7 @@ interface Headerprops{
 
 function HeaderComponent({ onSearchPressed, headerText }: Headerprops) {
     const { theme, changeTheme } = useContext(ThemeContext)
-    const leftArrowIcon = theme === "dark" ? LeftArrowWhite : leftArrow
+    const leftArrowIcon = theme === "dark" ? LeftArrowWhite : LightleftArrow
     const searchIcon = theme === "dark" ? searchWhiteIcon : search
     const moreIcon = theme === "dark" ? moreWhiteIcon : more
     const headerColor=theme==="dark"?styles.whiteHeader:styles.greyHeader
