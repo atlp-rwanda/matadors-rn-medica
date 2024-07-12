@@ -18,6 +18,7 @@ import {
   RTCView,
  
 } from "@videosdk.live/react-native-sdk";
+import { Colors } from "@/constants/Colors";
 import { createMeeting, token } from "@/lib/api";
 import Typography from "@/constants/Typography";
 import { SvgXml } from "react-native-svg";
@@ -211,6 +212,8 @@ const ControlsContainer: React.FC<ControlsContainerProps> = ({
   const [isCameraOn, setIsCameraOn] = useState(true);
   const { id, AppointmentID } = useGlobalSearchParams();
   const [isLoading, setIsLoading] = useState(false);
+  const { theme, changeTheme } = useContext(ThemeContext);
+
   const cameraRef = useRef("environment");
 
 
@@ -254,7 +257,7 @@ const ControlsContainer: React.FC<ControlsContainerProps> = ({
     >
       <TouchableOpacity
         style={{
-          backgroundColor: "#F0F0F0",
+          backgroundColor: theme === "light" ? "#02b11a": Colors.others.white,
           borderRadius: 100,
           padding: 23,
           opacity: 0.6,
@@ -265,12 +268,12 @@ const ControlsContainer: React.FC<ControlsContainerProps> = ({
         }}
         disabled={isButtonDisabled}
       >
-        <Text style={[Typography.bold.large, { color: "#000000" }]}>Join</Text>
+        <Text style={[Typography.bold.large, { color: theme === "light" ? Colors.others.white: Colors.others.white, }]}>Join</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
         style={{
-          backgroundColor: "#F0F0F0",
+          backgroundColor:  "#3f3f3f",
           borderRadius: 100,
           padding: 23,
           opacity: 0.6,
@@ -284,7 +287,7 @@ const ControlsContainer: React.FC<ControlsContainerProps> = ({
       </TouchableOpacity>
       <TouchableOpacity
         style={{
-          backgroundColor: "#F0F0F0",
+          backgroundColor: "#3f3f3f",
           borderRadius: 100,
           padding: 23,
           opacity: 0.6,
@@ -473,7 +476,7 @@ const ParticipantList: React.FC<ParticipantListProps> = ({ participants,meetingI
             {fetchDoctor.first_name} {fetchDoctor.last_name}
           </Text>
           <Text style={[Typography.medium.xLarge, { color: theme === "dark" ? "white" : "black" }]}>
-            Ringing...
+            Tap to join
           </Text>
         </View>
       )}

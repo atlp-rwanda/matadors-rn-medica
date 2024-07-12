@@ -28,8 +28,7 @@ import { makeRedirectUri } from "expo-auth-session";
 import * as QueryParams from "expo-auth-session/build/QueryParams";
 import React from "react";
 import { useAuth } from "@/ctx/AuthContext";
-import * as AppleAuthentication from 'expo-apple-authentication';
-
+import * as AppleAuthentication from "expo-apple-authentication";
 
 WebBrowser.maybeCompleteAuthSession();
 const redirectTo = makeRedirectUri({
@@ -136,7 +135,7 @@ const LetsYouIn = () => {
       await signInWithApple();
       router.push("/(app)/ActionMenu");
     } catch (error) {
-      console.error('Error signing in with Apple:', error);
+      console.error("Error signing in with Apple:", error);
       // Handle error (show alert, reset loading state, etc.)
     } finally {
       setLoading(false);
@@ -174,7 +173,7 @@ const LetsYouIn = () => {
                 { color: theme === "dark" ? "#FFFFFF" : Colors.grayScale._900 },
               ]}
             >
-              Let's you in
+              Let's get you in
             </Text>
           </View>
 
@@ -227,7 +226,8 @@ const LetsYouIn = () => {
                 </Text>
               </TouchableOpacity>
 
-              <TouchableOpacity onPress={signInWithApple}
+              <TouchableOpacity
+                onPress={signInWithApple}
                 style={[
                   styles.middleButton,
                   {

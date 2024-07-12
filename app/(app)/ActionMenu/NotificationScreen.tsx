@@ -1,210 +1,93 @@
-import React, { ReactElement, useEffect } from 'react';
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, Image, View, TouchableHighlight, SafeAreaView, Button, Alert, Platform, Dimensions,TextInput, ScrollView, Pressable} from 'react-native'
-import { Feather } from '@expo/vector-icons';
-import Notficationtab from '@/components/Notficationtab';
-import { AntDesign } from '@expo/vector-icons';
-import { Ionicons } from '@expo/vector-icons';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Octicons } from '@expo/vector-icons';
- import { SvgXml } from "react-native-svg"
-import Typography from '@/constants/Typography';
-import { close } from '@/assets/icons/close';
-import { calendar } from '@/assets/icons/calendar1';
-import { calendar2 } from '@/assets/icons/calendar2';
-import { service } from '@/assets/icons/service';
-import { wallet } from '@/assets/icons/wallet';
-import data from "../../../data.json"
-import { more } from '@/assets/icons/more';
-import { MorewhiteIcon } from '@/assets/icons/MorewhiteIcon';
-import { router } from 'expo-router';
-import { ThemeContext } from '@/ctx/ThemeContext';
-import { useContext } from 'react';
+import React, { useState,useEffect } from "react";
+import { FlatList, View } from "react-native";
 
-type iconName = 'close' | 'calendar' | 'calendar2' | 'service' | 'wallet'
-interface iconMapping{
-    [key :string]:ReactElement
+import { ThemeContext } from "@/ctx/ThemeContext";
+import { useContext } from "react";
+import { useNotifications } from "@/ctx/NotificationsContext";
+import NotificationListing from "@/components/UI/NotificationListing";
+import { Colors } from "@/constants/Colors";
+import { supabase } from "@/lib/supabase";
+interface Notification {
+  id: string;
+  title: string;
+  description: string;
+  createdAt: Date;
+  patientId: string;
+  doctorId: string;
+  type: 'appointment_changed' | 'appointment_completed' | 'appointment_booked' | 'new_service' | 'payment_setup' | 'account_setup';
+  viewed?: boolean;
 }
 
-export const iconMapping:iconMapping = {
-    close: <SvgXml xml={close} />,
-    calendar: <SvgXml xml={calendar} />,
-    calendar2: <SvgXml xml={calendar2} />,
-    service: <SvgXml xml={service} />,
-    wallet:<SvgXml xml={wallet} />
-};
-
-
-
 function NotificationScreen() {
-    const { theme, changeTheme } = useContext(ThemeContext)
-    const containerStyle = theme === "dark" ? styles.containerDark : styles.containerLight
-    const textColor = theme === "dark" ? styles.textDark : styles.textLight
-    const iconColor = theme === 'dark' ? '#FFFFFF' : 'black'
-    const moreIcon = theme === 'dark' ? MorewhiteIcon : more
+  const { theme, changeTheme } = useContext(ThemeContext);
+ 
+  const { notifications, setNotifications } = useNotifications()
+  
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      
+      const updateViewedStatus = async () => {
+        const userNotifications = notifications.filter(notification => !notification.viewed);
+
+        if (userNotifications.length > 0) {
+          const ids = userNotifications.map(notification => notification.id);
+          const { error } = await supabase
+            .from('notifications') 
+            .update({ viewed: true })
+            .in('id', ids);
+          if (!error) {
+           
+            const updatedNotifications = notifications.map(notification => 
+              ids.includes(notification.id) ? { ...notification, viewed: true } : notification
+            );
+            setNotifications(updatedNotifications);
+          }
+        }
+      };
+
+      updateViewedStatus();
+    }, 8000); 
+
+    return () => clearTimeout(timer);
+  }, [notifications, setNotifications]);
     
+   
+
     
-    return (
-        <SafeAreaView style={[styles.container, containerStyle]}>
-            <StatusBar
-                style={theme === "light" ? "dark" : "light"}
-                
-                
-               
-            
-            />
-            <View>
-             <View style={styles.upper}>
-            <View style={styles.upperInner}>
-                        <View style={styles.upperLeft}>
-                
-                <Pressable onPress={()=>router.back()}>
-                    <Ionicons name="arrow-back" size={24} color={iconColor} />
-                </Pressable>
-                <View style={styles.NotificationView}>
-                    <Text style={[styles.Headstyle,textColor]}>Notification</Text>
-                </View>
-                 </View>
-                        
-              <View style={styles.moreView}>
-                <SvgXml xml={moreIcon} />          
-              </View>
-              
-               </View>     
-            </View>
-            <ScrollView
-            showsVerticalScrollIndicator={false}
-             style={styles.scroll}
-              contentContainerStyle={{
-          }}
-                    
-            >
-            <View style={styles.body}>
-               <View style={styles.bodyInner}>
-                            {data.notification.map((Notification, index) => {
-                                const background=theme==="dark"?Notification.viewBackgroundDark:Notification.viewBackground
-                                
-                        return(
-                 
-                 <View key={index} style={styles.componentView}>
-                                    <Notficationtab
-                                        IconComponet={iconMapping[Notification.IconComponent]}
-                                        viewBackground={background}
-                                        timeFrame={Notification.timeFrame}
-                                        time={Notification.time}
-                                        notificationStatus={Notification.notificationStatus}
-                                        sentenceOne={Notification.sentenceOne}
-                                        sentenceTwo={Notification.sentenceTwo}
-                                        sentenceThree={Notification.sentenceThree}
-                                        btnVisibility={Notification.btnVisibility}
-                                    />
-                                </View>)
-                   
-            
-                             } )}
-                </View>
-            </View>
-            </ScrollView>
-           </View>
-        </SafeAreaView>
-        
-    );
+
+  return (
+    <View
+      style={{
+        height: "100%",
+        backgroundColor:
+          theme === "light" ? Colors.others.white : Colors.dark._1,
+      }}
+    >
+      <FlatList
+        scrollEnabled={true}
+        contentContainerStyle={{
+          padding: 24,
+          backgroundColor:
+            theme === "light" ? Colors.others.white : Colors.dark._1,
+          gap: 15,
+        }}
+        data={notifications}
+        renderItem={({ item: notification }) => (
+          <NotificationListing
+            createdAt={new Date(notification.createdAt)}
+            description={notification.description}
+            title={notification.title}
+                type={notification.type}
+                viewed={notification.viewed}
+          />
+        )}
+        keyExtractor={(item) => item.id.toString()} 
+        initialNumToRender={10}
+        maxToRenderPerBatch={10}
+        windowSize={5}
+      />
+    </View>
+  );
 }
 
 export default NotificationScreen;
-
-const styles = StyleSheet.create({
-    container: {
-        width: "100%",
-        height:"100%",
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "center",
-       
-    },
-    containerDark: {
-        backgroundColor: "#181820"
-        
-        
-    },
-    containerLight: {
-         backgroundColor:"white"
-    },
-    textDark: {
-        color:"white"
-        
-    },
-    textLight: {
-         color: "#212121",
-        
-        
-    },
-    upper: {
-        display: "flex",
-        flexDirection: 'row',
-        justifyContent: "center",
-        alignItems: "center",
-        width:"100%",
-        marginBottom: "7%",
-        marginTop: "18%",
-    },
-    upperInner: {
-        width: "93%",
-        display: "flex",
-        flexDirection: 'row',
-        justifyContent: "space-between",
-        alignItems: "center",
-    },
-    upperLeft: {
-        display: "flex",
-        flexDirection: "row",
-        gap:15,
-        width:"80%"  
-    },
-    body: {
-        width: "100%",
-        display: "flex",
-            flexDirection: "row",
-            justifyContent: "center",
-            alignItems: 'center',
-    },
-    bodyInner: {
-        width:"93%"
-    },
-    scroll: {
-        width: "100%",    
-    },
-    moreView: {
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: 'center',
-        height: "100%",
-    },
-    more: {
-        width: 30,
-        height: 30,
-        borderRadius:100,
-        borderWidth: 2, 
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: 'center',
-    },
-    Headstyle: {
-        fontWeight: "bold",
-        fontSize:20
-    },
-    NotificationView: {
-        width: "80%",
-        display: "flex",
-        flexDirection: "row",
-        alignItems: 'center',
-        height: "100%",
-    },
-    componentView: {
-        marginBottom: "10%",
-        width: "100%",
-    }
-    
-})

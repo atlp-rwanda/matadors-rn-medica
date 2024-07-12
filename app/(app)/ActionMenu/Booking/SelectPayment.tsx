@@ -1,7 +1,7 @@
 import { Colors } from "@/constants/Colors";
 import { StatusBar } from "expo-status-bar";
-import {  useContext, useState } from "react";
-import {  ScrollView,TouchableOpacity,View,Image } from "react-native";
+import { useContext, useState } from "react";
+import { ScrollView, TouchableOpacity, View, Image } from "react-native";
 import { Text } from "react-native";
 import { ThemeContext } from "@/ctx/ThemeContext";
 import Typography from "@/constants/Typography";
@@ -12,76 +12,118 @@ import PaymentChooseContainer from "@/components/UI/PaymentChooseContainer/Index
 import { router } from "expo-router";
 import React from "react";
 import { useLocalSearchParams } from "expo-router";
-import { PayWithFlutterwave } from 'flutterwave-react-native'
+import { PayWithFlutterwave } from "flutterwave-react-native";
 import { supabase } from "@/lib/supabase";
 import { useModal } from "@/ctx/ModalContext";
 export default function SelectPayment() {
   const { theme, changeTheme } = useContext(ThemeContext);
   const [selected, setSelected] = useState(false);
-  const [loggedEmail,setLoggedEmail]=useState<string>("")
-  const { doctor_id, hour, date, packageTitle, packagePrice, problem, user_id, patient_id, duration } = useLocalSearchParams()
+  const [loggedEmail, setLoggedEmail] = useState<string>("");
+  const {
+    doctor_id,
+    hour,
+    date,
+    packageTitle,
+    packagePrice,
+    problem,
+    user_id,
+    patient_id,
+    duration,
+  } = useLocalSearchParams();
 
-  const modal = useModal()
-  const flutterKey = process.env.EXPO_PUBLIC_FLUTTERWAVE_KEY ?? ""
-  
+  const modal = useModal();
+  const flutterKey = process.env.EXPO_PUBLIC_FLUTTERWAVE_KEY ?? "";
+  console.log("this is packageprice from slect Payment:", packagePrice);
+
   interface RedirectParams {
-	status: "successful" | "cancelled";
-	transaction_id?: string;
-	tx_ref: string;
+    status: "successful" | "cancelled";
+    transaction_id?: string;
+    tx_ref: string;
   }
-  let num:number=1;
+  let num: number = 1;
   if (duration === "30 minutes") {
-    num=1
+    num = 1;
   } else {
-    num=2
+    num = 2;
   }
   let price: number = 0;
   if (packagePrice === "Rwf20") {
-    price=20
+    price = 20;
   } else if (packagePrice === "Rwf40") {
-    price=40
+    price = 40;
   } else if (packagePrice === "Rwf60") {
-    price =60
+    price = 60;
   }
-const total:number=price*num
-  
+  const total: number = price * num;
+
   useEffect(() => {
     const fetchUser = async () => {
-      
-      const { data: { user },error } = await supabase.auth.getUser()
+      const {
+        data: { user },
+        error,
+      } = await supabase.auth.getUser();
       if (error) {
-        console.error("error fetching user")
+        console.error("error fetching user");
       } else {
-        setLoggedEmail(user?.email||"logged Email")
+        setLoggedEmail(user?.email || "logged Email");
       }
-    }
-    fetchUser()
-   
-  }, [loggedEmail])
+    };
+    fetchUser();
+  }, [loggedEmail]);
   async function bookAppointment() {
     try {
-    const { error } = await supabase
-      .from('appointment')
-      .insert({
+      const { error } = await supabase.from("appointment").insert({
         doctor_id: doctor_id,
-        time: hour, date: date,
+        time: hour,
+        date: date,
         package: packageTitle,
         price: packagePrice,
         illness_descr: problem,
         user_id: patient_id,
-        duration: duration
+        duration: duration,
       });
     } catch (error) {
-      console.log("Error while inserting data in booking ",error)
+      console.log("Error while inserting data in booking ", error);
+    }
   }
-   
-  }
+  const addNotification = async (doctorName: string) => {
+    try {
+      const { error } = await supabase.from("notifications").insert({
+        title: "Appointment Booked",
+        description: `You have successfully booked an appointment with Dr. ${doctorName}`,
+        patient_id: patient_id,
+        type: "appointment_booked",
+        doctor_id: doctor_id,
+        viewed: false,
+      });
+      console.log("Notification will be pushed");
+      if (error) {
+        console.log("Error while inserting notification ", error);
+      }
+    } catch (error) {
+      console.log("Error while inserting notification ", error);
+    }
+  };
+  const fetchDoctorName = async (doctorId: string) => {
+    const { data, error } = await supabase
+      .from("doctors")
+      .select("first_name")
+      .eq("id", doctorId)
+      .single();
+
+    if (error) {
+      console.log("Error fetching doctor's name: ", error);
+      return "";
+    }
+
+    return data.first_name;
+  };
   function successBooking() {
-    router.push("ActionMenu");;
+    router.push("ActionMenu");
     modal.hide();
   }
   const showSuccefulModal = () => {
-     modal.show({
+    modal.show({
       children: (
         <View
           style={{
@@ -135,13 +177,7 @@ const total:number=price*num
                 justifyContent: "center",
               }}
             ></View>
-            <Button
-              title="View Appointment"
-              onPress={()=> {
-                successBooking()
-                router.push("(app)/Appointments")
-              }}
-            />
+            <Button title="View Appointment" onPress={successBooking} />
             <TouchableOpacity
               onPress={() => {
                 router.push("ActionMenu");
@@ -173,29 +209,31 @@ const total:number=price*num
         </View>
       ),
     });
-  }
-  const handleOnRedirect = (data: RedirectParams) => {
-  
-    console.log("redire data:", data)
+  };
+  const handleOnRedirect = async (data: RedirectParams) => {
     if (data.status === "successful") {
-      bookAppointment()
-       showSuccefulModal()
+      bookAppointment();
+      if (typeof doctor_id === "string") {
+        const doctorName = await fetchDoctorName(doctor_id);
+        await addNotification(doctorName);
+      }
+      showSuccefulModal();
     } else {
-      alert("Payment Failed or cancelled ,please try again")
+      alert("Payment Failed or cancelled ,please try again");
     }
-  }
+  };
   const generateRef = (length: number): string => {
-  const characters = flutterKey;
-  const charactersArray = characters.split('');
-  let result = '';  
+    const characters = flutterKey;
+    const charactersArray = characters.split("");
+    let result = "";
 
-  for (let i = 0; i < length; i++) {
-    const randomIndex = Math.floor(Math.random() * charactersArray.length);
-    result += charactersArray[randomIndex];
-  }
+    for (let i = 0; i < length; i++) {
+      const randomIndex = Math.floor(Math.random() * charactersArray.length);
+      result += charactersArray[randomIndex];
+    }
 
-  return result;
-};
+    return result;
+  };
 
   return (
     <>
@@ -222,24 +260,30 @@ const total:number=price*num
         >
           Comfirm the payment by click the button below.
         </Text>
-        <View style={{width:"100%",height:"70%",display:"flex",flexDirection:"row",alignItems:"center",justifyContent:"center"}}>
-           <PayWithFlutterwave
-    onRedirect={handleOnRedirect}
-    options={{
-         tx_ref: generateRef(11),
-         authorization: 'FLWPUBK_TEST-3c390392d62e44fc5788cb0859823f05-X',
-         customer: {
-             email: loggedEmail
-         },
-         amount: total,
-         currency: 'RWF',
-         payment_options: 'card'
-      }}
-   />
-        
+        <View
+          style={{
+            width: "100%",
+            height: "70%",
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <PayWithFlutterwave
+            onRedirect={handleOnRedirect}
+            options={{
+              tx_ref: generateRef(11),
+              authorization: "FLWPUBK_TEST-3c390392d62e44fc5788cb0859823f05-X",
+              customer: {
+                email: loggedEmail,
+              },
+              amount: total,
+              currency: "RWF",
+              payment_options: "card",
+            }}
+          />
         </View>
-       
-        
       </ScrollView>
     </>
   );

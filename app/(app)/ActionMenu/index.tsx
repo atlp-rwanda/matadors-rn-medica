@@ -8,7 +8,7 @@ import {
   ScrollView,
   FlatList,
   Pressable,
-  Dimensions
+  Dimensions,
 } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { useFonts as useFontsExpo } from "expo-font";
@@ -22,19 +22,25 @@ import {
 import { ThemeContext } from "@/ctx/ThemeContext";
 import { blackHeart } from "@/components/UI/icons/blackHeart";
 import { supabase } from "@/lib/supabase";
-import {
-  getUserImageUrl,
-  fetchPatientData,
-} from "@/utils/LoggedInUser";
+import { getUserImageUrl, fetchPatientData } from "@/utils/LoggedInUser";
 import { Doctor } from "@/constants/Types";
 import DoctorComponent from "@/components/DoctorComponent";
 import { star } from "@/assets/icons/star";
 import { whiteHeart } from "@/assets/icons/whiteHeart";
-import { blueheart } from '@/assets/icons/blueHeart';
+import { blueheart } from "@/assets/icons/blueHeart";
 import NofoundComponent from "@/components/NofoundComponent";
 import { AuthContext, useAuth } from "@/ctx/AuthContext";
 import RemovefavoritePopup from "@/components/RemovefavoriteIndexPopup";
-import {  DentistsIcon, GeneralIcon, MoreIconPureBlue, NeurologyIcon, NutritionistIcon, OpticianIcon, PediatricianIcon, RadiologyIcon } from "@/constants/icon";
+import {
+  DentistsIcon,
+  GeneralIcon,
+  MoreIconPureBlue,
+  NeurologyIcon,
+  NutritionistIcon,
+  OpticianIcon,
+  PediatricianIcon,
+  RadiologyIcon,
+} from "@/constants/icon";
 
 export default function Index() {
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -49,14 +55,15 @@ export default function Index() {
   const { authType, imageUrl: otherAuthImageUrl } = useAuth();
   const [showpopUp, setShowPopup] = useState(false);
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor>();
-  const [selectedSpecilization, setSelectedSpecilization] = useState<string>("All")
-  const [specialization, setSpecialization] = useState<string[]>([])
-  const [patient_id, setPatient_id] = useState<string>()
-  const [favoriteDoctors, setFavoriteDoctors] = useState<number[]>([])
-  const [loggeduser, setLoggedUser] = useState<string>()
-  const [profile, setProfile] = useState<any>(null)
+  const [selectedSpecilization, setSelectedSpecilization] =
+    useState<string>("All");
+  const [specialization, setSpecialization] = useState<string[]>([]);
+  const [patient_id, setPatient_id] = useState<string>();
+  const [favoriteDoctors, setFavoriteDoctors] = useState<number[]>([]);
+  const [loggeduser, setLoggedUser] = useState<string>();
+  const [profile, setProfile] = useState<any>(null);
   const { userId } = useContext(AuthContext);
-  const [isLoading,setIsLoading]=useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { width } = Dimensions.get("window");
 
   const [fontsLoaded] = useFontsExpo({
@@ -66,7 +73,7 @@ export default function Index() {
     "Urbanist-Medium": require("@/assets/fonts/Urbanist-Medium.ttf"),
   });
   const tableName = "doctors";
-  const favoriteTable="favorite_doctors"
+  const favoriteTable = "favorite_doctors";
 
   const CDNURL =
     "https://vbwbfflzxuhktdvpbspd.supabase.co/storage/v1/object/public/patients/";
@@ -74,9 +81,9 @@ export default function Index() {
     theme === "dark" ? styles.scrollDark : styles.scrollLight;
 
   useEffect(() => {
-    if (userId ) {
-      fetchPatientData(userId , setPatientData);
-      getUserImageUrl("patients", userId , setImageUrl);
+    if (userId) {
+      fetchPatientData(userId, setPatientData);
+      getUserImageUrl("patients", userId, setImageUrl);
     }
   }, [userId]);
 
@@ -86,40 +93,49 @@ export default function Index() {
     }
   }, [imageUrl]);
 
- useEffect(() => {
+  useEffect(() => {
     async function fetchData() {
       setIsLoading(true);
-      
-      const { data: doctorData, error: doctorError } = await supabase.from('doctors').select('*');
+
+      const { data: doctorData, error: doctorError } = await supabase
+        .from("doctors")
+        .select("*");
       if (doctorError) {
         setIsLoading(false);
-        throw new Error('Error fetching data:' + doctorError.message);
+        throw new Error("Error fetching data:" + doctorError.message);
       }
 
-      const uniqueSpecialization = Array.from(new Set(doctorData.map((doctor) => doctor.specialization)));
-      setSpecialization(['All', ...uniqueSpecialization]);
+      const uniqueSpecialization = Array.from(
+        new Set(doctorData.map((doctor) => doctor.specialization))
+      );
+      setSpecialization(["All", ...uniqueSpecialization]);
 
-      const docIds = doctorData.map(doc => doc.id);
+      const docIds = doctorData.map((doc) => doc.id);
 
       const { data: reviewData, error: reviewError } = await supabase
-        .from('reviews')
-        .select('*')
-        .in('doctor_id', docIds);
+        .from("reviews")
+        .select("*")
+        .in("doctor_id", docIds);
 
       if (reviewError) {
         setIsLoading(false);
-        console.error('Error fetching reviews:', reviewError);
+        console.error("Error fetching reviews:", reviewError);
         return;
       }
 
-      const mergedData = doctorData.map(doctor => {
-        const reviews = reviewData.filter(review => review.doctor_id === doctor.id);
-        
-          
-          const totalStars = reviews.reduce((sum, review) => sum + parseFloat(review.stars), 0);
-          const result= reviews.length === 0 ? 0 :(totalStars / reviews.length).toFixed(1); 
-          
-        return { ...doctor, reviews ,result };
+      const mergedData = doctorData.map((doctor) => {
+        const reviews = reviewData.filter(
+          (review) => review.doctor_id === doctor.id
+        );
+
+        const totalStars = reviews.reduce(
+          (sum, review) => sum + parseFloat(review.stars),
+          0
+        );
+        const result =
+          reviews.length === 0 ? 0 : (totalStars / reviews.length).toFixed(1);
+
+        return { ...doctor, reviews, result };
       });
 
       setDoctors(mergedData);
@@ -127,57 +143,57 @@ export default function Index() {
     }
     fetchData();
   }, []);
-   useEffect(() => {
+  useEffect(() => {
     const fetchUser = async () => {
-      
-      const { data: { user },error } = await supabase.auth.getUser()
+      const {
+        data: { user },
+        error,
+      } = await supabase.auth.getUser();
       if (error) {
-        console.error("error fetching user")
+        console.error("error fetching user");
       } else {
-        setLoggedUser(user?.id)
+        setLoggedUser(user?.id);
       }
-    }
-    fetchUser()
-   
-  }, [loggeduser])
+    };
+    fetchUser();
+  }, [loggeduser]);
   useEffect(() => {
     const fetchUserProfile = async () => {
       if (loggeduser) {
         const { data, error } = await supabase
           .from("patients")
           .select("*")
-          .eq('auth_id', loggeduser)
-          .single()
+          .eq("auth_id", loggeduser)
+          .single();
         if (error) {
-          console.error("error while retrieving profile",error)
+          console.error("error while retrieving profile", error);
         } else {
-          setProfile(data)
-          setPatient_id(data.id)
-          console.log(data)
-         
+          setProfile(data);
+          setPatient_id(data.id);
+          // console.log(data)
         }
-        
-        
       }
-    }
-    fetchUserProfile()
-  }, [loggeduser])
- 
+    };
+    fetchUserProfile();
+  }, [loggeduser]);
+
   useEffect(() => {
     const fetchFavoritesDoctor = async () => {
-        if (patient_id) {
-            const { data, error } = await supabase
-                .from(favoriteTable)
-                .select("*")
-                .eq("patient", patient_id)
-            if (error) {
-                console.error("error while fetching ",error)
-            }
-            setFavoriteDoctors(data?.map((item:any)=>item.favorite_doctor)||[])
+      if (patient_id) {
+        const { data, error } = await supabase
+          .from(favoriteTable)
+          .select("*")
+          .eq("patient", patient_id);
+        if (error) {
+          console.error("error while fetching ", error);
         }
-    }
-    fetchFavoritesDoctor()
-},[patient_id])
+        setFavoriteDoctors(
+          data?.map((item: any) => item.favorite_doctor) || []
+        );
+      }
+    };
+    fetchFavoritesDoctor();
+  }, [patient_id]);
 
   useEffect(() => {
     const updateGreeting = () => {
@@ -198,28 +214,26 @@ export default function Index() {
     return () => clearInterval(intervalId);
   }, []);
 
+  const specializations = [
+    { icon: GeneralIcon, text: "General Doctor" },
+    { icon: DentistsIcon, text: "Dentist" },
+    { icon: NutritionistIcon, text: "Nutritionist" },
+    { icon: OpticianIcon, text: "Optician" },
+    { icon: NeurologyIcon, text: "Neurologist" },
+    { icon: PediatricianIcon, text: "Pediatrician" },
+    { icon: RadiologyIcon, text: "Radiologist" },
+    { icon: MoreIconPureBlue, text: "More" },
+  ];
 
-const specializations = [
-  { icon: GeneralIcon, text: "General Doctor" },
-  { icon: DentistsIcon, text: "Dentist" },
-  { icon: NutritionistIcon, text: "Nutritionist" },
-  { icon: OpticianIcon, text: "Optician" },
-  { icon: NeurologyIcon, text: "Neurologist" },
-  { icon: PediatricianIcon, text: "Pediatrician" },
-  { icon: RadiologyIcon, text: "Radiologist" },
-  { icon: MoreIconPureBlue, text: "More" },
-
-]
-
- const handleSpecializationChange = (specialization: string) => {
-  if(specialization === "More") {
-    router.push("/ActionMenu/AllDoctorScreen")
-    return
-  }
-    setSelectedSpecilization(specialization)
-    setSearchTerm('')
-  }
-   const updateFavoriteDoctors = async () => {
+  const handleSpecializationChange = (specialization: string) => {
+    if (specialization === "More") {
+      router.push("/ActionMenu/AllDoctorScreen");
+      return;
+    }
+    setSelectedSpecilization(specialization);
+    setSearchTerm("");
+  };
+  const updateFavoriteDoctors = async () => {
     const { data, error } = await supabase
       .from("favorite_doctors")
       .select("favorite_doctor")
@@ -227,10 +241,12 @@ const specializations = [
     if (error) {
       console.error("Error fetching favorite doctors:", error);
     } else {
-      setFavoriteDoctors(data.map((item: { favorite_doctor: number }) => item.favorite_doctor));
+      setFavoriteDoctors(
+        data.map((item: { favorite_doctor: number }) => item.favorite_doctor)
+      );
     }
   };
-  const handleIconClick = (doctor: Doctor,doctorId:number) => {
+  const handleIconClick = (doctor: Doctor, doctorId: number) => {
     if (favoriteDoctors.includes(doctor.id)) {
       setSelectedDoctor(doctor);
       setShowPopup(true);
@@ -238,25 +254,32 @@ const specializations = [
       handleAddfovorite(doctorId);
     }
   };
-  const filteredDoctors = doctors.filter(doctor => {
-    const matchSearchTerm = searchTerm.length > 0 ? doctor.last_name.toLowerCase().includes(searchTerm.toLowerCase())||doctor.first_name.toLowerCase().includes(searchTerm.toLowerCase()) : true
-    const matchSpecialization = selectedSpecilization === 'All' || doctor.specialization === selectedSpecilization
-    return matchSearchTerm&&matchSpecialization
-
-    })
+  const filteredDoctors = doctors.filter((doctor) => {
+    const matchSearchTerm =
+      searchTerm.length > 0
+        ? doctor.last_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          doctor.first_name.toLowerCase().includes(searchTerm.toLowerCase())
+        : true;
+    const matchSpecialization =
+      selectedSpecilization === "All" ||
+      doctor.specialization === selectedSpecilization;
+    return matchSearchTerm && matchSpecialization;
+  });
   if (!fontsLoaded) {
     return null;
   }
   const handleAddfovorite = async (doctorId: number) => {
-    const patientId = patient_id
-    const { error } = await supabase.from(favoriteTable).insert({ patient: patientId, favorite_doctor: doctorId })
+    const patientId = patient_id;
+    const { error } = await supabase
+      .from(favoriteTable)
+      .insert({ patient: patientId, favorite_doctor: doctorId });
     if (error) {
-      console.error("error while adding doctor to favorite", error)
+      console.error("error while adding doctor to favorite", error);
       return;
     }
-    setFavoriteDoctors(prev=>[...prev,doctorId])
-  }
-  
+    setFavoriteDoctors((prev) => [...prev, doctorId]);
+  };
+
   return (
     <View
       style={{
@@ -280,10 +303,11 @@ const specializations = [
               }}
             >
               <View style={{ borderRadius: 100, width: 70, height: 70 }}>
-              <Image
+                <Image
                   style={{ width: "100%", height: "100%", borderRadius: 100 }}
                   source={{
-                    uri:authType && authType !== "apple"
+                    uri:
+                      authType && authType !== "apple"
                         ? otherAuthImageUrl
                         : `${CDNURL  + patientData[0]?.image}`,
                       }}
@@ -319,8 +343,8 @@ const specializations = [
                 style={{
                   backgroundColor: theme === "dark" ? "#181A20" : "#FFFFFF",
                   flexDirection: "row",
-                  justifyContent:"flex-end",
-                  width:"35%",
+                  justifyContent: "flex-end",
+                  width: "35%",
                 }}
               >
                 <TouchableOpacity
@@ -354,7 +378,7 @@ const specializations = [
         alwaysBounceVertical={true}
         contentContainerStyle={{ height: "205%" }}
       >
-        <View
+        {/* <View
           style={{
             backgroundColor: theme === "dark" ? "#35383F" : "#F5F5F5",
             width: "90%",
@@ -382,7 +406,7 @@ const specializations = [
           <TouchableOpacity style={styles.filter}>
             <Image source={require("../../../assets/images/filter.png")} />
           </TouchableOpacity>
-        </View>
+        </View> */}
 
         <View style={styles.frame}>
           <ImageBackground
@@ -421,8 +445,9 @@ const specializations = [
             <Text style={styles.seeTxt}>See All</Text>
           </TouchableOpacity>
         </View>
-  
-        <View style={{
+
+        <View
+          style={{
             flexWrap: "wrap",
             flexDirection: "row",
             justifyContent: "center",
@@ -431,29 +456,41 @@ const specializations = [
             marginTop: 10,
             width: width,
             backgroundColor: theme === "dark" ? "#181A20" : "#ffffff",
-
-        }}>
+          }}
+        >
           {specializations.map((specialization, index) => (
-            <TouchableOpacity key={index} onPress={() => 
-              handleSpecializationChange(specialization.text)
-                       
-            }
-            style={{
-              alignItems: "center",
-              gap: 10,
-              marginTop: 5,
-              padding: 5,
-              marginBottom: 10,
-              backgroundColor: theme === "dark" ? "#181A20" : "#ffffff",
-            }}>
-              <SvgXml xml={specialization.icon === null ? GeneralIcon : specialization.icon} />
+            <TouchableOpacity
+              key={index}
+              onPress={() => handleSpecializationChange(specialization.text)}
+              style={{
+                alignItems: "center",
+                gap: 10,
+                marginTop: 5,
+                padding: 5,
+                marginBottom: 10,
+                backgroundColor: theme === "dark" ? "#181A20" : "#ffffff",
+              }}
+            >
+              <SvgXml
+                xml={
+                  specialization.icon === null
+                    ? GeneralIcon
+                    : specialization.icon
+                }
+              />
               <Text
-              style={{color: theme === "dark" ? "#FFFFFF" : "#000000", fontFamily: "Urbanist-bold", fontSize: 15}}
-              >{specialization.text.slice(0,8)+"..."}</Text>
+                style={{
+                  color: theme === "dark" ? "#FFFFFF" : "#000000",
+                  fontFamily: "Urbanist-bold",
+                  fontSize: 15,
+                }}
+              >
+                {specialization.text.slice(0, 8) + "..."}
+              </Text>
             </TouchableOpacity>
           ))}
         </View>
-       
+
         <View style={styles.TopDocs}>
           <Text
             style={{
@@ -483,22 +520,30 @@ const specializations = [
             backgroundColor: theme === "dark" ? "#181A20" : "#ffffff",
           }}
         >
-          <ScrollView 
-          horizontal 
-          showsHorizontalScrollIndicator={false}
-          >
-            {specialization.map((specialization, index) =>
-                        <Pressable key={index} onPress={()=>handleSpecializationChange(specialization)} style={[styles.categoryBtn,
-                            selectedSpecilization === specialization ? styles.firstCategoryBtn : {},
-                            ]}>
-                            
-                            <Text style={[
-                                styles.categoryBtnText,
-                                selectedSpecilization === specialization ? styles.firstCategoryBtnText : {},
-                                ]}>{specialization}</Text>  
-                            
-                    </Pressable>
-                        )}
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            {specialization.map((specialization, index) => (
+              <Pressable
+                key={index}
+                onPress={() => handleSpecializationChange(specialization)}
+                style={[
+                  styles.categoryBtn,
+                  selectedSpecilization === specialization
+                    ? styles.firstCategoryBtn
+                    : {},
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.categoryBtnText,
+                    selectedSpecilization === specialization
+                      ? styles.firstCategoryBtnText
+                      : {},
+                  ]}
+                >
+                  {specialization}
+                </Text>
+              </Pressable>
+            ))}
           </ScrollView>
         </View>
         <ImageBackground
@@ -518,42 +563,49 @@ const specializations = [
             }}
           >
             {filteredDoctors.length > 0 ? (
-              filteredDoctors.splice(0,5).map((doctor: any, index: number) => {
-                
-                return(
-                
-                <View
-                  key={index}
-                  style={{
-                    marginBottom: "5%",
-                    width: "100%",
-                    height: 150,
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    backgroundColor: theme === "dark" ? "#181A20" : "#EEEEEE",
-                  }}
-                >         
-                  <DoctorComponent
-                      path={() => router.push({ pathname: "/ActionMenu/Booking/Doctor_details", params: { id: doctor.id } })}
+              filteredDoctors.splice(0, 5).map((doctor: any, index: number) => {
+                return (
+                  <View
+                    key={index}
+                    style={{
+                      marginBottom: "5%",
+                      width: "100%",
+                      height: 150,
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      backgroundColor: theme === "dark" ? "#181A20" : "#EEEEEE",
+                    }}
+                  >
+                    <DoctorComponent
+                      path={() =>
+                        router.push({
+                          pathname: "/ActionMenu/Booking/Doctor_details",
+                          params: { id: doctor.id },
+                        })
+                      }
                       imageSource={{ uri: doctor.image }}
                       name={`${doctor.first_name} ${doctor.last_name}`}
-                      iconComponent={favoriteDoctors.includes(doctor.id) ? (
-                  <SvgXml xml={blueheart} 
-                  />
-                ) : (
-                  <SvgXml xml={whiteHeart} />
-                )}
+                      iconComponent={
+                        favoriteDoctors.includes(doctor.id) ? (
+                          <SvgXml xml={blueheart} />
+                        ) : (
+                          <SvgXml xml={whiteHeart} />
+                        )
+                      }
                       professionalTitle={doctor.specialization}
                       hospital={doctor.hospital_name}
                       star={<SvgXml xml={star} />}
                       review={doctor.reviews.length}
                       rate={doctor.result}
-                      addRemoveFavorite={() => handleIconClick(doctor,doctor.id) }
+                      addRemoveFavorite={() =>
+                        handleIconClick(doctor, doctor.id)
+                      }
                     />
-                </View>
-              )})
+                  </View>
+                );
+              })
             ) : (
               <NofoundComponent />
             )}
@@ -561,15 +613,13 @@ const specializations = [
         </ImageBackground>
       </ScrollView>
       <RemovefavoritePopup
-                userId={patient_id}
-                cancel={()=>setShowPopup(false)}
-                visible={showpopUp}
-                onClose={() => setShowPopup(false)}
-          doctor={selectedDoctor}
-          updateFavoriteDoctors={updateFavoriteDoctors}
-            
-            
-            />
+        userId={patient_id}
+        cancel={() => setShowPopup(false)}
+        visible={showpopUp}
+        onClose={() => setShowPopup(false)}
+        doctor={selectedDoctor}
+        updateFavoriteDoctors={updateFavoriteDoctors}
+      />
     </View>
   );
 }

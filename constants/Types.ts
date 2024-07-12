@@ -17,42 +17,49 @@ export interface PaymentOption {
   iconSvgStringDark?: string;
 }
 export interface AuthType {
-  isLoggedIn: boolean;
+  patientId: string;
+  email: string;
+  isLoggedIn: false;
+  activated: false;
+  userId: string;
   token: string;
   refreshToken: string;
-  loading: boolean;
-  refreshSession: () => void;
-  logout: () => void;
-  login: ( email: string, password: string) => Promise<void>;
-  signInWithApple: () => Promise<void>; 
+  name: string;
+  imageUrl: string;
+  authType: string;
+  refreshSession: () => Promise<void>;
+  setUpUserInfo: () => Promise<void>;
+  logout: () => Promise<void>;
+  login: (email: string, password: string) => Promise<void>;
+  signInWithApple: () => Promise<void>;
 }
 
 export interface Countries extends TCountries {
   [key: string]: any;
 }
 
-export interface Doctor{
-  id: number,
-  first_name: string,
-  last_name: string,
-  hospital: string,
-  rate: string,
-  review: string,
-  specialization: string,
-  about:string
+export interface Doctor {
+  id: number;
+  first_name: string;
+  last_name: string;
+  hospital: string;
+  rate: string;
+  review: string;
+  specialization: string;
+  about: string;
 }
 
-export interface Appointment{
-  id: number,
-  created_at: string,
- doctor_id: string,
-  date: string,
-  time: string,
-  package: string,
-  price: string,
-  illness_descr:string,
-  status:string,
-  user_id:string
+export interface Appointment {
+  id: number;
+  created_at: string;
+  doctor_id: string;
+  date: string;
+  time: string;
+  package: string;
+  price: string;
+  illness_descr: string;
+  status: string;
+  user_id: string;
 }
 
 export interface PatientTypes {
@@ -64,10 +71,10 @@ export interface PatientTypes {
   date_of_birth: string;
   email: string | null;
   first_name: string;
-  gender: 'M' | 'F';
+  gender: "M" | "F";
   id: string;
   image: string;
   last_name: string;
   phone: string | null;
   updated_at: string | null;
-};
+}

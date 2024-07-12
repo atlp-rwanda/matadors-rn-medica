@@ -63,10 +63,9 @@ function AppointmentVideoCall() {
   const [patient_id,setPatient_id]=useState<string>()
   const [profile, setProfile] = useState<any>(null)
   const [doctorID, setDoctorsID] = useState<string>();
-
- 
-
-
+  const[ages, setAges] = useState<string>()
+  const [showMore, setShowMore] = useState<boolean>(false);
+  
   useEffect(() => {
     async function fetchData() {
       setIsLoading(true)
@@ -163,7 +162,17 @@ try {
   }, [loggeduser])
 
 
-  
+  useEffect(() => {
+    const calculateAge = () => {
+      if (profile) {
+        const today = new Date();
+        const birthDate = new Date(profile?.date_of_birth);
+        const age = today.getFullYear() - birthDate.getFullYear();
+        setAges(age.toString())
+      }
+    }
+    calculateAge()
+  }, [profile])
 
   return (
     <View
@@ -228,7 +237,7 @@ try {
                 }}
               >
                 <View>
-                  <DoctorCard name= {appointment.doctor.first_name} specialization={appointment.doctor.specialization} hospital={appointment.doctor.hospital_name} image={{ uri: appointment.doctor.image }}/>
+                <DoctorCard first_name= {appointment.doctor.first_name} second_name={appointment.doctor.last_name} specialization={appointment.doctor.specialization} hospital={appointment.doctor.hospital_name} image={{ uri: appointment.doctor.image }}/>
                 </View>
                 <View style={{ gap: 10 }}>
                   <Text
@@ -282,6 +291,12 @@ try {
                     Patient Information
                   </Text>
                   <View style={{ gap: 10 }}>
+                    <View style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      gap: 70,
+                      borderRadius: 20,
+                    }}>
                     <Text
                       style={[
                         Typography.regular.large,
@@ -291,24 +306,50 @@ try {
                         },
                       ]}
                     >
-                      Full Name: <Text>{appointment.user.first_name}</Text>
+                      Full Name 
                     </Text>
-                    <Text
+                    <Text>: {appointment.user.first_name} {appointment.user.last_name}</Text>
+                    </View>
+
+                    <View style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      gap: 70,
+                      borderRadius: 20,
+                    }}>
+                   <Text
                       style={[
                         Typography.regular.large,
                         { color: theme === "dark" ? Colors.grayScale._300 : Colors.grayScale._900 },
                       ]}
                     >
-                      Gender: <Text>{appointment.user.gender}</Text>
+                      Gender {"   "}
+
                     </Text>
-                    <Text
+                    <Text>: {appointment.user.gender}</Text>
+                    </View>
+                    <View style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      gap: 70,
+                      borderRadius: 20,
+                    }}>
+                       <Text
                       style={[
                         Typography.regular.large,
                         { color: theme === "dark" ?Colors.grayScale._300 : Colors.grayScale._900 },
                       ]}
                     >
-                      Age: <Text>{appointment.user.age}</Text>
+                      Age {"          "}
                     </Text>
+                    <Text>: {ages}</Text>
+                    </View>
+                    <View style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      gap: 70,
+                      borderRadius: 20,
+                    }}>
                     <Text
                       style={[
                         Typography.regular.large,
@@ -319,21 +360,30 @@ try {
                         },
                       ]}
                     >
-                      Problem:{" "}
-                      <Text>
-                        {appointment.illness_descr}
-                        <TouchableOpacity>
-                          <Text
-                            style={[
-                              Typography.regular.large,
-                                {color: Colors.main.primary._500}
-                            ]}
-                          >
-                            view more
-                          </Text>
-                        </TouchableOpacity>
-                      </Text>
+                      Problem:{"  "}
+                    
                     </Text>
+                    <View style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      gap:10,
+                      borderRadius: 20,
+                      width: 200
+                    }}>
+                      <Text>:  {
+                        showMore ? appointment.illness_descr : appointment.illness_descr.slice(0, 20)
+                        }</Text>
+                      {appointment.illness_descr.length > 20 && (
+                        <Pressable 
+                        style={{alignSelf: "flex-end"}}
+                        onPress={() => setShowMore(!showMore)}>
+                          <Text style={{ color: Colors.main.primary._500 }}>
+                            {showMore ? "View Less" : "View More"}
+                          </Text>
+                        </Pressable>
+                      )}
+                    </View>
+                    </View>
                   </View>
                 </View>
                 <View style={{ gap: 20 }}>

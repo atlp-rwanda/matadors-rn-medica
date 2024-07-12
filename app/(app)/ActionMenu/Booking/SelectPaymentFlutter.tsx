@@ -46,10 +46,11 @@ class MyCart extends React.Component<{}, MyCartState> {
             this.abortController.signal
           );
           // use payment link
+
           this.usePaymentLink(paymentLink);
         } catch (error: any) {
           // do nothing if our payment initialization was aborted
-          if (error.code === 'ABORTERROR') {
+          if (error.code === "ABORTERROR") {
             return;
           }
           // handle other errors

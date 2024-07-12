@@ -26,31 +26,31 @@ export default function FAQ() {
       id: "1",
       title: "What is Medica?",
       description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "Medica is a mobile application designed to facilitate online doctor appointments and consultations.",
     },
     {
       id: "2",
       title: "How to use Medica?",
       description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "As a users can create an account, log in, browse through various doctor specialties, schedule appointments, and communicate with healthcare professionals through voice calls, video calls, or messaging.",
     },
     {
       id: "3",
       title: "How do I cancel an appointment?",
       description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "If a user happen to cancel an appointment, they can do so by going to the appointment section and clicking on the cancel button.",
     },
     {
       id: "4",
       title: "How do I save the recording?",
       description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "THis feature is under development and will be available in the next update.",
     },
     {
       id: "5",
       title: "How do I exit the app?",
       description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "As a logged in user you can exit the app by clicking on the logout button in the profile section.",
     },
   ]);
 

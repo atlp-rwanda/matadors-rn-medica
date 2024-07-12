@@ -6,7 +6,7 @@ import {
 } from "@/components/UI/Icons";
 import { Colors } from "@/constants/Colors";
 import Typography from "@/constants/Typography";
-import { useContext, useState,useEffect } from "react";
+import { useContext, useState, useEffect } from "react";
 import {
   StyleSheet,
   Image,
@@ -16,7 +16,7 @@ import {
 } from "react-native";
 import { colors } from "react-native-elements";
 import { Mastercard, Mastercarddark } from "@/components/UI/Icons";
-import {flutter} from "@/components/UI/Icons"
+import { flutter } from "@/components/UI/Icons";
 import { ThemeContext } from "@/ctx/ThemeContext";
 import { router } from "expo-router";
 import Button from "@/components/UI/Button";
@@ -28,59 +28,69 @@ import SelectPaymentCardListing from "@/components/Profile/SelectedPaymentCardLi
 import { useLocalSearchParams } from "expo-router";
 import { SvgXml } from "react-native-svg";
 import { supabase } from "@/lib/supabase";
-import { LightleftArrow } from '@/assets/icons/left';
-import { LeftArrowWhite } from '@/assets/icons/LeftArrowWhite';
+import { LightleftArrow } from "@/assets/icons/left";
+import { LeftArrowWhite } from "@/assets/icons/LeftArrowWhite";
 
 export default function Reviewsummary() {
   const { theme, changeTheme } = useContext(ThemeContext);
-  const { doctor_id, hour, date, packageTitle, packagePrice, problem, user_id,patient_id,duration } = useLocalSearchParams()
-  const [doctor, setDoctor] = useState<any>(null)
-    const leftArrowIcon = theme === "dark" ? LeftArrowWhite : LightleftArrow
-  
+  const {
+    doctor_id,
+    hour,
+    date,
+    packageTitle,
+    packagePrice,
+    problem,
+    user_id,
+    patient_id,
+    duration,
+  } = useLocalSearchParams();
+  const [doctor, setDoctor] = useState<any>(null);
+  const leftArrowIcon = theme === "dark" ? LeftArrowWhite : LightleftArrow;
+
   useEffect(() => {
     const fetchDoctordata = async () => {
       const { data, error } = await supabase
         .from("doctors")
         .select("*")
         .eq("id", doctor_id)
-        .single()
+        .single();
       if (error) {
-        console.log("error fetching doctor data on Review summary",error)
+        console.log("error fetching doctor data on Review summary", error);
       } else {
-        setDoctor(data)
+        setDoctor(data);
       }
-    }
-    fetchDoctordata()
-  }, [doctor_id])
-  let num:number=1;
+    };
+    fetchDoctordata();
+  }, [doctor_id]);
+  console.log("this is packagePrice:", packagePrice);
+  let num: number = 1;
   if (duration === "30 minutes") {
-    num=1
+    num = 1;
   } else {
-    num=2
+    num = 2;
   }
   let price: number = 0;
   if (packagePrice === "Rwf20") {
-    price=20
+    price = 20;
   } else if (packagePrice === "Rwf40") {
-    price=40
+    price = 40;
   } else if (packagePrice === "Rwf60") {
-    price =60
+    price = 60;
   }
-const total:number=price*num
+  const total: number = price * num;
   if (!doctor) {
-  return (<Text>Loading Doctor's data .........</Text>)
-}
+    return <Text>Loading Doctor's data .........</Text>;
+  }
 
   return (
     <>
-      
       <ScrollView
         style={{
           backgroundColor:
             theme === "light" ? Colors.others.white : Colors.dark._1,
           height: "100%",
           flex: 1,
-          width:"100%"
+          width: "100%",
         }}
         contentContainerStyle={{
           gap: 10,
@@ -88,14 +98,50 @@ const total:number=price*num
           paddingBottom: 20,
         }}
       >
-        <View style={{ marginTop: 50, display: "flex", flexDirection: "row", width: "100%", justifyContent: "space-between" }}>
-          <Pressable  onPress={()=>router.push("(app)/ActionMenu/Booking/SelectPayment")} style={{ height:"100%",width:"12%",display:"flex",flexDirection:"row",justifyContent:"center",alignItems:'center' }}>
-                    <SvgXml xml={leftArrowIcon} />
-                </Pressable>
-          <View style={{width:"80%",display:'flex',flexDirection:'row',justifyContent:"flex-start",alignItems:"center"}}><Text style={{ fontSize: 20,color:theme==="dark"?"white":"#212121" }}>{doctor?.first_name ?? "Doctor"}</Text></View>
+        <View
+          style={{
+            marginTop: 50,
+            display: "flex",
+            flexDirection: "row",
+            width: "100%",
+            justifyContent: "space-between",
+          }}
+        >
+          <Pressable
+            onPress={() =>
+              router.push("(app)/ActionMenu/Booking/SelectPayment")
+            }
+            style={{
+              height: "100%",
+              width: "12%",
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <SvgXml xml={leftArrowIcon} />
+          </Pressable>
+          <View
+            style={{
+              width: "80%",
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "flex-start",
+              alignItems: "center",
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 20,
+                color: theme === "dark" ? "white" : "#212121",
+              }}
+            >
+              {doctor?.first_name ?? "Doctor"}
+            </Text>
+          </View>
         </View>
-        
-       
+
         <View style={{ paddingHorizontal: 20, gap: 20 }}>
           <View
             style={{
@@ -111,8 +157,7 @@ const total:number=price*num
           >
             <Image
               source={{ uri: doctor.image }}
-               style={{ width: 100, height: 100, borderRadius: 50 }}
-             
+              style={{ width: 100, height: 100, borderRadius: 50 }}
             />
 
             <View style={{ gap: 10, paddingVertical: 4 }}>
@@ -145,7 +190,7 @@ const total:number=price*num
                   },
                 ]}
               >
-               {doctor.specialization}
+                {doctor.specialization}
               </Text>
               <Text
                 style={[
@@ -158,7 +203,7 @@ const total:number=price*num
                   },
                 ]}
               >
-               {doctor.hospital_name}
+                {doctor.hospital_name}
               </Text>
             </View>
           </View>
@@ -205,7 +250,7 @@ const total:number=price*num
                   },
                 ]}
               >
-                { hour}| {date}
+                {hour}| {date}
               </Text>
             </View>
             <View
@@ -239,7 +284,7 @@ const total:number=price*num
                   },
                 ]}
               >
-               {packageTitle}
+                {packageTitle}
               </Text>
             </View>
             <View
@@ -400,13 +445,8 @@ const total:number=price*num
 
           <SelectPaymentCardListing
             icon={() => {
-              return (
-                <SvgXml
-                  xml={theme === "light" ? flutter:flutter}
-                />
-              );
+              return <SvgXml xml={theme === "light" ? flutter : flutter} />;
             }}
-           
           />
         </View>
 
@@ -414,7 +454,20 @@ const total:number=price*num
           <Button
             title="Next"
             onPress={() =>
-              router.push({ pathname:"(app)/ActionMenu/Booking/SelectPayment",params:{doctor_id:doctor_id,hour:hour,date:date,packageTitle:packageTitle,packagePrice:packagePrice,problem:problem,user_id:user_id,patient_id:patient_id,duration:duration}})
+              router.push({
+                pathname: "(app)/ActionMenu/Booking/SelectPayment",
+                params: {
+                  doctor_id: doctor_id,
+                  hour: hour,
+                  date: date,
+                  packageTitle: packageTitle,
+                  packagePrice: packagePrice,
+                  problem: problem,
+                  user_id: user_id,
+                  patient_id: patient_id,
+                  duration: duration,
+                },
+              })
             }
             style={{}}
           />

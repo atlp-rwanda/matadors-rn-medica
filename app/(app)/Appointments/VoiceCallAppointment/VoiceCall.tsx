@@ -25,24 +25,19 @@ import {
 import { router, useGlobalSearchParams } from "expo-router";
 import { supabase } from "@/lib/supabase";
 import { ThemeContext } from "@/ctx/ThemeContext";
-
 interface JoinScreenProps {
   getMeetingId: (id?: string) => void;
 }
-
 const JoinScreen: React.FC<JoinScreenProps> = ({ getMeetingId }) => {
   const [meetingVal, setMeetingVal] = useState("");
   const [meetingFocused, setMeetingFocused] = useState(false);
   const { theme, changeTheme } = useContext(ThemeContext);
-
   const handleEmailFocus = () => {
     setMeetingFocused(true);
   };
-
   const handleEmailBlur = () => {
     setMeetingFocused(false);
   };
-
   return (
     <SafeAreaView
       style={{
@@ -59,10 +54,8 @@ const JoinScreen: React.FC<JoinScreenProps> = ({ getMeetingId }) => {
           <SvgXml xml={theme === "dark" ? BackArrow : blackArrow} />
         </TouchableOpacity>
       </View>
-
       <View style={{ justifyContent: "center", alignItems: "center", gap: 30 }}>
         <Image source={require("@/assets/icons/HeartPlus.png")} />
-
         <TouchableOpacity
           onPress={() => {
             getMeetingId();
@@ -80,9 +73,7 @@ const JoinScreen: React.FC<JoinScreenProps> = ({ getMeetingId }) => {
             Create Room
           </Text>
         </TouchableOpacity>
-
         <Text style={[Typography.bold.large, { color: "#757575" }]}>OR</Text>
-
         <View
           style={[
             meetingFocused && styles.inputOneFocused,
@@ -103,7 +94,6 @@ const JoinScreen: React.FC<JoinScreenProps> = ({ getMeetingId }) => {
             onBlur={handleEmailBlur}
           />
         </View>
-
         <TouchableOpacity
           style={{
             justifyContent: "center",
@@ -125,7 +115,6 @@ const JoinScreen: React.FC<JoinScreenProps> = ({ getMeetingId }) => {
     </SafeAreaView>
   );
 };
-
 const styles = StyleSheet.create({
   inputOneFocused: {
     borderColor: "#246BFD",
@@ -157,13 +146,11 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
   },
 });
-
 interface ButtonProps {
   onPress: () => void;
   buttonText: string;
   backgroundColor: string;
 }
-
 const Button: React.FC<ButtonProps> = ({
   onPress,
   buttonText,
@@ -184,13 +171,11 @@ const Button: React.FC<ButtonProps> = ({
     </TouchableOpacity>
   );
 };
-
 interface ControlsContainerProps {
   join: () => void;
   leave: () => void;
   toggleMic: () => void;
 }
-
 const ControlsContainer: React.FC<ControlsContainerProps> = ({
   join,
   leave,
@@ -200,7 +185,6 @@ const ControlsContainer: React.FC<ControlsContainerProps> = ({
   const [isMicOn, setIsMicOn] = useState(true);
   const { id, AppointmentID } = useGlobalSearchParams();
   const [isLoading, setIsLoading] = useState(false);
-
   const HandleUpdate = async () => {
     try {
       setIsLoading(true);
@@ -217,11 +201,9 @@ const ControlsContainer: React.FC<ControlsContainerProps> = ({
       console.log(error);
     }
   };
-
   const handleMicPress = () => {
     setIsMicOn((prevState) => !prevState);
   };
-
   const handleButtonDisable = () => {
     setButtonDisabled(true);
   };
@@ -284,12 +266,10 @@ const ControlsContainer: React.FC<ControlsContainerProps> = ({
     </View>
   );
 };
-
 interface ParticipantViewProps {
   participantId: string;
   meetingId: string | null;
 }
-
 interface Doctors {
   first_name: string;
   last_name: string;
@@ -297,12 +277,9 @@ interface Doctors {
   image: string;
   id: string;
 }
-
 type FetchDoctor = Doctors | null;
 type FetchError = string | null;
-
 const tableName = "doctors";
-
 const ParticipantView: React.FC<ParticipantViewProps> = ({ participantId }) => {
   const [FetchDoctor, setFetchDoctor] = useState<FetchDoctor>(null);
   const [FetchError, setFetchError] = useState<FetchError>(null);
@@ -315,12 +292,10 @@ const ParticipantView: React.FC<ParticipantViewProps> = ({ participantId }) => {
           .select("*")
           .eq("id", `${id}`)
           .single();
-
         if (data) {
           setFetchDoctor(data);
           setFetchError(null);
         }
-
         if (error) {
           setFetchDoctor(null);
           setFetchError("could not fetch description articles in database");
@@ -334,7 +309,6 @@ const ParticipantView: React.FC<ParticipantViewProps> = ({ participantId }) => {
     };
     FetchDoctors();
   }, []);
-
   return (
     <View
       style={{
@@ -344,7 +318,6 @@ const ParticipantView: React.FC<ParticipantViewProps> = ({ participantId }) => {
       }}
     >
       {FetchError && <Text>{FetchError}</Text>}
-
       {FetchDoctor && (
         <View
           style={{ justifyContent: "center", alignItems: "center", gap: 24 }}
@@ -353,7 +326,6 @@ const ParticipantView: React.FC<ParticipantViewProps> = ({ participantId }) => {
             source={{ uri: FetchDoctor.image }}
             style={{ width: 200, height: 200, borderRadius: 100 }}
           />
-
           <View
             style={{ justifyContent: "center", alignItems: "center", gap: 24 }}
           >
@@ -366,12 +338,10 @@ const ParticipantView: React.FC<ParticipantViewProps> = ({ participantId }) => {
     </View>
   );
 };
-
 interface ParticipantListProps {
   participants: string[];
   meetingId: string | null;
 }
-
 const ParticipantList: React.FC<ParticipantListProps> = ({
   participants,
   meetingId,
@@ -387,12 +357,10 @@ const ParticipantList: React.FC<ParticipantListProps> = ({
           .select("*")
           .eq("id", `${id}`)
           .single();
-
         if (data) {
           setFetchDoctor(data);
           setFetchError(null);
         }
-
         if (error) {
           setFetchDoctor(null);
           setFetchError("could not fetch description articles in database");
@@ -406,12 +374,8 @@ const ParticipantList: React.FC<ParticipantListProps> = ({
     };
     FetchDoctors();
   }, []);
-
   return participants.length > 0 ? (
     <View style={{ justifyContent: "center", alignItems: "center", gap: 10 }}>
-      <Text style={[Typography.medium.xLarge, { color: "#FFFFFF" }]}>
-        Doctor has joined the call
-      </Text>
       <ParticipantView participantId={participants[0]} meetingId={meetingId} />
     </View>
   ) : (
@@ -424,7 +388,6 @@ const ParticipantList: React.FC<ParticipantListProps> = ({
     >
       <View style={{ justifyContent: "center", alignItems: "center", gap: 24 }}>
         {FetchError && <Text>{FetchError}</Text>}
-
         {FetchDoctor && (
           <View
             style={{ justifyContent: "center", alignItems: "center", gap: 24 }}
@@ -433,7 +396,6 @@ const ParticipantList: React.FC<ParticipantListProps> = ({
               source={{ uri: FetchDoctor.image }}
               style={{ width: 200, height: 200, borderRadius: 100 }}
             />
-
             <View
               style={{
                 justifyContent: "center",
@@ -447,7 +409,6 @@ const ParticipantList: React.FC<ParticipantListProps> = ({
             </View>
           </View>
         )}
-
         <Text style={[Typography.medium.xLarge, { color: "#FFFFFF" }]}>
           Tap to call
         </Text>
@@ -455,11 +416,37 @@ const ParticipantList: React.FC<ParticipantListProps> = ({
     </View>
   );
 };
-
-const MeetingView: React.FC<{ meetingId: string | null }> = ({ meetingId }) => {
+const MeetingView: React.FC<{
+  meetingId: string | null;
+  appointmentId: string | null;
+}> = ({ meetingId, appointmentId }) => {
   const { join, leave, toggleMic, participants } = useMeeting({});
   const participantsArrId = [...participants.keys()];
-
+  const [participantJoinedMessage, setParticipantJoinedMessage] = useState("");
+  useEffect(() => {
+    const fetchMeetingId = async () => {
+      if (appointmentId) {
+        const { data, error } = await supabase
+          .from("appointment")
+          .select("meetingId")
+          .eq("id", appointmentId)
+          .single();
+        if (error) {
+          console.error("Error fetching meeting ID:", error);
+        } else {
+          console.log("Meeting ID fetched:", data.meetingId);
+        }
+      }
+    };
+    fetchMeetingId();
+  }, [appointmentId]);
+  useEffect(() => {
+    if (participantsArrId.length === 2) {
+      setParticipantJoinedMessage("Doctor has joined the call.");
+    } else {
+      setParticipantJoinedMessage(""); 
+    }
+  }, [participantsArrId]);
   return (
     <ImageBackground
       style={styles.Background}
@@ -471,16 +458,28 @@ const MeetingView: React.FC<{ meetingId: string | null }> = ({ meetingId }) => {
           participants={participantsArrId}
           meetingId={meetingId}
         />
+        <View>
+          {participantJoinedMessage ? (
+            <Text
+              style={{
+                color: "white",
+                fontSize: 16,
+                textAlign: "center",
+                marginVertical: 10,
+              }}
+            >
+              {participantJoinedMessage}
+            </Text>
+          ) : null}
+        </View>
         <ControlsContainer join={join} leave={leave} toggleMic={toggleMic} />
       </View>
     </ImageBackground>
   );
 };
-
 const VoiceCall: React.FC = () => {
   const [meetingId, setMeetingId] = useState<string | null>(null);
   const { AppointmentID } = useGlobalSearchParams();
-
   const getMeetingId = async (id?: string) => {
     const newMeetingId = id == null ? await createMeeting({ token }) : id;
     setMeetingId(newMeetingId);
@@ -498,7 +497,6 @@ const VoiceCall: React.FC = () => {
       }
     }
   };
-
   return meetingId ? (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#F6F6FF" }}>
       <MeetingProvider
@@ -510,12 +508,11 @@ const VoiceCall: React.FC = () => {
         }}
         token={token}
       >
-        <MeetingView meetingId={meetingId} />
+        <MeetingView meetingId={meetingId} appointmentId={null} />
       </MeetingProvider>
     </SafeAreaView>
   ) : (
     <JoinScreen getMeetingId={getMeetingId} />
   );
 };
-
 export default VoiceCall;
