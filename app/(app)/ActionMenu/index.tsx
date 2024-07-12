@@ -82,7 +82,7 @@ export default function Index() {
 
   useEffect(() => {
     if (imageUrl.length > 0) {
-      setProfilePhoto(imageUrl[0]?.name);
+      setProfilePhoto(imageUrl?.name);
     }
   }, [imageUrl]);
 
@@ -257,7 +257,6 @@ const specializations = [
     setFavoriteDoctors(prev=>[...prev,doctorId])
   }
   
-  
   return (
     <View
       style={{
@@ -286,7 +285,7 @@ const specializations = [
                   source={{
                     uri:authType && authType !== "apple"
                         ? otherAuthImageUrl
-                        : `${CDNURL + userId + "/" + profilePhoto}`,
+                        : `${CDNURL  + patientData[0]?.image}`,
                       }}
                 />
               </View>
