@@ -21,20 +21,29 @@ import { View, StyleSheet, ScrollView, Pressable, Alert } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 import { ActivityIndicator } from "react-native";
 import { SvgXml } from "react-native-svg";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 const YourProfile = () => {
   const [isFocus, setIsFocus] = useState(false);
-  const [image, setImage] = useState<null | string>(null);
-  const [value, setValue] = useState<string>(" ");
   const { theme } = useContext(ThemeContext);
   const { setUpUserInfo, name, authType, imageUrl } = useAuth();
   const { email } = useLocalSearchParams<{ email: string }>();
   const [isLoading, setIsLoading] = useState(false);
-
-  const [formData, setFormData] = useState<Omit<UserInfo, "email">>({
+  const [formData, setFormData] = useState<{
+    firstName: string;
+    lastName: string;
+    // email: string,
+    gender: string;
+    image: {
+      name: string;
+      mimeType: string;
+      uri: string;
+    };
+    birthDate: Date;
+  }>({
     firstName: "",
     lastName: "",
-    birthDate: "",
+    birthDate: new Date(),
     // email: "",
     gender: "",
     image: {
@@ -43,8 +52,9 @@ const YourProfile = () => {
       uri: "",
     },
   });
+  const [showDatepicker, setShowDatePicker] = useState(false);
 
-  function handleFormChange(name: string, value: string) {
+  function handleFormChange(name: string, value: string | Date) {
     setFormData((prevVal) => {
       return {
         ...prevVal,
@@ -53,24 +63,38 @@ const YourProfile = () => {
     });
   }
 
-  console.log(formData.lastName);
-
   async function handleSubmit() {
     try {
+      if (new Date(formData.birthDate) > new Date("2024-01-01"))
+        throw new Error("You're too young to use this app");
+
+      if (
+        formData.firstName == "" ||
+        formData.lastName == "" ||
+        formData.gender == "" ||
+        formData.image.uri == ""
+      )
+        throw new Error("Ensure you've filled all necessary fields");
+
       setIsLoading(true);
       await setUpUserInfo(
-
-        authType  && authType !== "apple"
+        authType && authType !== "apple"
           ? authType && authType !== "apple"
             ? {
+                ...formData,
+                firstName: String(name).split(" ")[0],
+                lastName: String(name).split(" ")[1],
+                imageUrl: { uri: imageUrl, mimeType: "image/jpeg" },
+              }
+            : {
+                ...formData,
+                birthDate: formData.birthDate.toISOString().split("T")[0],
+              }
+          : {
               ...formData,
-              firstName: String(name).split(" ")[0],
-              lastName: String(name).split(" ")[1],
-              imageUrl: { uri: imageUrl, mimeType: "image/jpeg" },
+              birthDate: formData.birthDate.toISOString().split("T")[0],
             }
-            : formData
-          : formData
-      )
+      );
     } catch (err) {
       setIsLoading(false);
       const error: Error = err as Error;
@@ -133,7 +157,7 @@ const YourProfile = () => {
           placeholder="Last Name"
           name="lastName"
           value={
-            authType  && authType !== "apple"
+            authType && authType !== "apple"
               ? authType || authType !== "apple"
                 ? String(name).split(" ")[1]
                 : formData.lastName
@@ -144,7 +168,7 @@ const YourProfile = () => {
         <Input
           placeholder="yyyy-MM-DD"
           name="birthDate"
-          value={formData.birthDate}
+          value={formData.birthDate.toISOString().split("T")[0]}
           onChange={handleFormChange}
           rightElement={() => {
             return (
@@ -153,7 +177,23 @@ const YourProfile = () => {
               </Pressable>
             );
           }}
+          onPress={() => {
+            setShowDatePicker(true);
+          }}
+          editable={false}
+          disabled={true}
         />
+        {showDatepicker && (
+          <DateTimePicker
+            value={formData.birthDate}
+            mode="date"
+            display="default"
+            onChange={(e: Event, selectedDate: Date) => {
+              setShowDatePicker(false);
+              handleFormChange("birthDate", selectedDate!);
+            }}
+          />
+        )}
         <Input
           placeholder="Email"
           name="email"
@@ -228,7 +268,7 @@ const YourProfile = () => {
           searchPlaceholder="Search..."
           renderInputSearch={() => <></>}
           value={formData.gender}
-          onChangeText={(e) => { }}
+          onChangeText={(e) => {}}
         />
       </View>
 

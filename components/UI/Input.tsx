@@ -2,7 +2,7 @@ import { Colors } from "@/constants/Colors";
 import Typography from "@/constants/Typography";
 import { ThemeContext } from "@/ctx/ThemeContext";
 import React, { useContext } from "react";
-import { View } from "react-native";
+import { Pressable, View } from "react-native";
 import { TextInput } from "react-native";
 
 interface Props {
@@ -15,10 +15,11 @@ interface Props {
   onChange: (name: string, value: string) => void;
   disabled?: boolean;
   editable?: boolean;
+  onPress?: () => void;
 }
 
 export default function Input({
-  name="Your name is empty",
+  name = "Your name is empty",
   onChange,
   placeholder,
   value,
@@ -26,11 +27,12 @@ export default function Input({
   rightElement,
   leftElement,
   disabled,
-  editable
+  editable,
+  onPress,
 }: Props) {
   const { theme } = useContext(ThemeContext);
   return (
-    <View
+    <Pressable
       style={{
         backgroundColor:
           theme === "light" ? Colors.grayScale._50 : Colors.dark._2,
@@ -39,6 +41,7 @@ export default function Input({
         alignItems: "center",
         paddingHorizontal: 20,
       }}
+      onPress={onPress}
     >
       {leftElement && leftElement()}
       <TextInput
@@ -62,6 +65,6 @@ export default function Input({
       />
 
       {rightElement && rightElement()}
-    </View>
+    </Pressable>
   );
 }

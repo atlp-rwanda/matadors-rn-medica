@@ -2,11 +2,8 @@ import React, { useContext, useEffect } from "react";
 import { AuthType, UserInfo } from "@/constants/Types";
 import { createContext, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { router } from "expo-router";
-import { Alert } from "react-native";
 import uuid from "react-native-uuid";
-import * as AppleAuthentication from 'expo-apple-authentication';
-
+import * as AppleAuthentication from "expo-apple-authentication";
 
 export const AuthContext = createContext<AuthType>({
   email: "",
@@ -40,6 +37,7 @@ export default function AuthProvider({ children }: Props) {
   const [name, setName] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [authType, setAuthType] = useState("");
+  const [patientId, setPatientId] = useState("");
 
   async function refreshSession() {}
 
@@ -55,24 +53,32 @@ export default function AuthProvider({ children }: Props) {
       setName("");
       setImageUrl("");
       setAuthType("");
-      console.log("Logout success");
+      setPatientId("");
     } else {
       console.error("Error logging out:", error.message);
     }
   }
-  
+
   async function login(email: string, password: string) {
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
-    
+
+    const { data: patientData, error: patientError } = await supabase
+      .from("patients")
+      .select("*")
+      .eq("auth_id", data.session?.user.id);
+
+    console.log(patientData);
+
     if (!error) {
       setIsLoggedIn(true);
       setEmail(data.session.user.email!);
       setToken(data.session.access_token);
       setRefreshToken(data.session.refresh_token);
       setUserId(data.session.user.id);
+      setPatientId(patientData![0].id);
     } else {
       throw new Error(error.message);
     }
@@ -106,16 +112,27 @@ export default function AuthProvider({ children }: Props) {
   }
 
   async function setUpUserInfo(user: UserInfo) {
+    if (!userId)
+      throw Error(
+        "Something happened,please try closing and reopening the app"
+      );
+
+    const imageName = userId + "/" + uuid.v4();
+    
     if (!authType || authType === "apple") {
-        const res = await fetch(user.image.uri);
-        const arrayBuffer = await res.arrayBuffer();
-  
-        await supabase.storage
-          .from("patients")
-          .upload(userId + "/" + uuid.v4(), arrayBuffer, {
-            contentType: user.image.mimeType ?? "image/jpeg",
-          });
-      }
+      const res = await fetch(user.image.uri);
+      const arrayBuffer = await res.arrayBuffer();
+
+      console.log("imageRes", res);
+
+      const res1 = await supabase.storage
+        .from("patients")
+        .upload(imageName, arrayBuffer, {
+          contentType: user.image.mimeType ?? "image/jpeg",
+        });
+
+      console.log("Res1: ", res1);
+    }
 
     const res = await supabase
       .from("patients")
@@ -125,12 +142,16 @@ export default function AuthProvider({ children }: Props) {
         gender: user.gender,
         date_of_birth: user.birthDate,
         activated: true,
-        image:authType  && authType !== "apple"
-        ? imageUrl
-        : userId + "/" + uuid.v4(),
+        image: authType && authType !== "apple" ? imageUrl : imageName,
       })
       .eq("auth_id", userId);
 
+    const { data: patientData, error: patientError } = await supabase
+      .from("patients")
+      .select("*")
+      .eq("auth_id", userId);
+
+    setPatientId(patientData![0].id);
     setActivated(true);
     setIsLoggedIn(true);
   }
@@ -143,59 +164,59 @@ export default function AuthProvider({ children }: Props) {
           AppleAuthentication.AppleAuthenticationScope.EMAIL,
         ],
       });
-  
+
       if (credential.identityToken) {
         const response = await supabase.auth.signInWithIdToken({
-          provider: 'apple',
+          provider: "apple",
           token: credential.identityToken,
         });
-  
+
         if (response.error) {
-          console.error('Error signing in with Apple:', response.error);
-          throw new Error('Error signing in with Apple');
+          console.error("Error signing in with Apple:", response.error);
+          throw new Error("Error signing in with Apple");
         } else {
-          console.log('User signed in:', response.data.user);
-          
+          console.log("User signed in:", response.data.user);
+
           const userId = response.data.user.id;
           const email = response.data.user.email;
-  
+
           const { data: existingUser, error: checkError } = await supabase
-            .from('patients')
-            .select('auth_id')
-            .eq('auth_id', userId)
+            .from("patients")
+            .select("auth_id")
+            .eq("auth_id", userId)
             .single();
-  
-          if (checkError && checkError.code !== 'PGRST116') {
-            console.log('Error checking existing user: ', checkError);
+
+          if (checkError && checkError.code !== "PGRST116") {
+            console.log("Error checking existing user: ", checkError);
             throw new Error(checkError.message);
           }
-  
+
           if (!existingUser) {
             const { error } = await supabase
-              .from('patients')
+              .from("patients")
               .insert({ auth_id: userId, activated: false });
-  
+
             if (error) {
-              console.log('Error creating patient entry: ', error);
+              console.log("Error creating patient entry: ", error);
               throw new Error(error.message);
             }
           }
-          setToken(response.data.session?.access_token || '');
-          setRefreshToken(response.data.session?.refresh_token || '');
+          setToken(response.data.session?.access_token || "");
+          setRefreshToken(response.data.session?.refresh_token || "");
           setEmail(email);
           setUserId(userId);
           setIsLoggedIn(true);
-          setAuthType('apple'); 
+          setAuthType("apple");
         }
       } else {
-        throw new Error('No identityToken.');
+        throw new Error("No identityToken.");
       }
     } catch (e) {
-      console.error('Error during Apple sign-in:', e);
+      console.error("Error during Apple sign-in:", e);
       throw e;
     }
   }
-  
+
   useEffect(() => {
     (async () => {
       if (userId) {
@@ -204,6 +225,8 @@ export default function AuthProvider({ children }: Props) {
           .select(`*`)
           .eq("auth_id", userId)
           .single();
+
+        console.log("Activated?: " + data?.activated);
 
         setActivated(data?.activated);
         setIsLoggedIn(true);
@@ -221,6 +244,8 @@ export default function AuthProvider({ children }: Props) {
     name,
     authType,
     imageUrl,
+    patientId,
+    setPatientId,
     setName,
     setUpUserInfo,
     refreshSession,

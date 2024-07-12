@@ -4,13 +4,15 @@ import { ThemeContext } from "@/ctx/ThemeContext";
 import React, { useContext } from "react";
 import { Image, Text, View } from "react-native";
 interface DoctorProps{
-  name:string;
+ first_name:string;
+ second_name:string;
+
   specialization:string;
   hospital:string;
   image: {uri:string}
 }
 
- function DoctorCard ({ name, specialization, hospital, image }: DoctorProps) {
+ function DoctorCard ({first_name, second_name,specialization, hospital, image }: DoctorProps) {
     const { theme, changeTheme } = useContext(ThemeContext);
 
   return (
@@ -44,7 +46,7 @@ interface DoctorProps{
             },
           ]}
         >
-          {name}
+          {first_name} {second_name}
         </Text>
         <View
           style={{

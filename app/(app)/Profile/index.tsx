@@ -1,6 +1,6 @@
 import Typography from "@/constants/Typography";
 import React, { useContext, useEffect, useState } from "react";
-import { Text, View, Image, FlatList } from "react-native";
+import { Text, View, Image, FlatList, RefreshControl } from "react-native";
 import { SvgXml } from "react-native-svg";
 import OptionListing from "@/components/Profile/OptionListing";
 import { Colors } from "@/constants/Colors";
@@ -40,6 +40,8 @@ const index = () => {
   const [imageUrl, setImageUrl] = useState("");
   const [profilePhoto, setProfilePhoto] = useState("");
   const { userId } = useContext(AuthContext);
+  const [refreshing, setRefreshing] = useState<boolean>(false);
+
 
   const CDNURL =
     "https://vbwbfflzxuhktdvpbspd.supabase.co/storage/v1/object/public/patients/";
@@ -51,6 +53,12 @@ const index = () => {
       getUserImageUrl("patients", userId, setImageUrl);
     }
   }, [userId]);
+
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    fetchPatientData(userId, setPatientData);
+    setRefreshing(false)
+  }
 
   useEffect(() => {
     if (patientData) {
@@ -112,6 +120,11 @@ const index = () => {
     <View>
       {patientData && (
         <FlatList
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={handleRefresh}
+          />}
           data={patientData}
           renderItem={({ item }) => (
             <View

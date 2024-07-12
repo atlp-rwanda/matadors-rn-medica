@@ -1,32 +1,24 @@
 {
   "build": {
-    "development": {
-      "developmentClient": true,
-      "distribution": "internal",
-      "ios": {
-        "simulator": true
+    "preview": {
+       "channel": "preview",
+      "android": {
+        "buildType": "apk"
       }
     },
-    "preview": {
+    "preview2": {
       "android": {
-        "buildType": "apk",
-        "distribution": "internal",
-        "env": {
-          "EXPO_PUBLIC_SUPABASE_URL": "https://vbwbfflzxuhktdvpbspd.supabase.co",
-          "EXPO_PUBLIC_SUPABASE_NON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZid2JmZmx6eHVoa3RkdnBic3BkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTgyNTg0MjgsImV4cCI6MjAzMzgzNDQyOH0.eOPZwYgyg3Ic-jbXW4Rehd2RDgqf-kt4vr30w_O9h3c",
-          "EXPO_PUBLIC_STREAM_API_KEY": "62vt32txzc3m",
-          "EXPO_PUBLIC_STREAM_API_SECRET": "jwwbc8b38usnqzxmf7cx38hmckxs83u5ztfxugkwbff4cxrg38vghuav9ch4x4xr"
-        }
+        "gradleCommand": ":app:assembleRelease"
       }
+    },
+    "preview3": {
+      "developmentClient": true
+    },
+    "preview4": {
+      "distribution": "internal"
     },
     "production": {
-      "ios": {
-        "simulator": false
-      },
-      "android": {}
+       "channel": "production"
     }
-  },
-  "submit": {
-    "production": {}
   }
 }

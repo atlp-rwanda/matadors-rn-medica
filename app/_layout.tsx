@@ -17,6 +17,9 @@ import ModalContainer from "@/components/UI/Modal";
 import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
 import { StatusBar } from "expo-status-bar";
 import AuthProvider, { useAuth } from "@/ctx/AuthContext";
+import NotificationsProvider, {
+  useNotifications,
+} from "@/ctx/NotificationsContext";
 
 export { ErrorBoundary } from "expo-router";
 
@@ -94,7 +97,9 @@ export default function RootLayout() {
       <ModalProvider>
         <AuthProvider>
           <AutocompleteDropdownContextProvider>
-            <RootLayoutNav />
+            <NotificationsProvider>
+              <RootLayoutNav />
+            </NotificationsProvider>
           </AutocompleteDropdownContextProvider>
         </AuthProvider>
       </ModalProvider>
@@ -107,13 +112,16 @@ function RootLayoutNav() {
   const segments = useSegments();
 
   const inAuth = segments[0] === "(auth)";
+  const { notifications } = useNotifications();
+
+  console.log(notifications);
 
   useEffect(() => {
     if (!isLoggedIn && !inAuth) {
       console.log("Not logged in");
       return router.replace("/(auth)/SignIn&SignOut/LetsYouIn");
     }
-    
+
     // if (isLoggedIn && !activated && !email) {
     //   console.log("Logged in, not activated, without email");
     //   return router.replace("/(auth)/SignIn&SignOut/LetsYouIn");
@@ -128,7 +136,7 @@ function RootLayoutNav() {
       console.log("Logged in, activated, and in auth");
       return router.replace("/(app)/ActionMenu");
     }
-  }, [isLoggedIn, activated, router, segments]);
+  }, [isLoggedIn, activated, router, segments, email]);
 
   return (
     <>

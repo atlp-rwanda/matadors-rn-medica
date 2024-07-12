@@ -8,6 +8,7 @@ import {
   ScrollView,
   Pressable,
   ActivityIndicator,
+  RefreshControl,
 } from "react-native";
 import { SvgXml } from "react-native-svg";
 import Typography from "@/constants/Typography";
@@ -63,7 +64,7 @@ const AppointmentScreen: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [showFilter, setShowFilter] = useState<boolean>(false);
   const [appointmentId, setAppointmentId] = useState<string | undefined>("");
-  const modal = useModal();
+  const [refreshing, setRefreshing] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -79,6 +80,43 @@ const AppointmentScreen: React.FC = () => {
     };
     fetchUser();
   }, []);
+
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    const { data: appointmentsData, error: appointmentsError } =
+      await supabase.from("appointment").select("*").eq("user_id", patientId);
+
+    if (appointmentsError) {
+      setRefreshing(false);
+      console.error("Error fetching appointments:", appointmentsError);
+      return;
+    }
+
+    const doctorIds = appointmentsData.map(
+      (appointment) => appointment.doctor_id
+    );
+
+    const { data: doctorsData, error: doctorsError } = await supabase
+      .from("doctors")
+      .select("*")
+      .in("id", doctorIds);
+
+    if (doctorsError) {
+      setRefreshing(false);
+      console.error("Error fetching doctors:", doctorsError);
+      return;
+    }
+
+    const mergedData = appointmentsData.map((appointment) => {
+      const doctor = doctorsData.find(
+        (doc) => doc.id === appointment.doctor_id
+      );
+      return { ...appointment, doctor };
+    });
+
+    setRefreshing(false);
+    setAppointments(mergedData);
+  };
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -186,10 +224,49 @@ const AppointmentScreen: React.FC = () => {
   const handleFilter = () => {
     setShowFilter(true);
   };
+  const fetchDoctorName = async (doctorId: string) => {
+    const { data, error } = await supabase
+      .from('doctors')
+      .select('first_name')
+      .eq('id', doctorId)
+      .single();
+
+    if (error) {
+      console.log("Error fetching doctor's name: ", error);
+      return "";
+    }
+
+    return data.first_name;
+  };
+  const addNotification = async ( doctorName: string) => {
+    try {
+      const { error } = await supabase
+        .from('notifications')
+        .insert({
+          title: 'Appointment Cancelled',
+          description: `You have successfully cancelled your booked appointment with Dr. ${doctorName}`,
+          patient_id: patientId,
+          type: "appointment_changed",
+          viewed:false
+         
+        });
+
+      if (error) {
+        console.log("Error while inserting notification ", error);
+      }
+    } catch (error) {
+      console.log("Error while inserting notification ", error);
+    }
+  };
 
 
-  const handleCancel = (id:string) => {
+  const handleCancel =async (id:string,doctor_id:string) => {
     setAppointmentId(id);
+    if (typeof doctor_id === "string") {
+        const doctorName = await fetchDoctorName(doctor_id);
+        await addNotification(doctorName);
+      }
+    
     setShowPopup(true);
   }
 
@@ -262,7 +339,13 @@ const AppointmentScreen: React.FC = () => {
         </View>
       </ImageBackground>
 
-      <ScrollView style={styles.cardContainer}>
+      <ScrollView 
+         refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={handleRefresh}
+          />}
+      style={styles.cardContainer}>
         {isLoading ? (
           <ActivityIndicator
             color={Colors.main.primary._500}
@@ -305,7 +388,7 @@ const AppointmentScreen: React.FC = () => {
                           text="Cancel Appointment"
                           size="small"
                           type="border"
-                          onPress={()=> handleCancel(appointment.id)}
+                          onPress={()=> handleCancel(appointment.id,appointment.doctor_id)}
                         />
                         <Chips
                           text="Reschedule"

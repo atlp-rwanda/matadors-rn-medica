@@ -124,6 +124,27 @@ function EditProfile() {
   ).map((key: string) => {
     return { label: typedCountries[key].name, value: typedCountries[key].name };
   });
+   const addNotification = async () => {
+    try {
+      const { error } = await supabase
+        .from('notifications')
+        .insert({
+          title: 'Account successfully updated',
+          description: `You have successfully updated your profile`,
+          patient_id:id,
+          type: "account_setup",
+          viewed:false
+         
+        });
+
+      if (error) {
+        console.log("Error while inserting notification ", error);
+      }
+    } catch (error) {
+      console.log("Error while inserting notification ", error);
+    }
+  };
+
 
   const handleUpdate = async () => {
     try {
@@ -142,6 +163,7 @@ function EditProfile() {
       const res = await supabase.auth.updateUser({ email: email });
 
       console.log(res);
+      addNotification()
 
       if (data.error) throw data.error;
       alert("Profile updated successfully");
@@ -403,8 +425,8 @@ function EditProfile() {
                   <Button
                     title="Update"
                     onPress={handleUpdate}
-                    shadowColor={Colors.main.primary._500}
-                    backgroundColor={Colors.main.primary._500}
+                    // shadowColor={Colors.main.primary._500}
+                    // backgroundColor={Colors.main.primary._500}
                   />
                 </View>
               </View>

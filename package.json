@@ -45,8 +45,8 @@
     "countries-list": "^3.1.0",
     "dotenv": "^16.4.5",
     "eas-cli": "^8.0.0",
-    "expo": "~51.0.21",
-    "expo-apple-authentication": "~6.4.1",
+    "expo": "~51.0.22",
+    "expo-apple-authentication": "~6.4.2",
     "expo-auth-session": "~5.5.2",
     "expo-av": "~14.0.6",
     "expo-barcode-scanner": "~13.0.1",
@@ -72,7 +72,7 @@
     "expo-splash-screen": "~0.27.5",
     "expo-status-bar": "^1.12.1",
     "expo-system-ui": "~3.0.7",
-    "expo-updates": "~0.25.20",
+    "expo-updates": "~0.25.21",
     "expo-web-browser": "~13.0.3",
     "flutterwave-react-native": "^1.0.4",
     "husky": "^9.0.11",
@@ -113,7 +113,8 @@
     "stream-chat": "^8.37.0",
     "stream-chat-expo": "^5.33.0",
     "uuid": "^10.0.0",
-    "vector-icons": "^0.1.0"
+    "vector-icons": "^0.1.0",
+    "expo-notifications": "~0.28.11"
   },
   "devDependencies": {
     "@babel/core": "^7.24.0",
