@@ -1,10 +1,17 @@
 import React, { useContext, useState, useEffect } from "react";
-import { Pressable, StyleSheet, View, FlatList, TextInput, Platform } from "react-native";
+import {
+  Pressable,
+  StyleSheet,
+  View,
+  FlatList,
+  TextInput,
+  Platform,
+} from "react-native";
 import { SvgXml } from "react-native-svg";
 import { Dropdown } from "react-native-element-dropdown";
 import Button from "@/components/UI/Button";
 import { Colors } from "@/constants/Colors";
-import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePicker from "@react-native-community/datetimepicker";
 import {
   CalenderIcon,
   CalenderIconDark,
@@ -19,18 +26,19 @@ import { ThemeContext } from "@/ctx/ThemeContext";
 import { supabase } from "@/lib/supabase";
 import { fetchPatientData, getPatientData } from "@/utils/LoggedInUser";
 import { User } from "@/utils/LoggedInUser";
+import { router } from "expo-router";
 
 interface PatientData {
-  id: string,
-  first_name: string,
-  last_name: string,
-  date_of_birth: string,
-  gender: string,
-  country: string,
-  email: string,
-  phone: string,
+  id: string;
+  first_name: string;
+  last_name: string;
+  date_of_birth: string;
+  gender: string;
+  country: string;
+  email: string;
+  phone: string;
 }
-interface props{
+interface props {
   disabled?: boolean;
   editable?: boolean;
 }
@@ -55,7 +63,7 @@ function EditProfile() {
 
   const onChange = (event: any, selectedDate?: Date) => {
     const currentDate = selectedDate || date;
-    setShow(Platform.OS === 'ios');
+    setShow(Platform.OS === "ios");
     setDate(currentDate);
   };
 
@@ -65,11 +73,11 @@ function EditProfile() {
 
   const formatDate = (date: Date): string => {
     const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are 0-based, so add 1
-    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, "0"); // Months are 0-based, so add 1
+    const day = date.getDate().toString().padStart(2, "0");
     return `${year}-${month}-${day}`;
   };
-  
+
   useEffect(() => {
     getPatientData(supabase, setUserData);
   }, []);
@@ -78,37 +86,38 @@ function EditProfile() {
     const id: string = userData?.id as string;
     if (id) {
       fetchPatientData(id, setPatientData);
-      if(userData){
-        setEmail(userData?.email as string)
-        setPhone(userData?.phone as string)
+      if (userData) {
+        setEmail(userData?.email as string);
+        setPhone(userData?.phone as string);
       }
     }
   }, [userData]);
-  
-  useEffect(() => {
-      if(patientData){
-        setCountry(patientData[0]?.country as string)
-        setFirstName(patientData[0]?.first_name as string)
-        setLastName(patientData[0]?.last_name as string)
-        setGender(patientData[0]?.gender as string)
-        setBirthDate(patientData[0]?.date_of_birth as string)
-        setId(patientData[0]?.id)
-        setPhone(patientData[0]?.phone as string)
-      }
-    }
-  , [patientData]);
 
   useEffect(() => {
-    setBirthDate(`${formatDate(date)}`)
-  },[date])
+    if (patientData) {
+      setCountry(patientData[0]?.country as string);
+      setFirstName(patientData[0]?.first_name as string);
+      setLastName(patientData[0]?.last_name as string);
+      setGender(patientData[0]?.gender as string);
+      setBirthDate(patientData[0]?.date_of_birth as string);
+      setId(patientData[0]?.id);
+      setPhone(patientData[0]?.phone as string);
+    }
+  }, [patientData]);
+
+  useEffect(() => {
+    setBirthDate(`${formatDate(date)}`);
+  }, [date]);
 
   useEffect(() => {
     const getUser = async () => {
-      const { data:{user} } = await supabase.auth.getUser()
-      setEmail(user?.email as string)
-    }
-    getUser()
-  },[])
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      setEmail(user?.email as string);
+    };
+    getUser();
+  }, []);
 
   const countryNames: { label: string; value: string }[] = Object.keys(
     typedCountries
@@ -119,22 +128,26 @@ function EditProfile() {
   const handleUpdate = async () => {
     try {
       const data = await supabase
-        .from('patients')
+        .from("patients")
         .update({
           first_name: firstName,
           last_name: lastName,
           gender: gender,
           date_of_birth: birthDate,
           country: country,
-          phone: phone
+          phone: phone,
         })
-        .eq('id', id);
+        .eq("id", id);
+
+      const res = await supabase.auth.updateUser({ email: email });
+
+      console.log(res);
 
       if (data.error) throw data.error;
-      console.log(data)
       alert("Profile updated successfully");
+      router.back();
     } catch (error) {
-      console.log(error)
+      console.log(error);
       alert("Error updating profile");
     }
   };
@@ -165,32 +178,44 @@ function EditProfile() {
                     Typography.semiBold.medium,
                     {
                       backgroundColor:
-                        theme === "light" ? Colors.grayScale._50 : Colors.dark._2,
+                        theme === "light"
+                          ? Colors.grayScale._50
+                          : Colors.dark._2,
                       borderRadius: 15,
                       flexDirection: "row",
                       alignItems: "center",
                       paddingHorizontal: 20,
-                      color: theme === "light" ? Colors.grayScale._900 : Colors.others.white,
+                      color:
+                        theme === "light"
+                          ? Colors.grayScale._900
+                          : Colors.others.white,
                       paddingVertical: 15,
-                    }]}
+                    },
+                  ]}
                   placeholderTextColor={Colors.grayScale._500}
                   placeholder="First Name"
                   value={firstName}
-                  onChangeText={(text)=>setFirstName(text) }
+                  onChangeText={(text) => setFirstName(text)}
                 />
                 <TextInput
                   style={[
                     Typography.semiBold.medium,
                     {
                       backgroundColor:
-                        theme === "light" ? Colors.grayScale._50 : Colors.dark._2,
+                        theme === "light"
+                          ? Colors.grayScale._50
+                          : Colors.dark._2,
                       borderRadius: 15,
                       flexDirection: "row",
                       alignItems: "center",
                       paddingHorizontal: 20,
-                      color: theme === "light" ? Colors.grayScale._900 : Colors.others.white,
+                      color:
+                        theme === "light"
+                          ? Colors.grayScale._900
+                          : Colors.others.white,
                       paddingVertical: 15,
-                    }]}
+                    },
+                  ]}
                   placeholderTextColor={Colors.grayScale._500}
                   placeholder="Last Name"
                   value={lastName}
@@ -204,13 +229,16 @@ function EditProfile() {
                     flexDirection: "row",
                     alignItems: "center",
                     paddingHorizontal: 20,
-                  }}>
+                  }}
+                >
                   <TextInput
                     style={[
                       Typography.semiBold.medium,
                       {
                         color:
-                          theme === "light" ? Colors.grayScale._900 : Colors.others.white,
+                          theme === "light"
+                            ? Colors.grayScale._900
+                            : Colors.others.white,
                         flexGrow: 1,
                         paddingVertical: 15,
                       },
@@ -223,19 +251,17 @@ function EditProfile() {
                   />
                   <Pressable onPress={showDatepicker}>
                     <SvgXml
-                      xml={
-                        theme === "light" ? CalenderIcon : CalenderIconDark
-                      }
+                      xml={theme === "light" ? CalenderIcon : CalenderIconDark}
                     />
                   </Pressable>
                   {show && (
-        <DateTimePicker
-          value={date}
-          mode="date"
-          display="default"
-          onChange={onChange}
-        />
-      )}
+                    <DateTimePicker
+                      value={date}
+                      mode="date"
+                      display="default"
+                      onChange={onChange}
+                    />
+                  )}
                 </View>
                 <View
                   style={{
@@ -245,13 +271,16 @@ function EditProfile() {
                     flexDirection: "row",
                     alignItems: "center",
                     paddingHorizontal: 20,
-                  }}>
+                  }}
+                >
                   <TextInput
                     style={[
                       Typography.semiBold.medium,
                       {
                         color:
-                          theme === "light" ? Colors.grayScale._900 : Colors.others.white,
+                          theme === "light"
+                            ? Colors.grayScale._900
+                            : Colors.others.white,
                         flexGrow: 1,
                         paddingVertical: 15,
                       },
@@ -263,9 +292,7 @@ function EditProfile() {
                   />
                   <Pressable>
                     <SvgXml
-                      xml={
-                        theme === "light" ? MessageIcon : MessageIconDark
-                      }
+                      xml={theme === "light" ? MessageIcon : MessageIconDark}
                     />
                   </Pressable>
                 </View>
@@ -329,14 +356,20 @@ function EditProfile() {
                     Typography.semiBold.medium,
                     {
                       backgroundColor:
-                        theme === "light" ? Colors.grayScale._50 : Colors.dark._2,
+                        theme === "light"
+                          ? Colors.grayScale._50
+                          : Colors.dark._2,
                       borderRadius: 15,
                       flexDirection: "row",
                       alignItems: "center",
                       paddingHorizontal: 20,
-                      color: theme === "light" ? Colors.grayScale._900 : Colors.others.white,
+                      color:
+                        theme === "light"
+                          ? Colors.grayScale._900
+                          : Colors.others.white,
                       paddingVertical: 15,
-                    }]}
+                    },
+                  ]}
                   placeholderTextColor={Colors.grayScale._500}
                   placeholder="+250"
                   value={phone}
@@ -347,14 +380,20 @@ function EditProfile() {
                     Typography.semiBold.medium,
                     {
                       backgroundColor:
-                        theme === "light" ? Colors.grayScale._50 : Colors.dark._2,
+                        theme === "light"
+                          ? Colors.grayScale._50
+                          : Colors.dark._2,
                       borderRadius: 15,
                       flexDirection: "row",
                       alignItems: "center",
                       paddingHorizontal: 20,
-                      color: theme === "light" ? Colors.grayScale._900 : Colors.others.white,
+                      color:
+                        theme === "light"
+                          ? Colors.grayScale._900
+                          : Colors.others.white,
                       paddingVertical: 15,
-                    }]}
+                    },
+                  ]}
                   placeholderTextColor={Colors.grayScale._500}
                   placeholder="Gender"
                   value={gender}
@@ -378,7 +417,7 @@ function EditProfile() {
       )}
     </>
   );
-};
+}
 
 export default EditProfile;
 
