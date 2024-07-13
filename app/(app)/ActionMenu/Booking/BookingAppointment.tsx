@@ -11,15 +11,21 @@ import Button from "@/components/UI/Button";
 import Chips from "@/components/UI/ChipsComponent";
 import SelectHour from "@/components/SelectHour";
 import { useLocalSearchParams } from "expo-router";
+import { supabase } from "@/lib/supabase";
 
 export default function BookingAppointment() {
   const { theme, changeTheme } = useContext(ThemeContext);
   const [timeSlots, setTimeSlots] = useState([""]);
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedHour, setSelectedHour] = useState("");
+  const [availableTimeSlots,setAvailbaleTimeSlots]=useState<string[]>([])
   const [errorMessage,setErrorMessage]=useState<string>("")
   const { id } = useLocalSearchParams()
  
+
+  const appointmentTable = "appointment"
+
+  
   
 
   const generateTimeSlots = () => {
@@ -36,10 +42,43 @@ export default function BookingAppointment() {
     }
     return setTimeSlots(times);
   };
+  const convertTo12HourFormat = (time24: string) => {
+    const [hours, minutes] = time24.split(":").map(Number);
+    const period = hours < 12 ? "AM" : "PM";
+    const adjustedHours = hours % 12 || 12;
+    return `${adjustedHours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")} ${period}`;
+  };
+  const fetchBookedSlots = async (id: string, date: string) => {
+    const { data, error } = await supabase
+      .from(appointmentTable)
+      .select("time")
+      .eq("doctor_id", id)
+      .eq("date", date)
+    if (error) {
+      
+      return []
+    }
+    return data.map((appointment)=>convertTo12HourFormat(appointment.time))  
+    
+  }
 
   useEffect(() => {
     generateTimeSlots();
   }, []);
+
+  useEffect(() => {
+    const updateAvailableTimeSlots = async () => {
+      if (selectedDate) {
+        const bookedSlots = await fetchBookedSlots(id as string, selectedDate)
+        
+        const availableSlots = timeSlots.filter((slot) => !bookedSlots.includes(slot))
+       
+        setAvailbaleTimeSlots(availableSlots)
+      }
+    }
+    updateAvailableTimeSlots()
+   
+  },[selectedDate,id,timeSlots])
 
   
   const handleNextPress = () => {
@@ -87,7 +126,7 @@ export default function BookingAppointment() {
             >
               Select Date
             </Text>
-            <DatePicker onChange={setSelectedDate} />
+            <DatePicker onChange={setSelectedDate}  />
           </View>
 
           <View style={{ gap: 10 }}>
@@ -104,7 +143,7 @@ export default function BookingAppointment() {
             >
               Select Hour
             </Text>
-            <SelectHour timeSlots={timeSlots} onChange={setSelectedHour} />
+            <SelectHour timeSlots={availableTimeSlots} onChange={setSelectedHour} />
           </View>
         </View>
       </View>
