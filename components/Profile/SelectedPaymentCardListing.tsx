@@ -7,7 +7,7 @@ import { colors } from "react-native-elements";
 
 interface Props {
   icon: () => React.JSX.Element;
-  title: string;
+  title?: string;
 }
 
 export default function SelectPaymentCardListing({ icon, title }: Props) {
@@ -19,8 +19,8 @@ export default function SelectPaymentCardListing({ icon, title }: Props) {
         style={{
           flexDirection: "row",
           alignItems: "center",
-          justifyContent: "flex-start",
-          paddingHorizontal: 20,
+          justifyContent: "center",
+          paddingHorizontal: 10,
           paddingVertical: 20,
           backgroundColor:
             theme === "light" ? Colors.others.white : Colors.dark._2,

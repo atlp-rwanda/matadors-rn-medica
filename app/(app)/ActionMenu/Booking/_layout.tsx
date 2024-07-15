@@ -53,6 +53,10 @@ export default function BookingLayout() {
           name="SelectPayment"
           options={{ header: () => <Header title="Payments" /> }}
         />
+        {/* <Stack.Screen
+          name="SelectPaymentFlutter"
+          options={{ header: () => <Header title="Payments" /> }}
+        /> */}
       </Stack>
     </>
   );

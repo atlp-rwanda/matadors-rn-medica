@@ -16,6 +16,7 @@ import {
 } from "react-native";
 import { colors } from "react-native-elements";
 import { Mastercard, Mastercarddark } from "@/components/UI/Icons";
+import {flutter} from "@/components/UI/Icons"
 import { ThemeContext } from "@/ctx/ThemeContext";
 import { router } from "expo-router";
 import Button from "@/components/UI/Button";
@@ -51,6 +52,7 @@ export default function Reviewsummary() {
     }
     fetchDoctordata()
   }, [doctor_id])
+  console.log("this is packagePrice:",packagePrice)
   let num:number=1;
   if (duration === "30 minutes") {
     num=1
@@ -58,11 +60,11 @@ export default function Reviewsummary() {
     num=2
   }
   let price: number = 0;
-  if (packagePrice === "$20") {
+  if (packagePrice === "Rwf20") {
     price=20
-  } else if (packagePrice === "$40") {
+  } else if (packagePrice === "Rwf40") {
     price=40
-  } else if (packagePrice === "$60") {
+  } else if (packagePrice === "Rwf60") {
     price =60
   }
 const total:number=price*num
@@ -401,11 +403,11 @@ const total:number=price*num
             icon={() => {
               return (
                 <SvgXml
-                  xml={theme === "light" ? masterCardLight : masterCardDark}
+                  xml={theme === "light" ? flutter:flutter}
                 />
               );
             }}
-            title="•••• •••• •••• •••• 4679"
+           
           />
         </View>
 
@@ -413,7 +415,7 @@ const total:number=price*num
           <Button
             title="Next"
             onPress={() =>
-              router.push({ pathname:"(app)/ActionMenu/Booking/EnterYourPin",params:{doctor_id:doctor_id,hour:hour,date:date,packageTitle:packageTitle,packagePrice:packagePrice,problem:problem,user_id:user_id,patient_id:patient_id,duration:duration}})
+              router.push({ pathname:"(app)/ActionMenu/Booking/SelectPayment",params:{doctor_id:doctor_id,hour:hour,date:date,packageTitle:packageTitle,packagePrice:packagePrice,problem:problem,user_id:user_id,patient_id:patient_id,duration:duration}})
             }
             style={{}}
           />

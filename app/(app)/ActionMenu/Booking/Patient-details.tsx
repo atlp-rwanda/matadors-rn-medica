@@ -105,7 +105,7 @@ const PatientDetails = () => {
     }
     
     router.push({
-      pathname: "/(app)/ActionMenu/Booking/SelectPayment",
+      pathname: "/(app)/ActionMenu/Booking/reviewSummary",
       params:{doctor_id:Doctor_id,hour:hour,date:date,packageTitle:packageTitle,packagePrice:packagePrice,problem:text,user_id:loggeduser,patient_id:patient_id,duration:duration},
     });
   }
@@ -205,9 +205,7 @@ const PatientDetails = () => {
           <Button
             title="Next"
             onPress={handleNextPress}
-            // onPress={() => {
-            //   router.push({ pathname: "/(app)/ActionMenu/Booking/SelectPayment",params:{doctor_id:Doctor_id,hour:hour,date:date,packageTitle:packageTitle,packagePrice:packagePrice,problem:text,user_id:loggeduser,patient_id:patient_id,duration:duration} });
-            // }}
+            
           />
         </View>
       </ScrollView>

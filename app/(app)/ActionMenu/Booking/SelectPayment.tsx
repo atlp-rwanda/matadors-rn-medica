@@ -1,21 +1,199 @@
 import { Colors } from "@/constants/Colors";
 import { StatusBar } from "expo-status-bar";
 import {  useContext, useState } from "react";
-import {  ScrollView } from "react-native";
+import {  ScrollView,TouchableOpacity,View,Image } from "react-native";
 import { Text } from "react-native";
 import { ThemeContext } from "@/ctx/ThemeContext";
 import Typography from "@/constants/Typography";
 import Button from "@/components/UI/Button";
+import { useEffect } from "react";
 import { PaymentMethods } from "@/constants/PaymentMethods";
 import PaymentChooseContainer from "@/components/UI/PaymentChooseContainer/Index";
 import { router } from "expo-router";
 import React from "react";
 import { useLocalSearchParams } from "expo-router";
-
+import { PayWithFlutterwave } from 'flutterwave-react-native'
+import { supabase } from "@/lib/supabase";
+import { useModal } from "@/ctx/ModalContext";
 export default function SelectPayment() {
   const { theme, changeTheme } = useContext(ThemeContext);
   const [selected, setSelected] = useState(false);
-const {doctor_id,hour,date,packageTitle,packagePrice,problem,user_id,patient_id,duration}=useLocalSearchParams()
+  const [loggedEmail,setLoggedEmail]=useState<string>("")
+  const { doctor_id, hour, date, packageTitle, packagePrice, problem, user_id, patient_id, duration } = useLocalSearchParams()
+
+  const modal = useModal()
+  const flutterKey = process.env.EXPO_PUBLIC_FLUTTERWAVE_KEY ?? ""
+  console.log("this is packageprice from slect Payment:",packagePrice)
+  
+  interface RedirectParams {
+	status: "successful" | "cancelled";
+	transaction_id?: string;
+	tx_ref: string;
+  }
+  let num:number=1;
+  if (duration === "30 minutes") {
+    num=1
+  } else {
+    num=2
+  }
+  let price: number = 0;
+  if (packagePrice === "Rwf20") {
+    price=20
+  } else if (packagePrice === "Rwf40") {
+    price=40
+  } else if (packagePrice === "Rwf60") {
+    price =60
+  }
+const total:number=price*num
+  
+  useEffect(() => {
+    const fetchUser = async () => {
+      
+      const { data: { user },error } = await supabase.auth.getUser()
+      if (error) {
+        console.error("error fetching user")
+      } else {
+        setLoggedEmail(user?.email||"logged Email")
+      }
+    }
+    fetchUser()
+   
+  }, [loggedEmail])
+  async function bookAppointment() {
+    try {
+    const { error } = await supabase
+      .from('appointment')
+      .insert({
+        doctor_id: doctor_id,
+        time: hour, date: date,
+        package: packageTitle,
+        price: packagePrice,
+        illness_descr: problem,
+        user_id: patient_id,
+        duration: duration
+      });
+    } catch (error) {
+      console.log("Error while inserting data in booking ",error)
+  }
+   
+  }
+  function successBooking() {
+    router.push("ActionMenu");;
+    modal.hide();
+  }
+  const showSuccefulModal = () => {
+     modal.show({
+      children: (
+        <View
+          style={{
+            padding: 40,
+            alignItems: "center",
+            gap: 20,
+            borderRadius: 48,
+            backgroundColor:
+              theme === "light" ? Colors.others.white : Colors.dark._2,
+          }}
+        >
+          <Image source={require("@/assets/images/calendarmodal.png")} />
+          <View
+            style={{
+              gap: 20,
+              backgroundColor:
+                theme === "light" ? Colors.others.white : Colors.dark._2,
+            }}
+          >
+            <Text
+              style={[
+                Typography.heading._4,
+                {
+                  color: Colors.main.primary._500,
+                  textAlign: "center",
+                },
+              ]}
+            >
+              Congratulations!
+            </Text>
+            <Text
+              style={[
+                Typography.regular.large,
+                {
+                  textAlign: "center",
+                  color:
+                    theme === "light"
+                      ? Colors.grayScale._900
+                      : Colors.others.white,
+                },
+              ]}
+            >
+              Appointment successfully booked. You will receive a notification
+              and the doctor you selected will contact you.
+            </Text>
+            <View
+              style={{
+                width: "100%",
+                backgroundColor: "red",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            ></View>
+            <Button
+              title="View Appointment"
+              onPress={successBooking}
+            />
+            <TouchableOpacity
+              onPress={() => {
+                router.push("ActionMenu");
+                modal.hide();
+              }}
+              style={{
+                backgroundColor:
+                  theme === "light" ? Colors.main.primary._100 : Colors.dark._3,
+                borderRadius: 100,
+                padding: 18,
+                alignItems: "center",
+              }}
+            >
+              <Text
+                style={[
+                  Typography.bold.large,
+                  {
+                    color:
+                      theme === "light"
+                        ? Colors.main.primary._500
+                        : Colors.others.white,
+                  },
+                ]}
+              >
+                cancel
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      ),
+    });
+  }
+  const handleOnRedirect = (data: RedirectParams) => {
+  
+    console.log("redire data:", data)
+    if (data.status === "successful") {
+      bookAppointment()
+       showSuccefulModal()
+    } else {
+      alert("Payment Failed or cancelled ,please try again")
+    }
+  }
+  const generateRef = (length: number): string => {
+  const characters = flutterKey;
+  const charactersArray = characters.split('');
+  let result = '';  
+
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * charactersArray.length);
+    result += charactersArray[randomIndex];
+  }
+
+  return result;
+};
 
   return (
     <>
@@ -40,23 +218,26 @@ const {doctor_id,hour,date,packageTitle,packagePrice,problem,user_id,patient_id,
             },
           ]}
         >
-          Select the payment method you want to use.
+          Comfirm the payment by click the button below.
         </Text>
-
-        <PaymentChooseContainer data={PaymentMethods} />
-
-        <Button
-          title="Add New Card"
-          onPress={() => router.push("(app)/ActionMenu/Booking/AddNewCard")}
-          type={theme === "light" ? "light" : "gray"}
-        />
-        <Button
-          title="Next"
-          onPress={() => {
-            router.push({ pathname: "(app)/ActionMenu/Booking/reviewSummary",params: {doctor_id:doctor_id,hour:hour,date:date,packageTitle:packageTitle,packagePrice:packagePrice,problem:problem,user_id:user_id,patient_id:patient_id,duration:duration}});
-          }}
-          style={{ marginTop: "auto" }}
-        />
+        <View style={{width:"100%",height:"70%",display:"flex",flexDirection:"row",alignItems:"center",justifyContent:"center"}}>
+           <PayWithFlutterwave
+    onRedirect={handleOnRedirect}
+    options={{
+         tx_ref: generateRef(11),
+         authorization: 'FLWPUBK_TEST-3c390392d62e44fc5788cb0859823f05-X',
+         customer: {
+             email: loggedEmail
+         },
+         amount: total,
+         currency: 'RWF',
+         payment_options: 'card'
+      }}
+   />
+        
+        </View>
+       
+        
       </ScrollView>
     </>
   );
