@@ -7,7 +7,8 @@ import {
   ImageBackground,
   ScrollView,
   FlatList,
-  Pressable
+  Pressable,
+  Dimensions
 } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { useFonts as useFontsExpo } from "expo-font";
@@ -20,12 +21,10 @@ import {
 } from "@/assets/icons/Profile/Icons";
 import { ThemeContext } from "@/ctx/ThemeContext";
 import { blackHeart } from "@/components/UI/icons/blackHeart";
-import { Session } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabase";
 import {
   getUserImageUrl,
   fetchPatientData,
-  getPatientData,
 } from "@/utils/LoggedInUser";
 import { Doctor } from "@/constants/Types";
 import DoctorComponent from "@/components/DoctorComponent";
@@ -35,16 +34,16 @@ import { blueheart } from '@/assets/icons/blueHeart';
 import NofoundComponent from "@/components/NofoundComponent";
 import { AuthContext, useAuth } from "@/ctx/AuthContext";
 import RemovefavoritePopup from "@/components/RemovefavoriteIndexPopup";
+import {  DentistsIcon, GeneralIcon, MoreIconPureBlue, NeurologyIcon, NutritionistIcon, OpticianIcon, PediatricianIcon, RadiologyIcon } from "@/constants/icon";
 
 export default function Index() {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [patientData, setPatientData] = useState(null);
   const [imageUrl, setImageUrl] = useState([]);
-  const [activeIcon, setActiveIcon] = useState("Home");
   const [profilePhoto, setProfilePhoto] = useState("");
-  const { theme, changeTheme } = useContext(ThemeContext);
+  const { theme } = useContext(ThemeContext);
   const navigation = useNavigation();
-  const [text, setText] = useState("");
+  const [setText] = useState("");
   const [doctors, setDoctors] = useState<Doctor[]>([]);
   const [greeting, setGreeting] = useState("");
   const { authType, imageUrl: otherAuthImageUrl } = useAuth();
@@ -58,6 +57,8 @@ export default function Index() {
   const [profile, setProfile] = useState<any>(null)
   const { userId } = useContext(AuthContext);
   const [isLoading,setIsLoading]=useState(false);
+  const { width } = Dimensions.get("window");
+
   const [fontsLoaded] = useFontsExpo({
     "Urbanist-regular": require("@/assets/fonts/Urbanist-Regular.ttf"),
     "Urbanist-bold": require("@/assets/fonts/Urbanist-Bold.ttf"),
@@ -81,7 +82,7 @@ export default function Index() {
 
   useEffect(() => {
     if (imageUrl.length > 0) {
-      setProfilePhoto(imageUrl?.name);
+      setProfilePhoto(imageUrl[0]?.name);
     }
   }, [imageUrl]);
 
@@ -124,7 +125,6 @@ export default function Index() {
       setDoctors(mergedData);
       setIsLoading(false);
     }
-
     fetchData();
   }, []);
    useEffect(() => {
@@ -164,23 +164,20 @@ export default function Index() {
   }, [loggeduser])
  
   useEffect(() => {
-        const fetchFavoritesDoctor = async () => {
-            if (patient_id) {
-                const { data, error } = await supabase
-                    .from(favoriteTable)
-                    .select("*")
-                    .eq("patient", patient_id)
-                if (error) {
-                    console.error("error while fetching ",error)
-                }
-                
-                setFavoriteDoctors(data?.map((item:any)=>item.favorite_doctor)||[])
+    const fetchFavoritesDoctor = async () => {
+        if (patient_id) {
+            const { data, error } = await supabase
+                .from(favoriteTable)
+                .select("*")
+                .eq("patient", patient_id)
+            if (error) {
+                console.error("error while fetching ",error)
             }
-            
+            setFavoriteDoctors(data?.map((item:any)=>item.favorite_doctor)||[])
         }
-        fetchFavoritesDoctor()
-     
- },[patient_id])
+    }
+    fetchFavoritesDoctor()
+},[patient_id])
 
   useEffect(() => {
     const updateGreeting = () => {
@@ -201,19 +198,26 @@ export default function Index() {
     return () => clearInterval(intervalId);
   }, []);
 
-  const handleIconPress = (iconName: string) => {
-    setActiveIcon(iconName);
-  };
 
-  const isIconActive = (iconName: string) => {
-    return activeIcon === iconName;
-  };
-  
+const specializations = [
+  { icon: GeneralIcon, text: "General Doctor" },
+  { icon: DentistsIcon, text: "Dentist" },
+  { icon: NutritionistIcon, text: "Nutritionist" },
+  { icon: OpticianIcon, text: "Optician" },
+  { icon: NeurologyIcon, text: "Neurologist" },
+  { icon: PediatricianIcon, text: "Pediatrician" },
+  { icon: RadiologyIcon, text: "Radiologist" },
+  { icon: MoreIconPureBlue, text: "More" },
+
+]
 
  const handleSpecializationChange = (specialization: string) => {
+  if(specialization === "More") {
+    router.push("/ActionMenu/AllDoctorScreen")
+    return
+  }
     setSelectedSpecilization(specialization)
     setSearchTerm('')
-    
   }
    const updateFavoriteDoctors = async () => {
     const { data, error } = await supabase
@@ -251,7 +255,6 @@ export default function Index() {
       return;
     }
     setFavoriteDoctors(prev=>[...prev,doctorId])
-    
   }
   
   
@@ -278,7 +281,7 @@ export default function Index() {
               }}
             >
               <View style={{ borderRadius: 100, width: 70, height: 70 }}>
-                <Image
+              <Image
                   style={{ width: "100%", height: "100%", borderRadius: 100 }}
                   source={{
                     uri:authType && authType !== "apple"
@@ -419,132 +422,36 @@ export default function Index() {
             <Text style={styles.seeTxt}>See All</Text>
           </TouchableOpacity>
         </View>
-        <View style={styles.specialityContainer1}>
-          <TouchableOpacity>
-            <Image
-              source={require("../../../assets/images/GeneralDoctor.png")}
-            ></Image>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Image
-              source={require("../../../assets/images/Dentist.png")}
-            ></Image>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Image
-              source={require("../../../assets/images/Optician.png")}
-            ></Image>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Image
-              source={require("../../../assets/images/Nutritionist.png")}
-            ></Image>
-          </TouchableOpacity>
+  
+        <View style={{
+            flexWrap: "wrap",
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: 20,
+            marginTop: 10,
+            width: width
+
+        }}>
+          {specializations.map((specialization, index) => (
+            <TouchableOpacity key={index} onPress={() => 
+              handleSpecializationChange(specialization.text)
+                       
+            }
+            style={{
+              alignItems: "center",
+              gap: 10,
+              marginTop: 5,
+              padding: 5,
+              marginBottom: 10,
+              backgroundColor: theme === "dark" ? "#181A20" : "#ffffff",
+            }}>
+              <SvgXml xml={specialization.icon === null ? GeneralIcon : specialization.icon} />
+              <Text>{specialization.text.slice(0,8)+"..."}</Text>
+            </TouchableOpacity>
+          ))}
         </View>
-        <View style={styles.NameTxt}>
-          <Text
-            style={{
-              color: theme === "dark" ? "#FFFFFF" : "#000000",
-              fontSize: 14,
-              marginLeft: "2%",
-              fontFamily: "Urbanist-bold",
-            }}
-          >
-            General..
-          </Text>
-          <Text
-            style={{
-              color: theme === "dark" ? "#FFFFFF" : "#000000",
-              fontSize: 14,
-              marginLeft: "2%",
-              fontFamily: "Urbanist-bold",
-            }}
-          >
-            Dentist
-          </Text>
-          <Text
-            style={{
-              color: theme === "dark" ? "#FFFFFF" : "#000000",
-              fontSize: 14,
-              marginLeft: "2%",
-              fontFamily: "Urbanist-bold",
-            }}
-          >
-            Ophthal..
-          </Text>
-          <Text
-            style={{
-              color: theme === "dark" ? "#FFFFFF" : "#000000",
-              fontSize: 14,
-              marginLeft: "2%",
-              fontFamily: "Urbanist-bold",
-            }}
-          >
-            Nutrition..
-          </Text>
-        </View>
-        <View style={styles.specialityContainer1}>
-          <TouchableOpacity>
-            <Image
-              source={require("../../../assets/images/Neurologist.png")}
-            ></Image>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Image
-              source={require("../../../assets/images/Pediatric.png")}
-            ></Image>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Image
-              source={require("../../../assets/images/Radiologist.png")}
-            ></Image>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Image source={require("../../../assets/images/More.png")}></Image>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.NameTxt}>
-          <Text
-            style={{
-              color: theme === "dark" ? "#FFFFFF" : "#000000",
-              fontSize: 14,
-              marginLeft: "2%",
-              fontFamily: "Urbanist-bold",
-            }}
-          >
-            Neurolo..
-          </Text>
-          <Text
-            style={{
-              color: theme === "dark" ? "#FFFFFF" : "#000000",
-              fontSize: 14,
-              marginLeft: "2%",
-              fontFamily: "Urbanist-bold",
-            }}
-          >
-            Pediatric
-          </Text>
-          <Text
-            style={{
-              color: theme === "dark" ? "#FFFFFF" : "#000000",
-              fontSize: 14,
-              marginLeft: "2%",
-              fontFamily: "Urbanist-bold",
-            }}
-          >
-            Radiolo..
-          </Text>
-          <Text
-            style={{
-              color: theme === "dark" ? "#FFFFFF" : "#000000",
-              fontSize: 14,
-              marginLeft: "2%",
-              fontFamily: "Urbanist-bold",
-            }}
-          >
-            More
-          </Text>
-        </View>
+       
         <View style={styles.TopDocs}>
           <Text
             style={{
@@ -574,7 +481,10 @@ export default function Index() {
             backgroundColor: theme === "dark" ? "#181A20" : "#ffffff",
           }}
         >
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          <ScrollView 
+          horizontal 
+          showsHorizontalScrollIndicator={false}
+          >
             {specialization.map((specialization, index) =>
                         <Pressable key={index} onPress={()=>handleSpecializationChange(specialization)} style={[styles.categoryBtn,
                             selectedSpecilization === specialization ? styles.firstCategoryBtn : {},
@@ -589,7 +499,6 @@ export default function Index() {
                         )}
           </ScrollView>
         </View>
-
         <ImageBackground
           style={{
             backgroundColor: theme === "dark" ? "#181A20" : "#EEEEEE",
@@ -629,7 +538,8 @@ export default function Index() {
                       imageSource={{ uri: doctor.image }}
                       name={`${doctor.first_name} ${doctor.last_name}`}
                       iconComponent={favoriteDoctors.includes(doctor.id) ? (
-                  <SvgXml xml={blueheart} />
+                  <SvgXml xml={blueheart} 
+                  />
                 ) : (
                   <SvgXml xml={whiteHeart} />
                 )}
@@ -639,8 +549,6 @@ export default function Index() {
                       review={doctor.reviews.length}
                       rate={doctor.result}
                       addRemoveFavorite={() => handleIconClick(doctor,doctor.id) }
-                    
-
                     />
                 </View>
               )})
