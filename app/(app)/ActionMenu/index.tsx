@@ -57,7 +57,7 @@ export default function Index() {
   const [loggeduser, setLoggedUser] = useState<string>()
   const [profile, setProfile] = useState<any>(null)
   const { userId } = useContext(AuthContext);
-
+  const [isLoading,setIsLoading]=useState(false);
   const [fontsLoaded] = useFontsExpo({
     "Urbanist-regular": require("@/assets/fonts/Urbanist-Regular.ttf"),
     "Urbanist-bold": require("@/assets/fonts/Urbanist-Bold.ttf"),
@@ -87,17 +87,42 @@ export default function Index() {
 
  useEffect(() => {
     async function fetchData() {
-      const { data, error } = await supabase.from(tableName).select("*");
+      setIsLoading(true);
+      
+      const { data: doctorData, error: doctorError } = await supabase.from('doctors').select('*');
+      if (doctorError) {
+        setIsLoading(false);
+        throw new Error('Error fetching data:' + doctorError.message);
+      }
 
-      if (error) {
-        console.error("Error fetching data:", error);
+      const uniqueSpecialization = Array.from(new Set(doctorData.map((doctor) => doctor.specialization)));
+      setSpecialization(['All', ...uniqueSpecialization]);
+
+      const docIds = doctorData.map(doc => doc.id);
+
+      const { data: reviewData, error: reviewError } = await supabase
+        .from('reviews')
+        .select('*')
+        .in('doctor_id', docIds);
+
+      if (reviewError) {
+        setIsLoading(false);
+        console.error('Error fetching reviews:', reviewError);
         return;
       }
-      setDoctors(data);
 
-   
-      const uniqueSpecialization = Array.from(new Set(data.map((doctor: Doctor) => doctor.specialization)))
-      setSpecialization(["All",...uniqueSpecialization])
+      const mergedData = doctorData.map(doctor => {
+        const reviews = reviewData.filter(review => review.doctor_id === doctor.id);
+        
+          
+          const totalStars = reviews.reduce((sum, review) => sum + parseFloat(review.stars), 0);
+          const result= reviews.length === 0 ? 0 :(totalStars / reviews.length).toFixed(1); 
+          
+        return { ...doctor, reviews ,result };
+      });
+
+      setDoctors(mergedData);
+      setIsLoading(false);
     }
 
     fetchData();
@@ -585,6 +610,7 @@ export default function Index() {
               filteredDoctors.map((doctor: any, index: number) => {
                 
                 return(
+                
                 <View
                   key={index}
                   style={{
@@ -597,7 +623,7 @@ export default function Index() {
                     alignItems: "center",
                     backgroundColor: theme === "dark" ? "#181A20" : "#EEEEEE",
                   }}
-                >
+                >         
                   <DoctorComponent
                       path={() => router.push({ pathname: "/ActionMenu/Booking/Doctor_details", params: { id: doctor.id } })}
                       imageSource={{ uri: doctor.image }}
@@ -610,8 +636,8 @@ export default function Index() {
                       professionalTitle={doctor.specialization}
                       hospital={doctor.hospital_name}
                       star={<SvgXml xml={star} />}
-                      review={doctor.review}
-                      rate={doctor.rate}
+                      review={doctor.reviews.length}
+                      rate={doctor.result}
                       addRemoveFavorite={() => handleIconClick(doctor,doctor.id) }
                     
 

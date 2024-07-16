@@ -63,6 +63,7 @@ function DoctorScreen() {
   const { theme, changeTheme } = useContext(ThemeContext);
   const [selectedSpecilization, setSelectedSpecilization] = useState<string>("All")
   const [specialization, setSpecialization] = useState<string[]>([])
+  const [isloading, setIsLoading] = useState(false)
     const [favoriteDoctors,setFavoriteDoctors]=useState<number[]>([])
   const containerStyle =
     theme === "dark" ? styles.outerDark : styles.outerLight;
@@ -108,23 +109,48 @@ function DoctorScreen() {
     fetchUserProfile()
   }, [loggeduser])
   
-  useEffect(() => {
-    async function fetchData() {
-      const { data, error } = await supabase.from(tableName).select("*");
-
-      if (error) {
-        console.error("Error fetching data:", error);
-        return;
+    useEffect(() => {
+      async function fetchData() {
+        setIsLoading(true);
+        
+        const { data: doctorData, error: doctorError } = await supabase.from('doctors').select('*');
+        if (doctorError) {
+          setIsLoading(false);
+          throw new Error('Error fetching data:' + doctorError.message);
+        }
+  
+        const uniqueSpecialization = Array.from(new Set(doctorData.map((doctor) => doctor.specialization)));
+        setSpecialization(['All', ...uniqueSpecialization]);
+  
+        const docIds = doctorData.map(doc => doc.id);
+  
+        const { data: reviewData, error: reviewError } = await supabase
+          .from('reviews')
+          .select('*')
+          .in('doctor_id', docIds);
+  
+        if (reviewError) {
+          setIsLoading(false);
+          console.error('Error fetching reviews:', reviewError);
+          return;
+        }
+  
+        const mergedData = doctorData.map(doctor => {
+          const reviews = reviewData.filter(review => review.doctor_id === doctor.id);
+          
+            
+            const totalStars = reviews.reduce((sum, review) => sum + parseFloat(review.stars), 0);
+            const result= reviews.length === 0 ? 0 :(totalStars / reviews.length).toFixed(1); 
+            
+          return { ...doctor, reviews ,result };
+        });
+  
+        setDoctors(mergedData);
+        setIsLoading(false);
       }
-      setDoctors(data);
-
-   
-      const uniqueSpecialization = Array.from(new Set(data.map((doctor: Doctor) => doctor.specialization)))
-      setSpecialization(["All",...uniqueSpecialization])
-    }
-
-    fetchData();
-  }, []);
+  
+      fetchData();
+    }, []);
   console.log("this is retrived specilization:", specialization)
    useEffect(() => {
         const fetchFavoritesDoctor = async () => {
@@ -282,8 +308,8 @@ function DoctorScreen() {
                       professionalTitle={doctor.specialization}
                       hospital={doctor.hospital_name}
                       star={<SvgXml xml={star} />}
-                      review={doctor.review}
-                      rate={doctor.rate}
+                      review={doctor.reviews.length}
+                      rate={doctor.result}
                       addRemoveFavorite={() => handleIconClick(doctor,doctor.id) }
                     
 

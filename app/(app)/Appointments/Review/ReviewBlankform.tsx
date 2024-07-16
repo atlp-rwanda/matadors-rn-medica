@@ -10,7 +10,7 @@ import {
     ColorSchemeName,
     Appearance
   } from "react-native";
-  import React, { useContext, useState } from "react";
+  import React, { useContext, useEffect, useState } from "react";
   import Typography from "@/constants/Typography";
   import { ThemeContext } from "@/ctx/ThemeContext";
   import { backArrowBlack, backArrowWhite } from "@/components/UI/icons/backArrow";
@@ -19,24 +19,116 @@ import {
   import { DivLine } from "@/assets/icons/DivLine";
   import { RadioButton } from "react-native-paper";
   import { StatusBar } from "expo-status-bar";
-  import { router } from "expo-router";
+  import { router, useLocalSearchParams } from "expo-router";
   import Popup from "./Popup";
+import { supabase } from "@/lib/supabase";
+import Index from "../..";
   
+  interface Review{
+    id:string;
+    doctor_id:string;
+    patient_id:string;
+    review:string;
+    recommend:boolean;
+    
+  }  interface Doctor {
+    id: string;
+    first_name: string;
+    last_name: string;
+    image: string;
+  };
   const ReviewBlankform: React.FC = () => {
     const { theme, changeTheme } = useContext(ThemeContext);
     const [rating, setRating] = useState(0);
-    const [value, setValue] = useState("first");
+    const [value, setValue] = useState("Yes");
+    const [doctor, setDoctor] = useState<Doctor[]>([]);
     const [showPopup, setShowPopup] = useState(false);
+    const [loggedUser, setLoggedUser] = useState<string | undefined>();
+    const [profile, setProfile] = useState<any>(null);
+    const [text, setText] = useState("");
+  const [patientId, setPatientId] = useState<string | undefined>();
     const ColorScheme = Appearance.getColorScheme(); 
-    console.log(rating)
+    
+
     const submitHandler = () => {
+      insertReview();
       setShowPopup(true);
     };
   
     const closePopup = () => {
-      setShowPopup(false);
+      setShowPopup(false); 
     };
+    useEffect(() => {
+      const fetchUser = async () => {
+        const { data: { user }, error } = await supabase.auth.getUser();
+        if (error) {
+          console.error("Error fetching user:", error);
+        } else {
+          setLoggedUser(user?.id);
+        }
+      };
+      fetchUser();
+    }, []);
+    useEffect(() => {
+      const fetchUserProfile = async () => {
+        if (loggedUser) {
+          const { data, error } = await supabase
+            .from("patients")
+            .select("*")
+            .eq('auth_id', loggedUser)
+            .single();
+          if (error) {
+            console.error("Error retrieving profile:", error);
+          } else {
+            setProfile(data);
+            setPatientId(data.id);
+            console.log(data.id);
+            
+          }
+        }
+      };
+      fetchUserProfile();
+    }, [loggedUser]);
+    
+    const {doctor_id} = useLocalSearchParams();
+    async function Fetchdoctor() {
+
+      const { data: doctorsData, error: doctorsError } = await supabase
+      .from("doctors")
+      .select("*")
+      .eq("id", doctor_id);
   
+    if (doctorsError) {
+      // setIsLoading(false);
+      console.error("Error fetching doctors:", doctorsError);
+      return;
+    }
+    const Data = doctorsData.map(doctor => {
+    const doctors = doctorsData.find(doc => doc.id === doctor.doctor_id);
+    setDoctor(doctor);
+        
+  });
+        
+        
+    }
+     Fetchdoctor();
+   
+    async function insertReview() {
+      const { data, error } = await supabase
+        .from('reviews')
+        .insert([
+          { patient_id: patientId, doctor_id: doctor_id, review: text,  recommend: value === 'Yes' ,stars:rating }
+        ]);
+    
+      if (error) {
+        console.error('Error inserting data:', error);
+      } else {
+        console.log('Data inserted:', data);
+      }
+    }
+  
+   
+    
     return (
       <View
         style={{
@@ -59,18 +151,21 @@ import {
             Write a Review
           </Text>
         </View>
+        {doctor && (
+          <>
         <View style={{ gap: 24, justifyContent: "center", alignItems: "center" }}>
-          <Image source={require("@/assets/images/Drake.png")} style={{width: 200, height: 200, borderRadius: 100}}/>
+          <Image source={{uri:doctor.image}} style={{width: 200, height: 200, borderRadius: 100}}/>
           <Text
             style={[
               Typography.heading._5,
               { color: theme === "dark" ? "#FFFFFF" : "#212121", width: 260 },
             ]}
           >
-            How was your experience with Dr. Drake Boeson?
+            How was your experience with {doctor.first_name}  {doctor.last_name}?
           </Text>
         </View>
-  
+        
+    
         <View>
           <StarRating
             rating={rating}
@@ -99,23 +194,25 @@ import {
           keyboardVerticalOffset={60}
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           >
-            <TextInput
-            multiline={true}
-            numberOfLines={7}
-            placeholder="Your review here..."
-            placeholderTextColor={theme === "dark" ? "#FFFFFF" : "#212121"}
-            style={[{
-             padding: 20,
-              height: 120,
-              width: 360,
-              borderRadius: 16,
-              backgroundColor: theme === "dark" ? "#1F222A" : "#FAFAFA",
-              color: theme === "dark" ? "#FFFFFF" : "#212121",
-              textAlignVertical:'top',
-              gap: 12,
-              
-            }]}
-          />
+           <TextInput
+  multiline={true}
+  numberOfLines={7}
+  placeholder="Your review here..."
+  placeholderTextColor={theme === "dark" ? "#FFFFFF" : "#212121"}
+  value={text}
+  onChangeText={setText}
+  style={{
+    padding: 20,
+    height: 120,
+    width: 360,
+    borderRadius: 16,
+    backgroundColor: theme === "dark" ? "#1F222A" : "#FAFAFA",
+    color: theme === "dark" ? "#FFFFFF" : "#212121",
+    textAlignVertical: 'top',
+    gap: 12
+  }}
+/>
+
           </KeyboardAvoidingView>
 
         </View>
@@ -127,7 +224,7 @@ import {
               { color: theme === "dark" ? "#FFFFFF" : "#212121" },
             ]}
           >
-            Would you recommend Dr. Drake Boeson to your friends?
+            Would you recommend {doctor.first_name}  {doctor.last_name} to your friends?
           </Text>
   
           <RadioButton.Group
@@ -137,7 +234,7 @@ import {
             <View style={{ flexDirection: "row", gap: 24 }}>
               <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <RadioButton
-                  value="first"
+                  value="Yes"
                   color="#246BFD"
                   uncheckedColor="#246BFD"
                 />
@@ -146,7 +243,7 @@ import {
   
               <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <RadioButton
-                  value="second"
+                  value="No"
                   color="#246BFD"
                   uncheckedColor="#246BFD"
                 />
@@ -201,7 +298,10 @@ import {
           
         </View>
         <Popup message="Review Successful!" bigMessage="Your review has been successfully submitted, thank you very much!" show={showPopup} onClose={closePopup} />
+      </>
+        )}
       </View>
+  
     );
   };
   
