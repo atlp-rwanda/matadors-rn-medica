@@ -1,6 +1,7 @@
 import { FlatList } from "react-native";
 import React, { useEffect, useState } from "react";
 import Chips from "./UI/ChipsComponent";
+import { View } from "react-native";
 
 interface Props {
   timeSlots: string[];
@@ -19,6 +20,9 @@ export default function SelectHour({ timeSlots, onChange }: Props) {
       renderItem={(item) => {
         return (
           <>
+            <View style={{ width: '32%', marginBottom: 10}}>
+
+            
             <Chips
               selected={selectedHour === item.item}
               text={item.item}
@@ -26,22 +30,19 @@ export default function SelectHour({ timeSlots, onChange }: Props) {
               size="large"
               style={{
                 paddingHorizontal: 5,
-                width: "32%",
+                width: "100%",
                 marginRight: 5,
               }}
               onPress={() => setSelectedHour(item.item)}
-            />
+              />
+              </View>
           </>
         );
       }}
       numColumns={3}
       contentContainerStyle={{
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
-
-        gap: 10,
-        flexWrap: "wrap",
+        
+       
       }}
     />
   );

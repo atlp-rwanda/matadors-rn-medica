@@ -9,29 +9,23 @@ import DateElement from "./Date";
 
 interface Props {
   onChange: React.Dispatch<React.SetStateAction<string>>;
+ 
 }
 
 export default function DatePicker({ onChange }: Props) {
+  const now = new Date()
+  const nowMonth = now.getMonth()
+  const nowYear=now.getFullYear()
   let [dates, setDates] = useState<React.JSX.Element[]>([]);
-  const [currentMonth, setCurrentMonth] = useState(6); // Initialize currentMonth to June (0-based index)
-  const [currentYear, setCurrentYear] = useState(2024); // Initialize currentYear to 2024
-  const { theme } = useContext(ThemeContext); // Get theme context
+  const [currentMonth, setCurrentMonth] = useState(nowMonth); 
+  const [currentYear, setCurrentYear] = useState(nowYear); 
+  const { theme } = useContext(ThemeContext); 
 
-  const days = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]; // Weekday names
+  const days = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]; 
 
-  const [selectedDate, setSelectedDate] = useState(0); // Initialize selectedDate to 0 (no date selected)
+  const [selectedDate, setSelectedDate] = useState(0); 
 
-  // Function to calculate the index of the day for a given date
-  function dayOfWeek(firstDayIndex: number, date: number): number {
-    if (firstDayIndex < 0 || firstDayIndex > 6) {
-      throw new Error("Invalid first day index. It should be between 0 and 6.");
-    }
-    if (date < 1) {
-      throw new Error("Invalid date. Date should be greater than or equal to 1.");
-    }
-    return (firstDayIndex + (date - 1)) % 7; 
-  }
-
+   const toDay=new Date()
   
   useEffect(() => {
     let datesArr = [];
@@ -47,6 +41,8 @@ export default function DatePicker({ onChange }: Props) {
 
     
     for (let j = 1; j <= daysInMonth; j++) {
+      const currentDate = new Date(currentYear, currentMonth, j)
+      const isDisabled=currentDate<toDay&&currentDate.toDateString()!==toDay.toDateString()
       if (j === selectedDate) {
         onChange(`${currentYear}-${(currentMonth + 1).toString().padStart(2, "0")}-${j.toString().padStart(2, "0")}`);
       }
@@ -56,6 +52,7 @@ export default function DatePicker({ onChange }: Props) {
           selectedDate={selectedDate}
           key={j}
           item={`${j}`}
+          disabled={isDisabled}
         />
       );
     }
@@ -120,6 +117,7 @@ export default function DatePicker({ onChange }: Props) {
           {`${new Date(currentYear, currentMonth).toLocaleString("en-US", {
             month: "long",
           })} ${currentYear}`}
+          
         </Text>
 
         <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -148,6 +146,7 @@ export default function DatePicker({ onChange }: Props) {
                   ]}
                 >
                   {item.item}
+                  
                 </Text>
               </Pressable>
             )}
