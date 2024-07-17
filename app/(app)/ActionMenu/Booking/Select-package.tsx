@@ -34,7 +34,7 @@ import { StatusBar } from "expo-status-bar";
 const SelectPackage = () => {
   const { theme, changeTheme } = useContext(ThemeContext);
   const { Doctor_id, hour, date,patient_id } = useLocalSearchParams()
-  const [selectedPackageTitle, setSelectedPackageTitle] = useState<{ title: string, price: string }>({ title: "Messaging", price: "$20" })
+  const [selectedPackageTitle, setSelectedPackageTitle] = useState<{ title: string, price: string }>({ title: "Messaging", price: "Rwf20" })
   const [selectedDuration, setSelectedDuration] = useState<string>("1 hour")
   console.log("this is new:", Doctor_id, hour, date)
   const handleNextPress = () => {
@@ -54,21 +54,21 @@ const SelectPackage = () => {
       id: "0",
       title: "Messaging",
       description: "Chat messages with doctor",
-      price: "$20",
+      price: "Rwf20",
       icon: () => <SvgXml xml={chatIcon} />,
     },
     {
       id: "1",
       title: "Voice Call",
       description: "Voice call with doctor",
-      price: "$40",
+      price: "Rwf40",
       icon: () => <SvgXml xml={phoneIcon} />,
     },
     {
       id: "2",
       title: "Video Call",
       description: "Video call with doctor",
-      price: "$60",
+      price: "Rwf60",
       icon: () => <SvgXml xml={videoIcon} />,
     },
   ];

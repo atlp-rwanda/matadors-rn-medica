@@ -416,7 +416,7 @@ const specializations = [
             Doctor Speciality
           </Text>
           <TouchableOpacity
-            onPress={() => router.push("/ActionMenu/FavoriteDoctorScreen")}
+            onPress={() => router.push("/ActionMenu/AllDoctorScreen")}
           >
             <Text style={styles.seeTxt}>See All</Text>
           </TouchableOpacity>
