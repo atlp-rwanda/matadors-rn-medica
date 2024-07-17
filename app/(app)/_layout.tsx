@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useEffect } from "react";
 import { AppointmentIcon } from "@/assets/icons/AppointmentSvg";
 import { ArticleIcon } from "@/assets/icons/ArticleSvg";
 import { HistoryIcon } from "@/assets/icons/HistorySvg";
@@ -23,17 +23,15 @@ export default function Layout() {
     <>
       <Tabs
         tabBar={({ state, navigation, descriptors }) => {
-          if (state.routeNames.includes(segments[segments.length - 1])) {
-            setTabVisible(true);
-          } else {
-            setTabVisible(false);
-          }
-
           return (
             <>
               <View
                 style={{
-                  display: tabVisible ? "flex" : "none",
+                  display:
+                    tabVisible ||
+                    state.routeNames.includes(segments[segments.length - 1])
+                      ? "flex"
+                      : "none",
                   flexDirection: "row",
                   justifyContent: "space-between",
                   backgroundColor:
