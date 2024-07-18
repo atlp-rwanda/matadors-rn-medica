@@ -1,17 +1,11 @@
 import React,{ReactElement, useEffect, useState} from 'react';
-import { StyleSheet, Text, Image, View, TouchableHighlight, SafeAreaView, Button, Alert, Platform, Dimensions,TextInput, ScrollView, Pressable} from 'react-native'
-import { Feather } from '@expo/vector-icons';
-import { AntDesign } from '@expo/vector-icons';
-import { Ionicons } from '@expo/vector-icons';
+import { StyleSheet, Text, Image, View, TouchableHighlight, SafeAreaView, Button, Alert, Platform, Dimensions,TextInput, ScrollView, Pressable, ActivityIndicator} from 'react-native'
+
 import DoctorComponent from '@/components/DoctorComponent';
-import { FontAwesome } from '@expo/vector-icons';
 import { SvgXml } from "react-native-svg"
 import { whiteHeart } from '@/assets/icons/whiteHeart';
 import { blueheart } from '@/assets/icons/blueHeart';
 import { star } from '@/assets/icons/star';
-import { search } from '@/assets/icons/search';
-import { more } from '@/assets/icons/more';
-import { LightleftArrow } from '@/assets/icons/left';
 import HeaderComponent from '@/components/HeaderComponent';
 import SearchComponent from '@/components/SearchComponent';
 import FoundDoctorCount from '@/components/FoundDoctorCount';
@@ -19,11 +13,11 @@ import NofoundComponent from '@/components/NofoundComponent';
 import RemovefavoritePopup from '@/components/RemovefavoritePopup';
 import FilterPopup from '@/components/FilterSearchComponent';
 import { StatusBar } from 'expo-status-bar';
-import NotFoundScreen from '@/app/+not-found';
 import { ThemeContext } from '@/ctx/ThemeContext';
 import { useContext } from 'react';
 import { supabase } from '@/lib/supabase';
 import { router } from 'expo-router';
+import { Colors } from '@/constants/Colors';
 
 
 
@@ -53,6 +47,7 @@ export const iconMapping: iconMappingProp = {
   star: <SvgXml xml={star} />,
 };
 
+
 function DoctorScreen() {
   const [showSearch, setShowSearch] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -63,7 +58,7 @@ function DoctorScreen() {
   const { theme, changeTheme } = useContext(ThemeContext);
   const [selectedSpecilization, setSelectedSpecilization] = useState<string>("All")
   const [specialization, setSpecialization] = useState<string[]>([])
-  const [isloading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
     const [favoriteDoctors,setFavoriteDoctors]=useState<number[]>([])
   const containerStyle =
     theme === "dark" ? styles.outerDark : styles.outerLight;
@@ -72,7 +67,6 @@ function DoctorScreen() {
   const [loggeduser, setLoggedUser] = useState<string>()
   const [profile, setProfile] = useState<any>(null)
   const [patient_id,setPatient_id]=useState<string>()
-
   useEffect(() => {
     const fetchUser = async () => {
       
@@ -151,7 +145,7 @@ function DoctorScreen() {
   
       fetchData();
     }, []);
-  console.log("this is retrived specilization:", specialization)
+  //console.log("this is retrived specilization:", specialization)
    useEffect(() => {
         const fetchFavoritesDoctor = async () => {
             if (patient_id) {
@@ -170,12 +164,13 @@ function DoctorScreen() {
         fetchFavoritesDoctor()
      
  },[patient_id])
+
     const handleSearchPressed = () => {
         setShowSearch(true)
     }
     const handleSearchSubmit = (text: string) => {
-        setSearchTerm(text.toLowerCase())
-    }
+      setSearchTerm(text.toLowerCase());
+    };
     
     const handleFilter = () => {
         setShowfilter(true)
@@ -216,13 +211,14 @@ function DoctorScreen() {
     }
   };
   
-
-  const filteredDoctors = doctors.filter(doctor => {
-    const matchSearchTerm = searchTerm.length > 0 ? doctor.last_name.toLowerCase().includes(searchTerm.toLowerCase())||doctor.first_name.toLowerCase().includes(searchTerm.toLowerCase()) : true
-    const matchSpecialization = selectedSpecilization === 'All' || doctor.specialization === selectedSpecilization
-    return matchSearchTerm&&matchSpecialization
-
-    })
+  const filteredDoctors = doctors.filter((doctor: Doctor) => {
+    const fullName = `${doctor.first_name || ''} ${doctor.last_name || ''}`.toLowerCase();
+    const matchSearchTerm = searchTerm.length > 0
+      ? fullName.includes(searchTerm.toLowerCase())
+      : true;    
+    const matchSpecialization = selectedSpecilization === 'All' || doctor.specialization === selectedSpecilization;
+    return matchSearchTerm && matchSpecialization;
+  });
 
 
     return (
@@ -231,23 +227,17 @@ function DoctorScreen() {
             <View>
                 
                 <View style={[styles.upper,containerStyle]}>
-                    {
-                        !showSearch ? (
-                            <HeaderComponent
-                                onSearchPressed={handleSearchPressed}
-                                headerText="Top Doctor"
-                            
-                            />
-                        ) : (
-                               
-                            <SearchComponent
-                                    onSearchSubmit={handleSearchSubmit}
-                                    filterAction={handleFilter}
-                                
-                                
-                            />
-                        )
-                    }
+                {!showSearch ? (
+            <HeaderComponent
+              onSearchPressed={handleSearchPressed}
+              headerText="Top doctos"
+            />
+          ) : (
+            <SearchComponent
+              onSearchSubmit={handleSearchSubmit}
+              filterAction={handleFilter}
+            />
+          )}
                 </View>
                 <View style={[styles.categoryBtnView,containerStyle]}>
                 <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.categoryScroll}
@@ -289,6 +279,15 @@ function DoctorScreen() {
             paddingTop:20
           }}
                     >
+                      
+                      {isLoading ? (
+          <ActivityIndicator
+            color={Colors.main.primary._500}
+            size="large"
+            style={{ marginLeft: "10%" }}
+          />
+        ) : (
+          <>
               {filteredDoctors.length > 0 ? (
                             
                 filteredDoctors.map((doctor: any, index: number) => { 
@@ -301,13 +300,13 @@ function DoctorScreen() {
                       imageSource={{ uri: doctor.image }}
                       name={`${doctor.first_name} ${doctor.last_name}`}
                       iconComponent={favoriteDoctors.includes(doctor.id) ? (
-                  <SvgXml xml={blueheart} />
+                        blueheart && <SvgXml xml={blueheart} />
                 ) : (
-                  <SvgXml xml={whiteHeart} />
+                  whiteHeart && <SvgXml xml={whiteHeart}/>
                 )}
                       professionalTitle={doctor.specialization}
                       hospital={doctor.hospital_name}
-                      star={<SvgXml xml={star} />}
+                      star={ star && <SvgXml xml={star}/>}
                       review={doctor.reviews.length}
                       rate={doctor.result}
                       addRemoveFavorite={() => handleIconClick(doctor,doctor.id) }
@@ -322,7 +321,8 @@ function DoctorScreen() {
                              <NofoundComponent/>   
                     )}
                          
-
+                         </>
+        )}
                     </ScrollView>
                      
                 </View>
