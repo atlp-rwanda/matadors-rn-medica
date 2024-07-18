@@ -34,7 +34,8 @@ export default function PackageItem({
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
-        padding: 15,
+        padding: 20,
+        margin: 10,
         backgroundColor:
           theme === "light" ? Colors.others.white : Colors.dark._2,
         borderRadius: 20,

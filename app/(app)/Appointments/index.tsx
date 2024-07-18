@@ -247,7 +247,7 @@ const AppointmentScreen: React.FC = () => {
               <Text
                 style={[
                   Typography.semiBold.xLarge,
-                  styles.tabText,
+                  theme === "dark" ? { color: Colors.others.white } : styles.tabText,
                   selectedStatus === status ? styles.activeTabText : {},
                 ]}
               >

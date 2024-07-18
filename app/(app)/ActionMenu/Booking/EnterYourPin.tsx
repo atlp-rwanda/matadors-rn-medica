@@ -16,7 +16,6 @@ import { router } from "expo-router";
 import { useModal } from "@/ctx/ModalContext";
 import { ThemeContext } from "@/ctx/ThemeContext";
 import Button from "@/components/UI/Button";
-import { useEffect } from "react";
 import React from "react";
 import { supabase } from "@/lib/supabase";
 

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Text, View, StyleSheet, ScrollView,Alert } from "react-native";
+import { Text, View, ScrollView,Alert } from "react-native";
 import { Colors } from "@/constants/Colors";
 import { router } from "expo-router";
 import { ThemeContext } from "@/ctx/ThemeContext";
@@ -14,8 +14,8 @@ import { useLocalSearchParams } from "expo-router";
 import { supabase } from "@/lib/supabase";
 
 export default function BookingAppointment() {
-  const { theme, changeTheme } = useContext(ThemeContext);
-  const [timeSlots, setTimeSlots] = useState([""]);
+  const { theme } = useContext(ThemeContext);
+    const [timeSlots, setTimeSlots] = useState([""]);
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedHour, setSelectedHour] = useState("");
   const [availableTimeSlots,setAvailbaleTimeSlots]=useState<string[]>([])
@@ -94,15 +94,14 @@ export default function BookingAppointment() {
   }
 
   return (
-    <ScrollView
+    <View
       style={{
         flex: 1,
+        flexGrow: 1,
         backgroundColor:
           theme === "light" ? Colors.others.white : Colors.dark._1,
       }}
-      contentContainerStyle={{
-        flexGrow: 1,
-      }}
+     
     >
       <View style={{}}>
         <View
@@ -159,6 +158,6 @@ export default function BookingAppointment() {
           onPress={handleNextPress}
         />
       </View>
-    </ScrollView>
+    </View>
   );
 }

@@ -21,7 +21,7 @@ export function Home() {
 
     const { userId } = useContext(AuthContext);
 
-    const {id}  = useGlobalSearchParams()
+    const {id, appointmentId} = useGlobalSearchParams()  
     const doctorId = id;  
     const chatRoomId = "matadores-medica"+uuid.v4();
 
@@ -70,7 +70,7 @@ export function Home() {
   }, [patientData]);
 
   return (
-    <ChannelLists/>
+    <ChannelLists appointmentId={appointmentId}/>
   )
 }
 

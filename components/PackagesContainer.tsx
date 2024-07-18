@@ -20,28 +20,20 @@ export default function PackagesContainer({ data,onPackageSelect}: Props) {
   
   return (
     <>
-      <FlatList
-        data={data}
-        contentContainerStyle={{
-          gap: 25,
-          width: "100%",
-          padding: 20,
+    {data.map((item) => (
+      <PackageItem
+        key={item.id}
+        title={item.title}
+        description={item.description}
+        price={item.price}
+        icon={item.icon}
+        selected={selectedPackage === item.id}
+        onPress={() => {
+          setSelectedPackage(item.id);
+          onPackageSelect(item.title, item.price);
         }}
-        renderItem={({ item }) => (
-          <PackageItem
-            key={item.id}
-            title={item.title}
-            description={item.description}
-            price={item.price}
-            icon={item.icon}
-            selected={selectedPackage === item.id}
-            onPress={() => {
-              setSelectedPackage(item.id);
-              onPackageSelect(item.title,item.price)
-            }}
-          />
-        )}
       />
-    </>
+    ))}
+  </>
   );
 }
