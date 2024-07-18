@@ -37,7 +37,7 @@ const DoctorCard: React.FC<DoctorCardProps> = ({ name, date, time, image, status
             </View>
             <TouchableOpacity 
             onPress={icon === null ? ()=> {} : iconOnPress}
-            style={{padding: 20, backgroundColor: icon === null? "#f5f5f5" :Colors.transparent.blue, borderRadius: 100, marginLeft: 10}}
+            style={{padding: 20, backgroundColor: icon === null && theme === "light"? "#f5f5f5" :Colors.transparent.blue, borderRadius: 100, marginLeft: 10}}
             >
             {icon}
             </TouchableOpacity>

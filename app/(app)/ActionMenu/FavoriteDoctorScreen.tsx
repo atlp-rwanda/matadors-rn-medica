@@ -1,16 +1,9 @@
 import React,{ReactElement, useEffect, useState} from 'react';
 import { StyleSheet, Text, Image, View, TouchableHighlight, SafeAreaView, Button, Alert, Platform, Dimensions,TextInput, ScrollView, Pressable} from 'react-native'
-import { Feather } from '@expo/vector-icons';
-import { AntDesign } from '@expo/vector-icons';
-import { Ionicons } from '@expo/vector-icons';
 import DoctorComponent from '@/components/DoctorComponent';
-import { FontAwesome } from '@expo/vector-icons';
  import { SvgXml } from "react-native-svg"
 import { blueheart } from '@/assets/icons/blueHeart';
 import { star } from '@/assets/icons/star';
-import { search } from '@/assets/icons/search';
-import { more } from '@/assets/icons/more';
-import { LightleftArrow } from '@/assets/icons/left';
 import data from "../../doctors.json"
 import HeaderComponent from '@/components/HeaderComponent';
 import SearchComponent from '@/components/SearchComponent';
@@ -19,7 +12,6 @@ import NofoundComponent from '@/components/NofoundComponent';
 import RemovefavoritePopup from '@/components/RemovefavoritePopup';
 import FilterPopup from '@/components/FilterSearchComponent';
 import { StatusBar } from 'expo-status-bar';
-import NotFoundScreen from '@/app/+not-found';
 import { ThemeContext } from '@/ctx/ThemeContext';
 import { useContext } from 'react';
 import { supabase } from '@/lib/supabase';

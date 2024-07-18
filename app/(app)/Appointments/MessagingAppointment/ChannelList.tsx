@@ -8,7 +8,7 @@ import { useAppContext } from '@/ctx/ChatContext';
 import { PatientTypes } from '@/constants/Types';
 import {useRouter } from 'expo-router';
 
-const ChannelLists = (props: any) => {
+const ChannelLists = ({appointmentId}:{appointmentId:any}) => {
     const { channel, setChannel } = useAppContext();
     const [patientData, setPatientData] = useState<PatientTypes[] | null>(null);
     const { userId, } = useContext(AuthContext);
@@ -34,7 +34,7 @@ const ChannelLists = (props: any) => {
       setChannel(channel);
       router.push({
         pathname: "(app)/Appointments/MessagingAppointment/ChannelScreen",
-        params: { id: channel?.id },
+        params: { id: channel?.id, appointmentId },
       });
     };
 
