@@ -16,7 +16,6 @@ import { router } from "expo-router";
 import { useModal } from "@/ctx/ModalContext";
 import { ThemeContext } from "@/ctx/ThemeContext";
 import Button from "@/components/UI/Button";
-import { useEffect } from "react";
 import React from "react";
 import { supabase } from "@/lib/supabase";
 
@@ -37,8 +36,8 @@ export default function EnterYourPin() {
   console.log("this is from lastpage",doctor_id,hour,packageTitle,packagePrice,problem)
 
   function successBooking() {
-    router.push("ActionMenu");;
     modal.hide();
+    router.push("ActionMenu");
   }
   async function handlePIN() {
     
@@ -103,8 +102,8 @@ export default function EnterYourPin() {
             />
             <TouchableOpacity
               onPress={() => {
-                router.push("ActionMenu");
                 modal.hide();
+                router.push("ActionMenu");
               }}
               style={{
                 backgroundColor:

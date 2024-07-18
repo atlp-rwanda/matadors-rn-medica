@@ -20,8 +20,7 @@ export function Home() {
 
 
     const { userId } = useContext(AuthContext);
-
-    const {id}  = useGlobalSearchParams()
+    const {id, appointmentId}  = useGlobalSearchParams()
     const doctorId = id;  
     const chatRoomId = "matadores-medica"+uuid.v4();
 
@@ -66,11 +65,11 @@ export function Home() {
     if (!chatClient.userID) {
       setupClient();
     }
-    // if(client){return async()=> await client.disconnectUser()}
+    if(client){return async()=> await client.disconnectUser()}
   }, [patientData]);
 
   return (
-    <ChannelLists/>
+    <ChannelLists appointmentId={appointmentId}/>
   )
 }
 

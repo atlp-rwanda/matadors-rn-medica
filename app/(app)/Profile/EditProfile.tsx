@@ -141,8 +141,6 @@ function EditProfile() {
 
       const res = await supabase.auth.updateUser({ email: email });
 
-      console.log(res);
-
       if (data.error) throw data.error;
       alert("Profile updated successfully");
       router.back();

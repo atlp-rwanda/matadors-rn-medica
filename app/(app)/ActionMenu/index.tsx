@@ -65,7 +65,6 @@ export default function Index() {
     "Urbanist-Semibold": require("@/assets/fonts/Urbanist-SemiBold.ttf"),
     "Urbanist-Medium": require("@/assets/fonts/Urbanist-Medium.ttf"),
   });
-  const tableName = "doctors";
   const favoriteTable="favorite_doctors"
 
   const CDNURL =
@@ -352,7 +351,7 @@ const specializations = [
       <ScrollView
         showsVerticalScrollIndicator={false}
         alwaysBounceVertical={true}
-        contentContainerStyle={{ height: "150%" }}
+        contentContainerStyle={{ height: "205%"}}
       >
         <View
           style={{
@@ -429,7 +428,8 @@ const specializations = [
             alignItems: "center",
             gap: 20,
             marginTop: 10,
-            width: width
+            width: width,
+            backgroundColor: theme === "dark" ? "#181A20" : "#ffffff",
 
         }}>
           {specializations.map((specialization, index) => (
@@ -446,7 +446,9 @@ const specializations = [
               backgroundColor: theme === "dark" ? "#181A20" : "#ffffff",
             }}>
               <SvgXml xml={specialization.icon === null ? GeneralIcon : specialization.icon} />
-              <Text>{specialization.text.slice(0,8)+"..."}</Text>
+              <Text
+              style={{color: theme === "dark" ? "#FFFFFF" : "#000000", fontFamily: "Urbanist-bold", fontSize: 15}}
+              >{specialization.text.slice(0,8)+"..."}</Text>
             </TouchableOpacity>
           ))}
         </View>
@@ -515,7 +517,7 @@ const specializations = [
             }}
           >
             {filteredDoctors.length > 0 ? (
-              filteredDoctors.map((doctor: any, index: number) => {
+              filteredDoctors.splice(0,5).map((doctor: any, index: number) => {
                 
                 return(
                 

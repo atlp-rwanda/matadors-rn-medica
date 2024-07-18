@@ -1,19 +1,11 @@
-import { Colors } from "@/constants/Colors";
-import { MaterialIcons } from "@expo/vector-icons";
 import { router,useLocalSearchParams } from "expo-router";
 import React, { useContext, useState } from "react";
 import {
   View,
-  StyleSheet,
   Text,
-  Pressable,
-  TextInput,
-  Image,
-  TouchableOpacity,
   ScrollView,
   Alert
 } from "react-native";
-import Icon from "react-native-vector-icons/FontAwesome";
 import { ThemeContext } from "@/ctx/ThemeContext";
 import Typography from "@/constants/Typography";
 import DropDown from "@/components/UI/DropDown";
@@ -25,14 +17,12 @@ import {
   phoneIcon,
   videoIcon,
 } from "@/constants/icon";
-import PackageItem from "@/components/UI/PackageItem";
-import { useTheme } from "react-native-paper";
 import PackagesContainer from "@/components/PackagesContainer";
 import Button from "@/components/UI/Button";
 import { StatusBar } from "expo-status-bar";
 
 const SelectPackage = () => {
-  const { theme, changeTheme } = useContext(ThemeContext);
+  const { theme} = useContext(ThemeContext);
   const { Doctor_id, hour, date,patient_id } = useLocalSearchParams()
   const [selectedPackageTitle, setSelectedPackageTitle] = useState<{ title: string, price: string }>({ title: "Messaging", price: "$20" })
   const [selectedDuration, setSelectedDuration] = useState<string>("1 hour")

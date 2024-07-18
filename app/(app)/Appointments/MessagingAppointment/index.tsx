@@ -26,7 +26,6 @@ import { backArrowWhite } from "@/components/UI/icons/backArrow";
 import { WhiteMenuCircle } from "@/components/UI/icons/WhiteMenuCircle";
 import { MoreIcon } from "@/assets/icons/MoreCircleSvg";
 import { backArrowBlackIcon } from '@/constants/icon'
-import { fetchPatientData, getPatientData } from "@/utils/LoggedInUser";
 import { supabase } from "@/lib/supabase";
 
 
@@ -60,9 +59,6 @@ function AppointmentMessaging() {
   const [patient_id,setPatient_id]=useState<string>()
   const [profile, setProfile] = useState<any>(null)
   
- 
-
-
   useEffect(() => {
     async function fetchData() {
       setIsLoading(true)
@@ -116,9 +112,6 @@ try {
   setIsLoading(false);
   console.error("Error fetching data:", error);
 }
-
-      
-      
     }
     fetchData();
   }, [appointment]);
@@ -152,13 +145,11 @@ try {
           setPatient_id(data.id)
           
         }
-              }
+     }
     }
     fetchUserProfile()
   }, [loggeduser])
 
-
-  
 
   return (
     <View
@@ -419,7 +410,7 @@ try {
                     router.push(
                     {
                     pathname: "(app)/Appointments/MessagingAppointment/Home",
-                    params: {id: "1f4c9b93-5d95-427b-93fc-4936e4046454"}
+                    params: {id: "1f4c9b93-5d95-427b-93fc-4936e4046454", appointmentId: appointment?.id}
                     }
                     )
                   }

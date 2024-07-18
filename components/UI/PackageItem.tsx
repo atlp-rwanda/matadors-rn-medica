@@ -34,12 +34,14 @@ export default function PackageItem({
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
-        padding: 15,
+        padding: 20,
+        margin: 10,
         backgroundColor:
           theme === "light" ? Colors.others.white : Colors.dark._2,
         borderRadius: 20,
         elevation: theme === "light" ? 20 : 0,
         shadowColor: theme === "light" ? Colors.grayScale._400 : Colors.dark._2,
+        
       }}
     >
       <View style={{ flexDirection: "row", alignItems: "center", gap: 15 }}>
