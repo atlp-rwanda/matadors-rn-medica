@@ -3,65 +3,62 @@ import { AuthContext } from "@/ctx/AuthContext";
 import { useContext, useEffect, useState } from "react";
 import { StreamChat } from "stream-chat";
 import { fetchPatientData } from "@/utils/LoggedInUser";
-import  {PatientTypes} from "@/constants/Types";
+import { PatientTypes } from "@/constants/Types";
 import { useAppContext } from "@/ctx/ChatContext";
 import ChannelLists from "./ChannelList";
 import uuid from "react-native-uuid";
-import {useGlobalSearchParams } from "expo-router";
+import { useGlobalSearchParams } from "expo-router";
 
 const API_KEY = process.env.EXPO_PUBLIC_STREAM_API_KEY;
 const SECRETE_KEY = process.env.EXPO_PUBLIC_STREAM_API_SECRET;
 
 export function Home() {
-    const [clientIsReady, setClientIsReady] = useState<boolean>(false);
-    const [patientData, setPatientData] = useState<PatientTypes[] | null>(null);
-    const [client, setClient] = useState<StreamChat | null>(null);
-    const { channel, setChannel } = useAppContext();
+  const [clientIsReady, setClientIsReady] = useState<boolean>(false);
+  const [patientData, setPatientData] = useState<PatientTypes[] | null>(null);
+  const [client, setClient] = useState<StreamChat | null>(null);
+  const { channel, setChannel } = useAppContext();
+  const { userId } = useContext(AuthContext);
+  const CDNURL =
+    "https://vbwbfflzxuhktdvpbspd.supabase.co/storage/v1/object/public/patients/";
+  const { doctorId, appointmentId } = useGlobalSearchParams();
+  const chatRoomId = "matadores-medica" + uuid.v4();
 
+  useEffect(() => {
+    if (userId) {
+      fetchPatientData(userId, setPatientData);
+    }
+  }, [userId]);
 
-    const { userId } = useContext(AuthContext);
-
-    const {id, appointmentId} = useGlobalSearchParams()  
-    const doctorId = id;  
-    const chatRoomId = "matadores-medica"+uuid.v4();
-
-    useEffect(() => {
-        if (userId) {
-            fetchPatientData(userId, setPatientData);
-        }
-    }, [userId]);
-
-    const chatClient = StreamChat.getInstance(`${API_KEY}`);
+  const chatClient = StreamChat.getInstance(`${API_KEY}`);
 
   useEffect(() => {
     const setupClient = async () => {
-        try {
-            if (patientData && patientData[0]) {
-                const user = {
-                    id: patientData[0].id,
-                    name: `${patientData[0].first_name} ${patientData[0].last_name}`,
-                    image: "https://i.imgur.com/fR9Jz14.png",
-                };
+      try {
+        if (patientData && patientData[0]) {
+          const user = {
+            id: patientData[0].id,
+            name: `${patientData[0].first_name} ${patientData[0].last_name}`,
+            image: `${CDNURL + patientData[0]?.image}`,
+          };
 
-             await chatClient.connectUser(
-                    user,
-                    chatClient.devToken(user.id));
-                    setClientIsReady(true);
-                    setClient(chatClient);
+          await chatClient.connectUser(user, chatClient.devToken(user.id));
 
-                    const channel = chatClient.channel("messaging", `${chatRoomId}`, {
-                    image: "https://vbwbfflzxuhktdvpbspd.supabase.co/storage/v1/object/public/doctors/adaptive_icon.png",
-                    name: "Medica Chat Room",
-                    members: [user?.id , `${doctorId}`],
-            });
-                    await channel.watch();
-                    setChannel(channel);
-            } else {
-                console.log("No patient data found");
-            }
-        } catch (error) {
-            console.error("An error occurred while connecting the user:", error);
+          setClientIsReady(true);
+          setClient(chatClient);
+          const channel = chatClient.channel("messaging", `${chatRoomId}`, {
+            image:
+              "https://vbwbfflzxuhktdvpbspd.supabase.co/storage/v1/object/public/doctors/adaptive_icon.png",
+            name: `${user?.name} in the chat`,
+            members: [user?.id, `${doctorId}`],
+          });
+          await channel.watch();
+          setChannel(channel);
+        } else {
+          console.log("No patient data found");
         }
+      } catch (error) {
+        console.error("An error occurred while connecting the user:", error);
+      }
     };
     if (!chatClient.userID) {
       setupClient();
@@ -69,10 +66,7 @@ export function Home() {
     // if(client){return async()=> await client.disconnectUser()}
   }, [patientData]);
 
-  return (
-    <ChannelLists appointmentId={appointmentId}/>
-  )
+  return <ChannelLists appointmentId={appointmentId} />;
 }
 
 export default Home;
-

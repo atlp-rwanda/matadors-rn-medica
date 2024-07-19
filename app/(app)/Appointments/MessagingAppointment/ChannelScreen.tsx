@@ -31,9 +31,14 @@ const ChannelScreen = () => {
   const [isloading, setIsLoading] = useState(false);
   const ios = Platform.OS === "ios";
   const modal = useModal();
-  const {appointmentId} = useGlobalSearchParams();
+  const {id,appointmentId} = useGlobalSearchParams();
   const { channel } = useAppContext();
 
+  // const deleteChannel = async () => {
+  //   try{
+  //     await client.deleteChannels([id], {hard_delete: true});
+  //   }catch(error){}
+  // }
   const endAppointment = async() => {
     try {
       setIsLoading(true);
@@ -131,7 +136,6 @@ const ChannelScreen = () => {
       enforceUniqueReaction={true}
       giphyEnabled={true}
     >
-
         <SafeAreaView style={{ marginBottom: ios ? 10 : 40 }}>
           <StatusBar style={theme === "dark" ? "dark" : "dark"} />
         </SafeAreaView>
