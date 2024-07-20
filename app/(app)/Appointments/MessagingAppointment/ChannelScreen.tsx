@@ -25,22 +25,31 @@ import { supabase } from "@/lib/supabase";
 import { useGlobalSearchParams } from "expo-router";
 import Typography from "@/constants/Typography";
 import { useModal } from "@/ctx/ModalContext";
+import { StreamChat } from "stream-chat";
 
 const ChannelScreen = () => {
-  const { theme, changeTheme } = useContext(ThemeContext);
+  const { theme} = useContext(ThemeContext);
   const [isloading, setIsLoading] = useState(false);
   const ios = Platform.OS === "ios";
   const modal = useModal();
-  const {id,appointmentId} = useGlobalSearchParams();
+  const {chanelId,appointmentId, loggedInUserId} = useGlobalSearchParams();
   const { channel } = useAppContext();
+  const API_KEY = process.env.EXPO_PUBLIC_STREAM_API_KEY;
 
-  // const deleteChannel = async () => {
-  //   try{
-  //     await client.deleteChannels([id], {hard_delete: true});
-  //   }catch(error){}
-  // }
+  const chatClient = StreamChat.getInstance(`${API_KEY}`);
+
+   const disableUser = async () => {
+    try{
+      await chatClient.channel('messaging', `${chanelId}`).removeMembers([`${loggedInUserId}`])
+    }catch(error){
+      console.log("user not deleted",error);
+    }
+  }
+
+
   const endAppointment = async() => {
     try {
+      disableUser();
       setIsLoading(true);
       const { error } = await supabase
         .from("appointment")
@@ -131,7 +140,6 @@ const ChannelScreen = () => {
   >
     <Channel
       channel={channel}
-      // MessageText={MessageStyle}
       audioRecordingEnabled={true}
       enforceUniqueReaction={true}
       giphyEnabled={true}

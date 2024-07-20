@@ -23,6 +23,7 @@ import { supabase } from "@/lib/supabase";
 import HeaderComponent from "@/components/HeaderComponent";
 import ReviewerCardComponent from "@/components/ReviewerCardComponent";
 import { StatusBar } from "expo-status-bar";
+import { color } from "react-native-elements/dist/helpers";
 
 interface Doctor{
     id: number,
@@ -548,7 +549,9 @@ const visibleReviews =  reviews.slice(0, 1);
               )
                             
             ) : (
-                 <Text style={[Typography.semiBold.large] }> No available reviews</Text>   
+                 <Text style={[Typography.semiBold.large, 
+                  {color: theme === "dark" ? Colors.others.white : "#212121",}
+                 ] }> No available reviews</Text>   
         )}
             </View>
           </View>

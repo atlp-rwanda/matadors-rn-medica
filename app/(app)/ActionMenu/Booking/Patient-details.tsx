@@ -193,7 +193,9 @@ const PatientDetails = () => {
             Write Your Problem
           </Text>
          
-          <TextArea text={text} onChangeText={setText} />
+          <TextArea 
+          text={text} 
+          onChangeText={setText} />
         </View>
 
         <View

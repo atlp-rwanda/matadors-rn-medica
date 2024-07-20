@@ -1,3 +1,4 @@
+import React from "react";
 import { BlueDownIcon } from "@/assets/icons/Profile/Icons";
 import { Colors } from "@/constants/Colors";
 import Typography from "@/constants/Typography";

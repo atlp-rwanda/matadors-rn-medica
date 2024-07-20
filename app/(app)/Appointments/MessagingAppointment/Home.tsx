@@ -10,13 +10,13 @@ import uuid from "react-native-uuid";
 import { useGlobalSearchParams } from "expo-router";
 
 const API_KEY = process.env.EXPO_PUBLIC_STREAM_API_KEY;
-const SECRETE_KEY = process.env.EXPO_PUBLIC_STREAM_API_SECRET;
 
 export function Home() {
   const [clientIsReady, setClientIsReady] = useState<boolean>(false);
   const [patientData, setPatientData] = useState<PatientTypes[] | null>(null);
   const [client, setClient] = useState<StreamChat | null>(null);
   const { channel, setChannel } = useAppContext();
+  const [loggedInUserId , setLoggedInUserId] = useState<string>("");
   const { userId } = useContext(AuthContext);
   const CDNURL =
     "https://vbwbfflzxuhktdvpbspd.supabase.co/storage/v1/object/public/patients/";
@@ -35,6 +35,7 @@ export function Home() {
     const setupClient = async () => {
       try {
         if (patientData && patientData[0]) {
+          setLoggedInUserId(patientData[0].id);
           const user = {
             id: patientData[0].id,
             name: `${patientData[0].first_name} ${patientData[0].last_name}`,
@@ -66,7 +67,7 @@ export function Home() {
     // if(client){return async()=> await client.disconnectUser()}
   }, [patientData]);
 
-  return <ChannelLists appointmentId={appointmentId} />;
+  return <ChannelLists appointmentId={appointmentId} loggedInUserId={loggedInUserId }/>;
 }
 
 export default Home;

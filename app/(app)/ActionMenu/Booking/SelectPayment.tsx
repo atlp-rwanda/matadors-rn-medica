@@ -23,7 +23,6 @@ export default function SelectPayment() {
 
   const modal = useModal()
   const flutterKey = process.env.EXPO_PUBLIC_FLUTTERWAVE_KEY ?? ""
-  console.log("this is packageprice from slect Payment:",packagePrice)
   
   interface RedirectParams {
 	status: "successful" | "cancelled";
@@ -78,7 +77,7 @@ const total:number=price*num
    
   }
   function successBooking() {
-    router.push("ActionMenu");;
+    router.push("ActionMenu");
     modal.hide();
   }
   const showSuccefulModal = () => {
@@ -138,7 +137,10 @@ const total:number=price*num
             ></View>
             <Button
               title="View Appointment"
-              onPress={successBooking}
+              onPress={()=> {
+                successBooking()
+                router.push("(app)/Appointments")
+              }}
             />
             <TouchableOpacity
               onPress={() => {
@@ -174,7 +176,6 @@ const total:number=price*num
   }
   const handleOnRedirect = (data: RedirectParams) => {
   
-    console.log("redire data:", data)
     if (data.status === "successful") {
       bookAppointment()
        showSuccefulModal()
