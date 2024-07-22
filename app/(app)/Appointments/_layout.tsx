@@ -1,6 +1,8 @@
 import { Stack } from "expo-router";
 import React from "react";
+import { register } from "@videosdk.live/react-native-sdk";
 
+register();
 export default function Layout() {
   return (
     <Stack>
@@ -11,7 +13,7 @@ export default function Layout() {
       <Stack.Screen name="VideoCallAppointment/VideoCall" options={{headerShown:false}}/>
       <Stack.Screen name="VideoCallAppointment/VideoCallSessionEnded" options={{headerShown:false}}/>
       <Stack.Screen name="VoiceCallAppointment/index" options={{headerShown:false}}/>
-      <Stack.Screen name="VoiceCallAppointment/VoiceCallRinging" options={{headerShown:false}}/>
+      <Stack.Screen name="VoiceCallAppointment/VoiceCall" options={{headerShown:false}}/>
       <Stack.Screen name="VoiceCallAppointment/SessionEnded" options={{headerShown:false}}/>
       <Stack.Screen name="MessagingAppointment" options={{headerShown:false}}/>
       <Stack.Screen name="ReschedualAppointment/index" options={{headerShown:false}}/>

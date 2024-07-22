@@ -130,7 +130,7 @@ const index = () => {
               >
                 <SelectProfile
                   image={{
-                    uri: imageUrl,
+                    uri:  `${CDNURL  + patientData[0]?.image}`,
                     name: "",
                     mimeType: "",
                   }}
