@@ -548,8 +548,10 @@ const visibleReviews =  reviews.slice(0, 1);
               )
                             
             ) : (
-                 <Text style={[Typography.semiBold.large] }> No available reviews</Text>   
-        )}
+              <Text style={[Typography.semiBold.large, 
+               {color: theme === "dark" ? Colors.others.white : "#212121",}
+              ] }> No available reviews</Text>   
+     )}
             </View>
           </View>
         </View>

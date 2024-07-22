@@ -52,7 +52,6 @@ export default function Reviewsummary() {
     }
     fetchDoctordata()
   }, [doctor_id])
-  console.log("this is packagePrice:",packagePrice)
   let num:number=1;
   if (duration === "30 minutes") {
     num=1

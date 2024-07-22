@@ -57,6 +57,7 @@ export default function DropDown({ data, leftIcon, rightIcon, search,defaultValu
           flexDirection: "row",
           paddingHorizontal: 20,
           gap: 20,
+          backgroundColor: theme === "light" ? Colors.grayScale._50 : Colors.dark._2,
         }}
         data={data}
         maxHeight={300}
@@ -94,8 +95,7 @@ export default function DropDown({ data, leftIcon, rightIcon, search,defaultValu
         )}
         itemTextStyle={{
           color:
-            theme === "light" ? Colors.grayScale._900 : Colors.others.white,
-        }}
+          theme === "light" ? Colors.grayScale._900 : Colors.main.primary._500,        }}
       />
     </>
   );

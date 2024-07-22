@@ -29,7 +29,6 @@ const SelectPackage = () => {
   const { Doctor_id, hour, date,patient_id } = useLocalSearchParams()
   const [selectedPackageTitle, setSelectedPackageTitle] = useState<{ title: string, price: string }>({ title: "Messaging", price: "Rwf20" })
   const [selectedDuration, setSelectedDuration] = useState<string>("1 hour")
-  console.log("this is new:", Doctor_id, hour, date)
   const handleNextPress = () => {
     if (!selectedPackageTitle||!selectedDuration) {
       Alert.alert("Please select both Duration and package")

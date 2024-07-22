@@ -74,7 +74,11 @@ const SessionEnded = () => {
           ]}
         >
           <StatusBar style={theme === "light" ? "dark" : "light"} />
-          
+          <View style={styles.backArrow}>
+            <TouchableOpacity onPress={() => router.back()}>
+              <SvgXml xml={theme === "dark" ? BackArrow : blackArrow} />
+            </TouchableOpacity>
+          </View>
 
           <View style={styles.middlePart}>
             <SvgXml xml={Timer} />

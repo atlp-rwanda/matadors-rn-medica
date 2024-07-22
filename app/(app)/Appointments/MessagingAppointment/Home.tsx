@@ -21,9 +21,12 @@ export function Home() {
 
     const { userId } = useContext(AuthContext);
 
-    const {id, appointmentId} = useGlobalSearchParams()  
-    const doctorId = id;  
     const chatRoomId = "matadores-medica"+uuid.v4();
+
+    const [loggedInUserId , setLoggedInUserId] = useState<string>("");
+    const CDNURL =
+      "https://vbwbfflzxuhktdvpbspd.supabase.co/storage/v1/object/public/patients/";
+    const { doctorId, appointmentId } = useGlobalSearchParams();
 
     useEffect(() => {
         if (userId) {
@@ -35,33 +38,32 @@ export function Home() {
 
   useEffect(() => {
     const setupClient = async () => {
-        try {
-            if (patientData && patientData[0]) {
-                const user = {
-                    id: patientData[0].id,
-                    name: `${patientData[0].first_name} ${patientData[0].last_name}`,
-                    image: "https://i.imgur.com/fR9Jz14.png",
-                };
+      try {
+        if (patientData && patientData[0]) {
+          setLoggedInUserId(patientData[0].id);
+          const user = {
+            id: patientData[0].id,
+            name: `${patientData[0].first_name} ${patientData[0].last_name}`,
+            image: `${CDNURL + patientData[0]?.image}`,
+          };
+          await chatClient.connectUser(user, chatClient.devToken(user.id));
 
-             await chatClient.connectUser(
-                    user,
-                    chatClient.devToken(user.id));
-                    setClientIsReady(true);
-                    setClient(chatClient);
-
-                    const channel = chatClient.channel("messaging", `${chatRoomId}`, {
-                    image: "https://vbwbfflzxuhktdvpbspd.supabase.co/storage/v1/object/public/doctors/adaptive_icon.png",
-                    name: "Medica Chat Room",
-                    members: [user?.id , `${doctorId}`],
-            });
-                    await channel.watch();
-                    setChannel(channel);
-            } else {
-                console.log("No patient data found");
-            }
-        } catch (error) {
-            console.error("An error occurred while connecting the user:", error);
+          setClientIsReady(true);
+          setClient(chatClient);
+          const channel = chatClient.channel("messaging", `${chatRoomId}`, {
+            image:
+              "https://vbwbfflzxuhktdvpbspd.supabase.co/storage/v1/object/public/doctors/adaptive_icon.png",
+            name: `${user?.name} in the chat`,
+            members: [user?.id, `${doctorId}`],
+          });
+          await channel.watch();
+          setChannel(channel);
+        } else {
+          console.log("No patient data found");
         }
+      } catch (error) {
+        console.error("An error occurred while connecting the user:", error);
+      }
     };
     if (!chatClient.userID) {
       setupClient();
@@ -69,10 +71,7 @@ export function Home() {
     // if(client){return async()=> await client.disconnectUser()}
   }, [patientData]);
 
-  return (
-    <ChannelLists appointmentId={appointmentId}/>
-  )
+  return <ChannelLists appointmentId={appointmentId} loggedInUserId={loggedInUserId} doctorId={doctorId}/>
 }
 
 export default Home;
-

@@ -49,7 +49,6 @@ export async function getPatientData(supabase: any, userInfo: any): Promise<any>
           return;
         }
         patentInfo(data);
-        console.log(data)
       } catch (error) {
         console.error("Error while fetching data:", error);
         return;
