@@ -2,13 +2,14 @@ import React, { useContext, useEffect, useState } from 'react'
 import { fetchPatientData } from '@/utils/LoggedInUser';
 import { AuthContext } from '@/ctx/AuthContext';
 import {
-    ChannelList
-  } from 'stream-chat-expo'
+  ChannelList,
+  DefaultStreamChatGenerics
+} from 'stream-chat-expo'
 import { useAppContext } from '@/ctx/ChatContext';
 import { PatientTypes } from '@/constants/Types';
 import {useRouter } from 'expo-router';
-
-const ChannelLists = ({appointmentId}:{appointmentId:any}) => {
+import { ChannelSort } from 'stream-chat';
+const ChannelLists = ({appointmentId, loggedInUserId, doctorId}:{appointmentId:any, loggedInUserId:string, doctorId:any}) => {
     const { channel, setChannel } = useAppContext();
     const [patientData, setPatientData] = useState<PatientTypes[] | null>(null);
     const { userId, } = useContext(AuthContext);
@@ -28,14 +29,13 @@ const ChannelLists = ({appointmentId}:{appointmentId:any}) => {
       };
     }
 
-    const sort = {last_message_at: -1,};
-
+    const sort : ChannelSort<DefaultStreamChatGenerics> = { last_message_at: -1 }
     const handleNavigateToChannel = (channel: any) => {
       setChannel(channel);
       router.push({
         pathname: "(app)/Appointments/MessagingAppointment/ChannelScreen",
-        params: { id: channel?.id, appointmentId },
-      });
+        params: { chanelId: channel?.id, appointmentId, loggedInUserId, doctorId},
+            });
     };
 
   return (
@@ -51,4 +51,3 @@ const ChannelLists = ({appointmentId}:{appointmentId:any}) => {
 
 
 export default ChannelLists
-

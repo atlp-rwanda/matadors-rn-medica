@@ -20,7 +20,7 @@ import {
   MicOff,
   BackArrow,
   blackArrow,
-  CallWhite
+  CallWhite,
 } from "@/components/Icons/Icons";
 import { router, useGlobalSearchParams } from "expo-router";
 import { supabase } from "@/lib/supabase";
@@ -251,25 +251,23 @@ const ControlsContainer: React.FC<ControlsContainerProps> = ({
       >
         <SvgXml xml={CallWhite} />
       </TouchableOpacity>
-       <View         style={{
+      <View
+        style={{
           backgroundColor: "#F0FFF0",
           borderRadius: 100,
           padding: 23,
           opacity: 0.6,
-        }}>
-      <TouchableOpacity
-
-        onPress={() => {
-          toggleMic();
-          handleMicPress();
         }}
       >
- 
-         <SvgXml xml={isMicOn ? Record : MicOff} />  
-       
-       
-      </TouchableOpacity>
- </View>
+        <TouchableOpacity
+          onPress={() => {
+            toggleMic();
+            handleMicPress();
+          }}
+        >
+          <SvgXml xml={isMicOn ? Record : MicOff} />
+        </TouchableOpacity>
+      </View>
       <TouchableOpacity
         style={{ backgroundColor: "#F75555", borderRadius: 100, padding: 20 }}
         onPress={() => {
@@ -305,7 +303,7 @@ type FetchError = string | null;
 
 const tableName = "doctors";
 
-const ParticipantView: React.FC<ParticipantViewProps> = () => {
+const ParticipantView: React.FC<ParticipantViewProps> = ({ participantId }) => {
   const [FetchDoctor, setFetchDoctor] = useState<FetchDoctor>(null);
   const [FetchError, setFetchError] = useState<FetchError>(null);
   const { id } = useGlobalSearchParams();
@@ -336,6 +334,7 @@ const ParticipantView: React.FC<ParticipantViewProps> = () => {
     };
     FetchDoctors();
   }, []);
+
   return (
     <View
       style={{
@@ -362,8 +361,7 @@ const ParticipantView: React.FC<ParticipantViewProps> = () => {
               {FetchDoctor.first_name} {FetchDoctor.last_name}
             </Text>
           </View>
-          </View>
-        
+        </View>
       )}
     </View>
   );
@@ -374,15 +372,10 @@ interface ParticipantListProps {
   meetingId: string | null;
 }
 
-interface Doctors {
-  first_name: string;
-  last_name: string;
-  created_at: string;
-  image: string;
-  id: string;
-}
-
-const ParticipantList: React.FC<ParticipantListProps> = ({ participants,meetingId  }) => {
+const ParticipantList: React.FC<ParticipantListProps> = ({
+  participants,
+  meetingId,
+}) => {
   const [FetchDoctor, setFetchDoctor] = useState<FetchDoctor>(null);
   const [FetchError, setFetchError] = useState<FetchError>(null);
   const { id } = useGlobalSearchParams();
@@ -403,7 +396,6 @@ const ParticipantList: React.FC<ParticipantListProps> = ({ participants,meetingI
         if (error) {
           setFetchDoctor(null);
           setFetchError("could not fetch description articles in database");
-          console.error("Error fetching item:", error);
           return null;
         }
       } catch (error) {
@@ -416,12 +408,12 @@ const ParticipantList: React.FC<ParticipantListProps> = ({ participants,meetingI
   }, []);
 
   return participants.length > 0 ? (
-    <FlatList
-      data={participants}
-      renderItem={({ item }) => {
-        return <ParticipantView participantId={item} meetingId={meetingId}/>;
-      }}
-    />
+    <View style={{ justifyContent: "center", alignItems: "center", gap: 10 }}>
+      <Text style={[Typography.medium.xLarge, { color: "#FFFFFF" }]}>
+        Doctor has joined the call
+      </Text>
+      <ParticipantView participantId={participants[0]} meetingId={meetingId} />
+    </View>
   ) : (
     <View
       style={{
@@ -430,29 +422,36 @@ const ParticipantList: React.FC<ParticipantListProps> = ({ participants,meetingI
         alignItems: "center",
       }}
     >
-      {FetchError && <Text>{FetchError}</Text>}
+      <View style={{ justifyContent: "center", alignItems: "center", gap: 24 }}>
+        {FetchError && <Text>{FetchError}</Text>}
 
-      {FetchDoctor && (
-        <View
-          style={{ justifyContent: "center", alignItems: "center", gap: 24 }}
-        >
-          <Image
-            source={{ uri: FetchDoctor.image }}
-            style={{ width: 200, height: 200, borderRadius: 100 }}
-          />
-
+        {FetchDoctor && (
           <View
             style={{ justifyContent: "center", alignItems: "center", gap: 24 }}
           >
-            <Text style={[Typography.heading._3, { color: "#FFFFFF" }]}>
-              {FetchDoctor.first_name} {FetchDoctor.last_name}
-            </Text>
+            <Image
+              source={{ uri: FetchDoctor.image }}
+              style={{ width: 200, height: 200, borderRadius: 100 }}
+            />
+
+            <View
+              style={{
+                justifyContent: "center",
+                alignItems: "center",
+                gap: 24,
+              }}
+            >
+              <Text style={[Typography.heading._3, { color: "#FFFFFF" }]}>
+                {FetchDoctor.first_name} {FetchDoctor.last_name}
+              </Text>
+            </View>
           </View>
-          <Text style={[Typography.medium.xLarge, { color: "#FFFFFF" }]}>
+        )}
+
+        <Text style={[Typography.medium.xLarge, { color: "#FFFFFF" }]}>
           Tap to call
-          </Text>
-        </View>
-      )}
+        </Text>
+      </View>
     </View>
   );
 };
@@ -468,7 +467,10 @@ const MeetingView: React.FC<{ meetingId: string | null }> = ({ meetingId }) => {
       source={require("@/assets/images/Background.png")}
     >
       <View style={{ flex: 1, justifyContent: "space-between" }}>
-        <ParticipantList participants={participantsArrId} meetingId={meetingId}/>
+        <ParticipantList
+          participants={participantsArrId}
+          meetingId={meetingId}
+        />
         <ControlsContainer join={join} leave={leave} toggleMic={toggleMic} />
       </View>
     </ImageBackground>
@@ -508,7 +510,7 @@ const VoiceCall: React.FC = () => {
         }}
         token={token}
       >
-        <MeetingView meetingId={meetingId}/>
+        <MeetingView meetingId={meetingId} />
       </MeetingProvider>
     </SafeAreaView>
   ) : (

@@ -25,17 +25,31 @@ import { supabase } from "@/lib/supabase";
 import { useGlobalSearchParams } from "expo-router";
 import Typography from "@/constants/Typography";
 import { useModal } from "@/ctx/ModalContext";
+import { StreamChat } from "stream-chat";
 
 const ChannelScreen = () => {
   const { theme, changeTheme } = useContext(ThemeContext);
   const [isloading, setIsLoading] = useState(false);
   const ios = Platform.OS === "ios";
   const modal = useModal();
-  const {appointmentId} = useGlobalSearchParams();
+  const {chanelId,appointmentId, loggedInUserId, doctorId} = useGlobalSearchParams();
   const { channel } = useAppContext();
+
+  const API_KEY = process.env.EXPO_PUBLIC_STREAM_API_KEY;
+
+  const chatClient = StreamChat.getInstance(`${API_KEY}`);
+
+   const disableUser = async () => {
+    try{
+      await chatClient.channel('messaging', `${chanelId}`).removeMembers([`${loggedInUserId}`])
+    }catch(error){
+      console.log("user not deleted",error);
+    }
+  }
 
   const endAppointment = async() => {
     try {
+      disableUser();
       setIsLoading(true);
       const { error } = await supabase
         .from("appointment")
@@ -46,7 +60,10 @@ const ChannelScreen = () => {
         console.log(error);
       } else {
         setIsLoading(false);
-        handlemodal()
+        router.push({
+          pathname: "Appointments/MessagingAppointment/SessionEnded",
+          params: {id: doctorId}
+        })
       }
     } catch (error) {
       console.log(error);
@@ -58,65 +75,6 @@ const ChannelScreen = () => {
     router.push("/(app)/Appointments");
   }
 
-  async function handlemodal() {
-    modal.show({
-      children: (
-        <View
-          style={{
-            padding: 40,
-            alignItems: "center",
-            gap: 20,
-            borderRadius: 48,
-            backgroundColor:
-              theme === "light" ? Colors.others.white : Colors.dark._2,
-          }}
-        >
-          <Image source={require("@/assets/images/cancelimg.png")} />
-          <View
-            style={{
-              gap: 20,
-              backgroundColor:
-                theme === "light" ? Colors.others.white : Colors.dark._2,
-            }}
-          >
-            <Text
-              style={[
-                Typography.heading._4,
-                {
-                  color: Colors.main.primary._500,
-                  textAlign: "center",
-                },
-              ]}
-            >
-              Chat ended Successfully!
-            </Text>
-            <Text
-              style={[
-                Typography.regular.large,
-                {
-                  textAlign: "center",
-                  color:
-                    theme === "light"
-                      ? Colors.grayScale._900
-                      : Colors.others.white,
-                },
-              ]}
-            >
-              Thank you for using our service. Your chat has been ended
-              please go on and provide a review to the doctor.
-            </Text>
-            <TouchableOpacity style={styles.btn} onPress={handlebackhome}>
-              <Text
-                style={[Typography.bold.large, { color: Colors.others.white }]}
-              >
-                Ok
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      ),
-    });
-  }
   return (
     <View
     style={{

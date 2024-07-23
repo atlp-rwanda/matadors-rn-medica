@@ -23,6 +23,9 @@ export default function TextArea({ text,onChangeText }: Props) {
     >
       <TextInput
         placeholder="Describe how you are feeling here..."
+        placeholderTextColor={
+          theme === "light" ? Colors.grayScale._500 : Colors.grayScale._400
+        }
         style={[
           Typography.semiBold.medium,
           {

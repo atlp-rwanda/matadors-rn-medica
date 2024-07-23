@@ -32,6 +32,7 @@ import { BlueVideoCall } from "@/components/UI/icons/videoCallIcon";
 import { VideoCallWhiteIcon } from "@/components/Icons/Icons";
 
 
+
 interface AppointmentType {
   [x: string]: any;
   name: string;
@@ -61,7 +62,8 @@ function AppointmentVideoCall() {
   const [loggeduser, setLoggedUser] = useState<string>()
   const [patient_id,setPatient_id]=useState<string>()
   const [profile, setProfile] = useState<any>(null)
-  
+  const [doctorID, setDoctorsID] = useState<string>();
+
  
 
 
@@ -80,6 +82,7 @@ function AppointmentVideoCall() {
       }
 
       const doctorIds = appointmentsData.map(appointment => appointment.doctor_id);
+      setDoctorsID(doctorIds[0]);
 const userIds = appointmentsData.map(appointment => appointment.user_id);
 
 try {
@@ -418,8 +421,10 @@ try {
 
                 <Pressable
                   onPress={() =>
-                    router.push(
-                      "(app)/Appointments/VideoCallAppointment/VideoCall"
+                    router.push({
+                      pathname: "(app)/Appointments/VideoCallAppointment/VideoCall",
+                      params:{id:doctorID, AppointmentID:id}
+                      ,}
                     )
                   }
                   style={{

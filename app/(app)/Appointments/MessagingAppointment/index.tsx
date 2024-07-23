@@ -409,7 +409,7 @@ try {
                           flexDirection: "row",
                           gap: 10,
                         },
-                      ]}>{appointment.paid ? "(Paid)" : "(not paid)"}</Text>
+                      ]}>(Paid)</Text>
                     </View>
                   </View>
                 </View>
@@ -419,7 +419,7 @@ try {
                     router.push(
                     {
                     pathname: "(app)/Appointments/MessagingAppointment/Home",
-                    params: {id: "1f4c9b93-5d95-427b-93fc-4936e4046454", appointmentId: appointment?.id}
+                    params: {doctorId:appointment?.doctor_id,appointmentId: appointment?.id}
                     }
                     )
                   }

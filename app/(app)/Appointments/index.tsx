@@ -320,7 +320,7 @@ const AppointmentScreen: React.FC = () => {
                         />
                       </>
                     ) : appointment.status === "Completed" ? (
-                      <><Chips text="Book Again" size="small" type="border" style={{paddingLeft:50,paddingRight:50}} onPress={() => router.push({ pathname: "/ActionMenu/Booking/Doctor_details",params:{id:appointment.doctor.id} })} /><Chips text="Leave a Review" size="small"  type="filled"style={{paddingLeft:30,paddingRight:30}} onPress={() => router.push({ pathname: "Appointments/Review/ReviewBlankform",params:{doctor_id:appointment.doctor.id} })} /></>
+                      <><Chips text="Book Again" size="small" type="border" style={{paddingLeft:50,paddingRight:50}} onPress={() => router.push({ pathname: "/ActionMenu/Booking/Doctor_details",params:{id:appointment.doctor.id} })} /><Chips text="Leave a Review" size="small"  type="filled"style={{paddingLeft:30,paddingRight:30}} onPress={() => router.push({ pathname: "Appointments/Review/ReviewBlankform",params:{id:appointment.doctor.id} })} /></>
                     ) : (
                       <></>
                     )
